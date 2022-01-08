@@ -12,6 +12,6 @@ ASSET_MANAGER.downloadAll(() => {
 	gameEngine.init(ctx);
 	// add entity here to the gameengine
 	// default x and y -> 50 50
-	gameEngine.addEntity(new Player(gameEngine, 0, 0, ASSET_MANAGER.getAsset("./sprites/spritesheet_test.png")));
+	gameEngine.addEntity(new Player(gameEngine, 0, 178, ASSET_MANAGER.getAsset("./sprites/spritesheet_test.png")));
 	gameEngine.start();
 });
