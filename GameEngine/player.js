@@ -14,7 +14,7 @@ class Player {
         this.state = 0; // 0 = idle, 1 = walking, 2 = jumping/falling, 
         // default values. 
         this.velocity = { x: 0, y: 0};
-        this.fallAcc =562.5;
+        // this.fallAcc = 562.5;
         // this.speed = 100;
 };
     loadAnimations(spritesheet) {
@@ -59,27 +59,29 @@ class Player {
 
     update() {
         const TICK = this.game.clockTick;
-        const MIN_WALK = 2;
-        const MAX_WALK = 3; // for running?
-        // if this.game.left -> change velocity of X (negative) 
-       
-        if (this.game.left) { 
-            this.velocity.x -= MIN_WALK;
-        } else if (!this.game.right) { 
-            this.velocity.x = 0;
-        }  
-        if (this.game.right) {
-            this.velocity.x += MIN_WALK;
-        } else if (!this.game.left) {
-            this.velocity.x = 0;
+        const MIN_WALK = 1;
+
+       if (this.state !== 2) { // when its not jumping 
+            if (this.game.left) { // when left key is pressed
+                this.velocity.x -= MIN_WALK; // the velocity goes negatigve -> move left
+            } else if (!this.game.right) { 
+                this.velocity.x = 0;        // if the right key is released -> stop 
+            }  
+            if (this.game.right) {  // when right key is pressed 
+                this.velocity.x += MIN_WALK; 
+           } else if (!this.game.left) { // if the left key is released -> stop
+                this.velocity.x = 0;
         }
+    }
+
+        // implement jumping 
 
         this.x += this.velocity.x * TICK * 2; 
+        this.y += this.velocity.y * TICK * 2;
 
-
-         // update state
+        // update state
          if (this.state !== 2) {
-            if (Math.abs(this.velocity.x) > MAX_WALK) this.state = 1;
+            if (Math.abs(this.velocity.x) >= MIN_WALK) this.state = 1;
             else this.state = 0;
         } else {
 
@@ -87,6 +89,7 @@ class Player {
          // update direction
          if (this.velocity.x < 0) this.facing = 1;
          if (this.velocity.x > 0) this.facing = 0;
+         
         // collision
         
     }
