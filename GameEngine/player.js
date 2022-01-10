@@ -52,25 +52,22 @@ class Player {
         //this.jumpRightAnim.drawFrame(this.game.clockTick, ctx, this.x, 192, 2);
         //this.jumpLeftAnim.drawFrame(this.game.clockTick, ctx, this.x, 256, 2);
 
-        this.animations[this.state][this.facing].drawFrame(this.game.clockTick, ctx, this.x, this.y, 2);
+        this.animations[this.state][this.facing].drawFrame(this.game.clockTick, ctx, this.x, this.y, 5);
 
         ctx.imageSmoothingEnabled = false;
     }
 
     update() {
         const TICK = this.game.clockTick;
-        const MIN_WALK = 1;
+        const MIN_WALK = 2;
 
        if (this.state !== 2) { // when its not jumping 
             if (this.game.left) { // when left key is pressed
-                this.velocity.x -= MIN_WALK; // the velocity goes negatigve -> move left
-            } else if (!this.game.right) { 
-                this.velocity.x = 0;        // if the right key is released -> stop 
-            }  
-            if (this.game.right) {  // when right key is pressed 
-                this.velocity.x += MIN_WALK; 
-           } else if (!this.game.left) { // if the left key is released -> stop
-                this.velocity.x = 0;
+                this.velocity.x -= MIN_WALK; 
+            } else if (this.game.right) {   // when right key is pressed
+                this.velocity.x += MIN_WALK;        
+            } else { 
+                this.velocity.x = 0;    
         }
     }
 
