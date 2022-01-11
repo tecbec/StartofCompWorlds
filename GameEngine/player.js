@@ -8,14 +8,16 @@ class Player {
     constructor(game, x, y, spritesheet) {
         Object.assign(this, {game, x, y, spritesheet });
         // NOTE: later on can be updated without the sprite sheet passed in the param. 
+        this.updateBB();
         this.animations = [];
         this.loadAnimations(spritesheet);
         this.facing = 0; // 0 = right; 1 = left
         this.state = 0; // 0 = idle, 1 = walking, 2 = jumping/falling, 
         // default values. 
         this.velocity = { x: 0, y: 0};
-        // this.fallAcc = 562.5;
+        this.fallAcc = 562.5;
         // this.speed = 100;
+        
 };
     loadAnimations(spritesheet) {
         // showcase each state
@@ -45,6 +47,11 @@ class Player {
 
     }
 
+    updateBB() {
+        this.lastBB = this.BB;
+        this.BB = new BoundingBox(this.x, this.y, PARAMS.BLOCKWIDTH, PARAMS.BLOCKWIDTH);
+    };
+
     draw(ctx) {
         // draw with [state][face]   
         //this.walkRightAnim.drawFrame(this.game.clockTick, ctx, this.x, 64, 2);
@@ -52,7 +59,10 @@ class Player {
         //this.jumpRightAnim.drawFrame(this.game.clockTick, ctx, this.x, 192, 2);
         //this.jumpLeftAnim.drawFrame(this.game.clockTick, ctx, this.x, 256, 2);
 
-        this.animations[this.state][this.facing].drawFrame(this.game.clockTick, ctx, this.x, this.y, 5);
+        this.animations[this.state][this.facing].drawFrame(this.game.clockTick, ctx, this.x, this.y, 2);
+
+        //ctx.strokeStyle = 'Red';
+        //ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
 
         ctx.imageSmoothingEnabled = false;
     }
@@ -60,7 +70,8 @@ class Player {
     update() {
         const TICK = this.game.clockTick;
         const MIN_WALK = 2;
-
+        const STOP_FALL = 1575;
+        const STOP_FALL_A = 450;
        if (this.state !== 2) { // when its not jumping 
             if (this.game.left) { // when left key is pressed
                 this.velocity.x -= MIN_WALK; 
@@ -69,13 +80,32 @@ class Player {
             } else { 
                 this.velocity.x = 0;    
         }
-    }
-
+            // jumping stuff
+            this.velocity.y += this.fallAcc * TICK;
+            if (this.game.up) {
+                this.velocity.y = -240;
+                this.state = 3;
+            } else {
+                if (this.fallAcc === STOP_FALL) this.velocity.y -= (STOP_FALL - STOP_FALL_A) * TICK;
+                if (this.y >= 178) this.velocity.y = 0;
+                if (this.game.right && ! this.game.left) {
+                    this.velocity.x += MIN_WALK * TICK;
+                } else if (this.game.left && !this.game.right) {
+                    this.velocity.x -= MIN_WALK * TICK;
+                } else {
+                }
+            }
+               
+               
+               
+    }   
+        
+   
         // implement jumping 
 
         this.x += this.velocity.x * TICK * 2; 
         this.y += this.velocity.y * TICK * 2;
-
+        this.updateBB();
         // update state
          if (this.state !== 2) {
             if (Math.abs(this.velocity.x) >= MIN_WALK) this.state = 1;
@@ -86,8 +116,16 @@ class Player {
          // update direction
          if (this.velocity.x < 0) this.facing = 1;
          if (this.velocity.x > 0) this.facing = 0;
-         
+
+      
+
         // collision
-        
+        // this.game.entities.forEach(function (entity) {
+        //     if (entity.BB && that.BB.collide(entity.BB)) {
+        //     if (entity instanceof Ground) {
+        //         that.velocity.y == 0; 
+        //     }
+        // }
+        // });
     }
 }
