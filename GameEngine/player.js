@@ -69,36 +69,37 @@ class Player {
 
     update() {
         const TICK = this.game.clockTick;
-        const MIN_WALK = 2;
+        const MIN_WALK = 200;
         const STOP_FALL = 1575;
         const STOP_FALL_A = 450;
        if (this.state !== 2) { // when its not jumping 
             if (this.game.left) { // when left key is pressed
-                this.velocity.x -= MIN_WALK; 
+                this.velocity.x -= MIN_WALK * TICK; 
             } else if (this.game.right) {   // when right key is pressed
-                this.velocity.x += MIN_WALK;        
+                this.velocity.x += MIN_WALK * TICK;        
             } else { 
                 this.velocity.x = 0;    
-        }
-            // jumping stuff
-            this.velocity.y += this.fallAcc * TICK;
-            if (this.game.up) {
-                this.velocity.y = -240;
-                this.state = 3;
-            } else {
-                if (this.fallAcc === STOP_FALL) this.velocity.y -= (STOP_FALL - STOP_FALL_A) * TICK;
-                if (this.y >= 178) this.velocity.y = 0;
-                if (this.game.right && ! this.game.left) {
-                    this.velocity.x += MIN_WALK * TICK;
-                } else if (this.game.left && !this.game.right) {
-                    this.velocity.x -= MIN_WALK * TICK;
-                } else {
-                }
             }
+
+            // jumping stuff
+            this.velocity.y += this.fallAcc * TICK; // gravity
+            if (this.game.up && this.state !== 2) {
+                this.velocity.y = -240;
+                this.state = 2;
+            } 
+            // if (this.fallAcc === STOP_FALL) this.velocity.y -= (STOP_FALL - STOP_FALL_A) * TICK;
+            if (this.y >= 178) this.velocity.y = 0;
+            // if (this.game.right && ! this.game.left) {
+            //     this.velocity.x += MIN_WALK * TICK;
+            // } else if (this.game.left && !this.game.right) {
+            //     this.velocity.x -= MIN_WALK * TICK;
+            // } else {
+            // }
+            
                
                
                
-    }   
+        }   
         
    
         // implement jumping 
@@ -107,7 +108,7 @@ class Player {
         this.y += this.velocity.y * TICK * 2;
         this.updateBB();
         // update state
-         if (this.state !== 2) {
+        if (this.state !== 2) {
             if (Math.abs(this.velocity.x) >= MIN_WALK) this.state = 1;
             else this.state = 0;
         } else {
