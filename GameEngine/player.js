@@ -37,8 +37,8 @@ class Player {
         this.animations[1][1] = new Animator (this.spritesheet, 0, 96, 32, 32, 6, 0.1, 0, false, true); 
 
         // jump -> right, left 
-        this.animations[2][0] = new Animator (this.spritesheet, 0, 128, 32, 32, 8, 0.1, 0, false, true); 
-        this.animations[2][1] = new Animator (this.spritesheet, 0, 160, 32, 32, 8, 0.1, 0, false, true); 
+        this.animations[2][0] = new Animator (this.spritesheet, 0, 128, 32, 32, 8, 0.15, 0, false, true); 
+        this.animations[2][1] = new Animator (this.spritesheet, 0, 160, 32, 32, 8, 0.15, 0, false, true); 
 
     }
 
@@ -60,20 +60,21 @@ class Player {
         const MIN_WALK = 2;
         const STOP_FALL = 1575;
         const STOP_FALL_A = 450;
-        if (this.isGrounded) {
+        if (this.isGrounded) { // can only jump and move while on the ground.
             if (this.game.left) { // when left key is pressed
                 this.velocity.x -= MIN_WALK; 
             } else if (this.game.right) {   // when right key is pressed
                 this.velocity.x += MIN_WALK;        
-            } else { 
-            
+            } else {           
                 this.velocity.x = 0;       
             }
             // TODO: can only jump if you're on the ground, include collision detection
             if (this.game.up) { 
                 this.velocity.y = -240;   
-            }  
-
+                this.state = 2;
+            }  else {
+                this.state = 0;
+            }
         }
         
         this.updateBB();
@@ -102,7 +103,7 @@ class Player {
                 if((entity instanceof Ground) && that.lastBB.bottom >= entity.BB.top) { // bottom of the box hits the top of the ground.
                     that.isGrounded = true;
                     that.y = 178;
-                    that.velocity.y = 0;
+                    that.velocity.y === 0;
                 } else {
                     that.isGrounded = false
                 }
