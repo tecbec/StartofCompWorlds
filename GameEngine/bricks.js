@@ -12,6 +12,6 @@ class Ground {
 
     draw(ctx) {
         ctx.strokeStyle = 'Red';
-        ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);    
+        ctx.fillRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);    
     };
 };
