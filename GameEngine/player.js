@@ -7,12 +7,20 @@ class Player {
     */
     constructor(game, x, y, spritesheet) {
         Object.assign(this, {game, x, y, spritesheet });
+
+        this.game.player = this;
+
+        
+
         // NOTE: later on can be updated without the sprite sheet passed in the param. 
         this.updateBB();
         this.animations = [];
-        this.loadAnimations(spritesheet);
+        
         this.facing = 0; // 0 = right; 1 = left
         this.state = 0; // 0 = idle, 1 = walking, 2 = jumping/falling, 
+
+        this.dead = false;
+
         // default values. 
         this.velocity = { x: 0, y: 0};
         this.fallAcc = 562.5;
@@ -68,52 +76,69 @@ class Player {
     }
 
     update() {
+       /** Clock Tick variable */
         const TICK = this.game.clockTick;
+
+        /** Velocity and acceleration variables  */
         const MIN_WALK = 200;
+        // const MIN_WALK = 2;
         const STOP_FALL = 1575;
         const STOP_FALL_A = 450;
+
+
+        /**  */
+        if (this.dead)
+
        if (this.state !== 2) { // when its not jumping 
             if (this.game.left) { // when left key is pressed
                 this.velocity.x -= MIN_WALK * TICK; 
+                // this.velocity.x -= MIN_WALK; 
             } else if (this.game.right) {   // when right key is pressed
                 this.velocity.x += MIN_WALK * TICK;        
+                // this.velocity.x += MIN_WALK;   
             } else { 
                 this.velocity.x = 0;    
             }
-
-            // jumping stuff
-            this.velocity.y += this.fallAcc * TICK; // gravity
-            if (this.game.up && this.state !== 2) {
-                this.velocity.y = -240;
-                this.state = 2;
-            } 
-            // if (this.fallAcc === STOP_FALL) this.velocity.y -= (STOP_FALL - STOP_FALL_A) * TICK;
-            if (this.y >= 178) this.velocity.y = 0;
-            // if (this.game.right && ! this.game.left) {
-            //     this.velocity.x += MIN_WALK * TICK;
-            // } else if (this.game.left && !this.game.right) {
-            //     this.velocity.x -= MIN_WALK * TICK;
-            // } else {
-            // }
-            
-               
-               
-               
-        }   
         
-   
+        
+            this.velocity.y += this.velocity.y * TICK;
+
+            if (this.state === 2 && this.game.up) { // jumping 
+
+                // jumping stuff
+                this.velocity.y += this.fallAcc * TICK; // gravity
+                // if (this.game.up) {
+                    this.velocity.y = -240;
+                    this.state = 2;
+                // } 
+                // if (this.fallAcc === STOP_FALL) this.velocity.y -= (STOP_FALL - STOP_FALL_A) * TICK;
+                if (this.y >= 178) this.velocity.y = 0;
+                // if (this.game.right && ! this.game.left) {
+                //     this.velocity.x += MIN_WALK * TICK;
+                // } else if (this.game.left && !this.game.right) {
+                //     this.velocity.x -= MIN_WALK * TICK;
+                // } else {
+                // }       
+            }   
+        } else {
+            
+        }
+
+        
         // implement jumping 
 
         this.x += this.velocity.x * TICK * 2; 
         this.y += this.velocity.y * TICK * 2;
         this.updateBB();
+
         // update state
         if (this.state !== 2) {
-            if (Math.abs(this.velocity.x) >= MIN_WALK) this.state = 1;
-            else this.state = 0;
+            if (Math.abs(this.velocity.x) > 0) this.state = 1;  // walking
+            else this.state = 0;                                // idle
         } else {
-
+            
         }
+
          // update direction
          if (this.velocity.x < 0) this.facing = 1;
          if (this.velocity.x > 0) this.facing = 0;
