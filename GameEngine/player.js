@@ -8,23 +8,22 @@ class Player {
     constructor(game, x, y, spritesheet) {
         Object.assign(this, {game, x, y, spritesheet });
 
-        this.game.player = this;
+        this.game.player = this;     
 
-        
-
-        // NOTE: later on can be updated without the sprite sheet passed in the param. 
-        this.updateBB();
-        this.animations = [];
-        
+        // Chihiro state variables
         this.facing = 0; // 0 = right; 1 = left
         this.state = 0; // 0 = idle, 1 = walking, 2 = jumping/falling, 
-
-        this.dead = false;
 
         // default values. 
         this.velocity = { x: 0, y: 0};
         this.fallAcc = 562.5;
-        // this.speed = 100;
+
+        // NOTE: later on can be updated without the sprite sheet passed in the param. 
+        this.updateBB();
+
+        // Chihiro animations
+        this.animations = [];
+        this.dead = false;
         
 };
     loadAnimations(spritesheet) {
