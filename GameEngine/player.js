@@ -17,6 +17,7 @@ class Player {
         this.velocity = { x: 0, y: 0};
         this.fallAcc = 562.5;
         // this.speed = 100;
+        this.isGrounded = false;
         
 };
     loadAnimations(spritesheet) {
@@ -59,30 +60,28 @@ class Player {
         const MIN_WALK = 2;
         const STOP_FALL = 1575;
         const STOP_FALL_A = 450;
-        if (this.game.left) { // when left key is pressed
-            this.velocity.x -= MIN_WALK; 
-        } else if (this.game.right) {   // when right key is pressed
-            this.velocity.x += MIN_WALK;        
-        } else { 
-        
-            this.velocity.x = 0;       
+        if (this.isGrounded) {
+            if (this.game.left) { // when left key is pressed
+                this.velocity.x -= MIN_WALK; 
+            } else if (this.game.right) {   // when right key is pressed
+                this.velocity.x += MIN_WALK;        
+            } else { 
+            
+                this.velocity.x = 0;       
+            }
+            // TODO: can only jump if you're on the ground, include collision detection
+            if (this.game.up) { 
+                this.velocity.y = -240;   
+            }  
+
         }
-        if (this.game.up) {
-            this.velocity.y = -240;  
-            this.inAir = true;  
-        }      
+        
         this.updateBB();
         // changes by tick
         this.velocity.y += this.fallAcc * TICK; 
               
         this.x += this.velocity.x * TICK * 2; 
         this.y += this.velocity.y * TICK *2;
-
-        // mimic ground
-        if (this.y > 178) {
-            this.y = 178;
-            this.velocity.y = 0; 
-        }
         
         // update state
         if (this.state !== 2) {
@@ -96,8 +95,22 @@ class Player {
          if (this.velocity.x > 0) this.facing = 0;
 
         var that = this;
-
+   
         // collision
+        this.game.entities.forEach(function (entity) {
+            if (entity.BB && that.BB.collide(entity.BB)) {
+                if((entity instanceof Ground) && that.lastBB.bottom >= entity.BB.top) { // bottom of the box hits the top of the ground.
+                    that.isGrounded = true;
+                    that.y = 178;
+                    that.velocity.y = 0;
+                } else {
+                    that.isGrounded = false
+                }
+                that.updateBB();
+            }
+            
+            
+        });
      
     }
 }

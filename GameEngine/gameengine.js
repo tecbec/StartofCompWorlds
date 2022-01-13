@@ -15,13 +15,9 @@ class GameEngine {
         // Entities to be added at the end of each update
         this.entitiesToAdd = [];
 
-        // Information on the input
-        this.click = null;
-        this.mouse = null;
-        this.wheel = null;
-
-        // THE KILL SWITCH
-        this.running = false;
+        this.left = false;
+        this.right = false;
+        this.up = false;
 
         // Options and the Details
         this.options = options || {
