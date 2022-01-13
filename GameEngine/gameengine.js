@@ -119,7 +119,7 @@ class GameEngine {
         this.update();
         this.draw();
         // if want one input to only trigger once 
-        this.up = false;
+        // this.up = false;
     };
 
     get["deltaTime"]() { return this.clockTick; }
