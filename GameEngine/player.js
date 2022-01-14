@@ -16,7 +16,6 @@ class Player {
         // default values. 
         this.velocity = { x: 0, y: 0};
         this.fallAcc = 562.5;
-        // this.speed = 100;
         this.isGrounded = false;
         
 };
@@ -49,6 +48,7 @@ class Player {
 
     draw(ctx) {
         this.animations[this.state][this.facing].drawFrame(this.game.clockTick, ctx, this.x, this.y, 2);
+        
         ctx.strokeStyle = 'Red';
         ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
 
@@ -57,37 +57,60 @@ class Player {
 
     update() {
         const TICK = this.game.clockTick;
-        const MIN_WALK = 2;
-        const STOP_FALL = 1575;
-        const STOP_FALL_A = 450;
+        const MIN_WALK = 200;
+
         if (this.isGrounded) { // can only jump and move while on the ground.
             if (this.game.left) { // when left key is pressed
-                this.velocity.x -= MIN_WALK; 
+                this.velocity.x -= MIN_WALK * TICK; 
             } else if (this.game.right) {   // when right key is pressed
-                this.velocity.x += MIN_WALK;        
-            } else {           
+                this.velocity.x += MIN_WALK * TICK;        
+            } else {            
                 this.velocity.x = 0;       
-            }
-            // TODO: can only jump if you're on the ground, include collision detection
+            }  
             if (this.game.up) { 
                 this.velocity.y = -240;   
                 this.state = 2;
-            }  else {
+            }  else {  
                 this.state = 0;
+                this.velocity.y = 0;
             }
         }
-        
-        this.updateBB();
-        // changes by tick
-        this.velocity.y += this.fallAcc * TICK; 
-              
+        this.velocity.y += this.fallAcc * TICK;
+
+        // ground imitation
+        // if (this.y > 178){
+        //     this.isGrounded = true;
+        //     this.y = 178;
+        //     this.velocity.y = 0;
+        // } else {
+        //     this.isGrounded = false
+        // }
+        // player is constantly falling 
+                
         this.x += this.velocity.x * TICK * 2; 
         this.y += this.velocity.y * TICK *2;
+
+        this.updateBB();
+ 
+        var that = this;
+   
+        // collision
+        this.game.entities.forEach(function (entity) {
+            if (entity.BB && that.BB.collide(entity.BB)) {        
+                    if((entity instanceof Ground) && that.lastBB.bottom >= entity.BB.top) { // bottom of the player hits the top of the ground.
+                        that.isGrounded = true;
+                        that.y = 178;
+                        that.velocity.y === 0;  
+                    }  else {  
+                        that.isGrounded = false;
+                    }
+                    that.updateBB();      
+              }     
+        });
         
-        // update state
+         // update state
         if (this.state !== 2) {
             if (Math.abs(this.velocity.x) > 0) this.state = 1;
-            else this.state = 0;
         } else {
             
         }
@@ -95,23 +118,5 @@ class Player {
          if (this.velocity.x < 0) this.facing = 1;
          if (this.velocity.x > 0) this.facing = 0;
 
-        var that = this;
-   
-        // collision
-        this.game.entities.forEach(function (entity) {
-            if (entity.BB && that.BB.collide(entity.BB)) {
-                if((entity instanceof Ground) && that.lastBB.bottom >= entity.BB.top) { // bottom of the box hits the top of the ground.
-                    that.isGrounded = true;
-                    that.y = 178;
-                    that.velocity.y === 0;
-                } else {
-                    that.isGrounded = false
-                }
-                that.updateBB();
-            }
-            
-            
-        });
-     
     }
 }
