@@ -11,6 +11,10 @@ class SceneManager {
     draw(ctx){
          ctx.font = PARAMS.BLOCKWIDTH / 2 + 'px "Press Start 2P"';
         if(PARAMS.DEBUG){
+            //capturing the velocity displaying useful variables   
+           // let xV = "xV=" + Math.floor(this.game.velocity.x); 
+           // let yV = "yV=" + Math.floor(this.game.velocity.y);
+         // ctx.fillText(xV, 1.5 * PARAMS.BLOCKWIDTH, 2.5 * PARAMS.BLOCKWIDTH);
              //ctx.translate(0, 10);
              ctx.strokeStyle = "Red"; //walk left
              ctx.lineWidth = 2; 
