@@ -35,15 +35,15 @@ class Soot {
             STARTy[i] = this.y[i] = 400;
         };
 
-        const START_Vx = [];
-        const START_Vy = [];
+        this.START_Vx = [];
+        this.START_Vy = [];
 
         let temp = 50;
         let temp1 = 100;
 
         for (let i = 0; i < NUM_SOOTS_HALF; i++){
-            START_Vx[i] = temp;
-            START_Vy[i] = temp1;
+            this.START_Vx[i] = temp;
+            this.START_Vy[i] = temp1;
             temp += 15;
             temp1 += 15;
         };
@@ -52,8 +52,8 @@ class Soot {
         temp1 = 100;
 
         for (let i = NUM_SOOTS_HALF; i < NUM_SOOTS; i++){
-            START_Vx[i] = temp;
-            START_Vy[i] = temp1;
+            this.START_Vx[i] = temp;
+            this.START_Vy[i] = temp1;
             temp += 15;
             temp1 += 15;
         };
@@ -62,8 +62,8 @@ class Soot {
         this.velocityx = [];
         this.velocityy = [];
         for (let i = 0; i < NUM_SOOTS; i++) {
-            this.velocityx[i] = START_Vx[i];
-            this.velocityy[i] = START_Vy[i];
+            this.velocityx[i] = this.START_Vx[i];
+            this.velocityy[i] = this.START_Vy[i];
         };
 
     };
@@ -92,7 +92,9 @@ class Soot {
         const STOP_FALL_A = [];
 
         const SCREEN_X = 400;
-        const SCREEN_Y = 400;
+        const SCREEN_Y = 350;
+
+        const MIN_Y = 300;
         
         let temp1 = 100;
         let temp2 = 200;
@@ -125,33 +127,37 @@ class Soot {
         for(let i = 0; i < NUM_SOOTS; i++){
             if (i < 5){     // soots moving left to right 
 
-                if(curFrame < 3 && this.x[i] < SCREEN_X) {
+                if(curFrame < 3 && this.x[i] < SCREEN_X && this.y[i] >= MIN_Y) {
                     this.velocityy[i] -= (STOP_FALL[i] - STOP_FALL_A[i]) * this.game.clockTick;
                     this.x[i] += this.velocityx[i] * this.game.clockTick;
                     this.y[i] -= this.velocityy[i] * this.game.clockTick;
                 } 
-                else if (curFrame  >= 3 && curFrame < 6 && this.x[i] < SCREEN_X) {
+                else if (curFrame  >= 3 && curFrame < 6 && this.x[i] < SCREEN_X && this.y[i] >= MIN_Y) {
                     this.velocityy[i] += (STOP_FALL[i] - STOP_FALL_A[i]) * this.game.clockTick;
                     this.x[i] += this.velocityx[i] * this.game.clockTick;
                     this.y[i] += this.velocityy[i] * this.game.clockTick;
                 } 
                 else if (this.x[i] >= SCREEN_X) {
+                    console.log("entered2");
                     this.x[i] = 0;
                 }
-                else if (this.y[i] <= 350) {
-                    this.y[i] = 400;
-                    this.velocityy[i] = this.START_Vy[i];
+                else if (this.y[i] < MIN_Y) {
+                    console.log("entered1");
+                    this.y[i] = SCREEN_Y;
+                    this.x[i] = SCREEN_X;
+
                 } else {
+                    console.log("entered3");
                     this.velocityy[i] = this.START_Vy[i];
                 }
 
             } else {        // soots moving right to left
-                if(curFrame < 3 && this.x[i] >= 0) {
+                if(curFrame < 3 && this.x[i] >= 0 && this.y[i] >= MIN_Y) {
                     this.velocityy[i] -= (STOP_FALL[i] - STOP_FALL_A[i]) * this.game.clockTick;
                     this.x[i] -= this.velocityx[i] * this.game.clockTick;
                     this.y[i] -= this.velocityy[i] * this.game.clockTick;
                 } 
-                else if (curFrame  >= 3 && curFrame < 6 && this.x[i] >= 0) {
+                else if (curFrame  >= 3 && curFrame < 6 && this.x[i] >= 0 && this.y[i] >= MIN_Y) {
                     this.velocityy[i] += (STOP_FALL[i] - STOP_FALL_A[i]) * this.game.clockTick;
                     this.x[i] -= this.velocityx[i] * this.game.clockTick;
                     this.y[i] += this.velocityy[i] * this.game.clockTick;
@@ -159,10 +165,15 @@ class Soot {
                 else if (this.x[i] < 0) {
                     this.x[i] = 800;
                 }
-                else if (this.y[i] <= 350){
-                    this.y[i] = 400;
+                else if (this.y[i] < MIN_Y){
+                    console.log("entered1b");
+                    this.y[i] = SCREEN_Y;
+                    this.x[i] = SCREEN_X;
+                    console.log("entered1c");
+                    console.log(this.START_Vy[i]);
                     this.velocityy[i] = this.START_Vy[i];
                 } else {
+                    console.log("entered3b")
                     this.velocityy[i] = this.START_Vy[i];
                 }
             }

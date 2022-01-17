@@ -114,8 +114,6 @@ class Player {
                 
             }
 
-            console.log("*");
-
             this.updateBB();
             // update position
             this.x += this.velocity.x * TICK * 2; 
