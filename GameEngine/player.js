@@ -5,21 +5,25 @@ class Player {
     - game = game engine 
     - x, y = the location of the Player
     */
-    constructor(game, x, y, spritesheet) {
-        Object.assign(this, {game, x, y, spritesheet });
+    constructor(game, x, y) {
+        Object.assign(this, {game, x, y});
         // NOTE: later on can be updated without the sprite sheet passed in the param. 
+        this.game.chihiro = this;
+        this.spritesheet = ASSET_MANAGER.getAsset("./sprites/spritesheet.png");
         this.updateBB();
+
         this.animations = [];
-        this.loadAnimations(spritesheet);
+        this.loadAnimations();
         this.facing = 0; // 0 = right; 1 = left
         this.state = 0; // 0 = idle, 1 = walking, 2 = jumping/falling, 
+
         // default values. 
         this.velocity = { x: 0, y: 0};
         this.fallAcc = 562.5;
         this.isGrounded = false;
         
 };
-    loadAnimations(spritesheet) {
+    loadAnimations() {
         // array with [state] [face] of the same animator.
         for (var i = 0; i < 3; i++) {
             this.animations.push([]);
