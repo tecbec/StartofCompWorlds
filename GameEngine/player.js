@@ -62,6 +62,7 @@ class Player {
     update() {
         const TICK = this.game.clockTick;
         const MIN_WALK = 200;
+        const MAX_FALL = 240;
 
         if (this.isGrounded) { // can only jump and move while on the ground.
             if (this.game.left) { // when left key is pressed
@@ -72,44 +73,45 @@ class Player {
                 this.velocity.x = 0;       
             }  
             if (this.game.up) { 
-                this.velocity.y = -240;   
+                this.velocity.y = -300;   
                 this.state = 2;
             }  else {  
                 this.state = 0;
                 this.velocity.y = 0;
             }
         }
+
+        // for testing purposes
+        if (this.x < 0 || this.x > 400 || this.y > 300) {
+            this.x = 0;
+        }
         this.velocity.y += this.fallAcc * TICK;
 
-        // ground imitation
-        // if (this.y > 178){
-        //     this.isGrounded = true;
-        //     this.y = 178;
-        //     this.velocity.y = 0;
-        // } else {
-        //     this.isGrounded = false
-        // }
-        // player is constantly falling 
-                
-        this.x += this.velocity.x * TICK * 2; 
-        this.y += this.velocity.y * TICK *2;
+        if (this.velocity.y >= MAX_FALL) this.velocity.y = MAX_FALL;
+        if (this.velocity.y <= -MAX_FALL) this.velocity.y = -MAX_FALL;
 
+        this.x += this.velocity.x * TICK * 2; 
+        this.y += this.velocity.y * TICK * 2;
+        
         this.updateBB();
  
         var that = this;
    
         // collision
+        // TODO: think about left and right bounding box.
         this.game.entities.forEach(function (entity) {
-            if (entity.BB && that.BB.collide(entity.BB)) {        
-                    if((entity instanceof Ground) && that.lastBB.bottom >= entity.BB.top) { // bottom of the player hits the top of the ground.
+                if (entity.BB && that.BB.collide(entity.BB)) {   
+                    if((entity instanceof Ground || entity instanceof Platform) 
+                    && (that.lastBB.bottom) >= entity.BB.top) { // bottom of the player hits the top of the ground.
                         that.isGrounded = true;
-                        that.y = 178;
+                        that.y = entity.BB.top - 32 * 2;
                         that.velocity.y === 0;  
+                        // for some reason because the players kept falling, it's always > than the top of the ground.
                     }  else {  
-                        that.isGrounded = false;
+                        that.isGrounded = false;  
                     }
-                    that.updateBB();      
-              }     
+                    that.updateBB();           
+            }
         });
         
          // update state

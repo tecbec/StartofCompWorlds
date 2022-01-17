@@ -106,6 +106,6 @@ const chooseRandom = items => items.length > 0
 
 const PARAMS = {
     DEBUG: true,
-    SCALE: 4,
-    BITWIDTH: 16
+    SCALE: 2,
+    BITWIDTH: 32
 };
