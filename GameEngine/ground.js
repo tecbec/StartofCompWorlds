@@ -3,7 +3,7 @@ class Ground {
         Object.assign(this, { game, x, y, w});
 
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/platform_sheet.png");
-        this.BB = new BoundingBox(this.x, this.y, this.w, PARAMS.BLOCKWIDTH);
+        this.BB = new BoundingBox(this.x, this.y, this.w, 64);
     };
 
     update() {
@@ -64,8 +64,6 @@ class Platform {
         Object.assign(this, { game, x, y, w});
         this.spritesheet = this.spritesheet = ASSET_MANAGER.getAsset("./sprites/platform_sheet.png");
         this.BB = new BoundingBox(this.x, this.y, 32 * 3, 32);
-        this.leftBB = new BoundingBox(this.x, this.y, PARAMS.BLOCKWIDTH, PARAMS.BLOCKWIDTH * 2)
-        this.rightBB = new BoundingBox(this.x + this.w - PARAMS.BLOCKWIDTH, this.y, PARAMS.BLOCKWIDTH, PARAMS.BLOCKWIDTH * 2)
     }
 
     update() {
