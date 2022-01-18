@@ -68,8 +68,8 @@ class Player {
     update() {
         const TICK = this.game.clockTick;
         const MIN_WALK = 200;
-        const MAX_RUN = 153;
-        const crouch_spe = 365.625;
+        const MAX_RUN = 400;
+        const crouch_spe = 350;
 
         if (this.isGrounded) { // can only jump and move while on the ground.
             if (this.game.left) { // when left key is pressed
@@ -82,10 +82,7 @@ class Player {
             } else if (this.game.runR) { //running
                 this.velocity.x += MAX_RUN * TICK; 
                 this.state = 4;
-            } else if(this.game.crouch ) {
-                this.velocity.x += crouch_spe * TICK;
-                this.state = 3
-            }            
+            }      
             else {
                 this.velocity.x = 0;       
             }  
@@ -132,7 +129,9 @@ class Player {
         
          // update state
         if (this.state !== 2) {
-            if (Math.abs(this.velocity.x) > 0) this.state = 1;
+             if(this.game.crouch) this.state = 3; //crouching state
+            else if (Math.abs(this.velocity.x) > 0) this.state = 1;
+            else if(Math.abs(this.velocity.x) > MIN_WALK) this.state = 4; //running state 
         } else {
             
         }
