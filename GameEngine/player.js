@@ -77,8 +77,8 @@ class Player {
                 this.velocity.x = 0;       
             }  
             if (this.game.up) { 
-                this.velocity.y = -240;   
-                this.fallAcc = RUN_FALL;
+                this.velocity.y = -300;   
+                // this.fallAcc = RUN_FALL;
                 this.state = 2;
                 
             }  else {  
@@ -114,21 +114,20 @@ class Player {
                             that.isGrounded = true;
                             that.y = entity.BB.top - 32 * 2;
                             that.velocity.y = 0;  
-                            
-                            if(that.state === 2) this.state = 0;
-
-                            // console.log("count: " + that.count + "  y2: " + that.velocity.y + "  y: " + that.y);
-                            // that.count+=1;
                             that.updateBB();        
-                        }                      
+                        }  else {
+                            that.isGrounded = false;
+                        }                    
                     }                    
                     if (that.velocity.y < 0) { // mario is jumping
                         if((entity instanceof Platform)  
                             && (that.lastBB.top >= entity.BB.bottom)) { // bottom of the player hits the top of the ground.
                                 that.y = entity.BB.bottom;
-                                that.velocity.y = -300;                                  
+                                that.velocity.y = 0;                                  
                                 that.updateBB();      
-                        }  
+                        }  else {
+                            that.isGrounded = false;
+                        }
                     }                 
                 }
         });
