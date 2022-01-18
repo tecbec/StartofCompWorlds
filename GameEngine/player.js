@@ -77,20 +77,13 @@ class Player {
                 this.velocity.x = 0;       
             }  
             if (this.game.up) { 
-                this.velocity.y = -240;   
-                this.fallAcc = RUN_FALL;
+                this.velocity.y = -300;   
                 this.state = 2;
-                
             }  else {  
                 this.state = 0;
                 this.velocity.y = 0;
             }
         }
-
-        // for testing purposes
-        // if (this.x < 0 || this.x > 400 || this.y > 300) {
-        //     this.x = 0;
-        // }
 
         this.velocity.y += this.fallAcc * TICK;
 
@@ -108,26 +101,25 @@ class Player {
         // TODO: think about left and right bounding box.
         this.game.entities.forEach(function (entity) {              // this will look at all entities in relation to mario
                 if (entity.BB && that.BB.collide(entity.BB)) {      //is there an entity bb & check to see if they collide
-                    if(that.velocity.y > 0) { // so mario is falling
+                    if(that.velocity.y > 0) { // so chihiro is falling
                         if((entity instanceof Ground || entity instanceof Platform) 
                         && (that.lastBB.bottom <= entity.BB.top)) { // bottom of the player hits the top of the ground.
                             that.isGrounded = true;
                             that.y = entity.BB.top - 32 * 2;
                             that.velocity.y = 0;  
-                            
-                            if(that.state === 2) this.state = 0;
-
-                            // console.log("count: " + that.count + "  y2: " + that.velocity.y + "  y: " + that.y);
-                            // that.count+=1;
                             that.updateBB();        
-                        }                      
+                        } else {
+                            that.isGrounded = false;
+                        }                   
                     }                    
-                    if (that.velocity.y < 0) { // mario is jumping
+                    if (that.velocity.y < 0) { // chihiro is jumping
                         if((entity instanceof Platform)  
                             && (that.lastBB.top >= entity.BB.bottom)) { // bottom of the player hits the top of the ground.
                                 that.y = entity.BB.bottom;
-                                that.velocity.y = -300;                                  
+                                that.velocity.y = 0;                                  
                                 that.updateBB();      
+                        } else {
+                            that.isGrounded = false;
                         }  
                     }                 
                 }
