@@ -102,12 +102,18 @@ class Player {
         this.game.entities.forEach(function (entity) {
                 if (entity.BB && that.BB.collide(entity.BB)) {   
                     if((entity instanceof Ground || entity instanceof Platform) 
-                    && (that.lastBB.bottom) >= entity.BB.top) { // bottom of the player hits the top of the ground.
+                    && (that.lastBB.bottom >= entity.BB.top)) { // bottom of the player hits the top of the ground.
                         that.isGrounded = true;
                         that.y = entity.BB.top - 32 * 2;
                         that.velocity.y === 0;  
                         // for some reason because the players kept falling, it's always > than the top of the ground.
-                    }  else {  
+                    } else if (entity instanceof Platform 
+                    && (that.lastBB.top <= entity.BB.bottom)) { // bottom of the player hits the top of the ground.
+                        that.isGrounded = true;
+                        that.y = entity.BB.top - 32 * 2;
+                        that.velocity.y === 0;  
+                        // for some reason because the players kept falling, it's always > than the top of the ground.
+                    } else {  
                         that.isGrounded = false;  
                     }
                     that.updateBB();           
