@@ -49,7 +49,7 @@ class Player {
 
     updateBB() {
         this.lastBB = this.BB;
-        this.BB = new BoundingBox(this.x + 10, this.y, 64-20, 64); // KD changed the bounding box dimensions to hug the sprite.
+        this.BB = new BoundingBox(this.x + 10, this.y+10, 64-20, 64-10); // KD changed the bounding box dimensions to hug the sprite.
     };
 
     draw(ctx) {
@@ -65,6 +65,7 @@ class Player {
         const TICK = this.game.clockTick;
         const MIN_WALK = 200;
         const MAX_FALL = 240;
+        const RUN_FALL  = 2025;
         
 
         if (this.isGrounded) { // can only jump and move while on the ground.
@@ -76,8 +77,10 @@ class Player {
                 this.velocity.x = 0;       
             }  
             if (this.game.up) { 
-                this.velocity.y = -300;   
+                this.velocity.y = -240;   
+                this.fallAcc = RUN_FALL;
                 this.state = 2;
+                
             }  else {  
                 this.state = 0;
                 this.velocity.y = 0;
@@ -85,23 +88,14 @@ class Player {
         }
 
         // for testing purposes
-        if (this.x < 0 || this.x > 400 || this.y > 300) {
-            this.x = 0;
-        }
+        // if (this.x < 0 || this.x > 400 || this.y > 300) {
+        //     this.x = 0;
+        // }
+
         this.velocity.y += this.fallAcc * TICK;
 
         if (this.velocity.y >= MAX_FALL) this.velocity.y = MAX_FALL;
         if (this.velocity.y <= -MAX_FALL) this.velocity.y = -MAX_FALL;
-
-        // ground imitation
-        // if (this.y > 178){
-        //     this.isGrounded = true;
-        //     this.y = 178;
-        //     this.velocity.y = 0;
-        // } else {
-        //     this.isGrounded = false
-        // }
-        // player is constantly falling 
                 
         this.x += this.velocity.x * TICK * 2; 
         this.y += this.velocity.y * TICK * 2;
@@ -110,7 +104,6 @@ class Player {
  
         var that = this;
         
-   
         // collision
         // TODO: think about left and right bounding box.
         this.game.entities.forEach(function (entity) {              // this will look at all entities in relation to mario
@@ -124,14 +117,14 @@ class Player {
                             
                             if(that.state === 2) this.state = 0;
 
-                            console.log("count: " + that.count + "  y2: " + that.velocity.y + "  y: " + that.y);
+                            // console.log("count: " + that.count + "  y2: " + that.velocity.y + "  y: " + that.y);
+                            // that.count+=1;
                             that.updateBB();        
                         }                      
                     }                    
                     if (that.velocity.y < 0) { // mario is jumping
                         if((entity instanceof Platform)  
                             && (that.lastBB.top >= entity.BB.bottom)) { // bottom of the player hits the top of the ground.
-                                that.count+=1;
                                 that.y = entity.BB.bottom;
                                 that.velocity.y = -300;                                  
                                 that.updateBB();      
