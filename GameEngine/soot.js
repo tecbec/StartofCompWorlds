@@ -30,7 +30,7 @@ class Soot {
             if (i < 5) {
                 STARTx[i] = this.x[i] = 0;
             } else {
-                STARTx[i] = this.x[i] = 400;
+                STARTx[i] = this.x[i] = 100;
             }
             STARTy[i] = this.y[i] = 400;
         };
@@ -91,7 +91,7 @@ class Soot {
         const STOP_FALL = [];
         const STOP_FALL_A = [];
 
-        const SCREEN_X = 400;
+        const SCREEN_X = 100;
         const SCREEN_Y = 350;
 
         const MIN_Y = 300;
@@ -163,7 +163,7 @@ class Soot {
                     this.y[i] += this.velocityy[i] * this.game.clockTick;
                 } 
                 else if (this.x[i] < 0) {
-                    this.x[i] = 800;
+                    this.x[i] = 100;
                 }
                 else if (this.y[i] < MIN_Y){
                     console.log("entered1b");

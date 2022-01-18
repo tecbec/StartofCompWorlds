@@ -21,6 +21,8 @@ class Player {
         this.velocity = { x: 0, y: 0};
         this.fallAcc = 562.5;
         this.isGrounded = false;
+
+        this.count = 0;
         
 };
     loadAnimations() {
@@ -47,7 +49,7 @@ class Player {
 
     updateBB() {
         this.lastBB = this.BB;
-        this.BB = new BoundingBox(this.x, this.y, 64, 64);
+        this.BB = new BoundingBox(this.x + 10, this.y, 64-20, 64); // KD changed the bounding box dimensions to hug the sprite.
     };
 
     draw(ctx) {
@@ -63,6 +65,7 @@ class Player {
         const TICK = this.game.clockTick;
         const MIN_WALK = 200;
         const MAX_FALL = 240;
+        
 
         if (this.isGrounded) { // can only jump and move while on the ground.
             if (this.game.left) { // when left key is pressed
@@ -106,28 +109,35 @@ class Player {
         this.updateBB();
  
         var that = this;
+        
    
         // collision
         // TODO: think about left and right bounding box.
-        this.game.entities.forEach(function (entity) {
-                if (entity.BB && that.BB.collide(entity.BB)) {   
-                    if((entity instanceof Ground || entity instanceof Platform) 
-                    && (that.lastBB.bottom >= entity.BB.top)) { // bottom of the player hits the top of the ground.
-                        that.isGrounded = true;
-                        that.y = entity.BB.top - 32 * 2;
-                        that.velocity.y === 0;  
-                        // for some reason because the players kept falling, it's always > than the top of the ground.
-                    } else if (entity instanceof Platform 
-                    && (that.lastBB.top <= entity.BB.bottom)) { // bottom of the player hits the top of the ground.
-                        that.isGrounded = true;
-                        that.y = entity.BB.top - 32 * 2;
-                        that.velocity.y === 0;  
-                        // for some reason because the players kept falling, it's always > than the top of the ground.
-                    } else {  
-                        that.isGrounded = false;  
-                    }
-                    that.updateBB();           
-            }
+        this.game.entities.forEach(function (entity) {              // this will look at all entities in relation to mario
+                if (entity.BB && that.BB.collide(entity.BB)) {      //is there an entity bb & check to see if they collide
+                    if(that.velocity.y > 0) { // so mario is falling
+                        if((entity instanceof Ground || entity instanceof Platform) 
+                        && (that.lastBB.bottom <= entity.BB.top)) { // bottom of the player hits the top of the ground.
+                            that.isGrounded = true;
+                            that.y = entity.BB.top - 32 * 2;
+                            that.velocity.y = 0;  
+                            
+                            if(that.state === 2) this.state = 0;
+
+                            console.log("count: " + that.count + "  y2: " + that.velocity.y + "  y: " + that.y);
+                            that.updateBB();        
+                        }                      
+                    }                    
+                    if (that.velocity.y < 0) { // mario is jumping
+                        if((entity instanceof Platform)  
+                            && (that.lastBB.top >= entity.BB.bottom)) { // bottom of the player hits the top of the ground.
+                                that.count+=1;
+                                that.y = entity.BB.bottom;
+                                that.velocity.y = -300;                                  
+                                that.updateBB();      
+                        }  
+                    }                 
+                }
         });
         
          // update state
@@ -139,6 +149,7 @@ class Player {
          // update direction
          if (this.velocity.x < 0) this.facing = 1;
          if (this.velocity.x > 0) this.facing = 0;
+         
 
     }
 }
