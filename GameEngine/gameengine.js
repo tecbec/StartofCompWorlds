@@ -15,13 +15,9 @@ class GameEngine {
         // Entities to be added at the end of each update
         this.entitiesToAdd = [];
 
-        // Information on the input
-        this.click = null;
-        this.mouse = null;
-        this.wheel = null;
-
-        // THE KILL SWITCH
-        this.running = false;
+        this.left = false;
+        this.right = false;
+        this.up = false;
 
         // Options and the Details
         this.options = options || {
@@ -119,7 +115,7 @@ class GameEngine {
         this.update();
         this.draw();
         // if want one input to only trigger once 
-        this.up = false;
+        // this.up = false;
     };
 
     get["deltaTime"]() { return this.clockTick; }
