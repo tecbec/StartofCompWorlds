@@ -68,6 +68,7 @@ class Player {
         const MAX_FALL = 240;
         const RUN_FALL  = 2025;
 
+ 
 
         if (this.isGrounded) { // can only jump and move while on the ground.
             if (this.game.left) { // when left key is pressed
@@ -119,14 +120,6 @@ class Player {
                         }  else {
                             that.isGrounded = false;
                         }
-                        if((entity instanceof NoFace )
-                            && ( (that.lastBB.right <= entity.BB.left)) ) { // bottom of the player hits the top of the ground.
-
-                            console.log("entered");
-                            this.nofaceCount++;
-                            console.log(this.nofaceCount);
-                            that.updateBB();
-                        }
                     }
                     if (that.velocity.y < 0) { // chihiro is jumping
                         if((entity instanceof Platform)
@@ -137,14 +130,12 @@ class Player {
                         }  else {
                             that.isGrounded = false;
                         }
-                        console.log(this.lastBB.right +" " + entity.BB.left);
-                        if((entity instanceof NoFace )
-                            && ( (that.lastBB.right <= entity.BB.left)) ) { // bottom of the player hits the top of the ground.
-                            console.log("entered");
-                            this.nofaceCount++;
-                            console.log(this.nofaceCount);
-                            that.updateBB();
-                        }
+                    }
+                    if(entity instanceof NoFace ) { // bottom of the player hits the top of the ground.
+                        console.log("entered");
+                        that.nofaceCount++;
+                        console.log(that.nofaceCount);
+                        // that.updateBB();
                     }
 
                 }
