@@ -45,6 +45,15 @@ class Player {
         this.animations[2][0] = new Animator (this.spritesheet, 0, 128, 32, 32, 8, 0.15, 0, false, true); 
         this.animations[2][1] = new Animator (this.spritesheet, 0, 160, 32, 32, 8, 0.15, 0, false, true); 
 
+        // crouch -> right, left
+        this.animations[3][0] = new Animator (this.spritesheet, 32, 128, 32, 32, 1, 0.33, 0, false, true); 
+        this.animations[3][1] = new Animator (this.spritesheet, 32, 160, 32, 32, 1, 0.33, 0, false, true); 
+
+        // run -> right, left
+        this.animations[4][0] = new Animator (this.spritesheet, 0, 64, 32, 32, 6, 0.05, 0, false, true); 
+        this.animations[4][1] = new Animator (this.spritesheet, 0, 96, 32, 32, 6, 0.05, 0, false, true); 
+
+
     }
 
     updateBB() {
@@ -66,18 +75,26 @@ class Player {
         const MIN_WALK = 200;
         const MAX_FALL = 240;
         const RUN_FALL  = 2025;
+        const crouch_spe = 350;
         
 
         if (this.isGrounded) { // can only jump and move while on the ground.
             if (this.game.left) { // when left key is pressed
                 this.velocity.x -= MIN_WALK * TICK; 
+            } else if(this.game.runL){ //run added 
+                this.velocity.x -= MAX_RUN * TICK; 
+                this.state = 4;
             } else if (this.game.right) {   // when right key is pressed
                 this.velocity.x += MIN_WALK * TICK;        
-            } else {            
+            } else if (this.game.runR) { //running
+                this.velocity.x += MAX_RUN * TICK; 
+                this.state = 4;
+            }      
+            else {
                 this.velocity.x = 0;       
             }  
             if (this.game.up) { 
-                this.velocity.y = -300;   
+                this.velocity.y = -240;   
                 this.state = 2;
             }  else {  
                 this.state = 0;
@@ -138,7 +155,9 @@ class Player {
         
          // update state
         if (this.state !== 2) {
-            if (Math.abs(this.velocity.x) > 0) this.state = 1;
+             if(this.game.crouch) this.state = 3; //crouching state
+            else if (Math.abs(this.velocity.x) > 0) this.state = 1;
+            else if(Math.abs(this.velocity.x) > MIN_WALK) this.state = 4; //running state 
         } else {
             
         }
