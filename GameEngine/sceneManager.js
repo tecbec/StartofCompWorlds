@@ -10,7 +10,7 @@ class SceneManager {
         // when y is too close to the ground it falls off ? when jumping right below ; not sure why 
         this.platform = new Platform(gameEngine, 140, 240, 32); 
         this.platform1 = new Platform(gameEngine, 300, 150, 32); 
-        this.platform2 = new Platform(gameEngine, 64, 100, 32); 
+        this.platform2 = new Platform(gameEngine, 90, 100, 32); 
         this.soots = new Soot(gameEngine, 0, 0);
         this.loadGame();
     };
