@@ -12,22 +12,14 @@ class Ground {
     };
 
     draw(ctx) {
-        // TODO:can refactor this code
-        // start piece
-        ctx.drawImage(this.spritesheet, 0, 0, 32, 32, this.x, this.y, 64, 64);
         // middle piece
-        ctx.drawImage(this.spritesheet, 32, 0, 32, 32, this.x + 64, this.y, 64, 64);
-        ctx.drawImage(this.spritesheet, 32, 0, 32, 32, this.x + 64 * 2, this.y, 64, 64);
-        ctx.drawImage(this.spritesheet, 32, 0, 32, 32, this.x + 64 * 3, this.y, 64, 64);
-        // end piece
-        ctx.drawImage(this.spritesheet, 64, 0, 32, 32, this.x + 64 * 4, this.y, 64, 64);
-    
-        // TODO:fix the bounding box measures
+        let count = PARAMS.CANVAS_WIDTH / 64 ;
+        for (var i = 0; i < count; i ++) {
+            ctx.drawImage(this.spritesheet, 32, 0, 32, 32, this.x + 64 * i, this.y, 64, 64);
+        }
+
         ctx.strokeStyle = 'Red';
         ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);  
-        
-        // y = 242
-        // chihiro 178 + 64
     };
 
 };
@@ -42,22 +34,8 @@ class BackGround {
     };
 
     draw(ctx) {
-        ctx.drawImage(this.spritesheet, 0, 0, 288, 208, this.x, this.y, PARAMS.CANVAS_WIDTH, 242);
+        ctx.drawImage(this.spritesheet, 0, 0, 288, 208, this.x, this.y, PARAMS.CANVAS_WIDTH, PARAMS.CANVAS_HEIGHT);
 
-    }
-}
-
-class Water {
-    constructor(game, x, y) {
-        Object.assign(this, { game, x, y});
-        this.spritesheet = ASSET_MANAGER.getAsset("./sprites/water.png");      
-    }
-    update() {
-
-    };
-
-    draw(ctx) {
-        ctx.drawImage(this.spritesheet, 0, 0, 32, 32, this.x, this.y, PARAMS.CANVAS_WIDTH, 242);
     }
 }
 
@@ -82,7 +60,7 @@ class Platform {
         ctx.drawImage(this.spritesheet, 16, 32, 16, 16, this.x + 32, this.y, 32, 32);
         ctx.drawImage(this.spritesheet, 32, 32, 16, 16, this.x + 64, this.y, 32, 32);
         ctx.strokeStyle = 'Red';
-        // the entire platform bb
+        // the whole platform bb 
         ctx.strokeRect(this.BB.x, this.BB.y, 32 * 3, 32);    
         // the left bb
         ctx.strokeStyle = 'Orange';
