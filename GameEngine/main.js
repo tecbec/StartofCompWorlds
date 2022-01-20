@@ -16,6 +16,8 @@ ASSET_MANAGER.downloadAll(() => {
 	const ctx = canvas.getContext("2d");
 	PARAMS.CANVAS_WIDTH = canvas.width;
 	PARAMS.CANVAS_HEIGHT = canvas.height;
+		//may need to change bitwidth or scale in Util
+		PARAMS.BLOCKWIDTH = PARAMS.BITWIDTH * PARAMS.SCALE;
 	gameEngine.init(ctx);
 	gameEngine.addEntity(new SceneManager(gameEngine));
 	gameEngine.start();
