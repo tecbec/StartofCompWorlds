@@ -8,17 +8,19 @@ class SceneManager {
         this.background = new BackGround(gameEngine, 0, 0);
         this.water = new Water(gameEngine, 0, 165);
         this.platform = new Platform(gameEngine, 100, 140, 32);
+        this.platform2 = new Platform(gameEngine, 200, 50, 32);
         this.soots = new Soot(gameEngine, 0, 0);
         this.loadGame();
     };
-    
+
     loadGame() {
         this.game.addEntity(this.background);
         this.game.addEntity(this.water);
         this.game.addEntity(this.chihiro);
         this.game.addEntity(this.ground);
         this.game.addEntity(this.platform);
-        // this.game.addEntity(this.soots);
+        this.game.addEntity(this.platform2);
+        this.game.addEntity(this.soots);
     }
 
     update() {

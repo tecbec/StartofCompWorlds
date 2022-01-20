@@ -93,9 +93,9 @@ class GameEngine {
         // Draw latest things first
         this.ctx.save();
         for (var i = 0; i < this.entities.length; i++) {
-            this.entities[i].draw(this.ctx);     
+            this.entities[i].draw(this.ctx);
         }
-       
+
     };
 
     update() {
