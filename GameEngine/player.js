@@ -18,11 +18,12 @@ class Player {
         this.state = 0; // 0 = idle, 1 = walking, 2 = jumping/falling,
 
         // default values.
-        this.velocity = { x: 0, y: 0};
+        this.velocity = {x: 0, y: 0};
         this.fallAcc = 562.5;
         this.isGrounded = false;
 
         this.sootCount = 0;
+        this.nofaceCount = 0;
 
 };
     loadAnimations() {
@@ -108,7 +109,7 @@ class Player {
         // TODO: think about left and right bounding box.
         this.game.entities.forEach(function (entity) {              // this will look at all entities in relation to mario
                 if (entity.BB && that.BB.collide(entity.BB)) {      //is there an entity bb & check to see if they collide
-                    if(that.velocity.y >= 0) { // so mario is falling
+                    if(that.velocity.y > 0) {                      // so chihiro is falling or standing still
                         if((entity instanceof Ground || entity instanceof Platform)
                         && (that.lastBB.bottom <= entity.BB.top)) { // bottom of the player hits the top of the ground.
                             that.isGrounded = true;
@@ -118,19 +119,16 @@ class Player {
                         }  else {
                             that.isGrounded = false;
                         }
-                        if((entity instanceof Soot )
-                            && ( (that.lastBB.bottom <= entity.BB.top)
-                              || (that.lastBB.right >= entity.BB.left)
-                              || (that.lastBB.left <= entity.BB.right) ) ) { // bottom of the player hits the top of the ground.
+                        if((entity instanceof NoFace )
+                            && ( (that.lastBB.right <= entity.BB.left)) ) { // bottom of the player hits the top of the ground.
 
-                            this.sootCount++;
-                            console.log(this.sootCount);
+                            console.log("entered");
+                            this.nofaceCount++;
+                            console.log(this.nofaceCount);
                             that.updateBB();
-                        }  else {
-
                         }
                     }
-                    if (that.velocity.y < 0) { // mario is jumping
+                    if (that.velocity.y < 0) { // chihiro is jumping
                         if((entity instanceof Platform)
                             && (that.lastBB.top >= entity.BB.bottom)) { // bottom of the player hits the top of the ground.
                                 that.y = entity.BB.bottom;
@@ -139,16 +137,13 @@ class Player {
                         }  else {
                             that.isGrounded = false;
                         }
-                        if((entity instanceof Soot )
-                            && ( (that.lastBB.bottom <= entity.BB.top)
-                              || (that.lastBB.right >= entity.BB.left)
-                              || (that.lastBB.left <= entity.BB.right) ) ) { // bottom of the player hits the top of the ground.
-
-                            this.sootCount++;
-                            console.log(this.sootCount);
+                        console.log(this.lastBB.right +" " + entity.BB.left);
+                        if((entity instanceof NoFace )
+                            && ( (that.lastBB.right <= entity.BB.left)) ) { // bottom of the player hits the top of the ground.
+                            console.log("entered");
+                            this.nofaceCount++;
+                            console.log(this.nofaceCount);
                             that.updateBB();
-                        }  else {
-
                         }
                     }
 
@@ -159,7 +154,7 @@ class Player {
         if (this.state !== 2) {
             if (Math.abs(this.velocity.x) > 0) this.state = 1;
         } else {
-            
+
         }
          // update direction
          if (this.velocity.x < 0) this.facing = 1;
