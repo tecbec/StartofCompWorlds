@@ -5,23 +5,29 @@ class Player {
     - game = game engine 
     - x, y = the location of the Player
     */
-    constructor(game, x, y, spritesheet) {
-        Object.assign(this, {game, x, y, spritesheet });
+    constructor(game, x, y) {
+        Object.assign(this, {game, x, y});
         // NOTE: later on can be updated without the sprite sheet passed in the param. 
+        this.game.chihiro = this;
+        this.spritesheet = ASSET_MANAGER.getAsset("./sprites/spritesheet.png");
         this.updateBB();
+
         this.animations = [];
-        this.loadAnimations(spritesheet);
+        this.loadAnimations();
         this.facing = 0; // 0 = right; 1 = left
         this.state = 0; // 0 = idle, 1 = walking, 2 = jumping/falling, 
+
         // default values. 
         this.velocity = { x: 0, y: 0};
         this.fallAcc = 562.5;
         this.isGrounded = false;
+
+        this.count = 0;
         
 };
-    loadAnimations(spritesheet) {
+    loadAnimations() {
         // array with [state] [face] of the same animator.
-        for (var i = 0; i < 3; i++) {
+        for (var i = 0; i < 5; i++) {
             this.animations.push([]);
             for (var j = 0; j < 2; j++) {
                 this.animations[i].push([]);
@@ -39,11 +45,20 @@ class Player {
         this.animations[2][0] = new Animator (this.spritesheet, 0, 128, 32, 32, 8, 0.15, 0, false, true); 
         this.animations[2][1] = new Animator (this.spritesheet, 0, 160, 32, 32, 8, 0.15, 0, false, true); 
 
+        // crouch -> right, left
+        this.animations[3][0] = new Animator (this.spritesheet, 32, 128, 32, 32, 1, 0.33, 0, false, true); 
+        this.animations[3][1] = new Animator (this.spritesheet, 32, 160, 32, 32, 1, 0.33, 0, false, true); 
+
+        // run -> right, left
+        this.animations[4][0] = new Animator (this.spritesheet, 0, 64, 32, 32, 6, 0.05, 0, false, true); 
+        this.animations[4][1] = new Animator (this.spritesheet, 0, 96, 32, 32, 6, 0.05, 0, false, true); 
+
+
     }
 
     updateBB() {
         this.lastBB = this.BB;
-        this.BB = new BoundingBox(this.x, this.y, 64, 64);
+        this.BB = new BoundingBox(this.x + 10, this.y+10, 64-20, 64-10); // KD changed the bounding box dimensions to hug the sprite.
     };
 
     draw(ctx) {
@@ -57,66 +72,122 @@ class Player {
 
     update() {
         const TICK = this.game.clockTick;
-        const MIN_WALK = 200;
-
-        if (this.isGrounded) { // can only jump and move while on the ground.
-            if (this.game.left) { // when left key is pressed
-                this.velocity.x -= MIN_WALK * TICK; 
-            } else if (this.game.right) {   // when right key is pressed
-                this.velocity.x += MIN_WALK * TICK;        
-            } else {            
-                this.velocity.x = 0;       
-            }  
+        const MAX_FALL = 240;
+        const MIN_WALK = 100;
+        const RUN_ACC = 400;
+        const crouch_spe = 350;
+        // can only jump and move while on the ground.
+        if (this.isGrounded) {   
+            if (Math.abs(this.velocity.x) < MIN_WALK) { // walking
+                this.velocity.x = 0;
+                if (this.game.left) { 
+                    this.velocity.x -= MIN_WALK; 
+                }
+                if (this.game.right) {
+                    this.velocity.x += MIN_WALK; 
+                }  
+            } else if (Math.abs(this.velocity.x) >= MIN_WALK) { // running
+                if (this.facing === 0) {                        // if going left
+                    if (this.game.right && !this.game.left) {   // make sure that only one arrow is pressed at a time
+                        if (this.game.run) {                    // when player press shift + arrow
+                            this.velocity.x += RUN_ACC * TICK;
+                        }
+                    } else {
+                        this.velocity.x = 0;
+                        this.state = 4;
+                    }
+                } 
+                if (this.facing === 1) {                        // if going right
+                    if (this.game.left && !this.game.right) {   // make sure that only one arrow is pressed at a time
+                        if (this.game.run) {                    // when player press shift + arrow
+                            this.velocity.x -= RUN_ACC * TICK;
+                        }
+                    } else {
+                        this.velocity.x = 0;
+                        this.state = 4;
+                    }
+                }
+            }
             if (this.game.up) { 
-                this.velocity.y = -240;   
+                this.velocity.y = -250;   
                 this.state = 2;
-            }  else {  
+            } else {  
                 this.state = 0;
                 this.velocity.y = 0;
             }
         }
+
+
+        // for testing purposes 
+        if (this.x < 0) {
+            this.x = 0;
+        } else if (this.x > 336) {
+            this.x = 336;
+        }
+
         this.velocity.y += this.fallAcc * TICK;
 
-        // ground imitation
-        // if (this.y > 178){
-        //     this.isGrounded = true;
-        //     this.y = 178;
-        //     this.velocity.y = 0;
-        // } else {
-        //     this.isGrounded = false
-        // }
-        // player is constantly falling 
+        if (this.velocity.y >= MAX_FALL) this.velocity.y = MAX_FALL;
+        if (this.velocity.y <= -MAX_FALL) this.velocity.y = -MAX_FALL;
                 
         this.x += this.velocity.x * TICK * 2; 
-        this.y += this.velocity.y * TICK *2;
-
+        this.y += this.velocity.y * TICK * 2;
+        
         this.updateBB();
  
         var that = this;
-   
+        
         // collision
-        this.game.entities.forEach(function (entity) {
-            if (entity.BB && that.BB.collide(entity.BB)) {        
-                    if((entity instanceof Ground) && that.lastBB.bottom >= entity.BB.top) { // bottom of the player hits the top of the ground.
-                        that.isGrounded = true;
-                        that.y = 178;
-                        that.velocity.y === 0;  
-                    }  else {  
-                        that.isGrounded = false;
-                    }
-                    that.updateBB();      
-              }     
+        // TODO: think about left and right bounding box.
+        this.game.entities.forEach(function (entity) {              // this will look at all entities in relation to mario
+                if (entity.BB && that.BB.collide(entity.BB)) {      //is there an entity bb & check to see if they collide
+                    if(that.velocity.y > 0) { // so chihiro is falling
+                        if((entity instanceof Ground || entity instanceof Platform) 
+                        && (that.lastBB.bottom <= entity.BB.top)) { // bottom of the player hits the top of the ground.
+                            that.isGrounded = true;
+                            that.y = entity.BB.top - 32 * 2;
+                            that.velocity.y = 0;  
+                            that.updateBB();        
+                        } else {
+                            that.isGrounded = false;
+                        }                   
+                    }                    
+                    if (that.velocity.y < 0) { // chihiro is jumping
+                        if((entity instanceof Platform)  
+                            && (that.lastBB.top >= entity.BB.bottom)) { // bottom of the player hits the top of the ground.
+                            that.y = entity.BB.bottom;
+                            that.velocity.y = 0;                                  
+                            that.updateBB();      
+                        } else {
+                            that.isGrounded = false;
+                        }  
+                    } 
+                    if (entity instanceof Platform && that.BB.collide(entity.BB)) { 
+                        if (that.BB.collide(entity.leftBB)) { // left collision
+                            that.x = entity.leftBB.left - 32 * 2;
+                            if (that.velocity.x > 0) that.velocity.x = 0;  
+                            
+                        } else if (that.BB.collide(entity.rightBB)) { // right collision
+                            that.x = entity.rightBB.right;
+                            if (that.velocity.x < 0) that.velocity.x = 0;  
+                        }
+                        that.updateBB();
+                    }           
+                }
         });
         
          // update state
         if (this.state !== 2) {
-            if (Math.abs(this.velocity.x) > 0) this.state = 1;
+            if(this.game.crouch) this.state = 3; //crouching state
+            else if (Math.abs(this.velocity.x) > 0) this.state = 1;
+            else if(Math.abs(this.velocity.x) > MIN_WALK) this.state = 4; //running state 
         } else {
             
         }
          // update direction
          if (this.velocity.x < 0) this.facing = 1;
          if (this.velocity.x > 0) this.facing = 0;
+         
 
     }
 }
