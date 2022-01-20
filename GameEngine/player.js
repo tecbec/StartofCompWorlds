@@ -8,7 +8,8 @@ class Player {
     constructor(game, x, y) {
         Object.assign(this, {game, x, y});
         // NOTE: later on can be updated without the sprite sheet passed in the param. 
-        this.game.chihiro = this;
+        this.game.chihiro = this; 
+        this.game.x = this; 
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/spritesheet.png");
         this.updateBB();
 
@@ -58,15 +59,17 @@ class Player {
 
     updateBB() {
         this.lastBB = this.BB;
+        //making the box smaller here 
         this.BB = new BoundingBox(this.x + 10, this.y+10, 64-20, 64-10); // KD changed the bounding box dimensions to hug the sprite.
     };
 
     draw(ctx) {
-        this.animations[this.state][this.facing].drawFrame(this.game.clockTick, ctx, this.x, this.y, 2);
+      //  this.animations[this.state][this.facing].drawFrame(this.game.clockTick, ctx, this.x, this.y, 2);
+      this.animations[this.state][this.facing].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, 2);
         
         ctx.strokeStyle = 'Red';
-        ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
-
+        //ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
+        ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
         ctx.imageSmoothingEnabled = false;
     }
 
@@ -93,7 +96,7 @@ class Player {
                             this.velocity.x += RUN_ACC * TICK;
                         }
                     } else {
-                        this.velocity.x = 0;
+                        this.velocity.x = 0; 
                         this.state = 4;
                     }
                 } 
@@ -118,14 +121,7 @@ class Player {
         }
 
 
-        // for testing purposes 
-        if (this.x < 0) {
-            this.x = 0;
-        } else if (this.x > 336) {
-            this.x = 336;
-        }
-
-        this.velocity.y += this.fallAcc * TICK;
+        this.velocity.y += this.fallAcc * TICK; //this makes mario always falling
 
         if (this.velocity.y >= MAX_FALL) this.velocity.y = MAX_FALL;
         if (this.velocity.y <= -MAX_FALL) this.velocity.y = -MAX_FALL;
@@ -135,7 +131,7 @@ class Player {
         
         this.updateBB();
  
-        var that = this;
+        var that = this; //need this becuase we are creating 
         
         // collision
         // TODO: think about left and right bounding box.
@@ -162,6 +158,7 @@ class Player {
                             that.isGrounded = false;
                         }  
                     } 
+                    //created all these bounding 
                     if (entity instanceof Platform && that.BB.collide(entity.BB)) { 
                         if (that.BB.collide(entity.leftBB)) { // left collision
                             that.x = entity.leftBB.left - 32 * 2;
@@ -178,7 +175,7 @@ class Player {
         
          // update state
         if (this.state !== 2) {
-            if(this.game.crouch) this.state = 3; //crouching state
+            if (this.game.crouch) this.state = 3; //crouching state
             else if (Math.abs(this.velocity.x) > 0) this.state = 1;
             else if(Math.abs(this.velocity.x) > MIN_WALK) this.state = 4; //running state 
         } else {

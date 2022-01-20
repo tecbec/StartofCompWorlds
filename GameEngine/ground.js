@@ -3,7 +3,7 @@ class Ground {
         Object.assign(this, { game, x, y, w});
 
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/platform_sheet.png");
-        this.BB = new BoundingBox(this.x, this.y, this.w, 64);
+        this.BB = new BoundingBox(this.x , this.y, this.w, 64);
         
     };
 
@@ -15,11 +15,11 @@ class Ground {
         // middle piece
         let count = PARAMS.CANVAS_WIDTH / 64 ;
         for (var i = 0; i < count; i ++) {
-            ctx.drawImage(this.spritesheet, 32, 0, 32, 32, this.x + 64 * i, this.y, 64, 64);
+            ctx.drawImage(this.spritesheet, 32, 0, 32, 32, this.x + 64 * i  - this.game.camera.x, this.y, 64, 64);
         }
 
         ctx.strokeStyle = 'Red';
-        ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);  
+        ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);  
     };
 
 };
@@ -34,7 +34,7 @@ class BackGround {
     };
 
     draw(ctx) {
-        ctx.drawImage(this.spritesheet, 0, 0, 288, 208, this.x, this.y, PARAMS.CANVAS_WIDTH, PARAMS.CANVAS_HEIGHT);
+        ctx.drawImage(this.spritesheet, 0, 0, 288, 208, this.x - this.game.camera.x, this.y, PARAMS.CANVAS_WIDTH, PARAMS.CANVAS_HEIGHT);
 
     }
 }
@@ -56,17 +56,19 @@ class Platform {
 
     draw(ctx) {
         // TODO:refactor this code
-        ctx.drawImage(this.spritesheet, 0, 32, 16, 16, this.x, this.y, 32, 32);
-        ctx.drawImage(this.spritesheet, 16, 32, 16, 16, this.x + 32, this.y, 32, 32);
-        ctx.drawImage(this.spritesheet, 32, 32, 16, 16, this.x + 64, this.y, 32, 32);
+        // we need different bounding boxes to be able to actually check for that condition 
+        // go in and delete and re-apply the bounding boxes 
+        ctx.drawImage(this.spritesheet, 0, 32, 16, 16, this.x - this.game.camera.x, this.y, 32, 32);
+        ctx.drawImage(this.spritesheet, 16, 32, 16, 16, this.x + 32- this.game.camera.x, this.y, 32, 32);
+        ctx.drawImage(this.spritesheet, 32, 32, 16, 16, this.x + 64- this.game.camera.x, this.y, 32, 32);
         ctx.strokeStyle = 'Red';
         // the whole platform bb 
         ctx.strokeRect(this.BB.x, this.BB.y, 32 * 3, 32);    
         // the left bb
         ctx.strokeStyle = 'Orange';
-        ctx.strokeRect(this.topBB.x, this.topBB.y, this.topBB.width, this.topBB.height);  
-        ctx.strokeRect(this.bottomBB.x, this.bottomBB.y, this.bottomBB.width, this.bottomBB.height);  
-        ctx.strokeRect(this.leftBB.x, this.leftBB.y, this.leftBB.width, this.leftBB.height);  
-        ctx.strokeRect(this.rightBB.x, this.rightBB.y, this.rightBB.width, this.rightBB.height);  
+        ctx.strokeRect(this.topBB.x - this.game.camera.x, this.topBB.y, this.topBB.width, this.topBB.height);  
+        ctx.strokeRect(this.bottomBB.x - this.game.camera.x, this.bottomBB.y, this.bottomBB.width, this.bottomBB.height);  
+        ctx.strokeRect(this.leftBB.x - this.game.camera.x, this.leftBB.y, this.leftBB.width, this.leftBB.height);  
+        ctx.strokeRect(this.rightBB.x - this.game.camera.x, this.rightBB.y, this.rightBB.width, this.rightBB.height);  
     }
 }
