@@ -63,11 +63,8 @@ class GameEngine {
                 case "ArrowUp":
                     that.up = true;
                     break;
-                case "ShiftRight": //run facing right
-                    that.runR = true;
-                    break;
-                case "ShiftLeft": //run facing left
-                    that.runL = true; 
+                case "ShiftLeft": //run 
+                    that.run = true;
                     break;
                 case "ArrowDown": //crouching 
                     that.crouch = true; 
@@ -86,11 +83,8 @@ class GameEngine {
                 case "ArrowUp":
                     that.up = false;
                     break;
-                case "ShiftRight":
-                    that.runR = false;
-                    break;
                 case "ShiftLeft":
-                    that.runL = false;
+                    that.run = false;
                     break;
                 case "ArrowDown":
                     that.crouch = false; 

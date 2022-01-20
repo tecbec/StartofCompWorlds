@@ -27,7 +27,7 @@ class Player {
 };
     loadAnimations() {
         // array with [state] [face] of the same animator.
-        for (var i = 0; i < 3; i++) {
+        for (var i = 0; i < 5; i++) {
             this.animations.push([]);
             for (var j = 0; j < 2; j++) {
                 this.animations[i].push([]);
@@ -72,34 +72,57 @@ class Player {
 
     update() {
         const TICK = this.game.clockTick;
-        const MIN_WALK = 200;
         const MAX_FALL = 240;
-        const RUN_FALL  = 2025;
+        const MIN_WALK = 100;
+        const RUN_ACC = 400;
         const crouch_spe = 350;
-        
-
-        if (this.isGrounded) { // can only jump and move while on the ground.
-            if (this.game.left) { // when left key is pressed
-                this.velocity.x -= MIN_WALK * TICK; 
-            } else if(this.game.runL){ //run added 
-                this.velocity.x -= MAX_RUN * TICK; 
-                this.state = 4;
-            } else if (this.game.right) {   // when right key is pressed
-                this.velocity.x += MIN_WALK * TICK;        
-            } else if (this.game.runR) { //running
-                this.velocity.x += MAX_RUN * TICK; 
-                this.state = 4;
-            }      
-            else {
-                this.velocity.x = 0;       
-            }  
+        // can only jump and move while on the ground.
+        if (this.isGrounded) {   
+            if (Math.abs(this.velocity.x) < MIN_WALK) { // walking
+                this.velocity.x = 0;
+                if (this.game.left) { 
+                    this.velocity.x -= MIN_WALK; 
+                }
+                if (this.game.right) {
+                    this.velocity.x += MIN_WALK; 
+                }  
+            } else if (Math.abs(this.velocity.x) >= MIN_WALK) { // running
+                if (this.facing === 0) {                        // if going left
+                    if (this.game.right && !this.game.left) {   // make sure that only one arrow is pressed at a time
+                        if (this.game.run) {                    // when player press shift + arrow
+                            this.velocity.x += RUN_ACC * TICK;
+                        }
+                    } else {
+                        this.velocity.x = 0;
+                        this.state = 4;
+                    }
+                } 
+                if (this.facing === 1) {                        // if going right
+                    if (this.game.left && !this.game.right) {   // make sure that only one arrow is pressed at a time
+                        if (this.game.run) {                    // when player press shift + arrow
+                            this.velocity.x -= RUN_ACC * TICK;
+                        }
+                    } else {
+                        this.velocity.x = 0;
+                        this.state = 4;
+                    }
+                }
+            }
             if (this.game.up) { 
-                this.velocity.y = -240;   
+                this.velocity.y = -250;   
                 this.state = 2;
-            }  else {  
+            } else {  
                 this.state = 0;
                 this.velocity.y = 0;
             }
+        }
+
+
+        // for testing purposes 
+        if (this.x < 0) {
+            this.x = 0;
+        } else if (this.x > 336) {
+            this.x = 336;
         }
 
         this.velocity.y += this.fallAcc * TICK;
@@ -155,7 +178,7 @@ class Player {
         
          // update state
         if (this.state !== 2) {
-             if(this.game.crouch) this.state = 3; //crouching state
+            if(this.game.crouch) this.state = 3; //crouching state
             else if (Math.abs(this.velocity.x) > 0) this.state = 1;
             else if(Math.abs(this.velocity.x) > MIN_WALK) this.state = 4; //running state 
         } else {
