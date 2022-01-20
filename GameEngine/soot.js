@@ -25,12 +25,17 @@ class Soot {
         this.y = [];
 
 
-        for (let i = 0; i < NUM_SOOTS; i++){
-            
-            if (i < 5) {
-                STARTx[i] = this.x[i] = 0;
-            } else {
-                STARTx[i] = this.x[i] = 100;
+
+        // the top x and y location the soots will be located.
+        this.minScreen = {x: 100, y: 75};
+        this.maxScreen = {x: 150, y: 175};
+
+        // determine the starting x and y values for all the soots
+        for (let i = 0; i < this.NUM_SOOTS; i++){
+            if (i < 5) { // from left
+                this.x[i] = this.minScreen.x ;
+            } else { // from right
+                this.x[i] = this.maxScreen.x;
             }
             STARTy[i] = this.y[i] = 400;
         };
@@ -136,10 +141,9 @@ class Soot {
                     this.velocityy[i] += (STOP_FALL[i] - STOP_FALL_A[i]) * this.game.clockTick;
                     this.x[i] += this.velocityx[i] * this.game.clockTick;
                     this.y[i] += this.velocityy[i] * this.game.clockTick;
-                } 
-                else if (this.x[i] >= SCREEN_X) {
-                    console.log("entered2");
-                    this.x[i] = 0;
+                }
+                else if (this.x[i] >= this.maxScreen.x) {
+                    this.x[i] = this.minScreen.x;
                 }
                 else if (this.y[i] < MIN_Y) {
                     console.log("entered1");
@@ -181,10 +185,9 @@ class Soot {
     };
 
     draw(ctx) {
-
-        const NUM_SOOTS = 10;
-
-        for(let i = 0; i < NUM_SOOTS; i++) {
+        ctx.strokeStyle = 'Red';
+        // for(let i = 0; i < this.NUM_SOOTS; i++) {
+        for(let i = 0; i < this.NUM_SOOTS_HALF; i++) {
             this.animations[i].drawFrame(this.game.clockTick, ctx, this.x[i], this.y[i], 0.3);
         }
 
