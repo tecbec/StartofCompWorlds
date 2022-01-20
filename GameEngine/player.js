@@ -115,13 +115,24 @@ class Player {
                     if (that.velocity.y < 0) { // chihiro is jumping
                         if((entity instanceof Platform)  
                             && (that.lastBB.top >= entity.BB.bottom)) { // bottom of the player hits the top of the ground.
-                                that.y = entity.BB.bottom;
-                                that.velocity.y = 0;                                  
-                                that.updateBB();      
+                            that.y = entity.BB.bottom;
+                            that.velocity.y = 0;                                  
+                            that.updateBB();      
                         } else {
                             that.isGrounded = false;
                         }  
-                    }                 
+                    } 
+                    if (entity instanceof Platform && that.BB.collide(entity.BB)) { 
+                        if (that.BB.collide(entity.leftBB)) { // left collision
+                            that.x = entity.leftBB.left - 32 * 2;
+                            if (that.velocity.x > 0) that.velocity.x = 0;  
+                            
+                        } else if (that.BB.collide(entity.rightBB)) { // right collision
+                            that.x = entity.rightBB.right;
+                            if (that.velocity.x < 0) that.velocity.x = 0;  
+                        }
+                        that.updateBB();
+                    }           
                 }
         });
         

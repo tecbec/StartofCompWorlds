@@ -7,7 +7,8 @@ class SceneManager {
         this.ground = new Ground(gameEngine, 0, 242, 320);
         this.background = new BackGround(gameEngine, 0, 0);
         this.water = new Water(gameEngine, 0, 165);
-        this.platform = new Platform(gameEngine, 100, 140, 32);
+        // when y is at 150 it falls off ? not sure why 
+        this.platform = new Platform(gameEngine, 100, 145, 32); 
         this.soots = new Soot(gameEngine, 0, 0);
         this.loadGame();
     };
