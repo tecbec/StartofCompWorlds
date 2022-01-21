@@ -11,7 +11,7 @@ class SceneManager {
         this.ground = new Ground(gameEngine, 0, PARAMS.CANVAS_WIDTH - 64, PARAMS.CANVAS_WIDTH);
 
         this.background = new BackGround(gameEngine, 0, 0);
-        this.water = new Water(gameEngine, 0, 165);
+        // this.water = new Water(gameEngine, 0, 165);
 
         this.game.camera = this; // focusing camera on mario 
 
@@ -29,10 +29,10 @@ class SceneManager {
         this.game.addEntity(this.chihiro);
         this.game.addEntity(this.ground);
         this.game.addEntity(this.platform);
-        this.game.addEntity(this.soots);
-        this.game.addEntity(this.noface);
         this.game.addEntity(this.platform1);
         this.game.addEntity(this.platform2);
+        this.game.addEntity(this.soots);
+        this.game.addEntity(this.noface);
     }
 
     update(){

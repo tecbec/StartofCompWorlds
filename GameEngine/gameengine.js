@@ -101,7 +101,7 @@ class GameEngine {
     draw() {
         // Clear the whole canvas with transparent color (rgba(0, 0, 0, 0))
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
-        
+
         //this.ctx.fillStyle = 'red';
         //this.ctx.fillRect(0,0,20,20);
         // Draw latest things first

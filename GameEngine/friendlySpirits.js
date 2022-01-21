@@ -11,8 +11,8 @@ class NoFace {
         this.loadAnimations();
 
         // initialize this.x and this.y
-        this.x = 200;
-        this.y = 0;
+        this.x = 100;
+        this.y = 20;
 
         // initialize the velocity .
         this.velocity = {x: 100, y: 100};
@@ -36,10 +36,10 @@ class NoFace {
     };
 
     draw(ctx) {
-        this.animations.drawFrame(this.game.clockTick, ctx, this.x, this.y, .2);
+        this.animations.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, .2);
 
         ctx.strokeStyle = 'Red';
-        ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
+        ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
         ctx.imageSmoothingEnabled = false;
 
     };

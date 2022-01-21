@@ -23,8 +23,8 @@ class Soot {
         this.y = [];
 
         // the top x and y location the soots will be located.
-        this.minScreen = {x: 200, y: 150};
-        this.maxScreen = {x: 300, y: 200};
+        this.minScreen = {x: 200, y: 260};
+        this.maxScreen = {x: 300, y: 280};
 
         // determine the starting x and y values for all the soots
         for (let i = 0; i < this.NUM_SOOTS; i++){
@@ -167,8 +167,8 @@ class Soot {
         ctx.strokeStyle = 'Red';
         for(let i = 0; i < this.NUM_SOOTS; i++) {
         // for(let i = 0; i < this.NUM_SOOTS_HALF; i++) {
-            this.animations[i].drawFrame(this.game.clockTick, ctx, this.x[i], this.y[i], 0.3);
-            ctx.strokeRect(this.BB[i].x, this.BB[i].y, this.BB[i].width, this.BB[i].height);
+            this.animations[i].drawFrame(this.game.clockTick, ctx, this.x[i]  - this.game.camera.x, this.y[i], 0.3);
+            ctx.strokeRect(this.BB[i].x  - this.game.camera.x, this.BB[i].y, this.BB[i].width, this.BB[i].height);
         }
         ctx.imageSmoothingEnabled = false;
     };
