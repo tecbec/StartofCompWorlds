@@ -27,7 +27,7 @@ class NoFace {
 
     updateBB() {
         this.lastBB = this.BB;
-        this.BB = new BoundingBox(this.x+5, this.y, 30, 100);
+        this.BB = new BoundingBox(this.x+5, this.y, 20, 75);
     };
 
 
