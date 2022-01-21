@@ -23,8 +23,8 @@ class Soot {
         this.y = [];
 
         // the top x and y location the soots will be located.
-        this.minScreen = {x: 200, y: 260};
-        this.maxScreen = {x: 300, y: 280};
+        this.minScreen = {x: 175, y: 175};
+        this.maxScreen = {x: 200, y: 200};
 
         // determine the starting x and y values for all the soots
         for (let i = 0; i < this.NUM_SOOTS; i++){

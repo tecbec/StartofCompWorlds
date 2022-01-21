@@ -11,7 +11,7 @@ class NoFace {
         this.loadAnimations();
 
         // initialize this.x and this.y
-        this.x = 100;
+        this.x = 125;
         this.y = 20;
 
         // initialize the velocity .
