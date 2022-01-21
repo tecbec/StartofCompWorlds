@@ -168,7 +168,7 @@ class Player {
                             that.isGrounded = false;
                         }
                     }
-                    //created all these bounding
+                    // left and right bounding boxes for platform
                     if (entity instanceof Platform && that.BB.collide(entity.BB)) {
                         if (that.BB.collide(entity.leftBB)) { // left collision
                             that.x = entity.leftBB.left - 32 * 2;
@@ -179,34 +179,40 @@ class Player {
                         }
                         that.updateBB();
                     }
-
-                    if(entity instanceof NoFace ) { // bottom of the player hits the top of the ground.
-                        that.nofaceCount++;
-                        console.log("that.nofaceCount++: " + that.nofaceCount++);
-
+                    // Collision with no face
+                    // TODO: Include top collision maybe, or just resize no face to be shorter.
+                    // TODO: fix the velocity changes. 
+                    if (entity instanceof NoFace && that.BB.collide(entity.BB)) { 
+                        if (that.BB.collide(entity.leftBB)) { // left collision
+                            that.x = entity.leftBB.left - 32 * 2;   
+                            if (that.velocity.x > 0) that.velocity.x = 0; 
+                        } else if (that.BB.collide(entity.rightBB)) {
+                            that.x = entity.rightBB.right - 5;
+                            if (that.velocity.x < 0) that.velocity.x = 0;
+                        }
                         // This is where we want to make no face give chihiro coins
                         // and after some amount of time make no face disappear.
+                        entity.removeFromWorld = true;
+                        that.nofaceCount++;
+                        console.log("that.nofaceCount++: " + that.nofaceCount++);
                     }
-
-                    if(entity instanceof Soot ) { // bottom of the player hits the top of the ground.
+                    // Collision with soot
+                    if (entity instanceof Soot ) { 
                         console.log("entered")
                         that.sootCount++;
                         console.log("that.sootCount " + that.sootCount);
-
                         // This is where we want to make chihiro loose stamina
                         // and after make the soots disappear?
                     }
-
+                    // Collision with coins
                     if (entity instanceof Coins) {
                         entity.removeFromWorld = true; 
                         if (that.breathbar < that.maxBreath) {
-                        that.breathwidth += 25; 
-                        that.breathbar.update(that.breathwidth);
+                            that.breathwidth += 25; 
+                            that.breathbar.update(that.breathwidth);
                         } 
                         that.breathwidth +=  that.maxBreath - that.breathwidth; 
                         that.breathbar.update(that.breathwidth);
-
-
                     }     
                 }
         });
@@ -224,7 +230,7 @@ class Player {
          if (this.velocity.x > 0) this.facing = 0;
          
          //updating the healthbar 
-         this.breathwidth -= .25; 
+         this.breathwidth -= .01; // changes for testing
          this.breathbar.update(this.breathwidth);
     }
 }

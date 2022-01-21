@@ -2,32 +2,22 @@ class SceneManager {
     constructor(game) {
         this.game = game;
         this.x = 0; //only scrolling to the left 
-        
+        this.game.camera = this; // focusing camera on mario 
+
         // chihiro falling from the sky and land on the ground
         this.chihiro = new Player(this.game, 0, 0);
         //this.chihiro = this;
         console.log(this.chihiro.x + this.chihiro.y)
         // x, y, w
         this.ground = new Ground(gameEngine, 0, PARAMS.CANVAS_WIDTH - 64, PARAMS.CANVAS_WIDTH);
-
         this.background = new BackGround(gameEngine, 0, 0);
-        // this.water = new Water(gameEngine, 0, 165);
-
-        this.game.camera = this; // focusing camera on mario 
-
-        //this.totalBreath = 0;
-        //this.maxBreath = 100;
-        // this.breathwidth = 100; 
-        // this.breathbarheight = 10; 
-        // this.maxBreath = 100; 
-        // this.breathbar = new BreathBar(this.game, 275, 10, this.breathwidth, this.breathbarheight, this.maxBreath, "Blue");
 
         // when y is too close to the ground it falls off ? when jumping right below ; not sure why 
         this.platform = new Platform(gameEngine, 140, 240, 32); 
         this.platform1 = new Platform(gameEngine, 300, 150, 32); 
         this.platform2 = new Platform(gameEngine, 90, 100, 32); 
         this.soots = new Soot(gameEngine, 0, 0);
-        this.noface = new NoFace(gameEngine, 0, 0);
+        this.noface = new NoFace(gameEngine, 325, PARAMS.CANVAS_WIDTH - 75 - 64);
 
         this.coin1 = new Coins(gameEngine, 200, 300);
         this.coin2 = new Coins(gameEngine, 300, 300);
