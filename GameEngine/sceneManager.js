@@ -15,12 +15,16 @@ class SceneManager {
 
         this.game.camera = this; // focusing camera on mario 
 
+        this.coins =0; 
         // when y is too close to the ground it falls off ? when jumping right below ; not sure why 
         this.platform = new Platform(gameEngine, 140, 240, 32); 
         this.platform1 = new Platform(gameEngine, 300, 150, 32); 
         this.platform2 = new Platform(gameEngine, 90, 100, 32); 
         this.soots = new Soot(gameEngine, 0, 0);
         this.noface = new NoFace(gameEngine, 0, 0);
+
+        this.coin1 = new Coins(gameEngine, 200, 300);
+        this.coin2 = new Coins(gameEngine, 300, 300);
         this.loadGame();
     };
 
@@ -33,6 +37,8 @@ class SceneManager {
         this.game.addEntity(this.platform2);
         this.game.addEntity(this.soots);
         this.game.addEntity(this.noface);
+        this.game.addEntity(this.coin1);
+        this.game.addEntity(this.coin2);
     }
 
     update(){

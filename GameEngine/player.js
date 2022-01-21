@@ -191,7 +191,13 @@ class Player {
                         // and after make the soots disappear?
                     }
 
+                    if (entity instanceof Coins) {
+                        console.log("here");
+                        entity.removeFromWorld = true;
+                    }
                 }
+
+
         });
 
          // update state
