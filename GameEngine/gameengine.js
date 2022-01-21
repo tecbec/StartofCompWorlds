@@ -63,6 +63,12 @@ class GameEngine {
                 case "ArrowUp":
                     that.up = true;
                     break;
+                case "ShiftLeft": //run 
+                    that.run = true;
+                    break;
+                case "ArrowDown": //crouching 
+                    that.crouch = true; 
+                    break;
             }
         }, false);
 
@@ -77,6 +83,12 @@ class GameEngine {
                 case "ArrowUp":
                     that.up = false;
                     break;
+                case "ShiftLeft":
+                    that.run = false;
+                    break;
+                case "ArrowDown":
+                    that.crouch = false; 
+                    break;
             }
         }, false);
 
@@ -89,7 +101,9 @@ class GameEngine {
     draw() {
         // Clear the whole canvas with transparent color (rgba(0, 0, 0, 0))
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
-
+        
+        //this.ctx.fillStyle = 'red';
+        //this.ctx.fillRect(0,0,20,20);
         // Draw latest things first
         this.ctx.save();
         for (var i = 0; i < this.entities.length; i++) {
