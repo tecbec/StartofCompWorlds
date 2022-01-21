@@ -29,6 +29,8 @@ class SceneManager {
 
         this.coin1 = new Coins(gameEngine, 200, 300);
         this.coin2 = new Coins(gameEngine, 300, 300);
+        this.coin3 = new Coins(gameEngine, 340, 110);
+        this.coin4 = new Coins(gameEngine, 100, 60);
         //this.healthbar = new BreathBar()
         this.loadGame();
     };
@@ -42,7 +44,8 @@ class SceneManager {
         this.game.addEntity(this.platform2);
         this.game.addEntity(this.coin1);
         this.game.addEntity(this.coin2);
-
+        this.game.addEntity(this.coin3);
+        this.game.addEntity(this.coin4);
         //this.game.addEntity(new BreathBar(gameEngine, this.totalBreath));
         //this.game.addEntity(this.soots);
     }
