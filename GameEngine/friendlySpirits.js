@@ -6,13 +6,13 @@
 class NoFace {
     constructor( game, x, y ) {
         Object.assign(this, { game, x, y});
-        this.spritesheet = ASSET_MANAGER.getAsset("./sprites/noface-spritesheet.png");
+        this.spritesheet = ASSET_MANAGER.getAsset("./sprites/noface-spritesheet-fade.png");
 
         this.loadAnimations();
 
         // initialize this.x and this.y
-        this.x = 100;
-        this.y = 150;
+        this.x = 200;
+        this.y = 0;
 
         // initialize the velocity .
         this.velocity = {x: 100, y: 100};
@@ -22,12 +22,12 @@ class NoFace {
     };
 
     loadAnimations() {
-        this.animations = new Animator(this.spritesheet, 0, 0, 198, 400, 9, .3, 10, false, true);
+        this.animations = new Animator(this.spritesheet, 0, 0, 150, 400, 7, .2, 10, false, true);
     }
 
     updateBB() {
         this.lastBB = this.BB;
-        this.BB = new BoundingBox(this.x+5, this.y, 40, 100);
+        this.BB = new BoundingBox(this.x+5, this.y, 30, 100);
     };
 
 
@@ -36,7 +36,7 @@ class NoFace {
     };
 
     draw(ctx) {
-        this.animations.drawFrame(this.game.clockTick, ctx, this.x, this.y, .25);
+        this.animations.drawFrame(this.game.clockTick, ctx, this.x, this.y, .2);
 
         ctx.strokeStyle = 'Red';
         ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);

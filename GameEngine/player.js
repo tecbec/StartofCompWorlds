@@ -9,6 +9,7 @@ class Player {
         Object.assign(this, {game, x, y});
         // NOTE: later on can be updated without the sprite sheet passed in the param.
         this.game.chihiro = this;
+
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/spritesheet.png");
         this.updateBB();
 
@@ -24,7 +25,6 @@ class Player {
 
         this.sootCount = 0;
         this.nofaceCount = 0;
-
 };
     loadAnimations() {
         // array with [state] [face] of the same animator.
@@ -67,8 +67,6 @@ class Player {
         const MIN_WALK = 200;
         const MAX_FALL = 240;
         const RUN_FALL  = 2025;
-
- 
 
         if (this.isGrounded) { // can only jump and move while on the ground.
             if (this.game.left) { // when left key is pressed
@@ -132,10 +130,20 @@ class Player {
                         }
                     }
                     if(entity instanceof NoFace ) { // bottom of the player hits the top of the ground.
-                        console.log("entered");
                         that.nofaceCount++;
-                        console.log(that.nofaceCount);
-                        // that.updateBB();
+                        console.log("that.nofaceCount++: " + that.nofaceCount++);
+
+                        // This is where we want to make no face give chihiro coins
+                        // and after some amount of time make no face disappear.
+                    }
+
+                    if(entity instanceof Soot ) { // bottom of the player hits the top of the ground.
+                        console.log("entered")
+                        that.sootCount++;
+                        console.log("that.sootCount " + that.sootCount);
+
+                        // This is where we want to make no face give chihiro coins
+                        // and after some amount of time make no face disappear.
                     }
 
                 }

@@ -22,11 +22,9 @@ class Soot {
         this.x = [];
         this.y = [];
 
-
-
         // the top x and y location the soots will be located.
-        this.minScreen = {x: 100, y: 75};
-        this.maxScreen = {x: 150, y: 175};
+        this.minScreen = {x: 200, y: 150};
+        this.maxScreen = {x: 300, y: 200};
 
         // determine the starting x and y values for all the soots
         for (let i = 0; i < this.NUM_SOOTS; i++){
@@ -152,7 +150,7 @@ class Soot {
                     this.x[i] = this.maxScreen.x;
                 }
                 else if (this.y[i] < this.minScreen.y){
-                    this.y[i] = this.this.maxScreen.y;
+                    this.y[i] = this.maxScreen.y;
                     this.x[i] = this.maxScreen.x;
                     this.velocityy[i] = this.START_Vy[i];
                     this.velocityx[i] = this.START_Vx[i];
@@ -167,8 +165,8 @@ class Soot {
 
     draw(ctx) {
         ctx.strokeStyle = 'Red';
-        // for(let i = 0; i < this.NUM_SOOTS; i++) {
-        for(let i = 0; i < this.NUM_SOOTS_HALF; i++) {
+        for(let i = 0; i < this.NUM_SOOTS; i++) {
+        // for(let i = 0; i < this.NUM_SOOTS_HALF; i++) {
             this.animations[i].drawFrame(this.game.clockTick, ctx, this.x[i], this.y[i], 0.3);
             ctx.strokeRect(this.BB[i].x, this.BB[i].y, this.BB[i].width, this.BB[i].height);
         }

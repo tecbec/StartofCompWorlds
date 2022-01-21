@@ -9,7 +9,7 @@ ASSET_MANAGER.queueDownload("./sprites/spritesheet.png");
 ASSET_MANAGER.queueDownload("./sprites/platform_sheet.png");
 ASSET_MANAGER.queueDownload("./sprites/background.png");
 ASSET_MANAGER.queueDownload("./sprites/water.png");
-ASSET_MANAGER.queueDownload("./sprites/noface-spritesheet.png");
+ASSET_MANAGER.queueDownload("./sprites/noface-spritesheet-fade.png");
 
 
 ASSET_MANAGER.downloadAll(() => {
