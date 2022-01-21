@@ -63,7 +63,7 @@ class Platform {
         ctx.drawImage(this.spritesheet, 32, 32, 16, 16, this.x + 64- this.game.camera.x, this.y, 32, 32);
         ctx.strokeStyle = 'Red';
         // the whole platform bb 
-        ctx.strokeRect(this.BB.x, this.BB.y, 32 * 3, 32);    
+        ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, 32 * 3, 32);    
         // the left bb
         ctx.strokeStyle = 'Orange';
         ctx.strokeRect(this.topBB.x - this.game.camera.x, this.topBB.y, this.topBB.width, this.topBB.height);  
