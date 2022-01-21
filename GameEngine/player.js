@@ -169,8 +169,15 @@ class Player {
                             if (that.velocity.x < 0) that.velocity.x = 0;  
                         }
                         that.updateBB();
-                    }           
+                    }      
+                    
+                    if (entity instanceof Coins) {
+                        console.log("here");
+                        entity.removeFromWorld = true; 
+                    }     
                 }
+
+               
         });
         
          // update state
