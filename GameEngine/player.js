@@ -18,6 +18,10 @@ class Player {
         this.facing = 0; // 0 = right; 1 = left
         this.state = 0; // 0 = idle, 1 = walking, 2 = jumping/falling, 
 
+        this.breathwidth = 100; 
+        this.breathbarheight = 10; 
+        this.maxBreath = 100; 
+        this.breathbar = new BreathBar(this.game, 275, 10, this.breathwidth, this.breathbarheight, this.maxBreath);
         // default values. 
         this.velocity = { x: 0, y: 0};
         this.fallAcc = 562.5;
@@ -61,6 +65,7 @@ class Player {
         this.lastBB = this.BB;
         //making the box smaller here 
         this.BB = new BoundingBox(this.x + 10, this.y+10, 64-20, 64-10); // KD changed the bounding box dimensions to hug the sprite.
+
     };
 
     draw(ctx) {
@@ -71,6 +76,7 @@ class Player {
         //ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
         ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
         ctx.imageSmoothingEnabled = false;
+        this.breathbar.draw(ctx);
     }
 
     update() {
@@ -172,12 +178,17 @@ class Player {
                     }      
                     
                     if (entity instanceof Coins) {
-                        console.log("here");
                         entity.removeFromWorld = true; 
+                        if (that.breathbar < that.maxBreath) {
+                        that.breathwidth += 25; 
+                        that.breathbar.update(that.breathwidth);
+                        } 
+                        that.breathwidth +=  that.maxBreath - that.breathwidth; 
+                        that.breathbar.update(that.breathwidth);
+
+
                     }     
                 }
-
-               
         });
         
          // update state
@@ -192,6 +203,8 @@ class Player {
          if (this.velocity.x < 0) this.facing = 1;
          if (this.velocity.x > 0) this.facing = 0;
          
-
+         //updating the healthbar 
+         this.breathwidth -= .25; 
+         this.breathbar.update(this.breathwidth);
     }
 }
