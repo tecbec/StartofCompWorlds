@@ -15,7 +15,13 @@ class SceneManager {
 
         this.game.camera = this; // focusing camera on mario 
 
-        this.coins =0; 
+        //this.totalBreath = 0;
+        //this.maxBreath = 100;
+        // this.breathwidth = 100; 
+        // this.breathbarheight = 10; 
+        // this.maxBreath = 100; 
+        // this.breathbar = new BreathBar(this.game, 275, 10, this.breathwidth, this.breathbarheight, this.maxBreath, "Blue");
+
         // when y is too close to the ground it falls off ? when jumping right below ; not sure why 
         this.platform = new Platform(gameEngine, 140, 240, 32); 
         this.platform1 = new Platform(gameEngine, 300, 150, 32); 
@@ -25,6 +31,9 @@ class SceneManager {
 
         this.coin1 = new Coins(gameEngine, 200, 300);
         this.coin2 = new Coins(gameEngine, 300, 300);
+        this.coin3 = new Coins(gameEngine, 340, 110);
+        this.coin4 = new Coins(gameEngine, 100, 60);
+        //this.healthbar = new BreathBar()
         this.loadGame();
     };
 
@@ -39,6 +48,10 @@ class SceneManager {
         this.game.addEntity(this.noface);
         this.game.addEntity(this.coin1);
         this.game.addEntity(this.coin2);
+        this.game.addEntity(this.coin3);
+        this.game.addEntity(this.coin4);
+        //this.game.addEntity(new BreathBar(gameEngine, this.totalBreath));
+        //this.game.addEntity(this.soots);
     }
 
     update(){
@@ -60,9 +73,12 @@ class SceneManager {
     };
 
     draw(ctx){
+       // this.breathbar.draw(ctx);
         ctx.font = PARAMS.BLOCKWIDTH / 2 + 'px "Press Start 2P"';
        
         if (PARAMS.DEBUG){
+           ctx.strokeStyle = "Black";
+           ctx.fillStyle = ctx.strokeStyle;
             // the only to access objects throughout the game implementation is by including this.game and adding the 
             //chihiro is this class 
             //capturing the velocity displaying useful variables  

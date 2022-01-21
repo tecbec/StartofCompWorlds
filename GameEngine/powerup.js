@@ -3,9 +3,7 @@ class Coins {
         Object.assign(this, { game, x, y});
         console.log("Here");
         this.animation = new Animator (
-            ASSET_MANAGER.getAsset("./sprites/coins.png"), 
-            0, 33, 9, 9, 6, 0.1, 0, false, true );
-        //the coin is 9x9 long 
+            ASSET_MANAGER.getAsset("./sprites/coins.png"), 0, 33, 9, 9, 6, 0.1, 0, false, true );
         this.BB = new BoundingBox(this.x, this.y, 8*3,8*3);
     }
 
