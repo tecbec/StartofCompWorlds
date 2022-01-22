@@ -26,10 +26,13 @@ class Player {
         this.velocity = { x: 0, y: 0};
         this.fallAcc = 562.5;
         this.isGrounded = false;
+        this.groundedCount = 0;
 
         this.sootCount = 0;
         this.nofaceCount = 0;
-};
+        this.coinCounter = new CoinCounter(this.game, 225, 7.25);
+    };
+
     loadAnimations() {
         // array with [state] [face] of the same animator.
         for (var i = 0; i < 5; i++) {
@@ -76,6 +79,7 @@ class Player {
         }
         ctx.imageSmoothingEnabled = false;
         this.breathbar.draw(ctx);
+        this.coinCounter.draw(ctx);
     }
 
     update() {
@@ -85,8 +89,17 @@ class Player {
         const MIN_WALK = 100;
         const RUN_ACC = 400;
         const crouch_spe = 350;
-        // can only jump and move while on the ground.
+        // can only move while on the ground.
+        // can only jump after has been grounded for x ticks
         if (this.isGrounded) {
+            if(this.jumping){ // just landed
+                // set off short timer, to prevent accidental double jumping
+                this.jumpTimer = 1000;
+            }
+            //updating jump timer
+            this.jumpTimer -= .01;
+            this.jumping = false; 
+
             if (Math.abs(this.velocity.x) < MIN_WALK) { // walking
                 this.velocity.x = 0;
                 if (this.game.left) {
@@ -117,8 +130,8 @@ class Player {
                     }
                 }
             }
-            // land for at least xxx seconds then can jump again.
-            if (this.game.up) { 
+            if (this.game.up /* && this.jumpTimer <= 0*/) {  //jumping
+                this.jumping = true;
                 this.velocity.y = -250;   
                 this.state = 2;     
             } else {  
@@ -126,7 +139,8 @@ class Player {
                 this.velocity.y = 0;
             }
         } else {
-            if (this.velocity.y > 0) {
+            //fall straight down if did not jump
+            if (this.velocity.y > 0 && !this.jumping) { 
                 this.velocity.x = 0;
             }
         }
@@ -156,37 +170,40 @@ class Player {
                             that.isGrounded = true;
                             that.y = entity.BB.top - 32 * 2;
                             that.velocity.y === 0;
-                            that.updateBB();
+                            that.updateBB(); 
                         } else {
                             that.isGrounded = false;
                         }
                     }
-                    if (that.velocity.y < 0) { // chihiro is jumping
+                    if (that.velocity.y < 0) { // chihiro is jumping up
                         if((entity instanceof Platform)
-                            && (that.lastBB.top >= entity.BB.bottom)) { // bottom of the player hits the top of the platform
-                            that.y = entity.BB.bottom;
-                            that.velocity.y === 0;
-                            that.updateBB();
-                        } else {
+                            && (that.lastBB.top >= entity.BB.bottom)) { // top of the player goes above the bottom of the platform
+                            //that.y = entity.BB.bottom; <- this causes weird ricochet on bottom of platforms
+                            that.velocity.y = 0;
+                            that.updateBB(); // why include this here too? 
+
+                        } else { //why this else statement? 
                             that.isGrounded = false;
                         }
                     }
-                    // left and right bounding boxes for platform
+
+                    // left, right, and bottom bounding boxes for platform
                     if (entity instanceof Platform && that.BB.collide(entity.BB)) {
-                        if (that.BB.collide(entity.leftBB)) { // left collision
-                            that.x = entity.leftBB.left - 32 * 2;
+                        if (that.BB.collide(entity.leftBB) && (that.lastBB.right <= entity.leftBB.left)) { // left collision
+                            that.x = entity.BB.left - 32 * 2;
                             if (that.velocity.x > 0) that.velocity.x = 0;
-                        } else if (that.BB.collide(entity.rightBB)) { // right collision
+
+                        } else if (that.BB.collide(entity.rightBB) && (that.lastBB.left >= entity.rightBB.right)) { // right collision
                             that.x = entity.rightBB.right;
                             if (that.velocity.x < 0) that.velocity.x = 0;
-                        } 
-                        that.isGrounded = false;
+                        }
                         that.updateBB();
                     }
                     // Collision with no face
                     // TODO: Include top collision maybe, or just resize no face to be shorter.
                     // TODO: fix the velocity changes. 
-                    if (entity instanceof NoFace && that.BB.collide(entity.BB)) {      
+                    if (entity instanceof NoFace && that.BB.collide(entity.BB)) { 
+                        that.coinCounter.coinCount += 10;
                         if (that.BB.collide(entity.leftBB)) { // left collision
                             that.x = entity.leftBB.left - 32 * 2;   
                             if (that.velocity.x > 0) that.velocity.x = 0; 
@@ -227,6 +244,7 @@ class Player {
                         } 
                         that.breathwidth +=  that.maxBreath - that.breathwidth; 
                         that.breathbar.update(that.breathwidth);
+                        that.coinCounter.coinCount ++;
                     }     
                 }
         });
