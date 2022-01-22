@@ -186,7 +186,6 @@ class Player {
                             that.isGrounded = false;
                         }
                     }
-
                     // left, right, and bottom bounding boxes for platform
                     if (entity instanceof Platform && that.BB.collide(entity.BB)) {
                         if (that.BB.collide(entity.leftBB) && (that.lastBB.right <= entity.leftBB.left)) { // left collision
@@ -205,15 +204,14 @@ class Player {
                     if (entity instanceof NoFace && that.BB.collide(entity.BB)) { 
                         that.coinCounter.coinCount += 10;
                         if (that.BB.collide(entity.leftBB)) { // left collision
-                            that.x = entity.leftBB.left - 32 * 2;   
+                            that.x = entity.leftBB.left - 32 * 2 + 10;   // to prevent ricochet agianst collisions we have to add padding.
                             if (that.velocity.x > 0) that.velocity.x = 0; 
                         } else if (that.BB.collide(entity.rightBB)) {
-                            that.x = entity.rightBB.right - 5;
+                            that.x = entity.rightBB.right - 14;
                             if (that.velocity.x < 0) that.velocity.x = 0;
                         }
                         // This is where we want to make no face give chihiro coins
                         // and after some amount of time make no face disappear.
-                        entity.removeFromWorld = true;
                         that.nofaceCount++;
                         console.log("that.nofaceCount++: " + that.nofaceCount++);
                     }
