@@ -36,9 +36,9 @@ class BackGround {
     };
 
     draw(ctx) {
-        let count = PARAMS.CANVAS_WIDTH * 3 / 288;
-        for (var i = 0; i < count; i ++) {
-            ctx.drawImage(this.spritesheet, 0, 0, 288, 208, this.x + 208 * i - this.game.camera.x, this.y, PARAMS.CANVAS_WIDTH, PARAMS.CANVAS_HEIGHT);
+        let count = PARAMS.CANVAS_WIDTH * 3 / 64 ;
+        for (var i = 0; i < count; i++) {
+             ctx.drawImage(this.spritesheet, 0, 0, 288, 208, this.x - this.game.camera.x + (400 * i), this.y, PARAMS.CANVAS_WIDTH, PARAMS.CANVAS_HEIGHT);
         }
         ctx.imageSmoothingEnabled = false;
     }

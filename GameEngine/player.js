@@ -213,7 +213,7 @@ class Player {
                     // TODO: Include top collision maybe, or just resize no face to be shorter.
                     // TODO: fix the velocity changes. 
                     if (entity instanceof NoFace && that.BB.collide(entity.BB)) { 
-                        //that.coinCounter.coinCount += 10;
+                        that.coinCounter.coinCount += 10; 
                         if (that.BB.collide(entity.leftBB)) { // left collision
                             that.x = entity.leftBB.left - 32 * 2 + 10;   // to prevent ricochet agianst collisions we have to add padding.
                             if (that.velocity.x > 0) that.velocity.x = 0; 
@@ -228,6 +228,9 @@ class Player {
                     }
                     // Collision with Haku
                     if (entity instanceof Haku && that.BB.collide(entity.BB)) {  
+                        // instantly heal stamina bar
+                        that.breathwidth +=  that.maxBreath - that.breathwidth; 
+                        that.breathbar.update(that.breathwidth);
                         if (that.BB.collide(entity.leftBB)) { // left collision
                             that.x = entity.leftBB.left - 32 * 2 + 10;  // added padding  
                             if (that.velocity.x > 0) that.velocity.x = 0; 
