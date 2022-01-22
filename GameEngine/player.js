@@ -17,6 +17,7 @@ class Player {
         this.loadAnimations();
         this.facing = 0; // 0 = right; 1 = left
         this.state = 0; // 0 = idle, 1 = walking, 2 = jumping/falling,
+        this.dead = false; 
 
         this.breathwidth = 100; 
         this.breathbarheight = 10; 
@@ -35,7 +36,7 @@ class Player {
 
     loadAnimations() {
         // array with [state] [face] of the same animator.
-        for (var i = 0; i < 5; i++) {
+        for (var i = 0; i < 6; i++) {
             this.animations.push([]);
             for (var j = 0; j < 2; j++) {
                 this.animations[i].push([]);
@@ -61,6 +62,9 @@ class Player {
         this.animations[4][0] = new Animator (this.spritesheet, 0, 64, 32, 32, 6, 0.05, 0, false, true);
         this.animations[4][1] = new Animator (this.spritesheet, 0, 96, 32, 32, 6, 0.05, 0, false, true);
 
+        // dead -> right, left.
+        this.animations[5][0] = new Animator(this.spritesheet, 0, 192, 32, 32, 8, 0.12, 0, false, false);
+        this.animations[5][1] = new Animator(this.spritesheet, 0, 224, 32, 32, 8, 0.12, 0, false, false);
     }
 
     updateBB() {
@@ -91,7 +95,7 @@ class Player {
         const crouch_spe = 350;
         // can only move while on the ground.
         // can only jump after has been grounded for x ticks
-        if (this.isGrounded) {
+        if (this.isGrounded && !this.dead) {
             if(this.jumping){ // just landed
                 // set off short timer, to prevent accidental double jumping
                 this.jumpTimer = 1000;
@@ -257,24 +261,33 @@ class Player {
                         that.breathwidth +=  that.maxBreath - that.breathwidth; 
                         that.breathbar.update(that.breathwidth);
                         that.coinCounter.coinCount ++;
-                    }     
+                    } 
                 }
         });
 
          // update state
-        if (this.state !== 2) {
+        if (this.state !== 2 || this.state !== 5) {
             if (this.game.crouch) this.state = 3; //crouching state
             else if (Math.abs(this.velocity.x) > 0) this.state = 1;
-            else if(Math.abs(this.velocity.x) > MIN_WALK) this.state = 4; //running state
+            else if (Math.abs(this.velocity.x) > MIN_WALK) this.state = 4; //running state
         } else {
 
+        }
+        if (this.dead) {
+            this.state = 5;
         }
          // update direction
          if (this.velocity.x < 0) this.facing = 1;
          if (this.velocity.x > 0) this.facing = 0;
          
          //updating the healthbar 
-         this.breathwidth -= .01; // changes for testing
+         this.breathwidth -= .1; // changes for testing
          this.breathbar.update(this.breathwidth);
+
+         if (this.breathwidth <= 0) {
+            this.dead = true;
+         } else {
+             this.dead = false;
+         }
     }
 }
