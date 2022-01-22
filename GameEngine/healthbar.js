@@ -18,11 +18,9 @@ class BreathBar {
 
     update(val) {
         if( val >= 0) { // we want our player to die when the val is less then zero
-        this.heath = val; 
-        this.width = (this.heath /this.maxHealth) *this.maxHealth;
-        }
-
-        
+            this.heath = val; 
+            this.width = (this.heath /this.maxHealth) *this.maxHealth;
+        }       
     }
 };
 

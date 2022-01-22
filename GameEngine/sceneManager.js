@@ -1,13 +1,11 @@
 class SceneManager {
     constructor(game) {
         this.game = game;
-        this.x = 0; //only scrolling to the left 
-        this.game.camera = this; // focusing camera on mario 
-
+        this.game.camera = this; // focusing camera on chihiro
         // chihiro falling from the sky and land on the ground
         this.chihiro = new Player(this.game, 0, 0);
         //this.chihiro = this;
-        console.log(this.chihiro.x + this.chihiro.y)
+
         // x, y, w
         // TODO: fix these measurements 
         this.ground = new Ground(gameEngine, -200, PARAMS.CANVAS_WIDTH - 64, PARAMS.CANVAS_WIDTH * 3);
@@ -27,6 +25,7 @@ class SceneManager {
         this.coin4 = new Coins(gameEngine, 100, 60);
         //this.healthbar = new BreathBar()
         this.loadGame();
+        this.midpoint = 0;
     };
 
     loadGame() {
@@ -51,9 +50,7 @@ class SceneManager {
         // canvas width = 400 
         // blockwidth = 32 *1 = 32 
         // 200 -16 = 164
-        let midpoint = PARAMS.CANVAS_WIDTH /2 - PARAMS.BLOCKWIDTH/2;  
-        console.log("this is the midpoint "  + midpoint);
-
+        let midpoint = PARAMS.CANVAS_WIDTH / 2 - PARAMS.BLOCKWIDTH / 2;  
         // stop camera from moving (reach dead end on the left)
         if (this.chihiro.x < 0) {
             if (this.chihiro.x < -200) {
@@ -66,8 +63,6 @@ class SceneManager {
         } else {
             this.x = this.chihiro.x - midpoint; // force centering
         }  
-       // console.log("value x "  + this.x + " value of player x "  + this.chihiro.x);
-
         PARAMS.DEBUG = document.getElementById("debug").checked;
     };
 
@@ -76,16 +71,27 @@ class SceneManager {
         ctx.font = PARAMS.BLOCKWIDTH / 2 + 'px "Press Start 2P"';
        
         if (PARAMS.DEBUG){
-           ctx.strokeStyle = "Black";
-           ctx.fillStyle = ctx.strokeStyle;
+            ctx.strokeStyle = "Black";
+            ctx.fillStyle = ctx.strokeStyle;
             // the only to access objects throughout the game implementation is by including this.game and adding the 
-            //chihiro is this class 
-            //capturing the velocity displaying useful variables  
+            // chihiro is this class 
+            // capturing the velocity displaying useful variables  
             let xV = "xV=" + Math.floor(this.game.chihiro.velocity.x); 
-            //console.log(this.game.chihiro.x);
             let yV = "yV=" + Math.floor(this.game.chihiro.velocity.y);
             ctx.fillText(xV, 10, 15);
             ctx.fillText(yV, 10, 30);
+            
+            // x and y position of the sprite 
+            let xP = "xP=" + Math.floor(this.game.chihiro.x); 
+            let yP = "yP=" + Math.floor(this.game.chihiro.y);
+            ctx.fillText(xP, 100, 15);
+            ctx.fillText(yP, 100, 30);
+
+            // bounding box
+            let bX ="xB=" + Math.floor(this.game.chihiro.BB.left); 
+            let bY ="yB=" + Math.floor(this.game.chihiro.BB.top); 
+            ctx.fillText(bX, 160, 15);    
+            ctx.fillText(bY, 160, 30);
 
             //ctx.translate(0, 10);
             // walk left

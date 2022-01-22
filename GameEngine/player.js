@@ -58,23 +58,22 @@ class Player {
         this.animations[4][0] = new Animator (this.spritesheet, 0, 64, 32, 32, 6, 0.05, 0, false, true);
         this.animations[4][1] = new Animator (this.spritesheet, 0, 96, 32, 32, 6, 0.05, 0, false, true);
 
-
     }
 
     updateBB() {
         this.lastBB = this.BB;
         //making the box smaller here
-        this.BB = new BoundingBox(this.x + 10, this.y+10, 64-20, 64-10); // KD changed the bounding box dimensions to hug the sprite.
+        this.BB = new BoundingBox(this.x + 10, this.y + 10, 64-20, 64-10); // KD changed the bounding box dimensions to hug the sprite.
 
     };
 
     draw(ctx) {
         // this.animations[this.state][this.facing].drawFrame(this.game.clockTick, ctx, this.x, this.y, 2);
         this.animations[this.state][this.facing].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, 2);
-
-        ctx.strokeStyle = 'Red';
-        //ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
-        ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
+        if (PARAMS.DEBUG) {
+            ctx.strokeStyle = 'Red';
+            ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
+        }
         ctx.imageSmoothingEnabled = false;
         this.breathbar.draw(ctx);
     }
@@ -82,6 +81,7 @@ class Player {
     update() {
         const TICK = this.game.clockTick;
         const MAX_FALL = 240;
+        const MAX_RUN = 250;
         const MIN_WALK = 100;
         const RUN_ACC = 400;
         const crouch_spe = 350;
@@ -117,6 +117,7 @@ class Player {
                     }
                 }
             }
+            // land for at least xxx seconds then can jump again.
             if (this.game.up) { 
                 this.velocity.y = -250;   
                 this.state = 2;     
@@ -135,6 +136,8 @@ class Player {
 
         if (this.velocity.y >= MAX_FALL) this.velocity.y = MAX_FALL;
         if (this.velocity.y <= -MAX_FALL) this.velocity.y = -MAX_FALL;
+        if (this.velocity.x >= MAX_RUN) this.velocity.x = MAX_RUN;
+        if (this.velocity.x <= -MAX_RUN) this.velocity.x = -MAX_RUN;
 
         this.x += this.velocity.x * TICK * 2;
         this.y += this.velocity.y * TICK * 2;
@@ -144,12 +147,12 @@ class Player {
         var that = this; //need this because we are creating
 
         // collision
-        // TODO: think about left and right bounding box.
+        // TODO: think about left and right bounding box
         this.game.entities.forEach(function (entity) {              // this will look at all entities in relation to mario
                 if (entity.BB && that.BB.collide(entity.BB)) {      //is there an entity bb & check to see if they collide
-                    if (that.velocity.y > 0) { // so chihiro is falling
+                    if (that.velocity.y > 0) { // chihiro is falling
                         if((entity instanceof Ground || entity instanceof Platform || entity instanceof Haku)
-                        && (that.lastBB.bottom <= entity.BB.top)) { // bottom of the player hits the top of the ground.
+                        && (that.lastBB.bottom <= entity.BB.top)) { // bottom of the player hits the top of the ground
                             that.isGrounded = true;
                             that.y = entity.BB.top - 32 * 2;
                             that.velocity.y === 0;
@@ -160,7 +163,7 @@ class Player {
                     }
                     if (that.velocity.y < 0) { // chihiro is jumping
                         if((entity instanceof Platform)
-                            && (that.lastBB.top >= entity.BB.bottom)) { // bottom of the player hits the top of the ground.
+                            && (that.lastBB.top >= entity.BB.bottom)) { // bottom of the player hits the top of the platform
                             that.y = entity.BB.bottom;
                             that.velocity.y === 0;
                             that.updateBB();
@@ -176,7 +179,8 @@ class Player {
                         } else if (that.BB.collide(entity.rightBB)) { // right collision
                             that.x = entity.rightBB.right;
                             if (that.velocity.x < 0) that.velocity.x = 0;
-                        }
+                        } 
+                        that.isGrounded = false;
                         that.updateBB();
                     }
                     // Collision with no face
@@ -199,10 +203,10 @@ class Player {
                     // Collision with Haku
                     if (entity instanceof Haku && that.BB.collide(entity.BB)) {  
                         if (that.BB.collide(entity.leftBB)) { // left collision
-                            that.x = entity.leftBB.left - 32 * 2;   
+                            that.x = entity.leftBB.left - 32 * 2 + 8.8;  // added padding  
                             if (that.velocity.x > 0) that.velocity.x = 0; 
                         } else if (that.BB.collide(entity.rightBB)) { // right 
-                            that.x = entity.rightBB.right - 5;
+                            that.x = entity.rightBB.right - 8.88;
                             if (that.velocity.x < 0) that.velocity.x = 0;
                         } 
                     }

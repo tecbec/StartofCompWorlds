@@ -17,7 +17,7 @@ class Haku {
     };
 
     loadAnimations() {
-         this.animations = new Animator(this.spritesheet, 0, 70, 70, 70, 4, .25 ,0, false, true);
+         this.animations = new Animator(this.spritesheet, 0, 70, 70, 70, 4, .23 ,0, false, true);
     }
 
     // updateBB() {
@@ -30,12 +30,12 @@ class Haku {
 
     draw(ctx) {
         this.animations.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, 1);
-        // ctx.strokeStyle = 'Red';
-        ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
-        ctx.strokeRect(this.leftBB.x - this.game.camera.x, this.leftBB.y, this.leftBB.width, this.leftBB.height);
-        ctx.strokeRect(this.rightBB.x - this.game.camera.x, this.rightBB.y, this.rightBB.width, this.rightBB.height);
+        if (PARAMS.DEBUG) {
+            ctx.strokeStyle = 'Red';
+            ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
+            ctx.strokeRect(this.leftBB.x - this.game.camera.x, this.leftBB.y, this.leftBB.width, this.leftBB.height);
+            ctx.strokeRect(this.rightBB.x - this.game.camera.x, this.rightBB.y, this.rightBB.width, this.rightBB.height); 
+        }
         ctx.imageSmoothingEnabled = false;
-
     };
-
 };

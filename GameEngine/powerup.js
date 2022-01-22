@@ -12,11 +12,11 @@ class Coins {
     };
 
     draw(ctx){
-        this.animation.drawFrame(this.game.clockTick, ctx, 
-            this.x - this.game.camera.x, this.y, PARAMS.SCALE * 3);
-
-        ctx.strokeStyle = 'Red';
-        ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);  
-
+        this.animation.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, PARAMS.SCALE * 3);
+        if (PARAMS.DEBUG) {
+            ctx.strokeStyle = 'Red';
+            ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);  
+        }
+        ctx.imageSmoothingEnabled = false; 
     };
 };
