@@ -139,7 +139,7 @@ class Player {
                 this.velocity.y = 0;
             }
         } else {
-            //fall straight down if did not jump
+            // fall straight down if did not jump
             if (this.velocity.y > 0 && !this.jumping) { 
                 this.velocity.x = 0;
             }
@@ -165,7 +165,7 @@ class Player {
         this.game.entities.forEach(function (entity) {              // this will look at all entities in relation to mario
                 if (entity.BB && that.BB.collide(entity.BB)) {      //is there an entity bb & check to see if they collide
                     if (that.velocity.y > 0) { // chihiro is falling
-                        if((entity instanceof Ground || entity instanceof Platform || entity instanceof Haku)
+                        if((entity instanceof Ground || entity instanceof Platform || entity instanceof Haku || entity instanceof NoFace)
                         && (that.lastBB.bottom <= entity.BB.top)) { // bottom of the player hits the top of the ground
                             that.isGrounded = true;
                             that.y = entity.BB.top - 32 * 2;
@@ -191,7 +191,6 @@ class Player {
                         if (that.BB.collide(entity.leftBB) && (that.lastBB.right <= entity.leftBB.left)) { // left collision
                             that.x = entity.BB.left - 32 * 2;
                             if (that.velocity.x > 0) that.velocity.x = 0;
-
                         } else if (that.BB.collide(entity.rightBB) && (that.lastBB.left >= entity.rightBB.right)) { // right collision
                             that.x = entity.rightBB.right;
                             if (that.velocity.x < 0) that.velocity.x = 0;
@@ -202,12 +201,12 @@ class Player {
                     // TODO: Include top collision maybe, or just resize no face to be shorter.
                     // TODO: fix the velocity changes. 
                     if (entity instanceof NoFace && that.BB.collide(entity.BB)) { 
-                        that.coinCounter.coinCount += 10;
+                        //that.coinCounter.coinCount += 10;
                         if (that.BB.collide(entity.leftBB)) { // left collision
                             that.x = entity.leftBB.left - 32 * 2 + 10;   // to prevent ricochet agianst collisions we have to add padding.
                             if (that.velocity.x > 0) that.velocity.x = 0; 
                         } else if (that.BB.collide(entity.rightBB)) {
-                            that.x = entity.rightBB.right - 14;
+                            that.x = entity.rightBB.right - 10;
                             if (that.velocity.x < 0) that.velocity.x = 0;
                         }
                         // This is where we want to make no face give chihiro coins
@@ -218,10 +217,10 @@ class Player {
                     // Collision with Haku
                     if (entity instanceof Haku && that.BB.collide(entity.BB)) {  
                         if (that.BB.collide(entity.leftBB)) { // left collision
-                            that.x = entity.leftBB.left - 32 * 2 + 8.8;  // added padding  
+                            that.x = entity.leftBB.left - 32 * 2 + 10;  // added padding  
                             if (that.velocity.x > 0) that.velocity.x = 0; 
                         } else if (that.BB.collide(entity.rightBB)) { // right 
-                            that.x = entity.rightBB.right - 8.88;
+                            that.x = entity.rightBB.right - 10;
                             if (that.velocity.x < 0) that.velocity.x = 0;
                         } 
                     }
