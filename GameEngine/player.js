@@ -92,6 +92,7 @@ class Player {
         // can only move while on the ground.
         // can only jump after has been grounded for x ticks
         if (this.isGrounded) {
+            this.jumping = false;
             if (Math.abs(this.velocity.x) < MIN_WALK) { // walking
                 this.velocity.x = 0;
                 if (this.game.left) {
@@ -122,7 +123,8 @@ class Player {
                     }
                 }
             }
-            if (this.game.up) { 
+            if (this.game.up) {  //jumping
+                this.jumping = true;
                 this.velocity.y = -250;   
                 this.state = 2;     
             } else {  
@@ -130,9 +132,8 @@ class Player {
                 this.velocity.y = 0;
             }
         } else {
-            //fall straight down
-            if (this.velocity.y > 0 /* && this.velocity.x < MIN_WALK*2 */) { 
-                // smooth so player can choose to fall straight down or with some x momentum 
+            //fall straight down if did not jump
+            if (this.velocity.y > 0 && !this.jumping) { 
                 this.velocity.x = 0;
             }
         }
