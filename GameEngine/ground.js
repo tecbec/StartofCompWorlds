@@ -46,7 +46,7 @@ class Platform {
         this.spritesheet = this.spritesheet = ASSET_MANAGER.getAsset("./sprites/platform_sheet.png");
         this.BB = new BoundingBox(this.x, this.y, 32 * 3, 32);
         this.topBB = new BoundingBox(this.x, this.y, 32*3, 32/2);
-        this.bottomBB = new BoundingBox(this.x, this.y + 32/2, 32*3, 32/2);
+        this.bottomBB = new BoundingBox(this.x, this.y, 32*3, 32/2);
         this.leftBB = new BoundingBox(this.x, this.y, 5, 32);
         this.rightBB = new BoundingBox(this.BB.right - 5, this.y, 5, 32);
     }

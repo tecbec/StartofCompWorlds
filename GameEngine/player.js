@@ -165,7 +165,6 @@ class Player {
                     if (that.velocity.y > 0) { // chihiro is falling down
                         if((entity instanceof Ground || entity instanceof Platform)
                         && (that.lastBB.bottom <= entity.BB.top)) { // bottom of the player hits the top of the ground/platform
-                           // up is negative y, so chihiro above the top of the bounding box
                             that.isGrounded = true;
                             that.y = entity.BB.top - 32 * 2;
                             that.velocity.y === 0;
@@ -177,11 +176,9 @@ class Player {
                     if (that.velocity.y < 0) { // chihiro is jumping up
                         if((entity instanceof Platform)
                             && (that.lastBB.top >= entity.BB.bottom)) { // top of the player goes above the bottom of the platform
-                             // positive y is down 
-                             // chihiro is below the bounding box
                             //that.y = entity.BB.bottom; <- this causes weird ricochet on bottom of platforms
                             that.velocity.y = 0;
-                            that.updateBB(); //what does this do?
+                            that.updateBB(); // why include this here too? 
 
                         } else { //why this else statement? 
                             that.isGrounded = false;
@@ -189,13 +186,12 @@ class Player {
                     }
 
                     // left, right, and bottom bounding boxes for platform
-                    if (entity instanceof Platform /*&& that.BB.collide(entity.BB)*/) {
-                        if (that.BB.collide(entity.leftBB) && !that.BB.collide(entity.bottomBB)) { // left collision
-                           // that.x = entity.BB.left - 32 * 2;
+                    if (entity instanceof Platform && that.BB.collide(entity.BB)) {
+                        if (that.BB.collide(entity.leftBB) && (that.lastBB.right <= entity.leftBB.left)) { // left collision
                             that.x = entity.BB.left - 32 * 2;
                             if (that.velocity.x > 0) that.velocity.x = 0;
 
-                        } else if (that.BB.collide(entity.rightBB) && !that.BB.collide(entity.bottomBB)) { // right collision
+                        } else if (that.BB.collide(entity.rightBB) && (that.lastBB.left >= entity.rightBB.right)) { // right collision
                             that.x = entity.rightBB.right;
                             if (that.velocity.x < 0) that.velocity.x = 0;
                         }
