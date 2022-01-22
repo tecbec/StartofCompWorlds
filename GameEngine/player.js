@@ -180,13 +180,11 @@ class Player {
                     if (entity instanceof Coins) {
                         entity.removeFromWorld = true; 
                         if (that.breathbar < that.maxBreath) {
-                        that.breathwidth += 25; 
-                        that.breathbar.update(that.breathwidth);
+                            that.breathwidth += 5; 
+                            that.breathbar.update(that.breathwidth);
                         } 
                         that.breathwidth +=  that.maxBreath - that.breathwidth; 
                         that.breathbar.update(that.breathwidth);
-
-
                     }     
                 }
         });
