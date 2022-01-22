@@ -92,7 +92,14 @@ class Player {
         // can only move while on the ground.
         // can only jump after has been grounded for x ticks
         if (this.isGrounded) {
-            this.jumping = false;
+            if(this.jumping){ // just landed
+                // set off short timer, to prevent accidental double jumping
+                this.jumpTimer = 1000;
+            }
+            //updating jump timer
+            this.jumpTimer -= .01;
+            this.jumping = false; 
+
             if (Math.abs(this.velocity.x) < MIN_WALK) { // walking
                 this.velocity.x = 0;
                 if (this.game.left) {
@@ -123,7 +130,7 @@ class Player {
                     }
                 }
             }
-            if (this.game.up) {  //jumping
+            if (this.game.up /* && this.jumpTimer <= 0*/) {  //jumping
                 this.jumping = true;
                 this.velocity.y = -250;   
                 this.state = 2;     
