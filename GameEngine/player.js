@@ -130,6 +130,7 @@ class Player {
                     }
                 }
             }
+
             if (this.game.up /* && this.jumpTimer <= 0*/) {  //jumping
                 this.jumping = true;
                 this.velocity.y = -250;   
@@ -138,12 +139,23 @@ class Player {
                 this.state = 0;
                 this.velocity.y = 0;
             }
+
         } else {
             //fall straight down if did not jump
             if (this.velocity.y > 0 && !this.jumping) { 
                 this.velocity.x = 0;
             }
+
+            //can change direction they are falling
+            if (this.game.left) {
+                this.velocity.x = -Math.abs(this.velocity.x);
+            }
+            if (this.game.right) {
+                this.velocity.x = Math.abs(this.velocity.x);
+            }
         }
+
+        
 
 
         this.velocity.y += this.fallAcc * TICK; //this makes mario always falling
@@ -195,12 +207,6 @@ class Player {
                             that.x = entity.rightBB.right;
                             if (that.velocity.x < 0) that.velocity.x = 0;
                         }
-
-
-                        // else if (that.BB.collide(entity.bottomBB)) { // bottom collision
-                        //     that.y = entity.bottomBB.bottom;
-                        //     if (that.velocity.y < 0) that.velocity.y = 0;
-                        // } 
                         that.updateBB();
                     }
                     // Collision with no face
