@@ -162,36 +162,49 @@ class Player {
         // TODO: think about left and right bounding box.
         this.game.entities.forEach(function (entity) {              // this will look at all entities in relation to mario
                 if (entity.BB && that.BB.collide(entity.BB)) {      //is there an entity bb & check to see if they collide
-                    if (that.velocity.y > 0) { // so chihiro is falling
+                    if (that.velocity.y > 0) { // chihiro is falling down
                         if((entity instanceof Ground || entity instanceof Platform)
-                        && (that.lastBB.bottom <= entity.BB.top)) { // bottom of the player hits the top of the ground.
+                        && (that.lastBB.bottom <= entity.BB.top)) { // bottom of the player hits the top of the ground/platform
+                           // up is negative y, so chihiro above the top of the bounding box
                             that.isGrounded = true;
                             that.y = entity.BB.top - 32 * 2;
                             that.velocity.y === 0;
-                            that.updateBB();
+                            that.updateBB(); 
                         } else {
                             that.isGrounded = false;
                         }
                     }
-                    if (that.velocity.y < 0) { // chihiro is jumping
+                    if (that.velocity.y < 0) { // chihiro is jumping up
                         if((entity instanceof Platform)
-                            && (that.lastBB.top >= entity.BB.bottom)) { // bottom of the player hits the top of the ground.
-                            that.y = entity.BB.bottom;
-                            that.velocity.y === 0;
-                            that.updateBB();
-                        } else {
+                            && (that.lastBB.top >= entity.BB.bottom)) { // top of the player goes above the bottom of the platform
+                             // positive y is down 
+                             // chihiro is below the bounding box
+                            //that.y = entity.BB.bottom; <- this causes weird ricochet on bottom of platforms
+                            that.velocity.y = 0;
+                            that.updateBB(); //what does this do?
+
+                        } else { //why this else statement? 
                             that.isGrounded = false;
                         }
                     }
-                    // left and right bounding boxes for platform
-                    if (entity instanceof Platform && that.BB.collide(entity.BB)) {
-                        if (that.BB.collide(entity.leftBB)) { // left collision
-                            that.x = entity.leftBB.left - 32 * 2;
+
+                    // left, right, and bottom bounding boxes for platform
+                    if (entity instanceof Platform /*&& that.BB.collide(entity.BB)*/) {
+                        if (that.BB.collide(entity.leftBB) && !that.BB.collide(entity.bottomBB)) { // left collision
+                           // that.x = entity.BB.left - 32 * 2;
+                            that.x = entity.BB.left - 32 * 2;
                             if (that.velocity.x > 0) that.velocity.x = 0;
-                        } else if (that.BB.collide(entity.rightBB)) { // right collision
+
+                        } else if (that.BB.collide(entity.rightBB) && !that.BB.collide(entity.bottomBB)) { // right collision
                             that.x = entity.rightBB.right;
                             if (that.velocity.x < 0) that.velocity.x = 0;
                         }
+
+
+                        // else if (that.BB.collide(entity.bottomBB)) { // bottom collision
+                        //     that.y = entity.bottomBB.bottom;
+                        //     if (that.velocity.y < 0) that.velocity.y = 0;
+                        // } 
                         that.updateBB();
                     }
                     // Collision with no face
