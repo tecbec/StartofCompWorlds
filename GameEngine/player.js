@@ -26,10 +26,13 @@ class Player {
         this.velocity = { x: 0, y: 0};
         this.fallAcc = 562.5;
         this.isGrounded = false;
+        this.groundedCount = 0;
 
         this.sootCount = 0;
         this.nofaceCount = 0;
-};
+        this.coinCounter = new CoinCounter(this.game, 225, 7.25);
+    };
+
     loadAnimations() {
         // array with [state] [face] of the same animator.
         for (var i = 0; i < 5; i++) {
@@ -77,6 +80,7 @@ class Player {
         ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
         ctx.imageSmoothingEnabled = false;
         this.breathbar.draw(ctx);
+        this.coinCounter.draw(ctx);
     }
 
     update() {
@@ -85,7 +89,8 @@ class Player {
         const MIN_WALK = 100;
         const RUN_ACC = 400;
         const crouch_spe = 350;
-        // can only jump and move while on the ground.
+        // can only move while on the ground.
+        // can only jump after has been grounded for x ticks
         if (this.isGrounded) {
             if (Math.abs(this.velocity.x) < MIN_WALK) { // walking
                 this.velocity.x = 0;
@@ -125,7 +130,9 @@ class Player {
                 this.velocity.y = 0;
             }
         } else {
-            if (this.velocity.y > 0) {
+            //fall straight down
+            if (this.velocity.y > 0 /* && this.velocity.x < MIN_WALK*2 */) { 
+                // smooth so player can choose to fall straight down or with some x momentum 
                 this.velocity.x = 0;
             }
         }
@@ -183,6 +190,7 @@ class Player {
                     // TODO: Include top collision maybe, or just resize no face to be shorter.
                     // TODO: fix the velocity changes. 
                     if (entity instanceof NoFace && that.BB.collide(entity.BB)) { 
+                        that.coinCounter.coinCount += 10;
                         if (that.BB.collide(entity.leftBB)) { // left collision
                             that.x = entity.leftBB.left - 32 * 2;   
                             if (that.velocity.x > 0) that.velocity.x = 0; 
@@ -213,6 +221,7 @@ class Player {
                         } 
                         that.breathwidth +=  that.maxBreath - that.breathwidth; 
                         that.breathbar.update(that.breathwidth);
+                        that.coinCounter.coinCount ++;
                     }     
                 }
         });
