@@ -19,6 +19,7 @@ class SceneManager {
         this.platform2 = new Platform(gameEngine, 90, 100, 32); 
         this.soots = new Soot(gameEngine, 0, 0);
         this.noface = new NoFace(gameEngine, 325, PARAMS.CANVAS_WIDTH - 75 - 64);
+        this.haku = new Haku(gameEngine, -85, PARAMS.CANVAS_WIDTH - 70 - 64);
 
         this.coin1 = new Coins(gameEngine, 200, 300);
         this.coin2 = new Coins(gameEngine, 300, 300);
@@ -37,6 +38,7 @@ class SceneManager {
         this.game.addEntity(this.platform2);
         this.game.addEntity(this.soots);
         this.game.addEntity(this.noface);
+        this.game.addEntity(this.haku);
         this.game.addEntity(this.coin1);
         this.game.addEntity(this.coin2);
         this.game.addEntity(this.coin3);

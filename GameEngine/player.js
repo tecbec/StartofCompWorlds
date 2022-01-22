@@ -148,7 +148,7 @@ class Player {
         this.game.entities.forEach(function (entity) {              // this will look at all entities in relation to mario
                 if (entity.BB && that.BB.collide(entity.BB)) {      //is there an entity bb & check to see if they collide
                     if (that.velocity.y > 0) { // so chihiro is falling
-                        if((entity instanceof Ground || entity instanceof Platform)
+                        if((entity instanceof Ground || entity instanceof Platform || entity instanceof Haku)
                         && (that.lastBB.bottom <= entity.BB.top)) { // bottom of the player hits the top of the ground.
                             that.isGrounded = true;
                             that.y = entity.BB.top - 32 * 2;
@@ -182,7 +182,7 @@ class Player {
                     // Collision with no face
                     // TODO: Include top collision maybe, or just resize no face to be shorter.
                     // TODO: fix the velocity changes. 
-                    if (entity instanceof NoFace && that.BB.collide(entity.BB)) { 
+                    if (entity instanceof NoFace && that.BB.collide(entity.BB)) {      
                         if (that.BB.collide(entity.leftBB)) { // left collision
                             that.x = entity.leftBB.left - 32 * 2;   
                             if (that.velocity.x > 0) that.velocity.x = 0; 
@@ -195,6 +195,16 @@ class Player {
                         entity.removeFromWorld = true;
                         that.nofaceCount++;
                         console.log("that.nofaceCount++: " + that.nofaceCount++);
+                    }
+                    // Collision with Haku
+                    if (entity instanceof Haku && that.BB.collide(entity.BB)) {  
+                        if (that.BB.collide(entity.leftBB)) { // left collision
+                            that.x = entity.leftBB.left - 32 * 2;   
+                            if (that.velocity.x > 0) that.velocity.x = 0; 
+                        } else if (that.BB.collide(entity.rightBB)) { // right 
+                            that.x = entity.rightBB.right - 5;
+                            if (that.velocity.x < 0) that.velocity.x = 0;
+                        } 
                     }
                     // Collision with soot
                     if (entity instanceof Soot ) { 
