@@ -6,13 +6,11 @@ class Haku {
     constructor( game, x, y ) {
         Object.assign(this, { game, x, y});
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/haku_spritesheet.png");
-
+        this.dead = false;
+        this.deadCounter = 0;
+        this.spawnCounter = 0;
         this.loadAnimations();
-
-        this.BB = new BoundingBox(this.x + 20, this.y + 8, 35, 60);
-        this.leftBB = new BoundingBox(this.x + 20, this.y + 8, 5, 60);
-        this.rightBB = new BoundingBox(this.BB.right - 5, this.y + 8, 5, 60);
-        // this.updateBB();
+        this.updateBB();
 
     };
 
@@ -20,12 +18,20 @@ class Haku {
          this.animations = new Animator(this.spritesheet, 0, 70, 70, 70, 4, .23 ,0, false, true);
     }
 
-    // updateBB() {
-    //     this.lastBB = this.BB;
-    // };
+    updateBB() {
+        this.lastBB = this.BB;
+        this.BB = new BoundingBox(this.x + 20, this.y + 8, 35, 60);
+        this.leftBB = new BoundingBox(this.x + 20, this.y + 8, 5, 60);
+        this.rightBB = new BoundingBox(this.BB.right - 5, this.y + 8, 5, 60);
+    };
 
     update() {
-
+        if (this.dead) {
+            this.deadCounter += this.game.clockTick;
+            if (this.deadCounter > 0.75) {
+                this.removeFromWorld = true; 
+            }      
+        } 
     };
 
     draw(ctx) {
