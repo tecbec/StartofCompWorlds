@@ -17,13 +17,13 @@ class Player {
         this.loadAnimations();
         this.facing = 0; // 0 = right; 1 = left
         this.state = 0; // 0 = idle, 1 = walking, 2 = jumping/falling,
-        this.dead = false; 
+        this.dead = false;
 
-        this.breathwidth = 100; 
-        this.breathbarheight = 10; 
-        this.maxBreath = 100; 
+        this.breathwidth = 100;
+        this.breathbarheight = 10;
+        this.maxBreath = 100;
         this.breathbar = new BreathBar(this.game, 275, 10, this.breathwidth, this.breathbarheight, this.maxBreath);
-        // default values. 
+        // default values.
         this.velocity = { x: 0, y: 0};
         this.fallAcc = 562.5;
         this.isGrounded = false;
@@ -102,7 +102,7 @@ class Player {
             }
             //updating jump timer
             this.jumpTimer -= .01;
-            this.jumping = false; 
+            this.jumping = false;
 
             if (Math.abs(this.velocity.x) < MIN_WALK) { // walking
                 this.velocity.x = 0;
@@ -119,10 +119,10 @@ class Player {
                             this.velocity.x += RUN_ACC * TICK;
                         }
                     } else {
-                        this.velocity.x = 0; 
+                        this.velocity.x = 0;
                         this.state = 4;
                     }
-                } 
+                }
                 if (this.facing === 1) {                        // if going right
                     if (this.game.left && !this.game.right) {   // make sure that only one arrow is pressed at a time
                         if (this.game.run) {                    // when player press shift + arrow
@@ -137,16 +137,16 @@ class Player {
 
             if (this.game.up /* && this.jumpTimer <= 0*/) {  //jumping
                 this.jumping = true;
-                this.velocity.y = -250;   
-                this.state = 2;     
-            } else {  
+                this.velocity.y = -250;
+                this.state = 2;
+            } else {
                 this.state = 0;
                 this.velocity.y = 0;
             }
 
         } else {
             // fall straight down if did not jump
-            if (this.velocity.y > 0 && !this.jumping) { 
+            if (this.velocity.y > 0 && !this.jumping) {
                 this.velocity.x = 0;
             }
 
@@ -158,9 +158,6 @@ class Player {
                 this.velocity.x = Math.abs(this.velocity.x);
             }
         }
-
-        
-
 
         this.velocity.y += this.fallAcc * TICK; //this makes mario always falling
 
@@ -186,7 +183,7 @@ class Player {
                             that.isGrounded = true;
                             that.y = entity.BB.top - 32 * 2;
                             that.velocity.y === 0;
-                            that.updateBB(); 
+                            that.updateBB();
                         } else {
                             that.isGrounded = false;
                         }
@@ -196,9 +193,9 @@ class Player {
                             && (that.lastBB.top >= entity.BB.bottom)) { // top of the player goes above the bottom of the platform
                             //that.y = entity.BB.bottom; <- this causes weird ricochet on bottom of platforms
                             that.velocity.y = 0;
-                            that.updateBB(); // why include this here too? 
+                            that.updateBB(); // why include this here too?
 
-                        } else { //why this else statement? 
+                        } else { //why this else statement?
                             that.isGrounded = false;
                         }
                     }
@@ -215,53 +212,58 @@ class Player {
                     }
                     // Collision with no face
                     // TODO: Include top collision maybe, or just resize no face to be shorter.
-                    // TODO: fix the velocity changes. 
-                    if (entity instanceof NoFace && that.BB.collide(entity.BB)) { 
-                        that.coinCounter.coinCount += 10; 
+                    // TODO: fix the velocity changes.
+                    if (entity instanceof NoFace && that.BB.collide(entity.BB)) {
+                        that.coinCounter.coinCount += 10;
+                        entity.dead = true;
                         if (that.BB.collide(entity.leftBB)) { // left collision
-                            that.x = entity.leftBB.left - 32 * 2 + 10;   // to prevent ricochet agianst collisions we have to add padding.
-                            if (that.velocity.x > 0) that.velocity.x = 0; 
+                            that.x = entity.leftBB.left - 32 * 2 + 10;   // to prevent ricochet against collisions we have to add padding.
+                            if (that.velocity.x > 0) that.velocity.x = 0;
                         } else if (that.BB.collide(entity.rightBB)) {
                             that.x = entity.rightBB.right - 10;
                             if (that.velocity.x < 0) that.velocity.x = 0;
                         }
-                        // This is where we want to make no face give chihiro coins
-                        // and after some amount of time make no face disappear.
-                        that.nofaceCount++;
-                        console.log("that.nofaceCount++: " + that.nofaceCount++);
                     }
                     // Collision with Haku
-                    if (entity instanceof Haku && that.BB.collide(entity.BB)) {  
+                    if (entity instanceof Haku && that.BB.collide(entity.BB)) {
                         // instantly heal stamina bar
-                        that.breathwidth +=  that.maxBreath - that.breathwidth; 
+                        that.breathwidth +=  that.maxBreath - that.breathwidth;
                         that.breathbar.update(that.breathwidth);
                         if (that.BB.collide(entity.leftBB)) { // left collision
-                            that.x = entity.leftBB.left - 32 * 2 + 10;  // added padding  
-                            if (that.velocity.x > 0) that.velocity.x = 0; 
-                        } else if (that.BB.collide(entity.rightBB)) { // right 
+                            that.x = entity.leftBB.left - 32 * 2 + 10;  // added padding
+                            if (that.velocity.x > 0) that.velocity.x = 0;
+                        } else if (that.BB.collide(entity.rightBB)) { // right
                             that.x = entity.rightBB.right - 10;
                             if (that.velocity.x < 0) that.velocity.x = 0;
-                        } 
+                        }
                     }
                     // Collision with soot
-                    if (entity instanceof Soot ) { 
-                        console.log("entered")
-                        that.sootCount++;
-                        console.log("that.sootCount " + that.sootCount);
-                        // This is where we want to make chihiro loose stamina
-                        // and after make the soots disappear?
+                    if (entity instanceof Soot ) {
+                        that.breathwidth--;
+                        that.breathbar.update(that.breathwidth);
+
+                        entity.dead = true;
+
+                        if (that.BB.collide(entity.leftBB)) { // left collision
+                            that.x = entity.leftBB.left - 32 * 2 + 10;   // to prevent ricochet against collisions we have to add padding.
+                            if (that.velocity.x > 0) that.velocity.x = 0;
+                        } else if (that.BB.collide(entity.rightBB)) {
+                            that.x = entity.rightBB.right - 10;
+                            if (that.velocity.x < 0) that.velocity.x = 0;
+                        }
+
                     }
                     // Collision with coins
                     if (entity instanceof Coins) {
-                        entity.removeFromWorld = true; 
+                        entity.removeFromWorld = true;
                         if (that.breathbar < that.maxBreath) {
-                            that.breathwidth += 25; 
+                            that.breathwidth += 25;
                             that.breathbar.update(that.breathwidth);
-                        } 
-                        that.breathwidth +=  that.maxBreath - that.breathwidth; 
+                        }
+                        that.breathwidth +=  that.maxBreath - that.breathwidth;
                         that.breathbar.update(that.breathwidth);
                         that.coinCounter.coinCount ++;
-                    } 
+                    }
                 }
         });
 
@@ -282,8 +284,8 @@ class Player {
          // update direction
          if (this.velocity.x < 0) this.facing = 1;
          if (this.velocity.x > 0) this.facing = 0;
-         
-         //updating the healthbar 
+
+         //updating the healthbar
          this.breathwidth -= .1; // changes for testing
          this.breathbar.update(this.breathwidth);
 
