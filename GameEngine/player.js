@@ -275,6 +275,9 @@ class Player {
         }
         if (this.dead) {
             this.state = 5;
+            this.velocity.x = 0;
+        } else {
+
         }
          // update direction
          if (this.velocity.x < 0) this.facing = 1;
