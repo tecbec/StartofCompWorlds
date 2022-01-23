@@ -214,12 +214,15 @@ class Player {
                     // TODO: Include top collision maybe, or just resize no face to be shorter.
                     // TODO: fix the velocity changes.
                     if (entity instanceof NoFace && that.BB.collide(entity.BB)) {
-                        that.coinCounter.coinCount += 10;
+                        // Set a maximum amount of coins upon interact
+                        if (that.coinCounter.coinCount <= 10) {
+                            that.coinCounter.coinCount += 10;
+                        }
                         entity.dead = true;
                         if (that.BB.collide(entity.leftBB)) { // left collision
                             that.x = entity.leftBB.left - 32 * 2 + 10;   // to prevent ricochet against collisions we have to add padding.
                             if (that.velocity.x > 0) that.velocity.x = 0;
-                        } else if (that.BB.collide(entity.rightBB)) {
+                        } else if (that.BB.collide(entity.rightBB)) { // right
                             that.x = entity.rightBB.right - 10;
                             if (that.velocity.x < 0) that.velocity.x = 0;
                         }
@@ -229,6 +232,7 @@ class Player {
                         // instantly heal stamina bar
                         that.breathwidth +=  that.maxBreath - that.breathwidth;
                         that.breathbar.update(that.breathwidth);
+                        entity.dead = true;
                         if (that.BB.collide(entity.leftBB)) { // left collision
                             that.x = entity.leftBB.left - 32 * 2 + 10;  // added padding
                             if (that.velocity.x > 0) that.velocity.x = 0;
@@ -239,11 +243,9 @@ class Player {
                     }
                     // Collision with soot
                     if (entity instanceof Soot ) {
-                        that.breathwidth--;
+                        that.breathwidth -= 2;
                         that.breathbar.update(that.breathwidth);
-
                         entity.dead = true;
-
                         if (that.BB.collide(entity.leftBB)) { // left collision
                             that.x = entity.leftBB.left - 32 * 2 + 10;   // to prevent ricochet against collisions we have to add padding.
                             if (that.velocity.x > 0) that.velocity.x = 0;
@@ -251,7 +253,6 @@ class Player {
                             that.x = entity.rightBB.right - 10;
                             if (that.velocity.x < 0) that.velocity.x = 0;
                         }
-
                     }
                     // Collision with coins
                     if (entity instanceof Coins) {
@@ -277,13 +278,16 @@ class Player {
         }
         if (this.dead) {
             this.state = 5;
+            this.velocity.x = 0;
+        } else {
+
         }
          // update direction
          if (this.velocity.x < 0) this.facing = 1;
          if (this.velocity.x > 0) this.facing = 0;
 
          //updating the healthbar
-         this.breathwidth -= .1; // changes for testing
+         this.breathwidth -= .05; // changes for testing
          this.breathbar.update(this.breathwidth);
 
          if (this.breathwidth <= 0) {
