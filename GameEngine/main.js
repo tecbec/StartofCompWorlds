@@ -8,10 +8,9 @@ ASSET_MANAGER.queueDownload("./sprites/soot-jump-long_aura2_bidir.png");
 ASSET_MANAGER.queueDownload("./sprites/spritesheet.png");
 ASSET_MANAGER.queueDownload("./sprites/platform_sheet.png");
 ASSET_MANAGER.queueDownload("./sprites/background.png");
-ASSET_MANAGER.queueDownload("./sprites/water.png");
 ASSET_MANAGER.queueDownload("./sprites/noface-spritesheet-fade.png");
-ASSET_MANAGER.queueDownload("./sprites/spritesheet_test.png");
 ASSET_MANAGER.queueDownload("./sprites/coins.png");
+ASSET_MANAGER.queueDownload("./sprites/haku_spritesheet.png");
 
 ASSET_MANAGER.downloadAll(() => {
 	const canvas = document.getElementById("gameWorld");

@@ -17,12 +17,13 @@ class Player {
         this.loadAnimations();
         this.facing = 0; // 0 = right; 1 = left
         this.state = 0; // 0 = idle, 1 = walking, 2 = jumping/falling,
+        this.dead = false;
 
-        this.breathwidth = 100; 
-        this.breathbarheight = 10; 
-        this.maxBreath = 100; 
+        this.breathwidth = 100;
+        this.breathbarheight = 10;
+        this.maxBreath = 100;
         this.breathbar = new BreathBar(this.game, 275, 10, this.breathwidth, this.breathbarheight, this.maxBreath);
-        // default values. 
+        // default values.
         this.velocity = { x: 0, y: 0};
         this.fallAcc = 562.5;
         this.isGrounded = false;
@@ -35,7 +36,7 @@ class Player {
 
     loadAnimations() {
         // array with [state] [face] of the same animator.
-        for (var i = 0; i < 5; i++) {
+        for (var i = 0; i < 6; i++) {
             this.animations.push([]);
             for (var j = 0; j < 2; j++) {
                 this.animations[i].push([]);
@@ -61,23 +62,25 @@ class Player {
         this.animations[4][0] = new Animator (this.spritesheet, 0, 64, 32, 32, 6, 0.05, 0, false, true);
         this.animations[4][1] = new Animator (this.spritesheet, 0, 96, 32, 32, 6, 0.05, 0, false, true);
 
-
+        // dead -> right, left.
+        this.animations[5][0] = new Animator(this.spritesheet, 0, 192, 32, 32, 8, 0.12, 0, false, false);
+        this.animations[5][1] = new Animator(this.spritesheet, 0, 224, 32, 32, 8, 0.12, 0, false, false);
     }
 
     updateBB() {
         this.lastBB = this.BB;
         //making the box smaller here
-        this.BB = new BoundingBox(this.x + 10, this.y+10, 64-20, 64-10); // KD changed the bounding box dimensions to hug the sprite.
+        this.BB = new BoundingBox(this.x + 10, this.y + 10, 64-20, 64-10); // KD changed the bounding box dimensions to hug the sprite.
 
     };
 
     draw(ctx) {
         // this.animations[this.state][this.facing].drawFrame(this.game.clockTick, ctx, this.x, this.y, 2);
         this.animations[this.state][this.facing].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, 2);
-
-        ctx.strokeStyle = 'Red';
-        //ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
-        ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
+        if (PARAMS.DEBUG) {
+            ctx.strokeStyle = 'Red';
+            ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
+        }
         ctx.imageSmoothingEnabled = false;
         this.breathbar.draw(ctx);
         this.coinCounter.draw(ctx);
@@ -86,19 +89,20 @@ class Player {
     update() {
         const TICK = this.game.clockTick;
         const MAX_FALL = 240;
+        const MAX_RUN = 250;
         const MIN_WALK = 100;
         const RUN_ACC = 400;
         const crouch_spe = 350;
         // can only move while on the ground.
         // can only jump after has been grounded for x ticks
-        if (this.isGrounded) {
+        if (this.isGrounded && !this.dead) {
             if(this.jumping){ // just landed
                 // set off short timer, to prevent accidental double jumping
                 this.jumpTimer = 1000;
             }
             //updating jump timer
             this.jumpTimer -= .01;
-            this.jumping = false; 
+            this.jumping = false;
 
             if (Math.abs(this.velocity.x) < MIN_WALK) { // walking
                 this.velocity.x = 0;
@@ -115,10 +119,10 @@ class Player {
                             this.velocity.x += RUN_ACC * TICK;
                         }
                     } else {
-                        this.velocity.x = 0; 
+                        this.velocity.x = 0;
                         this.state = 4;
                     }
-                } 
+                }
                 if (this.facing === 1) {                        // if going right
                     if (this.game.left && !this.game.right) {   // make sure that only one arrow is pressed at a time
                         if (this.game.run) {                    // when player press shift + arrow
@@ -133,16 +137,16 @@ class Player {
 
             if (this.game.up /* && this.jumpTimer <= 0*/) {  //jumping
                 this.jumping = true;
-                this.velocity.y = -250;   
-                this.state = 2;     
-            } else {  
+                this.velocity.y = -250;
+                this.state = 2;
+            } else {
                 this.state = 0;
                 this.velocity.y = 0;
             }
 
         } else {
-            //fall straight down if did not jump
-            if (this.velocity.y > 0 && !this.jumping) { 
+            // fall straight down if did not jump
+            if (this.velocity.y > 0 && !this.jumping) {
                 this.velocity.x = 0;
             }
 
@@ -155,13 +159,12 @@ class Player {
             }
         }
 
-        
-
-
         this.velocity.y += this.fallAcc * TICK; //this makes mario always falling
 
         if (this.velocity.y >= MAX_FALL) this.velocity.y = MAX_FALL;
         if (this.velocity.y <= -MAX_FALL) this.velocity.y = -MAX_FALL;
+        if (this.velocity.x >= MAX_RUN) this.velocity.x = MAX_RUN;
+        if (this.velocity.x <= -MAX_RUN) this.velocity.x = -MAX_RUN;
 
         this.x += this.velocity.x * TICK * 2;
         this.y += this.velocity.y * TICK * 2;
@@ -171,16 +174,16 @@ class Player {
         var that = this; //need this because we are creating
 
         // collision
-        // TODO: think about left and right bounding box.
+        // TODO: think about left and right bounding box
         this.game.entities.forEach(function (entity) {              // this will look at all entities in relation to mario
                 if (entity.BB && that.BB.collide(entity.BB)) {      //is there an entity bb & check to see if they collide
-                    if (that.velocity.y > 0) { // chihiro is falling down
-                        if((entity instanceof Ground || entity instanceof Platform)
-                        && (that.lastBB.bottom <= entity.BB.top)) { // bottom of the player hits the top of the ground/platform
+                    if (that.velocity.y > 0) { // chihiro is falling
+                        if((entity instanceof Ground || entity instanceof Platform || entity instanceof Haku || entity instanceof NoFace)
+                        && (that.lastBB.bottom <= entity.BB.top)) { // bottom of the player hits the top of the ground
                             that.isGrounded = true;
                             that.y = entity.BB.top - 32 * 2;
                             that.velocity.y === 0;
-                            that.updateBB(); 
+                            that.updateBB();
                         } else {
                             that.isGrounded = false;
                         }
@@ -190,19 +193,17 @@ class Player {
                             && (that.lastBB.top >= entity.BB.bottom)) { // top of the player goes above the bottom of the platform
                             //that.y = entity.BB.bottom; <- this causes weird ricochet on bottom of platforms
                             that.velocity.y = 0;
-                            that.updateBB(); // why include this here too? 
+                            that.updateBB(); // why include this here too?
 
-                        } else { //why this else statement? 
+                        } else { //why this else statement?
                             that.isGrounded = false;
                         }
                     }
-
                     // left, right, and bottom bounding boxes for platform
                     if (entity instanceof Platform && that.BB.collide(entity.BB)) {
                         if (that.BB.collide(entity.leftBB) && (that.lastBB.right <= entity.leftBB.left)) { // left collision
                             that.x = entity.BB.left - 32 * 2;
                             if (that.velocity.x > 0) that.velocity.x = 0;
-
                         } else if (that.BB.collide(entity.rightBB) && (that.lastBB.left >= entity.rightBB.right)) { // right collision
                             that.x = entity.rightBB.right;
                             if (that.velocity.x < 0) that.velocity.x = 0;
@@ -211,58 +212,88 @@ class Player {
                     }
                     // Collision with no face
                     // TODO: Include top collision maybe, or just resize no face to be shorter.
-                    // TODO: fix the velocity changes. 
-                    if (entity instanceof NoFace && that.BB.collide(entity.BB)) { 
-                        that.coinCounter.coinCount += 10;
+                    // TODO: fix the velocity changes.
+                    if (entity instanceof NoFace && that.BB.collide(entity.BB)) {
+                        // Set a maximum amount of coins upon interact
+                        if (that.coinCounter.coinCount <= 10) {
+                            that.coinCounter.coinCount += 10;
+                        }
+                        entity.dead = true;
                         if (that.BB.collide(entity.leftBB)) { // left collision
-                            that.x = entity.leftBB.left - 32 * 2;   
-                            if (that.velocity.x > 0) that.velocity.x = 0; 
-                        } else if (that.BB.collide(entity.rightBB)) {
-                            that.x = entity.rightBB.right - 5;
+                            that.x = entity.leftBB.left - 32 * 2 + 10;   // to prevent ricochet against collisions we have to add padding.
+                            if (that.velocity.x > 0) that.velocity.x = 0;
+                        } else if (that.BB.collide(entity.rightBB)) { // right
+                            that.x = entity.rightBB.right - 10;
                             if (that.velocity.x < 0) that.velocity.x = 0;
                         }
-                        // This is where we want to make no face give chihiro coins
-                        // and after some amount of time make no face disappear.
-                        entity.removeFromWorld = true;
-                        that.nofaceCount++;
-                        console.log("that.nofaceCount++: " + that.nofaceCount++);
+                    }
+                    // Collision with Haku
+                    if (entity instanceof Haku && that.BB.collide(entity.BB)) {
+                        // instantly heal stamina bar
+                        that.breathwidth +=  that.maxBreath - that.breathwidth;
+                        that.breathbar.update(that.breathwidth);
+                        entity.dead = true;
+                        if (that.BB.collide(entity.leftBB)) { // left collision
+                            that.x = entity.leftBB.left - 32 * 2 + 10;  // added padding
+                            if (that.velocity.x > 0) that.velocity.x = 0;
+                        } else if (that.BB.collide(entity.rightBB)) { // right
+                            that.x = entity.rightBB.right - 10;
+                            if (that.velocity.x < 0) that.velocity.x = 0;
+                        }
                     }
                     // Collision with soot
-                    if (entity instanceof Soot ) { 
-                        console.log("entered")
-                        that.sootCount++;
-                        console.log("that.sootCount " + that.sootCount);
-                        // This is where we want to make chihiro loose stamina
-                        // and after make the soots disappear?
+                    if (entity instanceof Soot ) {
+                        that.breathwidth -= 2;
+                        that.breathbar.update(that.breathwidth);
+                        entity.dead = true;
+                        if (that.BB.collide(entity.leftBB)) { // left collision
+                            that.x = entity.leftBB.left - 32 * 2 + 10;   // to prevent ricochet against collisions we have to add padding.
+                            if (that.velocity.x > 0) that.velocity.x = 0;
+                        } else if (that.BB.collide(entity.rightBB)) {
+                            that.x = entity.rightBB.right - 10;
+                            if (that.velocity.x < 0) that.velocity.x = 0;
+                        }
                     }
                     // Collision with coins
                     if (entity instanceof Coins) {
-                        entity.removeFromWorld = true; 
+                        entity.removeFromWorld = true;
                         if (that.breathbar < that.maxBreath) {
-                            that.breathwidth += 25; 
+                            that.breathwidth += 25;
                             that.breathbar.update(that.breathwidth);
-                        } 
-                        that.breathwidth +=  that.maxBreath - that.breathwidth; 
+                        }
+                        that.breathwidth +=  that.maxBreath - that.breathwidth;
                         that.breathbar.update(that.breathwidth);
                         that.coinCounter.coinCount ++;
-                    }     
+                    }
                 }
         });
 
          // update state
-        if (this.state !== 2) {
+        if (this.state !== 2 || this.state !== 5) {
             if (this.game.crouch) this.state = 3; //crouching state
             else if (Math.abs(this.velocity.x) > 0) this.state = 1;
-            else if(Math.abs(this.velocity.x) > MIN_WALK) this.state = 4; //running state
+            else if (Math.abs(this.velocity.x) > MIN_WALK) this.state = 4; //running state
+        } else {
+
+        }
+        if (this.dead) {
+            this.state = 5;
+            this.velocity.x = 0;
         } else {
 
         }
          // update direction
          if (this.velocity.x < 0) this.facing = 1;
          if (this.velocity.x > 0) this.facing = 0;
-         
-         //updating the healthbar 
-         this.breathwidth -= .01; // changes for testing
+
+         //updating the healthbar
+         this.breathwidth -= .05; // changes for testing
          this.breathbar.update(this.breathwidth);
+
+         if (this.breathwidth <= 0) {
+            this.dead = true;
+         } else {
+             this.dead = false;
+         }
     }
 }
