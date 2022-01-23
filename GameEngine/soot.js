@@ -29,7 +29,6 @@ class Soot {
         // bounding box
         this.updateBB();
 
-
     };
 
     loadAnimations() {
