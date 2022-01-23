@@ -159,8 +159,6 @@ class Player {
             }
         }
 
-
-
         this.velocity.y += this.fallAcc * TICK; //this makes mario always falling
 
         if (this.velocity.y >= MAX_FALL) this.velocity.y = MAX_FALL;
