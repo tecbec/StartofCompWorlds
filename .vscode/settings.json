@@ -1,6 +1,7 @@
 {
     "liveServer.settings.port": 5502,
     "cSpell.words": [
+        "bitwidth",
         "breathbar",
         "breathbarheight",
         "breathwidth",
@@ -9,6 +10,7 @@
         "Ladd's",
         "randomx",
         "randomy",
+        "spritesheets",
         "velocityx",
         "velocityy"
     ]

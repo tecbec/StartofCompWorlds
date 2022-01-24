@@ -12,37 +12,50 @@ class NoFace {
 
         this.dead = false;
         this.deadCounter = 0;
+        this.scale = .3;
 
-        // initialize the velocity .
-        // this.velocity = {x: 100, y: 100};
+        // bounding box
         this.updateBB();
-
 
     };
 
     loadAnimations() {
-        this.animations = new Animator(this.spritesheet, 0, 0, 150, 400, 7, .2, 10, false, true);
+
+        const start = {x: 0, y: 0};
+        const height = 150;
+        const width = 400;
+        const frames = 7;
+        const framedur = 0.2;
+        const pad = 10;
+
+        this.animations = new Animator(this.spritesheet, start.x, start.y, height, width, frames, framedur, pad, false, true);
     }
 
     updateBB() {
-        this.lastBB = this.BB;
-        // this.BB = new BoundingBox(this.x+5, this.y, 20, 75);
+        const subwidth = 10;
+        let width = 30;
+        const height = 110;
 
-        this.BB = new BoundingBox(this.x + 5, this.y, 23, 75);
-        this.leftBB = new BoundingBox(this.x + 5, this.y, 5, 75);
-        this.rightBB = new BoundingBox(this.BB.right - 5, this.y, 5, 75);
+        this.lastBB = this.BB;
+        this.BB = new BoundingBox(this.x+subwidth, this.y, width, height);
+
+        width = 5;
+        this.leftBB = new BoundingBox(this.x+subwidth, this.y, width, height);
+        this.rightBB = new BoundingBox(this.BB.right-subwidth, this.y, width, height);
+
     };
 
 
     update() {
+        const pause = 0.75; 
         if (this.dead) {
             this.deadCounter += this.game.clockTick;
-            if (this.deadCounter > 0.75) this.removeFromWorld = true;
+            if (this.deadCounter > pause) this.removeFromWorld = true;
         }
     };
 
     draw(ctx) {
-        this.animations.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, .2);
+        this.animations.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, this.scale);
 
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';

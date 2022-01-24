@@ -1,3 +1,6 @@
+
+
+
 class SceneManager {
     constructor(game) {
         this.game = game;
@@ -5,6 +8,10 @@ class SceneManager {
         // chihiro falling from the sky and land on the ground
         this.chihiro = new Player(this.game, 0, 0);
         //this.chihiro = this;
+
+        // entity locations on the screen
+        const nofacelocation = {x: 110, y: 225};
+        const sootlocation = {x: 150, y: 190};
 
         // x, y, w
         // TODO: fix these measurements
@@ -21,10 +28,10 @@ class SceneManager {
         this.soot = [];
         for(let i = 0; i < this.Num_Soots; i++) {
             let dir = getRandomInteger(0,1);
-            this.soot[i] = new Soot(gameEngine, 150, 190, dir);
+            this.soot[i] = new Soot(gameEngine, sootlocation.x, sootlocation.y, dir);
         }
 
-        this.noface = new NoFace(gameEngine, 325, PARAMS.CANVAS_WIDTH - 75 - 64);
+        this.noface = new NoFace(gameEngine, nofacelocation.x, nofacelocation.y);
         this.haku = new Haku(gameEngine, -85, PARAMS.CANVAS_WIDTH - 69 - 64);
 
         this.coin1 = new Coins(gameEngine, 200, 300);
