@@ -12,9 +12,12 @@ class Soot {
 
         this.loadAnimations();
 
+        const widthSootArea = 50;
+        const heightSootArea = 25;
+
         // sets the areas the soot will be located in
         this.minScreen = {x: x, y: y};
-        this.maxScreen = {x: x+50, y: y+25};
+        this.maxScreen = {x: x+widthSootArea, y: y+heightSootArea};
 
         // velocity values
         const randomx = getRandomInteger(25,50);
@@ -25,6 +28,7 @@ class Soot {
         this.velocity = {x: this.START_V.x, y: this.START_V.y};
 
         this.dead = false;
+        this.scale = 0.15;
 
         // bounding box
         this.updateBB();
@@ -32,18 +36,31 @@ class Soot {
     };
 
     loadAnimations() {
+        let start = {x: 0, y: 0};
+        const height = 100;
+        const width = 100;
+        const frames = 6;
+        const framedur = 0.2;
+        const pad = 15;
         if(this.sootDir === 1) { // soots move left to right
-            this.animations = new Animator(this.spritesheet_aura2, 0, 0, 100, 100, 6, .2, 15, false, true);
+            this.animations = new Animator(this.spritesheet_aura2, start.x, start.y, height, width, frames, framedur, pad, false, true);
         } else {            // soots move right to left
-            this.animations = new Animator(this.spritesheet_aura2, 0, 125, 100, 100, 6, .2, 15, false, true);
+            start.y = 125;
+            this.animations = new Animator(this.spritesheet_aura2, start.x, start.y, height, width, frames, framedur, pad, false, true);
         }
     }
 
     updateBB() {
+        const subwidth = 2;
+        const subheight = 5;
+        let width = 10;
+        const height = 10;
+
         this.lastBB = this.BB;
-        this.BB = new BoundingBox(this.x + 2, this.y + 5, 10, 10);
-        this.leftBB = new BoundingBox(this.x + 2, this.y + 5, 2, 10);
-        this.rightBB = new BoundingBox(this.BB.right - 2, this.y, 2, 10);
+        this.BB = new BoundingBox(this.x+subwidth, this.y+subheight, width, height);
+        width = 2;
+        this.leftBB = new BoundingBox(this.x+subwidth, this.y+subheight, width, height);
+        this.rightBB = new BoundingBox(this.BB.right-subwidth, this.y, width, height);
     };
 
     // this is set to move the piece across the screen
@@ -110,7 +127,7 @@ class Soot {
     };
 
     draw(ctx) {
-        this.animations.drawFrame(this.game.clockTick, ctx, this.x  - this.game.camera.x, this.y, 0.15);
+        this.animations.drawFrame(this.game.clockTick, ctx, this.x  - this.game.camera.x, this.y, this.scale);
 
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
@@ -119,7 +136,7 @@ class Soot {
             ctx.strokeRect(this.leftBB.x - this.game.camera.x, this.leftBB.y, this.leftBB.width, this.leftBB.height);
             ctx.strokeRect(this.rightBB.x - this.game.camera.x, this.rightBB.y, this.rightBB.width, this.rightBB.height);
         }
-       
+
         ctx.imageSmoothingEnabled = false;
     };
 };
