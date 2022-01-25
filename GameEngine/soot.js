@@ -1,7 +1,6 @@
 /*
  * Soot Object
  * Created and animated by Kumiko
- *
  */
 
 class Soot {
@@ -42,6 +41,7 @@ class Soot {
         const frames = 6;
         const framedur = 0.2;
         const pad = 15;
+
         if(this.sootDir === 1) { // soots move left to right
             this.animations = new Animator(this.spritesheet_aura2, start.x, start.y, height, width, frames, framedur, pad, false, true);
         } else {            // soots move right to left
