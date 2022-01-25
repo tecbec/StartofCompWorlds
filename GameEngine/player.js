@@ -150,7 +150,7 @@ class Player {
                 this.velocity.x = 0;
             }
 
-            //can change direction they are facing 
+            //can change direction they are facing
             if (this.game.left) {
                 this.velocity.x = -Math.abs(this.velocity.x);
             }
