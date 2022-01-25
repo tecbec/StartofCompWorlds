@@ -33,7 +33,7 @@ class SceneManager {
 
         this.noface = new NoFace(gameEngine, nofacelocation.x, nofacelocation.y);
         this.haku = new Haku(gameEngine, -85, PARAMS.CANVAS_WIDTH - 69 - 64);
-        this.yubaba = new Yubaba(gameEngine);
+        this.yubaba = new Yubaba(gameEngine, 0, 0);
 
         this.coin1 = new Coins(gameEngine, 200, 300);
         this.coin2 = new Coins(gameEngine, 300, 300);
