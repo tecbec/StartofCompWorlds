@@ -116,14 +116,13 @@ class Player {
         this.animations[5][0] = new Animator(this.spritesheet, CHIHIRO.DEAD.RIGHT.X, CHIHIRO.DEAD.RIGHT.Y,
             CHIHIRO.SIZE, CHIHIRO.SIZE,
             CHIHIRO.DEAD.FRAME, CHIHIRO.DEAD.SPEED,
-            CHIHIRO.DEAD.PADDING, false, false);
+            CHIHIRO.DEAD.PADDING, CHIHIRO.DEAD.REVERSE, CHIHIRO.DEAD.LOOP);
         // dead -> left
         this.animations[5][1] = new Animator(this.spritesheet, CHIHIRO.DEAD.LEFT.X, CHIHIRO.DEAD.LEFT.Y,
             CHIHIRO.SIZE, CHIHIRO.SIZE,
             CHIHIRO.DEAD.FRAME, 0.12,
-            CHIHIRO.DEAD.PADDING, false, false);
+            CHIHIRO.DEAD.PADDING, CHIHIRO.DEAD.REVERSE, CHIHIRO.DEAD.LOOP);
     };
-
     /* Update the bounding box of the player for collision detection */
     updateBB() {
         this.lastBB = this.BB;
