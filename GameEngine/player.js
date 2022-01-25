@@ -18,10 +18,12 @@ class Player {
         this.facing = 0; // 0 = right; 1 = left
         this.state = 0; // 0 = idle, 1 = walking, 2 = jumping/falling,
 
+        // parameters for breathbar
         this.breathwidth = 100; 
         this.breathbarheight = 10; 
         this.maxBreath = 100; 
         this.breathbar = new BreathBar(this.game, 275, 10, this.breathwidth, this.breathbarheight, this.maxBreath);
+        
         // default values. 
         this.velocity = { x: 0, y: 0};
         this.fallAcc = 562.5;
