@@ -1,3 +1,4 @@
+/* Chihiro's Params */
 var CHIHIRO = {
     INITIAL_POSITION: {X: 0, Y: 0},
     SIZE: 32,
@@ -20,18 +21,13 @@ class Player {
         this.game.x = this;
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/spritesheet.png");
 
-        // initialization of the breath bar and counter
+        // initialization of the breath bar and counter    
+        this.breathwidth = 100; 
+        this.coinCounter = new CoinCounter(this.game, CHIHIRO.COIN_COUNTER.X, CHIHIRO.COIN_COUNTER.Y);       
         this.breathbar = new BreathBar(this.game, CHIHIRO.BREATH_BAR.X, CHIHIRO.BREATH_BAR.Y, this.breathwidth, 
             CHIHIRO.BREATH_BAR.HEIGHT, CHIHIRO.BREATH_BAR.MAX);
-        this.coinCounter = new CoinCounter(this.game, CHIHIRO.COIN_COUNTER.X, CHIHIRO.COIN_COUNTER.Y);  
-
-        // parameters for breathbar
-        this.breathwidth = 100; 
-        this.breathbarheight = 10; 
-        this.maxBreath = 100; 
-        this.breathbar = new BreathBar(this.game, 275, 10, this.breathwidth, this.breathbarheight, this.maxBreath);
         
-        // default values that will change
+        // default values 
         this.velocity = { x: 0, y: 0};
         this.isGrounded = false;
         this.dead = false;
@@ -133,7 +129,7 @@ class Player {
     updateBB() {
         this.lastBB = this.BB;
         this.BB = new BoundingBox(this.x + CHIHIRO.BB_PADDING, this.y + CHIHIRO.BB_PADDING,
-                                    CHIHIRO.SIZE * CHIHIRO.SCALE - CHIHIRO.BB_PADDING - CHIHIRO.BB_PADDING,
+                                    CHIHIRO.SIZE * CHIHIRO.SCALE - CHIHIRO.BB_PADDING - CHIHIRO.BB_PADDING, // both side 
                                     CHIHIRO.SIZE * CHIHIRO.SCALE - CHIHIRO.BB_PADDING); // KD changed the bounding box dimensions to hug the sprite
     };
 
