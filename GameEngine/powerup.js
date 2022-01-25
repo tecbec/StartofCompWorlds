@@ -1,3 +1,9 @@
+class Bubbles{
+    constructor(game, x,y, target) {
+        Object.assign(this, {game, x,y, target});
+    }
+}
+
 class Coins {
     constructor( game, x, y) {
         Object.assign(this, { game, x, y});
