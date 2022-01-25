@@ -33,6 +33,7 @@ class SceneManager {
 
         this.noface = new NoFace(gameEngine, nofacelocation.x, nofacelocation.y);
         this.haku = new Haku(gameEngine, -85, PARAMS.CANVAS_WIDTH - 69 - 64);
+        this.yubaba = new Yubaba(gameEngine);
 
         this.coin1 = new Coins(gameEngine, 200, 300);
         this.coin2 = new Coins(gameEngine, 300, 300);
@@ -63,6 +64,7 @@ class SceneManager {
 
         this.game.addEntity(this.noface);
         this.game.addEntity(this.haku);
+        this.game.addEntity(this.yubaba);
         this.game.addEntity(this.coin1);
         this.game.addEntity(this.coin2);
         this.game.addEntity(this.coin3);
