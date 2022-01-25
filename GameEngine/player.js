@@ -25,6 +25,12 @@ class Player {
             CHIHIRO.BREATH_BAR.HEIGHT, CHIHIRO.BREATH_BAR.MAX);
         this.coinCounter = new CoinCounter(this.game, CHIHIRO.COIN_COUNTER.X, CHIHIRO.COIN_COUNTER.Y);  
 
+        // parameters for breathbar
+        this.breathwidth = 100; 
+        this.breathbarheight = 10; 
+        this.maxBreath = 100; 
+        this.breathbar = new BreathBar(this.game, 275, 10, this.breathwidth, this.breathbarheight, this.maxBreath);
+        
         // default values that will change
         this.velocity = { x: 0, y: 0};
         this.isGrounded = false;
