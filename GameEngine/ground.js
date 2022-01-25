@@ -12,10 +12,12 @@ class Ground {
     };
 
     draw(ctx) {
-        // middle piece
-        let count = PARAMS.CANVAS_WIDTH * 3 / 64 ;
-        for (var i = 0; i < count; i ++) {
-            ctx.drawImage(this.spritesheet, 32, 0, 32, 32, this.x + 64 * i  - this.game.camera.x, this.y, 64, 64);
+        let COUNT = PARAMS.CANVAS_WIDTH * BACKGROUND.CANVAS_SCALE / BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE;
+        for (var i = 0; i < COUNT; i ++) {
+            ctx.drawImage(this.spritesheet, BACKGROUND.GROUND.X, BACKGROUND.GROUND.Y,
+                BACKGROUND.GROUND.SIZE, BACKGROUND.GROUND.SIZE,
+                this.x + BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE * i  - this.game.camera.x, this.y,
+                BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE, BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE);
         }
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
@@ -31,14 +33,18 @@ class BackGround {
         Object.assign(this, { game, x, y});
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/background.png");      
     }
+
     update() {
 
     };
 
     draw(ctx) {
-        let count = PARAMS.CANVAS_WIDTH * 3 / 288;
-        for (var i = 0; i < count; i ++) {
-            ctx.drawImage(this.spritesheet, 0, 0, 288, 208, this.x + 208 * i - this.game.camera.x, this.y, PARAMS.CANVAS_WIDTH, PARAMS.CANVAS_HEIGHT);
+        let COUNT = PARAMS.CANVAS_WIDTH * BACKGROUND.CANVAS_SCALE / BACKGROUND.SIZE.W * BACKGROUND.SIZE.H * BACKGROUND.SCALE;
+        for (var i = 0; i < COUNT; i++) {
+             ctx.drawImage(this.spritesheet, BACKGROUND.X, BACKGROUND.Y,
+                BACKGROUND.SIZE.W, BACKGROUND.SIZE.H,
+                this.x - this.game.camera.x + (PARAMS.CANVAS_WIDTH * i), this.y,
+                PARAMS.CANVAS_WIDTH, PARAMS.CANVAS_HEIGHT);
         }
         ctx.imageSmoothingEnabled = false;
     }
@@ -48,29 +54,55 @@ class Platform {
     constructor(game, x, y, w) {
         Object.assign(this, { game, x, y, w});
         this.spritesheet = this.spritesheet = ASSET_MANAGER.getAsset("./sprites/platform_sheet.png");
-        this.BB = new BoundingBox(this.x, this.y, 32 * 3, 32);
-        this.topBB = new BoundingBox(this.x, this.y, 32*3, 32/2);
-        this.bottomBB = new BoundingBox(this.x, this.y, 32*3, 32/2);
-        this.leftBB = new BoundingBox(this.x, this.y, 5, 32);
-        this.rightBB = new BoundingBox(this.BB.right - 5, this.y, 5, 32);
     }
 
     update() {
 
     };
 
-    draw(ctx) {
-        // TODO:refactor this code
-        // we need different bounding boxes to be able to actually check for that condition 
-        // go in and delete and re-apply the bounding boxes 
-        ctx.drawImage(this.spritesheet, 0, 32, 16, 16, this.x - this.game.camera.x, this.y, 32, 32);
-        ctx.drawImage(this.spritesheet, 16, 32, 16, 16, this.x + 32- this.game.camera.x, this.y, 32, 32);
-        ctx.drawImage(this.spritesheet, 32, 32, 16, 16, this.x + 64- this.game.camera.x, this.y, 32, 32);
-        ctx.strokeStyle = 'Red';
+    draw(ctx) {  
+        // left platform
+        ctx.drawImage(this.spritesheet, BACKGROUND.PLATFORM.LEFT.X, BACKGROUND.PLATFORM.LEFT.Y,
+            BACKGROUND.PLATFORM.SIZE, BACKGROUND.PLATFORM.SIZE,
+            this.x - this.game.camera.x, this.y,
+            BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE);
+
+        // default values to draw platform
+        let LOCATION = 1;    
+
+        // middle platform
+        for (var i = 1; i < BACKGROUND.PLATFORM.COUNT; i++) {
+            ctx.drawImage(this.spritesheet, BACKGROUND.PLATFORM.MID.X, BACKGROUND.PLATFORM.MID.Y,
+                BACKGROUND.PLATFORM.SIZE, BACKGROUND.PLATFORM.SIZE,
+                this.x + BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE - this.game.camera.x, this.y,
+                BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE * i, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE);
+                LOCATION++;
+        }
+
+        // right platform
+        ctx.drawImage(this.spritesheet, BACKGROUND.PLATFORM.RIGHT.X, BACKGROUND.PLATFORM.RIGHT.Y,
+            BACKGROUND.PLATFORM.SIZE, BACKGROUND.PLATFORM.SIZE,
+            this.x + BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE * LOCATION++ - this.game.camera.x, this.y,
+            BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE);
+        
+        this.BB = new BoundingBox(this.x, this.y,
+            BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE * LOCATION, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE);
+
+        this.topBB = new BoundingBox(this.x, this.y,
+            BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE * LOCATION, BACKGROUND.PLATFORM.BB_SIZE.H);
+
+        this.bottomBB = new BoundingBox(this.x, this.y,
+            BACKGROUND.PLATFORM.SIZE * LOCATION, BACKGROUND.PLATFORM.BB_SIZE.H);
+
+        this.leftBB = new BoundingBox(this.x, this.y,
+            BACKGROUND.PLATFORM.BB_SIZE.W, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE);
+
+        this.rightBB = new BoundingBox(this.BB.right - BACKGROUND.PLATFORM.BB_SIZE.W, this.y,
+            BACKGROUND.PLATFORM.BB_SIZE.W, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE);   
+
         if (PARAMS.DEBUG) {
-            // the whole platform bb 
-            ctx.strokeRect(this.BB.x -this.game.camera.x, this.BB.y, 32 * 3, 32);    
-            // the left bb
+            ctx.strokeStyle = 'Red';
+            ctx.strokeRect(this.BB.x -this.game.camera.x, this.BB.y, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE * LOCATION, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE);    
             ctx.strokeStyle = 'Orange';
             ctx.strokeRect(this.topBB.x - this.game.camera.x, this.topBB.y, this.topBB.width, this.topBB.height);  
             ctx.strokeRect(this.bottomBB.x - this.game.camera.x, this.bottomBB.y, this.bottomBB.width, this.bottomBB.height);  
@@ -80,3 +112,13 @@ class Platform {
         ctx.imageSmoothingEnabled = false;
     }
 }
+// Background's parameter
+var BACKGROUND = {
+    X: 0,  
+    Y: 0,
+    SIZE: {W: 288, H: 208},
+    SCALE: 1,
+    CANVAS_SCALE: 3,
+    GROUND: {X: 32, Y: 0, SIZE: 32, SCALE: 2},
+    PLATFORM: {LEFT: {X: 0, Y: 32}, MID: {X: 16, Y: 32}, RIGHT: {X: 32, Y: 32}, SIZE: 16, SCALE: 2, COUNT: 2, BB_SIZE: {W: 5, H: 16}}
+};
