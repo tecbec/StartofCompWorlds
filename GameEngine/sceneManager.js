@@ -9,6 +9,8 @@ class SceneManager {
         this.chihiro = new Player(this.game, 0, 0);
         //this.chihiro = this;
 
+        this.title = true;
+
         // entity locations on the screen
         const nofacelocation = {x: 110, y: 225};
         const sootlocation = {x: 150, y: 190};
@@ -49,6 +51,10 @@ class SceneManager {
             entity.removeFromWorld = true;
         });
     };
+
+    loadLevel(level, x, y, transition, title){
+
+    }
 
     loadGame() {
         this.game.addEntity(this.background);
@@ -95,6 +101,17 @@ class SceneManager {
     draw(ctx){
        // this.breathbar.draw(ctx);
         ctx.font = PARAMS.BLOCKWIDTH / 2 + 'px "Press Start 2P"';
+
+        if (this.title) {
+            var width = 176;
+            var height = 88;
+            ctx.drawImage(ASSET_MANAGER.getAsset("./sprites/title.png"), 2.5 * PARAMS.BLOCKWIDTH, 2 * PARAMS.BLOCKWIDTH, width * PARAMS.SCALE, height * PARAMS.SCALE);
+            ctx.fillStyle = this.game.mouse && this.game.mouse.y > 9 * PARAMS.BLOCKWIDTH && this.game.mouse.y < 9.5 * PARAMS.BLOCKWIDTH ? "Grey" : "White";
+            ctx.fillText("MARIO", 6.75 * PARAMS.BLOCKWIDTH, 9.5 * PARAMS.BLOCKWIDTH);
+            ctx.fillStyle = this.game.mouse && this.game.mouse.y > 10 * PARAMS.BLOCKWIDTH && this.game.mouse.y < 10.5 * PARAMS.BLOCKWIDTH ? "Grey" : "White";
+            ctx.fillText("LUIGI", 6.75 * PARAMS.BLOCKWIDTH, 10.5 * PARAMS.BLOCKWIDTH);
+        }
+
 
         if (PARAMS.DEBUG){
             ctx.strokeStyle = "Black";
