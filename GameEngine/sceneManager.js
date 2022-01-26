@@ -10,6 +10,7 @@ class SceneManager {
         //this.chihiro = this;
 
         this.title = true;
+        this.level = null;
 
         // entity locations on the screen
         const nofacelocation = {x: 110, y: 225};
@@ -52,7 +53,15 @@ class SceneManager {
         });
     };
 
-    loadLevel(level, x, y, transition, title){
+    loadLevel(level, title){
+        this.title = title;
+        this.level = level;
+
+        // don't play music unless it's not the title page
+        if (level.music && !this.title) {
+            // ASSET_MANAGER.pauseBackgroundMusic();
+            // ASSET_MANAGER.playAsset(level.music);
+        }
 
     }
 
