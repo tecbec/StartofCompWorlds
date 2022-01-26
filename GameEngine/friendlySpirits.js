@@ -6,7 +6,7 @@
 class NoFace {
     constructor( game, x, y ) {
         Object.assign(this, { game, x, y});
-        this.spritesheet = ASSET_MANAGER.getAsset("./sprites/noface-spritesheet-fade-aura.png");
+        this.spritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/noface-spritesheet-fade-aura.png");
 
         this.loadAnimations();
 

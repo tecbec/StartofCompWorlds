@@ -8,7 +8,7 @@ class Soot {
     constructor( game, x, y, sootDir) {
         Object.assign(this, { game, x, y, sootDir});
         // this.spritesheet_aura = ASSET_MANAGER.getAsset("./sprites/soot-jump-long_aura.png");
-        this.spritesheet_aura2 = ASSET_MANAGER.getAsset("./sprites/soot-jump-long_aura2_bidir.png");
+        this.spritesheet_aura2 = ASSET_MANAGER.getAsset("./GameEngine/sprites/soot-jump-long_aura2_bidir.png");
 
         this.loadAnimations();
 
