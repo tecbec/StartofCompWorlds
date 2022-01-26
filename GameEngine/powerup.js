@@ -2,7 +2,7 @@ class Coins {
     constructor( game, x, y) {
         Object.assign(this, { game, x, y});
         this.animation = new Animator (
-            ASSET_MANAGER.getAsset("./sprites/coins.png"), 0, 33, 9, 9, 6, 0.1, 0, false, true );
+            ASSET_MANAGER.getAsset("./GameEngine/sprites/coins.png"), 0, 33, 9, 9, 6, 0.1, 0, false, true );
         this.BB = new BoundingBox(this.x, this.y, 8*3,8*3);
     }
 
@@ -24,7 +24,7 @@ class CoinCounter {
     constructor( game, x, y) {
         Object.assign(this, { game, x, y});
         this.animation = new Animator (
-            ASSET_MANAGER.getAsset("./sprites/coins.png"), 0, 33, 9, 9, 6, 0.1, 0, false, true );
+            ASSET_MANAGER.getAsset("./GameEngine/sprites/coins.png"), 0, 33, 9, 9, 6, 0.1, 0, false, true );
 
         this.coinCount = 0;
     }

@@ -5,7 +5,7 @@
 class Haku {
     constructor( game, x, y ) {
         Object.assign(this, { game, x, y});
-        this.spritesheet = ASSET_MANAGER.getAsset("./sprites/haku_spritesheet.png");
+        this.spritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/haku_spritesheet.png");
         this.dead = false;
         this.deadCounter = 0;
         this.spawnCounter = 0;

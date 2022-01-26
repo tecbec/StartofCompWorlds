@@ -2,7 +2,7 @@ class Ground {
     constructor(game, x, y, w) {
         Object.assign(this, { game, x, y, w});
 
-        this.spritesheet = ASSET_MANAGER.getAsset("./sprites/platform_sheet.png");
+        this.spritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/platform_sheet.png");
         this.BB = new BoundingBox(this.x , this.y, this.w, 64);
         
     };
@@ -29,7 +29,7 @@ class Ground {
 class BackGround {
     constructor(game, x, y) {
         Object.assign(this, { game, x, y});
-        this.spritesheet = ASSET_MANAGER.getAsset("./sprites/background.png");      
+        this.spritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/background.png");      
     }
     update() {
 
@@ -47,7 +47,7 @@ class BackGround {
 class Platform {
     constructor(game, x, y, w) {
         Object.assign(this, { game, x, y, w});
-        this.spritesheet = this.spritesheet = ASSET_MANAGER.getAsset("./sprites/platform_sheet.png");
+        this.spritesheet = this.spritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/platform_sheet.png");
         this.BB = new BoundingBox(this.x, this.y, 32 * 3, 32);
         this.topBB = new BoundingBox(this.x, this.y, 32*3, 32/2);
         this.bottomBB = new BoundingBox(this.x, this.y, 32*3, 32/2);

@@ -10,7 +10,7 @@ class Player {
         // NOTE: later on can be updated without the sprite sheet passed in the param.
         this.game.chihiro = this;
         this.game.x = this;
-        this.spritesheet = ASSET_MANAGER.getAsset("./sprites/spritesheet.png");
+        this.spritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/spritesheet.png");
         this.updateBB();
 
         this.animations = [];

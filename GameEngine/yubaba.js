@@ -5,7 +5,7 @@ class Yubaba {
 
         // sprite stuff
         Object.assign(this, { game, x, y});
-        this.path = ASSET_MANAGER.getAsset("./sprites/yubaba.png");
+        this.path = ASSET_MANAGER.getAsset("./GameEngine/sprites/yubaba.png");
         this.width = 278;
         this.height = 230;
         this.frameCount = 14;
