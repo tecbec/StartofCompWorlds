@@ -1,13 +1,17 @@
-
-
-
+// TODO: move this when we create a level.js
+var LEVEL = {
+    START_CANVAS: {X: -200, Y: 0},
+    END_CANVAS: {X: 940}
+}
 class SceneManager {
     constructor(game) {
         this.game = game;
-        this.game.camera = this; // focusing camera on chihiro
+        this.game.camera = this; // camera focus on chihiro
+        this.midpoint = 0;
         // chihiro falling from the sky and land on the ground
-        this.chihiro = new Player(this.game, 0, 0);
-        //this.chihiro = this;
+        this.chihiro = new Player(this.game, CHIHIRO.INITIAL_POSITION.X, CHIHIRO.INITIAL_POSITION.Y);
+        this.ground = new Ground(gameEngine, LEVEL.START_CANVAS.X, PARAMS.CANVAS_WIDTH - CHIHIRO.SIZE * CHIHIRO.SCALE, PARAMS.CANVAS_WIDTH * BACKGROUND.CANVAS_SCALE);
+        this.background = new BackGround(gameEngine, LEVEL.START_CANVAS.X,  LEVEL.START_CANVAS.Y);
 
         this.title = true;
         this.level = null;
@@ -21,10 +25,10 @@ class SceneManager {
         this.ground = new Ground(gameEngine, -200, PARAMS.CANVAS_WIDTH - 64, PARAMS.CANVAS_WIDTH * 3);
         this.background = new BackGround(gameEngine, -200, 0);
 
-        // when y is too close to the ground it falls off ? when jumping right below ; not sure why
-        this.platform = new Platform(gameEngine, 140, 240, 32);
-        this.platform1 = new Platform(gameEngine, 300, 150, 32);
-        this.platform2 = new Platform(gameEngine, 90, 100, 32);
+        // TODO: put the Platform's (x, y) in LEVEL once we finalized the coordinates
+        this.platform = new Platform(gameEngine, 140, 240, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE);
+        this.platform1 = new Platform(gameEngine, 300, 150, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE);
+        this.platform2 = new Platform(gameEngine, 90, 100, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE);
 
         // set the number of soots to create
         this.Num_Soots = 10;
@@ -33,18 +37,21 @@ class SceneManager {
             let dir = getRandomInteger(0,1);
             this.soot[i] = new Soot(gameEngine, sootlocation.x, sootlocation.y, dir);
         }
+        // TODO: fix no face position
+        this.noface = new NoFace(gameEngine, 325, PARAMS.CANVAS_WIDTH - 75 - BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE);
+        this.haku = new Haku(gameEngine, HAKU.INITIAL_POSITION.X, PARAMS.CANVAS_WIDTH - HAKU.SIZE * HAKU.SCALE - BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE);
 
         this.noface = new NoFace(gameEngine, nofacelocation.x, nofacelocation.y);
         this.haku = new Haku(gameEngine, -85, PARAMS.CANVAS_WIDTH - 69 - 64);
         this.yubaba = new Yubaba(gameEngine, 0, 0);
 
+         // TODO: put the Coins's (x, y) in LEVEL once we finalized the coordinates
         this.coin1 = new Coins(gameEngine, 200, 300);
         this.coin2 = new Coins(gameEngine, 300, 300);
         this.coin3 = new Coins(gameEngine, 340, 110);
         this.coin4 = new Coins(gameEngine, 100, 60);
-        //this.healthbar = new BreathBar()
+
         this.loadGame();
-        this.midpoint = 0;
     };
 
     clearEntities() {
@@ -72,11 +79,9 @@ class SceneManager {
         this.game.addEntity(this.platform);
         this.game.addEntity(this.platform1);
         this.game.addEntity(this.platform2);
-
         for(let i = 0; i < this.Num_Soots; i++) {
             this.game.addEntity(this.soot[i]);
         }
-
         this.game.addEntity(this.noface);
         this.game.addEntity(this.haku);
         this.game.addEntity(this.yubaba);
@@ -84,31 +89,30 @@ class SceneManager {
         this.game.addEntity(this.coin2);
         this.game.addEntity(this.coin3);
         this.game.addEntity(this.coin4);
-        //this.game.addEntity(new BreathBar(gameEngine, this.totalBreath));
     }
 
     update(){
         // canvas width = 400
-        // blockwidth = 32 *1 = 32
+        // blockwidth = 32 * 1 = 32
         // 200 -16 = 164
-        let midpoint = PARAMS.CANVAS_WIDTH / 2 - PARAMS.BLOCKWIDTH / 2;
+        let midPoint = PARAMS.CANVAS_WIDTH / 2 - CHIHIRO.SIZE;
+
         // stop camera from moving (reach dead end on the left)
         if (this.chihiro.x < 0) {
-            if (this.chihiro.x < -200) {
-                this.chihiro.x = -200;
+            if (this.chihiro.x < LEVEL.START_CANVAS.X) {
+                this.chihiro.x =  LEVEL.START_CANVAS.X;
             }
-        } else if (this.chihiro.x > 780) {
-            if (this.chihiro.x > 940) {
-                this.chihiro.x = 940;
+        } else if (this.chihiro.x > LEVEL.END_CANVAS.X - midPoint) {
+            if (this.chihiro.x > LEVEL.END_CANVAS.X) {
+                this.chihiro.x = LEVEL.END_CANVAS.X;
             }
         } else {
-            this.x = this.chihiro.x - midpoint; // force centering
+            this.x = this.chihiro.x - midPoint; // force centering
         }
         PARAMS.DEBUG = document.getElementById("debug").checked;
     };
 
     draw(ctx){
-       // this.breathbar.draw(ctx);
         ctx.font = PARAMS.BLOCKWIDTH / 2 + 'px "Press Start 2P"';
 
         if (this.title) {
@@ -121,12 +125,10 @@ class SceneManager {
             ctx.fillText("LUIGI", 6.75 * PARAMS.BLOCKWIDTH, 10.5 * PARAMS.BLOCKWIDTH);
         }
 
-
         if (PARAMS.DEBUG){
             ctx.strokeStyle = "Black";
             ctx.fillStyle = ctx.strokeStyle;
-            // the only to access objects throughout the game implementation is by including this.game and adding the
-            // chihiro is this class
+            // the only to access objects throughout the game implementation is by including this.game and adding the chihiro in this class
             // capturing the velocity displaying useful variables
             let xV = "xV=" + Math.floor(this.game.chihiro.velocity.x);
             let yV = "yV=" + Math.floor(this.game.chihiro.velocity.y);
@@ -139,13 +141,12 @@ class SceneManager {
             ctx.fillText(xP, 100, 15);
             ctx.fillText(yP, 100, 30);
 
-            // bounding box
+            // bounding box 
             let bX ="xB=" + Math.floor(this.game.chihiro.BB.left);
             let bY ="yB=" + Math.floor(this.game.chihiro.BB.top);
             ctx.fillText(bX, 160, 15);
             ctx.fillText(bY, 160, 30);
 
-            //ctx.translate(0, 10);
             // walk left
             ctx.strokeStyle = "Red";
             ctx.lineWidth = 1;
@@ -180,3 +181,4 @@ class SceneManager {
         }
     };
 }
+

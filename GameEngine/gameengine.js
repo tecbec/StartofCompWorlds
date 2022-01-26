@@ -50,8 +50,7 @@ class GameEngine {
 
     startInput() {
         var that = this; 
-        // add the listeners and detect key inputs
-        // pass in the event to the function
+        // Key pressed 
         this.ctx.canvas.addEventListener("keydown", function (e) {
             switch(e.code) {
                 case "ArrowLeft":
@@ -71,7 +70,7 @@ class GameEngine {
                     break;
             }
         }, false);
-
+        // Key released
         this.ctx.canvas.addEventListener("keyup", function (e) {
             switch(e.code) {
                 case "ArrowLeft":
@@ -101,7 +100,6 @@ class GameEngine {
     draw() {
         // Clear the whole canvas with transparent color (rgba(0, 0, 0, 0))
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
-
         //this.ctx.fillStyle = 'red';
         //this.ctx.fillRect(0,0,20,20);
         // Draw latest things first
