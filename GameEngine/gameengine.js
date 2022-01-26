@@ -50,6 +50,25 @@ class GameEngine {
 
     startInput() {
         var that = this; 
+ 
+        // From Mario Bros
+        var getXandY = function (e) {
+            var x = e.clientX - that.ctx.canvas.getBoundingClientRect().left;
+            var y = e.clientY - that.ctx.canvas.getBoundingClientRect().top;
+
+            return { x: x, y: y, radius: 0 };
+        }
+
+        // From Mario Bros
+        this.ctx.canvas.addEventListener("mousemove", function (e) {
+            that.mouse = getXandY(e);
+        }, false);
+
+        // From Mario Bros
+        this.ctx.canvas.addEventListener("click", function (e) {
+            that.click = getXandY(e);
+        }, false);
+
         // Key pressed 
         this.ctx.canvas.addEventListener("keydown", function (e) {
             switch(e.code) {
@@ -128,6 +147,8 @@ class GameEngine {
         this.draw();
         // if want one input to only trigger once 
         // this.up = false;
+
+        this.click = null;
     };
 
     get["deltaTime"]() { return this.clockTick; }

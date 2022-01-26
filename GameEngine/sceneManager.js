@@ -8,50 +8,12 @@ class SceneManager {
         this.game = game;
         this.game.camera = this; // camera focus on chihiro
         this.midpoint = 0;
-        // chihiro falling from the sky and land on the ground
-        this.chihiro = new Player(this.game, CHIHIRO.INITIAL_POSITION.X, CHIHIRO.INITIAL_POSITION.Y);
-        this.ground = new Ground(gameEngine, LEVEL.START_CANVAS.X, PARAMS.CANVAS_WIDTH - CHIHIRO.SIZE * CHIHIRO.SCALE, PARAMS.CANVAS_WIDTH * BACKGROUND.CANVAS_SCALE);
-        this.background = new BackGround(gameEngine, LEVEL.START_CANVAS.X,  LEVEL.START_CANVAS.Y);
 
         this.title = true;
-        this.level = null;
+        this.level = 1;
 
-        // entity locations on the screen
-        const nofacelocation = {x: 110, y: 225};
-        const sootlocation = {x: 150, y: 190};
-
-        // x, y, w
-        // TODO: fix these measurements
-        this.ground = new Ground(gameEngine, -200, PARAMS.CANVAS_WIDTH - 64, PARAMS.CANVAS_WIDTH * 3);
-        this.background = new BackGround(gameEngine, -200, 0);
-
-        // TODO: put the Platform's (x, y) in LEVEL once we finalized the coordinates
-        this.platform = new Platform(gameEngine, 140, 240, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE);
-        this.platform1 = new Platform(gameEngine, 300, 150, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE);
-        this.platform2 = new Platform(gameEngine, 90, 100, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE);
-
-        // set the number of soots to create
-        this.Num_Soots = 10;
-        this.soot = [];
-        for(let i = 0; i < this.Num_Soots; i++) {
-            let dir = getRandomInteger(0,1);
-            this.soot[i] = new Soot(gameEngine, sootlocation.x, sootlocation.y, dir);
-        }
-        // TODO: fix no face position
-        this.noface = new NoFace(gameEngine, 325, PARAMS.CANVAS_WIDTH - 75 - BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE);
-        this.haku = new Haku(gameEngine, HAKU.INITIAL_POSITION.X, PARAMS.CANVAS_WIDTH - HAKU.SIZE * HAKU.SCALE - BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE);
-
-        this.noface = new NoFace(gameEngine, nofacelocation.x, nofacelocation.y);
-        this.haku = new Haku(gameEngine, -85, PARAMS.CANVAS_WIDTH - 69 - 64);
-        this.yubaba = new Yubaba(gameEngine, 0, 0);
-
-         // TODO: put the Coins's (x, y) in LEVEL once we finalized the coordinates
-        this.coin1 = new Coins(gameEngine, 200, 300);
-        this.coin2 = new Coins(gameEngine, 300, 300);
-        this.coin3 = new Coins(gameEngine, 340, 110);
-        this.coin4 = new Coins(gameEngine, 100, 60);
-
-        this.loadGame();
+        this.loadLevel(this.level, this.title);
+        console.log(this.game.mouse);
     };
 
     clearEntities() {
@@ -64,6 +26,48 @@ class SceneManager {
         this.title = title;
         this.level = level;
 
+        this.clearEntities();
+
+        // chihiro falling from the sky and land on the ground
+        this.ground = new Ground(gameEngine, LEVEL.START_CANVAS.X, PARAMS.CANVAS_WIDTH - CHIHIRO.SIZE * CHIHIRO.SCALE, PARAMS.CANVAS_WIDTH * BACKGROUND.CANVAS_SCALE);
+        this.background = new BackGround(gameEngine, LEVEL.START_CANVAS.X,  LEVEL.START_CANVAS.Y);
+        this.chihiro = new Player(this.game, CHIHIRO.INITIAL_POSITION.X, CHIHIRO.INITIAL_POSITION.Y);
+
+        if(!this.title){
+
+            // entity locations on the screen
+            const nofacelocation = {x: 110, y: 225};
+            const sootlocation = {x: 150, y: 190};
+
+            // TODO: put the Platform's (x, y) in LEVEL once we finalized the coordinates
+            this.platform = new Platform(gameEngine, 140, 240, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE);
+            this.platform1 = new Platform(gameEngine, 300, 150, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE);
+            this.platform2 = new Platform(gameEngine, 90, 100, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE);
+
+            // set the number of soots to create
+            this.Num_Soots = 10;
+            this.soot = [];
+            for(let i = 0; i < this.Num_Soots; i++) {
+                let dir = getRandomInteger(0,1);
+                this.soot[i] = new Soot(gameEngine, sootlocation.x, sootlocation.y, dir);
+            }
+            // TODO: fix no face position
+            this.noface = new NoFace(gameEngine, 325, PARAMS.CANVAS_WIDTH - 75 - BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE);
+            this.haku = new Haku(gameEngine, HAKU.INITIAL_POSITION.X, PARAMS.CANVAS_WIDTH - HAKU.SIZE * HAKU.SCALE - BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE);
+
+            this.noface = new NoFace(gameEngine, nofacelocation.x, nofacelocation.y);
+            this.haku = new Haku(gameEngine, -85, PARAMS.CANVAS_WIDTH - 69 - 64);
+            this.yubaba = new Yubaba(gameEngine, 0, 0);
+
+            // TODO: put the Coins's (x, y) in LEVEL once we finalized the coordinates
+            this.coin1 = new Coins(gameEngine, 200, 300);
+            this.coin2 = new Coins(gameEngine, 300, 300);
+            this.coin3 = new Coins(gameEngine, 340, 110);
+            this.coin4 = new Coins(gameEngine, 100, 60);
+        }
+
+        this.loadGame();
+
         // don't play music unless it's not the title page
         if (level.music && !this.title) {
             // ASSET_MANAGER.pauseBackgroundMusic();
@@ -73,28 +77,47 @@ class SceneManager {
     }
 
     loadGame() {
-        this.game.addEntity(this.background);
-        this.game.addEntity(this.chihiro);
-        this.game.addEntity(this.ground);
-        this.game.addEntity(this.platform);
-        this.game.addEntity(this.platform1);
-        this.game.addEntity(this.platform2);
-        for(let i = 0; i < this.Num_Soots; i++) {
-            this.game.addEntity(this.soot[i]);
+        if(this.title) {
+            this.game.addEntity(this.background);
+            this.game.addEntity(this.chihiro);
+            this.game.addEntity(this.ground);
+        } else {
+            this.game.addEntity(this.background);
+            this.game.addEntity(this.chihiro);
+            this.game.addEntity(this.ground);
+            this.game.addEntity(this.platform);
+            this.game.addEntity(this.platform1);
+            this.game.addEntity(this.platform2);
+            for(let i = 0; i < this.Num_Soots; i++) {
+                this.game.addEntity(this.soot[i]);
+            }
+            this.game.addEntity(this.noface);
+            this.game.addEntity(this.haku);
+            this.game.addEntity(this.yubaba);
+            this.game.addEntity(this.coin1);
+            this.game.addEntity(this.coin2);
+            this.game.addEntity(this.coin3);
+            this.game.addEntity(this.coin4);
+
         }
-        this.game.addEntity(this.noface);
-        this.game.addEntity(this.haku);
-        this.game.addEntity(this.yubaba);
-        this.game.addEntity(this.coin1);
-        this.game.addEntity(this.coin2);
-        this.game.addEntity(this.coin3);
-        this.game.addEntity(this.coin4);
     }
 
     update(){
         // canvas width = 400
         // blockwidth = 32 * 1 = 32
         // 200 -16 = 164
+
+        console.log(this.game.mouse.y);
+
+        if (this.title && this.game.click) {
+
+            if (this.game.click && this.game.click.y > 275 && this.game.click.y < 295) {
+                this.title = false;
+                this.chihiro = new Player(this.game, CHIHIRO.INITIAL_POSITION.X, CHIHIRO.INITIAL_POSITION.Y);
+                this.loadLevel(levelOne, false);
+            }
+        }
+
         let midPoint = PARAMS.CANVAS_WIDTH / 2 - CHIHIRO.SIZE;
 
         // stop camera from moving (reach dead end on the left)
@@ -119,10 +142,11 @@ class SceneManager {
             var width = 176;
             var height = 88;
             ctx.drawImage(ASSET_MANAGER.getAsset("./sprites/title.png"), 2.5 * PARAMS.BLOCKWIDTH, 2 * PARAMS.BLOCKWIDTH, width * PARAMS.SCALE, height * PARAMS.SCALE);
-            ctx.fillStyle = this.game.mouse && this.game.mouse.y > 9 * PARAMS.BLOCKWIDTH && this.game.mouse.y < 9.5 * PARAMS.BLOCKWIDTH ? "Grey" : "White";
-            ctx.fillText("MARIO", 6.75 * PARAMS.BLOCKWIDTH, 9.5 * PARAMS.BLOCKWIDTH);
-            ctx.fillStyle = this.game.mouse && this.game.mouse.y > 10 * PARAMS.BLOCKWIDTH && this.game.mouse.y < 10.5 * PARAMS.BLOCKWIDTH ? "Grey" : "White";
-            ctx.fillText("LUIGI", 6.75 * PARAMS.BLOCKWIDTH, 10.5 * PARAMS.BLOCKWIDTH);
+            ctx.fillStyle = this.game.mouse && this.game.mouse.y > 275 && this.game.mouse.y < 295 ? "Yellow" : "Black";
+            ctx.fillText("Start", 170,280);
+            ctx.fillStyle = this.game.mouse && this.game.mouse.y > 295 && this.game.mouse.y < 315 ? "Yellow" : "Black";
+            ctx.fillText("Instructions", 150,300);
+            console.log(this.game.mouse.y);
         }
 
         if (PARAMS.DEBUG){
