@@ -38,7 +38,7 @@ class SceneManager {
             // chihiro falling from the sky and land on the ground
             this.chihiro = new Player(this.game, CHIHIRO.INITIAL_POSITION.X, CHIHIRO.INITIAL_POSITION.Y);
             // entity locations on the screen
-            const nofacelocation = {x: 110, y: 225};
+            const nofacelocation = {x: 300, y: 50};
             const sootlocation = {x: 150, y: 190};
 
             // TODO: put the Platform's (x, y) in LEVEL once we finalized the coordinates
@@ -106,7 +106,7 @@ class SceneManager {
 
     update() {
         if (this.title && this.game.click) {
-            if (this.game.click && this.game.click.y > 230 && this.game.click.y < 255) {
+            if (this.game.click && this.game.click.y > 220 && this.game.click.y < 245) {
                 this.title = false;
                 this.loadLevel(1, this.title);
                 this.game.click = false;
@@ -143,10 +143,10 @@ class SceneManager {
             var width = 176;
             var height = 88;
             ctx.drawImage(ASSET_MANAGER.getAsset("./sprites/title.png"), 2.5 * PARAMS.BLOCKWIDTH, 2 * PARAMS.BLOCKWIDTH, width * PARAMS.SCALE, height * PARAMS.SCALE);
-            ctx.fillStyle = this.game.mouse && this.game.mouse.y > 230 && this.game.mouse.y < 255 ? "LightCoral" : "Black";
-            ctx.fillText("Start", 170,250); //280
-            ctx.fillStyle = this.game.mouse && this.game.mouse.y > 255 && this.game.mouse.y < 280 ? "LightCoral" : "Black";
-            ctx.fillText("Instructions", 150,270); //300
+            ctx.fillStyle = this.game.mouse && this.game.mouse.y > 220 && this.game.mouse.y < 255 ? "LightCoral" : "Black";
+            ctx.fillText("Start", 170,240); //280
+            ctx.fillStyle = this.game.mouse && this.game.mouse.y > 245 && this.game.mouse.y < 280 ? "LightCoral" : "Black";
+            ctx.fillText("Instructions", 150,260); //300
         }
 
         if (PARAMS.DEBUG && !this.title) {

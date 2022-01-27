@@ -1,6 +1,6 @@
 /* Chihiro's Params */
 var CHIHIRO = {
-    TITLE_POSITION: {X: 0, Y: 270 },
+    TITLE_POSITION: {X: 0, Y: 260},
     INITIAL_POSITION: {X: 0, Y: 0},
     SIZE: 70,
     SCALE: 1,
