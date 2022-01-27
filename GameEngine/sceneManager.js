@@ -148,7 +148,7 @@ class SceneManager {
             ctx.fillText("Instructions", 150,270); //300
         }
 
-        if (PARAMS.DEBUG){
+        if (PARAMS.DEBUG && !this.title) {
             ctx.strokeStyle = "Black";
             ctx.fillStyle = ctx.strokeStyle;
             // the only to access objects throughout the game implementation is by including this.game and adding the chihiro in this class
