@@ -350,6 +350,7 @@ class Player {
             this.deadCounter += this.game.clockTick;
             if (this.deadCounter > 1) {
                 this.removeFromWorld = true;
+                this.game.camera.loadLevel(1, true)
             }
         } else {
             // do nothing

@@ -12,9 +12,6 @@ class SceneManager {
         this.title = true;
         this.level = 1;
 
-        // chihiro falling from the sky and land on the ground
-        this.chihiro = new Player(this.game, CHIHIRO.TITLE_POSITION.X, CHIHIRO.TITLE_POSITION.Y);
-
         this.loadLevel(this.level, this.title);
     };
 
@@ -29,8 +26,9 @@ class SceneManager {
         this.level = level;
 
         this.clearEntities();
-
         
+        // chihiro falling from the sky and land on the ground
+        this.chihiro = new Player(this.game, CHIHIRO.TITLE_POSITION.X, CHIHIRO.TITLE_POSITION.Y);
         this.ground = new Ground(gameEngine, LEVEL.START_CANVAS.X, PARAMS.CANVAS_WIDTH - CHIHIRO.SIZE * CHIHIRO.SCALE, PARAMS.CANVAS_WIDTH * BACKGROUND.CANVAS_SCALE);
         this.background = new BackGround(gameEngine, LEVEL.START_CANVAS.X,  LEVEL.START_CANVAS.Y);
 
@@ -68,7 +66,7 @@ class SceneManager {
             this.coin4 = new Coins(gameEngine, 100, 60);
 
         }
-    
+
         this.loadGame();
 
         // don't play music unless it's not the title page
