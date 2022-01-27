@@ -19,8 +19,6 @@ class Haku {
 
         this.loadAnimations();
         this.updateBB();
-
-        console.log("this.x ", this.x);
     };
 
     loadAnimations() {

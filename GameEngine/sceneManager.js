@@ -12,6 +12,9 @@ class SceneManager {
         this.title = true;
         this.level = 1;
 
+        //Breath
+        this.breathwidth = 100;
+
         this.loadLevel(this.level, this.title);
     };
 
@@ -62,6 +65,11 @@ class SceneManager {
             this.coin3 = new Coins(gameEngine, 340, 110);
             this.coin4 = new Coins(gameEngine, 100, 60);
 
+            // initialization of the breath bar and counter
+            this.coinCounter = new CoinCounter(this.game, CHIHIRO.COIN_COUNTER.X, CHIHIRO.COIN_COUNTER.Y);
+            this.breathbar = new BreathBar(this.game, CHIHIRO.BREATH_BAR.X, CHIHIRO.BREATH_BAR.Y, this.breathwidth,
+                CHIHIRO.BREATH_BAR.HEIGHT, CHIHIRO.BREATH_BAR.MAX);
+
         }
 
         this.loadGame();
@@ -96,6 +104,8 @@ class SceneManager {
             this.game.addEntity(this.coin2);
             this.game.addEntity(this.coin3);
             this.game.addEntity(this.coin4);
+            this.game.addEntity(this.breathbar);
+            this.game.addEntity(this.coinCounter);
         }
     };
 
@@ -105,12 +115,12 @@ class SceneManager {
                 this.title = false;
                 this.loadLevel(1, this.title);
                 this.game.click = false;
-            } 
+            }
         }
         if (!this.title && this.chihiro.dead && this.chihiro.removeFromWorld) {
             this.gameOver = true;
-            this.title = true; 
-            this.clearEntities();
+            this.title = true;
+            this.loadLevel(1, this.title);
         } else {
 
         }

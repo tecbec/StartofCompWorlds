@@ -22,18 +22,18 @@ class Player {
         this.game.x = this;
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/chihiro_spritesheet.png");
 
-        // initialization of the breath bar and counter
-        this.breathwidth = 100;
-        this.coinCounter = new CoinCounter(this.game, CHIHIRO.COIN_COUNTER.X, CHIHIRO.COIN_COUNTER.Y);
-        this.breathbar = new BreathBar(this.game, CHIHIRO.BREATH_BAR.X, CHIHIRO.BREATH_BAR.Y, this.breathwidth,
-            CHIHIRO.BREATH_BAR.HEIGHT, CHIHIRO.BREATH_BAR.MAX);
+        // // initialization of the breath bar and counter
+        // this.breathwidth = 100;
+        // this.coinCounter = new CoinCounter(this.game, CHIHIRO.COIN_COUNTER.X, CHIHIRO.COIN_COUNTER.Y);
+        // this.breathbar = new BreathBar(this.game, CHIHIRO.BREATH_BAR.X, CHIHIRO.BREATH_BAR.Y, this.breathwidth,
+        //     CHIHIRO.BREATH_BAR.HEIGHT, CHIHIRO.BREATH_BAR.MAX);
 
         // default values
         this.velocity = { x: 0, y: 0};
         this.isGrounded = false;
         this.dead = false;
         this.deadCounter = 0;
-        this.breathwidth = 100;
+        // this.breathwidth = 100;
         // testing
         this.sootCount = 0;
         this.nofaceCount = 0;
@@ -63,7 +63,7 @@ class Player {
 
         // idle -> left
         this.animations[0][1] = new Animator (this.spritesheet, CHIHIRO.IDLE.LEFT.X, CHIHIRO.IDLE.LEFT.Y,
-            CHIHIRO.SIZE, CHIHIRO.SIZE, 
+            CHIHIRO.SIZE, CHIHIRO.SIZE,
             CHIHIRO.IDLE.FRAME, CHIHIRO.IDLE.SPEED,
             CHIHIRO.IDLE.PADDING, CHIHIRO.IDLE.REVERSE, CHIHIRO.IDLE.LOOP);
 
@@ -148,8 +148,8 @@ class Player {
             // ctx.strokeRect(this.BBbottom.x - this.game.camera.x, this.BBbottom.y, this.BBbottom.width, this.BBbottom.height);
         }
         ctx.imageSmoothingEnabled = false;
-        this.breathbar.draw(ctx);
-        this.coinCounter.draw(ctx);
+        // this.breathbar.draw(ctx);
+        // this.coinCounter.draw(ctx);
     };
 
     update() {
@@ -265,22 +265,22 @@ class Player {
                 // left & right bounding boxes for platform
                 if (entity instanceof Platform && that.BB.collide(entity.BB)) {
                     if (that.BB.collide(entity.leftBB) && (that.lastBB.right <= entity.leftBB.left)) { // left collision
-                        that.x -= 3; // so that the player won't move up 
+                        that.x -= 3; // so that the player won't move up
                         // that.x = entity.leftBB.left - CHIHIRO.SIZE * CHIHIRO.SCALE;
                         if (that.velocity.x > 0) that.velocity.x = 0;
                     } else if (that.BB.collide(entity.rightBB) && (that.lastBB.left >= entity.rightBB.right)) { // right collision
                         that.x += 3;
                         // that.x = entity.rightBB.right;
                         if (that.velocity.x < 0) that.velocity.x = 0;
-                    } 
+                    }
                     that.updateBB();
                 }
                 // collision with no face
                 if (entity instanceof NoFace && that.BB.collide(entity.BB)) {
                     // Set a maximum amount of coins upon interact
-                    if (that.coinCounter.coinCount <= 10) {
-                        that.coinCounter.coinCount += 10;
-                    }
+                    // if (that.coinCounter.coinCount <= 10) {
+                    //     that.coinCounter.coinCount += 10;
+                    // }
                     entity.dead = true;
                     if (that.BB.collide(entity.leftBB)) { // left collision
                         that.x = entity.leftBB.left - CHIHIRO.SIZE * CHIHIRO.SCALE + CHIHIRO.BB_PADDING;
@@ -293,8 +293,10 @@ class Player {
                 // collision with Haku
                 if (entity instanceof Haku && that.BB.collide(entity.BB)) {
                     // instantly heal stamina bar
-                    that.breathwidth +=  CHIHIRO.BREATH_BAR.MAX - that.breathwidth;
-                    that.breathbar.update(that.breathwidth);
+                    // that.game.camera.breathwidth +=  CHIHIRO.BREATH_BAR.MAX - that.breathwidth;
+                    // that.breathbar.update(that.breathwidth);
+                    that.game.addEntity(new BreathBar(this.game, CHIHIRO.BREATH_BAR.X, CHIHIRO.BREATH_BAR.Y, this.breathwidth,
+                        CHIHIRO.BREATH_BAR.HEIGHT, CHIHIRO.BREATH_BAR.MAX));
                     entity.dead = true;
                     if (that.BB.collide(entity.leftBB)) { // left collision
                         that.x = entity.leftBB.left - CHIHIRO.SIZE * CHIHIRO.SCALE + CHIHIRO.BB_PADDING;
@@ -306,8 +308,8 @@ class Player {
                 }
                 // collision with soot
                 if (entity instanceof Soot ) {
-                    that.breathwidth -= 10; // lose breath upon contact (can change)
-                    that.breathbar.update(that.breathwidth);
+                    // that.breathwidth -= 10; // lose breath upon contact (can change)
+                    // that.breathbar.update(that.breathwidth);
                     entity.dead = true;
                     if (that.BB.collide(entity.leftBB)) { // left collision
                         // that.x = entity.leftBB.left - CHIHIRO.SIZE * CHIHIRO.SCALE + CHIHIRO.BB_PADDING;  // check these out for push back
@@ -320,30 +322,29 @@ class Player {
                 // collision with coins
                 if (entity instanceof Coins) {
                     entity.removeFromWorld = true;
-                    if (that.breathbar < CHIHIRO.BREATH_BAR.MAX) {
-                        that.breathwidth += 25; // gain breath upon contact (for testing ONLY)
-                        that.breathbar.update(that.breathwidth);
-                    }
-                    that.breathwidth += CHIHIRO.BREATH_BAR.MAX - that.breathwidth;
-                    that.breathbar.update(that.breathwidth);
-                    that.coinCounter.coinCount ++;
+                    // if (that.breathbar < CHIHIRO.BREATH_BAR.MAX) {
+                    //     that.breathwidth += 25; // gain breath upon contact (for testing ONLY)
+                    //     that.breathbar.update(that.breathwidth);
+                    // }
+                    // that.breathwidth += CHIHIRO.BREATH_BAR.MAX - that.breathwidth;
+                    // that.breathbar.update(that.breathwidth);
+                    // that.coinCounter.coinCount ++;
                 }
             }
         });
 
         // update state
-        if (this.state !== 2 || this.state !== 5) {  // NOT jump or dead 
+        if (this.state !== 2 || this.state !== 5) {  // NOT jump or dead
             if (this.game.crouch) this.state = 3;    // crouching state
             else if (Math.abs(this.velocity.x) > 0) this.state = 1;        // walking state
             else if (Math.abs(this.velocity.x) > MIN_WALK) this.state = 4; // running state
-           
         } else {
-            
+
         }
         if (this.velocity.y < 0) {
             this.state = 2;
         }
-        
+
         if (this.dead) {
             this.state = 5;
             this.velocity.x = 0;
@@ -360,13 +361,13 @@ class Player {
         if (this.velocity.x > 0) this.facing = 0;
 
         // updating the breath bar
-        this.breathwidth -= .05; // changes for testing
-        this.breathbar.update(this.breathwidth);
+        // this.breathwidth -= 0.05; // changes for testing
+        // this.breathbar.update(this.breathwidth);
 
-        if (this.breathwidth <= 0) {
-            this.dead = true;
-        } else {
-            this.dead = false;
-        }
+        // if (this.breathwidth <= 0) {
+        //     this.dead = true;
+        // } else {
+        //     this.dead = false;
+        // }
     };
 };
