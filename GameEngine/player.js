@@ -1,15 +1,15 @@
 /* Chihiro's Params */
 var CHIHIRO = {
     INITIAL_POSITION: {X: 0, Y: 0},
-    SIZE: 32,
-    SCALE: 2,
+    SIZE: 70,
+    SCALE: 1,
     BB_PADDING: 10,
-    IDLE:   {RIGHT: {X: 0,  Y: 0},    LEFT: {X: 0,  Y: 32},   FRAME: 4, SPEED: 0.1,  PADDING: 0, REVERSE: false, LOOP: true}, 
-    WALK:   {RIGHT: {X: 0,  Y: 64},   LEFT: {X: 0,  Y: 96},   FRAME: 6, SPEED: 0.1,  PADDING: 0, REVERSE: false, LOOP: true},
-    JUMP:   {RIGHT: {X: 0,  Y: 128},  LEFT: {X: 0,  Y: 160},  FRAME: 8, SPEED: 0.15, PADDING: 0, REVERSE: false, LOOP: true}, 
-    CROUCH: {RIGHT: {X: 32, Y: 128},  LEFT: {X: 32, Y: 160},  FRAME: 1, SPEED: 0.33, PADDING: 0, REVERSE: false, LOOP: true},
-    RUN:    {RIGHT: {X: 0,  Y: 64},   LEFT: {X: 0,  Y: 96},   FRAME: 6, SPEED: 0.05, PADDING: 0, REVERSE: false, LOOP: true},
-    DEAD:   {RIGHT: {X: 0,  Y: 192},  LEFT: {X: 0,  Y: 224},  FRAME: 8, SPEED: 0.12, PADDING: 0, REVERSE: false, LOOP: false}, 
+    IDLE:   {RIGHT: {X: 0,  Y: 0},    LEFT: {X: 0,  Y: 70},   FRAME: 4, SPEED: 0.4,  PADDING: 0, REVERSE: false, LOOP: true}, 
+    WALK:   {RIGHT: {X: 0,  Y: 140},  LEFT: {X: 0,  Y: 210},  FRAME: 4, SPEED: 0.2,  PADDING: 0, REVERSE: false, LOOP: true},
+    JUMP:   {RIGHT: {X: 0,  Y: 280},  LEFT: {X: 0,  Y: 350},  FRAME: 7, SPEED: 0.1, PADDING: 0, REVERSE: false, LOOP: true}, 
+    CROUCH: {RIGHT: {X: 0,  Y: 280},  LEFT: {X: 0,  Y: 350},  FRAME: 1, SPEED: 0.33, PADDING: 0, REVERSE: false, LOOP: true},
+    RUN:    {RIGHT: {X: 0,  Y: 140},  LEFT: {X: 0,  Y: 210},  FRAME: 4, SPEED: 0.1, PADDING: 0, REVERSE: false, LOOP: true},
+    DEAD:   {RIGHT: {X: 0,  Y: 420},  LEFT: {X: 0,  Y: 490},  FRAME: 3, SPEED: 0.3, PADDING: 0, REVERSE: false, LOOP: false}, 
     BREATH_BAR: {X: 275, Y: 10, HEIGHT: 10, MAX: 100},
     COIN_COUNTER: {X: 225, Y: 7.25}
 };
@@ -19,7 +19,7 @@ class Player {
         Object.assign(this, {game, x, y});
         this.game.chihiro = this;
         this.game.x = this;
-        this.spritesheet = ASSET_MANAGER.getAsset("./sprites/spritesheet.png");
+        this.spritesheet = ASSET_MANAGER.getAsset("./sprites/chihiro_spritesheet.png");
 
         // initialization of the breath bar and counter
         this.breathwidth = 100;
@@ -97,7 +97,7 @@ class Player {
             CHIHIRO.CROUCH.PADDING, CHIHIRO.CROUCH.REVERSE, CHIHIRO.CROUCH.LOOP);
 
         // crouch -> left
-        this.animations[3][1] = new Animator (this.spritesheet, CHIHIRO.CROUCH.LEFT.X, CHIHIRO.CROUCH.RIGHT.Y,
+        this.animations[3][1] = new Animator (this.spritesheet, CHIHIRO.CROUCH.LEFT.X, CHIHIRO.CROUCH.LEFT.Y,
             CHIHIRO.SIZE, CHIHIRO.SIZE,
             CHIHIRO.CROUCH.FRAME, CHIHIRO.CROUCH.SPEED,
             CHIHIRO.CROUCH.PADDING, CHIHIRO.CROUCH.REVERSE, CHIHIRO.CROUCH.LOOP);
@@ -211,6 +211,7 @@ class Player {
         } else {
             // fall straight down if did not jump
             if (this.velocity.y > 0 && !this.jumping) {
+                this.state = 2;
                 this.velocity.x = 0;
             }
 
@@ -330,19 +331,23 @@ class Player {
         });
 
         // update state
-        if (this.state !== 2 || this.state !== 5) {                        // NOT jump or dead
-            if (this.game.crouch) this.state = 3;                          // crouching state
+        if (this.state !== 2 || this.state !== 5) {  // NOT jump or dead 
+            if (this.game.crouch) this.state = 3;    // crouching state
             else if (Math.abs(this.velocity.x) > 0) this.state = 1;        // walking state
             else if (Math.abs(this.velocity.x) > MIN_WALK) this.state = 4; // running state
+           
         } else {
-            // do nothing
+            
         }
-
+        if (this.velocity.y < 0) {
+            this.state = 2;
+        }
+        
         if (this.dead) {
             this.state = 5;
             this.velocity.x = 0;
             this.deadCounter += this.game.clockTick;
-            if (this.deadCounter > 0.75) {
+            if (this.deadCounter > 1) {
                 this.removeFromWorld = true;
             }
         } else {
