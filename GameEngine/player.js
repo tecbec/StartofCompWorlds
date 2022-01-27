@@ -21,13 +21,13 @@ class Player {
         this.game.x = this;
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/spritesheet.png");
 
-        // initialization of the breath bar and counter    
-        this.breathwidth = 100; 
-        this.coinCounter = new CoinCounter(this.game, CHIHIRO.COIN_COUNTER.X, CHIHIRO.COIN_COUNTER.Y);       
-        this.breathbar = new BreathBar(this.game, CHIHIRO.BREATH_BAR.X, CHIHIRO.BREATH_BAR.Y, this.breathwidth, 
+        // initialization of the breath bar and counter
+        this.breathwidth = 100;
+        this.coinCounter = new CoinCounter(this.game, CHIHIRO.COIN_COUNTER.X, CHIHIRO.COIN_COUNTER.Y);
+        this.breathbar = new BreathBar(this.game, CHIHIRO.BREATH_BAR.X, CHIHIRO.BREATH_BAR.Y, this.breathwidth,
             CHIHIRO.BREATH_BAR.HEIGHT, CHIHIRO.BREATH_BAR.MAX);
-        
-        // default values 
+
+        // default values
         this.velocity = { x: 0, y: 0};
         this.isGrounded = false;
         this.dead = false;
@@ -36,7 +36,7 @@ class Player {
         // testing
         this.sootCount = 0;
         this.nofaceCount = 0;
-        // animation 
+        // animation
         this.facing = 0; // 0 = right; 1 = left
         this.state = 0;  // 0 = idle, 1 = walking, 2 = jumping/falling, 3 = crouching, 4 = death
 
@@ -299,10 +299,10 @@ class Player {
                     that.breathbar.update(that.breathwidth);
                     entity.dead = true;
                     if (that.BB.collide(entity.leftBB)) { // left collision
-                        that.x = entity.leftBB.left - CHIHIRO.SIZE * CHIHIRO.SCALE + CHIHIRO.BB_PADDING;  
+                        // that.x = entity.leftBB.left - CHIHIRO.SIZE * CHIHIRO.SCALE + CHIHIRO.BB_PADDING;  // check these out for push back
                         if (that.velocity.x > 0) that.velocity.x = 0;
                     } else if (that.BB.collide(entity.rightBB)) {
-                        that.x = entity.rightBB.right - CHIHIRO.BB_PADDING;
+                        // that.x = entity.rightBB.right - CHIHIRO.BB_PADDING;  // check these out for push back
                         if (that.velocity.x < 0) that.velocity.x = 0;
                     }
                 }
