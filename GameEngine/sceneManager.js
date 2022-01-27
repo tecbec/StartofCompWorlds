@@ -12,8 +12,10 @@ class SceneManager {
         this.title = true;
         this.level = 1;
 
+        this.chihiro = new Player(this.game, CHIHIRO.INITIAL_POSITION.X, CHIHIRO.INITIAL_POSITION.Y);
+
         this.loadLevel(this.level, this.title);
-        console.log(this.game.mouse);
+        
     };
 
     clearEntities() {
@@ -31,7 +33,7 @@ class SceneManager {
         // chihiro falling from the sky and land on the ground
         this.ground = new Ground(gameEngine, LEVEL.START_CANVAS.X, PARAMS.CANVAS_WIDTH - CHIHIRO.SIZE * CHIHIRO.SCALE, PARAMS.CANVAS_WIDTH * BACKGROUND.CANVAS_SCALE);
         this.background = new BackGround(gameEngine, LEVEL.START_CANVAS.X,  LEVEL.START_CANVAS.Y);
-        this.chihiro = new Player(this.game, CHIHIRO.INITIAL_POSITION.X, CHIHIRO.INITIAL_POSITION.Y);
+
 
         if(!this.title){
 
@@ -78,9 +80,9 @@ class SceneManager {
 
     loadGame() {
         if(this.title) {
-            this.game.addEntity(this.background);
-            this.game.addEntity(this.chihiro);
-            this.game.addEntity(this.ground);
+            // this.game.addEntity(this.background);
+            // this.game.addEntity(this.chihiro);
+            // this.game.addEntity(this.ground);
         } else {
             this.game.addEntity(this.background);
             this.game.addEntity(this.chihiro);
@@ -106,15 +108,11 @@ class SceneManager {
         // canvas width = 400
         // blockwidth = 32 * 1 = 32
         // 200 -16 = 164
-
-        console.log(this.game.mouse.y);
-
         if (this.title && this.game.click) {
-
             if (this.game.click && this.game.click.y > 275 && this.game.click.y < 295) {
                 this.title = false;
-                this.chihiro = new Player(this.game, CHIHIRO.INITIAL_POSITION.X, CHIHIRO.INITIAL_POSITION.Y);
-                this.loadLevel(levelOne, false);
+                this.chihiro = new Player(this.game, CHIHIRO.INITIAL_POSITION.X-this.game.camera.x, CHIHIRO.INITIAL_POSITION.Y);
+                this.loadLevel(1, this.title);
             }
         }
 
@@ -146,7 +144,6 @@ class SceneManager {
             ctx.fillText("Start", 170,280);
             ctx.fillStyle = this.game.mouse && this.game.mouse.y > 295 && this.game.mouse.y < 315 ? "Yellow" : "Black";
             ctx.fillText("Instructions", 150,300);
-            console.log(this.game.mouse.y);
         }
 
         if (PARAMS.DEBUG){

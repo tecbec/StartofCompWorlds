@@ -18,6 +18,8 @@ class GameEngine {
         this.left = false;
         this.right = false;
         this.up = false;
+        this.mouse = false;
+        this.click = false;
 
         // Options and the Details
         this.options = options || {
@@ -55,6 +57,8 @@ class GameEngine {
         var getXandY = function (e) {
             var x = e.clientX - that.ctx.canvas.getBoundingClientRect().left;
             var y = e.clientY - that.ctx.canvas.getBoundingClientRect().top;
+
+            console.log(x, y);
 
             return { x: x, y: y, radius: 0 };
         }
@@ -148,7 +152,7 @@ class GameEngine {
         // if want one input to only trigger once 
         // this.up = false;
 
-        this.click = null;
+        // this.click = null;
     };
 
     get["deltaTime"]() { return this.clockTick; }
