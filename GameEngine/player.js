@@ -128,9 +128,13 @@ class Player {
     /* Update the bounding box of the player for collision detection */
     updateBB() {
         this.lastBB = this.BB;
+        this.lastBBbottom = this.BBbottom;
         this.BB = new BoundingBox(this.x + CHIHIRO.BB_PADDING, this.y + CHIHIRO.BB_PADDING,
                                     CHIHIRO.SIZE * CHIHIRO.SCALE - CHIHIRO.BB_PADDING - CHIHIRO.BB_PADDING, // both side
                                     CHIHIRO.SIZE * CHIHIRO.SCALE - CHIHIRO.BB_PADDING); // KD changed the bounding box dimensions to hug the sprite
+        // this.BBbottom = new BoundingBox(this.x + CHIHIRO.BB_PADDING + CHIHIRO.BB_PADDING, this.y - CHIHIRO.BB_PADDING + CHIHIRO.SIZE * CHIHIRO.SCALE,
+        //     CHIHIRO.BB_PADDING + CHIHIRO.BB_PADDING, // both side
+        //     CHIHIRO.BB_PADDING); // KD changed the bounding box dimensions to hug the sprite
     };
 
     /* Draw the images onto the screen */
@@ -139,6 +143,8 @@ class Player {
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
             ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
+            // ctx.strokeStyle = 'Green';
+            // ctx.strokeRect(this.BBbottom.x - this.game.camera.x, this.BBbottom.y, this.BBbottom.width, this.BBbottom.height);
         }
         ctx.imageSmoothingEnabled = false;
         this.breathbar.draw(ctx);
@@ -231,7 +237,7 @@ class Player {
 
         // collision handling
         var that = this; //need this because we are creating
-        this.game.entities.forEach(function (entity) {          // this will look at all entities in relation to chihiro
+        this.game.entities.forEach(function (entity) {  // this will look at all entities in relation to chihiro
             if (entity.BB && that.BB.collide(entity.BB)) {      // is there an entity bb & check to see if they collide
                 if (that.velocity.y > 0) { // chihiro is falling
                     if((entity instanceof Ground || entity instanceof Platform || entity instanceof Haku || entity instanceof NoFace)
@@ -240,7 +246,8 @@ class Player {
                         that.y = entity.BB.top - CHIHIRO.SIZE * CHIHIRO.SCALE;
                         that.velocity.y === 0;
                         that.updateBB();
-                    } else {
+                    }
+                    else {
                         that.isGrounded = false;
                     }
                 }
@@ -256,12 +263,14 @@ class Player {
                 // left & right bounding boxes for platform
                 if (entity instanceof Platform && that.BB.collide(entity.BB)) {
                     if (that.BB.collide(entity.leftBB) && (that.lastBB.right <= entity.leftBB.left)) { // left collision
-                        that.x = entity.BB.left - CHIHIRO.SIZE * CHIHIRO.SCALE;
+                        that.x -= 3; // so that the player won't move up 
+                        // that.x = entity.leftBB.left - CHIHIRO.SIZE * CHIHIRO.SCALE;
                         if (that.velocity.x > 0) that.velocity.x = 0;
                     } else if (that.BB.collide(entity.rightBB) && (that.lastBB.left >= entity.rightBB.right)) { // right collision
-                        that.x = entity.rightBB.right;
+                        that.x += 3;
+                        // that.x = entity.rightBB.right;
                         if (that.velocity.x < 0) that.velocity.x = 0;
-                    }
+                    } 
                     that.updateBB();
                 }
                 // collision with no face
@@ -286,7 +295,7 @@ class Player {
                     that.breathbar.update(that.breathwidth);
                     entity.dead = true;
                     if (that.BB.collide(entity.leftBB)) { // left collision
-                        that.x = entity.leftBB.left - CHIHIRO.SIZE * CHIHIRO.SCALE + CHIHIRO.BB_PADDING;  // added padding
+                        that.x = entity.leftBB.left - CHIHIRO.SIZE * CHIHIRO.SCALE + CHIHIRO.BB_PADDING;
                         if (that.velocity.x > 0) that.velocity.x = 0;
                     } else if (that.BB.collide(entity.rightBB)) { // right
                         that.x = entity.rightBB.right - CHIHIRO.BB_PADDING;

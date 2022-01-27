@@ -8,7 +8,7 @@ class SceneManager {
         this.game = game;
         this.game.camera = this; // camera focus on chihiro
         // this.midPoint = 0;
-
+        this.gameOver = false;
         this.title = true;
         this.level = 1;
 
@@ -65,10 +65,10 @@ class SceneManager {
             this.coin2 = new Coins(gameEngine, 300, 300);
             this.coin3 = new Coins(gameEngine, 340, 110);
             this.coin4 = new Coins(gameEngine, 100, 60);
+
         }
-
+    
         this.loadGame();
-
 
         // don't play music unless it's not the title page
         if (level.music && !this.title) {
@@ -79,7 +79,7 @@ class SceneManager {
     };
 
     loadGame() {
-        if(this.title) {
+        if (this.title) {
             this.game.addEntity(this.background);
             this.game.addEntity(this.chihiro);
             this.game.addEntity(this.ground);
@@ -100,25 +100,25 @@ class SceneManager {
             this.game.addEntity(this.coin2);
             this.game.addEntity(this.coin3);
             this.game.addEntity(this.coin4);
-
         }
     };
 
-    update(){
-        // canvas width = 400
-        // blockwidth = 32 * 1 = 32
-        // 200 -16 = 164
+    update() {
         if (this.title && this.game.click) {
             if (this.game.click && this.game.click.y > 230 && this.game.click.y < 255) {
                 this.title = false;
-                // this.chihiro = new Player(this.game, CHIHIRO.INITIAL_POSITION.X, CHIHIRO.INITIAL_POSITION.Y);
                 this.loadLevel(1, this.title);
-            }
+                this.game.click = false;
+            } 
         }
+        if (!this.title && this.chihiro.dead && this.chihiro.removeFromWorld) {
+            this.gameOver = true;
+            this.title = true; 
+            this.clearEntities();
+        } else {
 
+        }
         let midPoint = PARAMS.CANVAS_WIDTH / 2 - CHIHIRO.SIZE;
-
-        console.log(midPoint);
 
         // stop camera from moving (reach dead end on the left)
         if (this.chihiro.x < 0) {
@@ -135,10 +135,10 @@ class SceneManager {
         PARAMS.DEBUG = document.getElementById("debug").checked;
     };
 
-    draw(ctx){
+    draw(ctx) {
         ctx.font = PARAMS.BLOCKWIDTH / 2 + 'px "Press Start 2P"';
 
-        if (this.title) {
+        if (this.title || this.chihiro.dead && this.chihiro.removeFromWorld) {
             var width = 176;
             var height = 88;
             ctx.drawImage(ASSET_MANAGER.getAsset("./sprites/title.png"), 2.5 * PARAMS.BLOCKWIDTH, 2 * PARAMS.BLOCKWIDTH, width * PARAMS.SCALE, height * PARAMS.SCALE);
