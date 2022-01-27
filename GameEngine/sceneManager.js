@@ -4,6 +4,7 @@ class SceneManager {
         this.game.camera = this; // focusing camera on chihiro
         // chihiro falling from the sky and land on the ground
         this.chihiro = new Player(this.game, 0, 0);
+        this.game.player = this.chihiro;
         //this.chihiro = this;
 
         // x, y, w

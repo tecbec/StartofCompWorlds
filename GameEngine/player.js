@@ -296,4 +296,8 @@ class Player {
              this.dead = false;
          }
     }
+
+    toString(){
+        return "Player: x-" + this.x + " y-" + this.y;
+    }
 }

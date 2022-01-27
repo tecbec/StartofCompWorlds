@@ -14,20 +14,24 @@ class Yubaba {
         this.loadAnimations();
 
         //bounding box
+        // magic numbers for bounding box may be adjusted, just to have the bounding box around the body of yubaba (not the wings and tail)
         this.BB = new BoundingBox(this.x+this.width*3/8 *this.scale, this.y+this.height*1/8*this.scale, this.width*3/8*this.scale, this.height*3/4*this.scale);
 
         // speed stuff
         this.speed = 50;
 
         // set up target ... more efficient way to do this than searching? 
-        for (var i = 0; i < this.game.entities.length; i++) {
-            var ent = this.game.entities[i];  
-            if(ent instanceof Player){
-                this.target = ent;
-                break;
-            }
-        }
+        // console.log("Begin search for Chihiro");
+        // for (var i = 0; i < this.game.entities.length; i++) {
+        //     var ent = this.game.entities[i];  
+        //     if(ent instanceof Player){
+        //         console.log("Found Chihiro: " + ent.toString());  // ... never finds chihiro? 
+        //         this.target = ent;
+        //         break;
+        //     }
+        // }
 
+        this.target = this.game.player;
     };
 
     loadAnimations(){
@@ -99,8 +103,9 @@ class Crow{
         this.BB = new BoundingBox(this.x+this.width*3/8 *this.scale, this.y+this.height*1/8*this.scale, this.width*3/8*this.scale, this.height*3/4*this.scale);
 
         // speed stuff
+        this.speed = 50;
         this.speedX = 0;
-        this.speedY = 50;
+        this.speedY = this.speed;
 
     };
 
@@ -116,18 +121,33 @@ class Crow{
     }
 
     update(){
-        /*
-        if(this.y + this.height/2*this.scale >= this.target.y){
-            this.SpeedY = 0;
-            if(){
+        // console.log(this.toString());
+        // console.log(this.target.toString());
 
-            }else{
-
+        console.log(this.target.y <= this.y);
+        if(this.y + this.height/2*this.scale  >= this.target.y){ // once at same y-level as Chihiro 
+            this.speedY = 0;
+        }
+        if(this.speedY == 0 && this.speedX == 0){ 
+            // if this x is to the right of Chihiro
+            if(this.x + this.width/2*this.scale > (this.target.x - this.game.camera.x)){ // go left towards chihiro 
+                this.speedX = -this.speed;
+            }else{ //else go right
+                this.speedY = this.speed;
             }
-        } */
+        }
+
         this.y += this.speedY * this.game.clockTick;
+        this.x += this.speedX * this.game.clockTick;
        // this.x += this.speedX * this.game.clockTick;
         this.BB = new BoundingBox(this.x+this.width*3/8*this.scale, this.y+this.height*1/8*this.scale, this.width*3/8*this.scale, this.height*3/4*this.scale);
+        
+        /*
+        if(){ //moved off screen? Delete entity 
+
+        }else if(){
+
+        }*/
     };
 
     /*
@@ -146,5 +166,8 @@ class Crow{
         }
     };
 
+    toString(){
+        return "Crow: x-" + this.x + " y-" + this.y;
+    }
 
 }
