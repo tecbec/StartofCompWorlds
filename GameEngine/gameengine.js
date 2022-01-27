@@ -128,6 +128,8 @@ class GameEngine {
             this.entities[i].draw(this.ctx);
         }
 
+        // Need this to update when the camera is deleted from the work when a new level is entered.
+        this.camera.draw(this.ctx);
     };
 
     update() {

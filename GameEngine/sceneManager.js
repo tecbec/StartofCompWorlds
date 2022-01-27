@@ -12,7 +12,8 @@ class SceneManager {
         this.title = true;
         this.level = 1;
 
-        this.chihiro = new Player(this.game, CHIHIRO.INITIAL_POSITION.X, CHIHIRO.INITIAL_POSITION.Y);
+        // chihiro falling from the sky and land on the ground
+        this.chihiro = new Player(this.game, CHIHIRO.TITLE_POSITION.X, CHIHIRO.TITLE_POSITION.Y);
 
         this.loadLevel(this.level, this.title);
     };
@@ -29,12 +30,12 @@ class SceneManager {
 
         this.clearEntities();
 
-        // chihiro falling from the sky and land on the ground
-
+        
         this.ground = new Ground(gameEngine, LEVEL.START_CANVAS.X, PARAMS.CANVAS_WIDTH - CHIHIRO.SIZE * CHIHIRO.SCALE, PARAMS.CANVAS_WIDTH * BACKGROUND.CANVAS_SCALE);
         this.background = new BackGround(gameEngine, LEVEL.START_CANVAS.X,  LEVEL.START_CANVAS.Y);
 
         if(!this.title){
+            // chihiro falling from the sky and land on the ground
             this.chihiro = new Player(this.game, CHIHIRO.INITIAL_POSITION.X, CHIHIRO.INITIAL_POSITION.Y);
             // entity locations on the screen
             const nofacelocation = {x: 110, y: 225};
@@ -117,8 +118,6 @@ class SceneManager {
         }
 
         let midPoint = PARAMS.CANVAS_WIDTH / 2 - CHIHIRO.SIZE;
-
-        console.log(midPoint);
 
         // stop camera from moving (reach dead end on the left)
         if (this.chihiro.x < 0) {
