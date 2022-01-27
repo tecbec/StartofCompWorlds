@@ -52,11 +52,8 @@ class SceneManager {
                 this.soot[i] = new Soot(gameEngine, sootlocation.x, sootlocation.y, dir);
             }
             // TODO: fix no face position
-            this.noface = new NoFace(gameEngine, 325, PARAMS.CANVAS_WIDTH - 75 - BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE);
             this.haku = new Haku(gameEngine, HAKU.INITIAL_POSITION.X, PARAMS.CANVAS_WIDTH - HAKU.SIZE * HAKU.SCALE - BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE);
-
             this.noface = new NoFace(gameEngine, nofacelocation.x, nofacelocation.y);
-            this.haku = new Haku(gameEngine, -85, PARAMS.CANVAS_WIDTH - 69 - 64);
             this.yubaba = new Yubaba(gameEngine, 0, 0);
 
             // TODO: put the Coins's (x, y) in LEVEL once we finalized the coordinates

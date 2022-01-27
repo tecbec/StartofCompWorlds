@@ -1,6 +1,6 @@
 // Haku's parameter
 var HAKU = {
-    INITIAL_POSITION : {X: -85},
+    INITIAL_POSITION : {X: 750},
     SIZE: 70,
     SCALE: 1, 
     IDLE: {RIGHT: {X: 0, Y: 70}, LEFT: {X: 0, Y: 0}, FRAME: 4, SPEED: .23, PADDING: 0, REVERSE: false, LOOP: true},
@@ -19,6 +19,8 @@ class Haku {
 
         this.loadAnimations();
         this.updateBB();
+
+        console.log("this.x ", this.x);
     };
 
     loadAnimations() {

@@ -306,7 +306,7 @@ class Player {
                 }
                 // collision with soot
                 if (entity instanceof Soot ) {
-                    that.breathwidth -= 2; // lose breath upon contact (can change)
+                    that.breathwidth -= 10; // lose breath upon contact (can change)
                     that.breathbar.update(that.breathwidth);
                     entity.dead = true;
                     if (that.BB.collide(entity.leftBB)) { // left collision
