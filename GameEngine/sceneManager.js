@@ -41,7 +41,7 @@ class SceneManager {
             const sootlocation = {x: 150, y: 190};
 
             // TODO: put the Platform's (x, y) in LEVEL once we finalized the coordinates
-            this.platform = new Platform(gameEngine, 140, 240, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE);
+            this.platform = new Platform(gameEngine, 140, 230, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE);
             this.platform1 = new Platform(gameEngine, 300, 150, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE);
             this.platform2 = new Platform(gameEngine, 90, 100, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE);
 
