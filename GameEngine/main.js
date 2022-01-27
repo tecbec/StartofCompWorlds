@@ -15,8 +15,8 @@ ASSET_MANAGER.queueDownload("./sprites/yubaba.png");
 ASSET_MANAGER.queueDownload("./sprites/title.png");
 
 ASSET_MANAGER.downloadAll(() => {
-	const canvas = document.getElementById("gameWorld");
-	const ctx = canvas.getContext("2d");
+	let canvas = document.getElementById("gameWorld");
+	let ctx = canvas.getContext("2d");
 	PARAMS.CANVAS_WIDTH = canvas.width;
 	PARAMS.CANVAS_HEIGHT = canvas.height;
 

@@ -7,7 +7,7 @@ class SceneManager {
     constructor(game) {
         this.game = game;
         this.game.camera = this; // camera focus on chihiro
-        this.midpoint = 0;
+        // this.midPoint = 0;
 
         this.title = true;
         this.level = 1;
@@ -15,7 +15,6 @@ class SceneManager {
         this.chihiro = new Player(this.game, CHIHIRO.INITIAL_POSITION.X, CHIHIRO.INITIAL_POSITION.Y);
 
         this.loadLevel(this.level, this.title);
-        
     };
 
     clearEntities() {
@@ -31,12 +30,12 @@ class SceneManager {
         this.clearEntities();
 
         // chihiro falling from the sky and land on the ground
+
         this.ground = new Ground(gameEngine, LEVEL.START_CANVAS.X, PARAMS.CANVAS_WIDTH - CHIHIRO.SIZE * CHIHIRO.SCALE, PARAMS.CANVAS_WIDTH * BACKGROUND.CANVAS_SCALE);
         this.background = new BackGround(gameEngine, LEVEL.START_CANVAS.X,  LEVEL.START_CANVAS.Y);
 
-
         if(!this.title){
-
+            this.chihiro = new Player(this.game, CHIHIRO.INITIAL_POSITION.X, CHIHIRO.INITIAL_POSITION.Y);
             // entity locations on the screen
             const nofacelocation = {x: 110, y: 225};
             const sootlocation = {x: 150, y: 190};
@@ -70,19 +69,20 @@ class SceneManager {
 
         this.loadGame();
 
+
         // don't play music unless it's not the title page
         if (level.music && !this.title) {
             // ASSET_MANAGER.pauseBackgroundMusic();
             // ASSET_MANAGER.playAsset(level.music);
         }
 
-    }
+    };
 
     loadGame() {
         if(this.title) {
-            // this.game.addEntity(this.background);
-            // this.game.addEntity(this.chihiro);
-            // this.game.addEntity(this.ground);
+            this.game.addEntity(this.background);
+            this.game.addEntity(this.chihiro);
+            this.game.addEntity(this.ground);
         } else {
             this.game.addEntity(this.background);
             this.game.addEntity(this.chihiro);
@@ -102,21 +102,23 @@ class SceneManager {
             this.game.addEntity(this.coin4);
 
         }
-    }
+    };
 
     update(){
         // canvas width = 400
         // blockwidth = 32 * 1 = 32
         // 200 -16 = 164
         if (this.title && this.game.click) {
-            if (this.game.click && this.game.click.y > 275 && this.game.click.y < 295) {
+            if (this.game.click && this.game.click.y > 230 && this.game.click.y < 255) {
                 this.title = false;
-                this.chihiro = new Player(this.game, CHIHIRO.INITIAL_POSITION.X-this.game.camera.x, CHIHIRO.INITIAL_POSITION.Y);
+                // this.chihiro = new Player(this.game, CHIHIRO.INITIAL_POSITION.X, CHIHIRO.INITIAL_POSITION.Y);
                 this.loadLevel(1, this.title);
             }
         }
 
         let midPoint = PARAMS.CANVAS_WIDTH / 2 - CHIHIRO.SIZE;
+
+        console.log(midPoint);
 
         // stop camera from moving (reach dead end on the left)
         if (this.chihiro.x < 0) {
@@ -140,10 +142,10 @@ class SceneManager {
             var width = 176;
             var height = 88;
             ctx.drawImage(ASSET_MANAGER.getAsset("./sprites/title.png"), 2.5 * PARAMS.BLOCKWIDTH, 2 * PARAMS.BLOCKWIDTH, width * PARAMS.SCALE, height * PARAMS.SCALE);
-            ctx.fillStyle = this.game.mouse && this.game.mouse.y > 275 && this.game.mouse.y < 295 ? "Yellow" : "Black";
-            ctx.fillText("Start", 170,280);
-            ctx.fillStyle = this.game.mouse && this.game.mouse.y > 295 && this.game.mouse.y < 315 ? "Yellow" : "Black";
-            ctx.fillText("Instructions", 150,300);
+            ctx.fillStyle = this.game.mouse && this.game.mouse.y > 230 && this.game.mouse.y < 255 ? "LightCoral" : "Black";
+            ctx.fillText("Start", 170,250); //280
+            ctx.fillStyle = this.game.mouse && this.game.mouse.y > 255 && this.game.mouse.y < 280 ? "LightCoral" : "Black";
+            ctx.fillText("Instructions", 150,270); //300
         }
 
         if (PARAMS.DEBUG){
@@ -200,6 +202,9 @@ class SceneManager {
             ctx.strokeRect(7, 47, 20, 20);
             ctx.fillText("S", 13, 60);
         }
+
+
     };
+
 }
 

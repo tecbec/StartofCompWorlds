@@ -129,7 +129,7 @@ class Player {
     updateBB() {
         this.lastBB = this.BB;
         this.BB = new BoundingBox(this.x + CHIHIRO.BB_PADDING, this.y + CHIHIRO.BB_PADDING,
-                                    CHIHIRO.SIZE * CHIHIRO.SCALE - CHIHIRO.BB_PADDING - CHIHIRO.BB_PADDING, // both side 
+                                    CHIHIRO.SIZE * CHIHIRO.SCALE - CHIHIRO.BB_PADDING - CHIHIRO.BB_PADDING, // both side
                                     CHIHIRO.SIZE * CHIHIRO.SCALE - CHIHIRO.BB_PADDING); // KD changed the bounding box dimensions to hug the sprite
     };
 
@@ -184,8 +184,8 @@ class Player {
                     }
                 }
                 if (this.facing === 1) {                        // if going right
-                    if (this.game.left && !this.game.right) {   
-                        if (this.game.run) {                    
+                    if (this.game.left && !this.game.right) {
+                        if (this.game.run) {
                             this.velocity.x -= RUN_ACC * TICK;
                         }
                     } else {
@@ -217,7 +217,7 @@ class Player {
             }
         }
         //this makes chihiro always fall
-        this.velocity.y += FALL_ACC * TICK; 
+        this.velocity.y += FALL_ACC * TICK;
 
         if (this.velocity.y >= MAX_FALL)  this.velocity.y =  MAX_FALL;
         if (this.velocity.y <= -MAX_FALL) this.velocity.y = -MAX_FALL;
@@ -248,8 +248,8 @@ class Player {
                     if((entity instanceof Platform) // collision with platform
                         && (that.lastBB.top >= entity.BB.bottom)) { // top of chihiro goes above the bottom of the platform
                         that.velocity.y = 0;
-                        that.updateBB(); 
-                    } else { 
+                        that.updateBB();
+                    } else {
                         that.isGrounded = false;
                     }
                 }
@@ -272,7 +272,7 @@ class Player {
                     }
                     entity.dead = true;
                     if (that.BB.collide(entity.leftBB)) { // left collision
-                        that.x = entity.leftBB.left - CHIHIRO.SIZE * CHIHIRO.SCALE + CHIHIRO.BB_PADDING;  
+                        that.x = entity.leftBB.left - CHIHIRO.SIZE * CHIHIRO.SCALE + CHIHIRO.BB_PADDING;
                         if (that.velocity.x > 0) that.velocity.x = 0;
                     } else if (that.BB.collide(entity.rightBB)) { // right
                         that.x = entity.rightBB.right - CHIHIRO.BB_PADDING;
@@ -323,7 +323,7 @@ class Player {
         // update state
         if (this.state !== 2 || this.state !== 5) {                        // NOT jump or dead
             if (this.game.crouch) this.state = 3;                          // crouching state
-            else if (Math.abs(this.velocity.x) > 0) this.state = 1;        // walking state 
+            else if (Math.abs(this.velocity.x) > 0) this.state = 1;        // walking state
             else if (Math.abs(this.velocity.x) > MIN_WALK) this.state = 4; // running state
         } else {
             // do nothing
@@ -334,8 +334,8 @@ class Player {
             this.velocity.x = 0;
             this.deadCounter += this.game.clockTick;
             if (this.deadCounter > 0.75) {
-                this.removeFromWorld = true; 
-            }     
+                this.removeFromWorld = true;
+            }
         } else {
             // do nothing
         }

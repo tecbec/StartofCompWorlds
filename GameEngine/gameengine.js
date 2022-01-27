@@ -57,9 +57,6 @@ class GameEngine {
         var getXandY = function (e) {
             var x = e.clientX - that.ctx.canvas.getBoundingClientRect().left;
             var y = e.clientY - that.ctx.canvas.getBoundingClientRect().top;
-
-            console.log(x, y);
-
             return { x: x, y: y, radius: 0 };
         }
 
@@ -139,6 +136,9 @@ class GameEngine {
 
         // Remove dead things
         this.entities = this.entities.filter(entity => !entity.removeFromWorld);
+
+        // Need this so camera will move with change in levels.
+        this.camera.update();
 
         // Add new things
         this.entities = this.entities.concat(this.entitiesToAdd);
