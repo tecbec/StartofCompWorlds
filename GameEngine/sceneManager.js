@@ -138,6 +138,7 @@ class SceneManager {
         } else {
             this.x = this.chihiro.x - midPoint; // force centering
         }
+
         PARAMS.DEBUG = document.getElementById("debug").checked;
     };
 

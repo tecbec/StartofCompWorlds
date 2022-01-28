@@ -293,10 +293,13 @@ class Player {
                 // collision with Haku
                 if (entity instanceof Haku && that.BB.collide(entity.BB)) {
                     // instantly heal stamina bar
-                    // that.game.camera.breathwidth +=  CHIHIRO.BREATH_BAR.MAX - that.breathwidth;
+                    that.game.camera.breathwidth =  CHIHIRO.BREATH_BAR.MAX ;
+                    // that.breathbar.update();
+                    // that.game.addEntity(new BreathBar(this.game, CHIHIRO.BREATH_BAR.X, CHIHIRO.BREATH_BAR.Y, this.breathwidth,
+                        // CHIHIRO.BREATH_BAR.HEIGHT, CHIHIRO.BREATH_BAR.MAX));
                     // that.breathbar.update(that.breathwidth);
-                    that.game.addEntity(new BreathBar(this.game, CHIHIRO.BREATH_BAR.X, CHIHIRO.BREATH_BAR.Y, this.breathwidth,
-                        CHIHIRO.BREATH_BAR.HEIGHT, CHIHIRO.BREATH_BAR.MAX));
+                    // that.game.addEntity(new BreathBar(this.game, CHIHIRO.BREATH_BAR.X, CHIHIRO.BREATH_BAR.Y, this.breathwidth,
+                    //     CHIHIRO.BREATH_BAR.HEIGHT, CHIHIRO.BREATH_BAR.MAX));
                     entity.dead = true;
                     if (that.BB.collide(entity.leftBB)) { // left collision
                         that.x = entity.leftBB.left - CHIHIRO.SIZE * CHIHIRO.SCALE + CHIHIRO.BB_PADDING;

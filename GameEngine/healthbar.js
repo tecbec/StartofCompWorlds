@@ -1,13 +1,20 @@
 class BreathBar {
-    // the agent is the player it is a has a relationship chihiro has a breath bar 
-    // use this to avoid inheriting a health bar 
-    constructor(game, x, y, width, height, maxHealth) {
-        Object.assign(this, {game, x, y, width, height, maxHealth});
-        this.width = 100;
-        this.game.camera.breathbar -= this.width;
+    // the agent is the player it is a has a relationship chihiro has a breath bar
+    // use this to avoid inheriting a health bar
+    constructor(game, x, y, width, height) {
+        Object.assign(this, {game, x, y, width, height});
+
+        /* this.x and this.y set the top left corner of the breathbar */
+        /* this.width and this.height are for the dimensions of the blue bar */
+
+        this.maxHealth = 100; // this sets the width of the whole breath bar
+
+        this.velocity = -2 * 16;
+        console.log(this.width);
     };
 
     update() {
+        this.elapsed += this.game.clockTick;
 
         if(this.width >= 0) {
             // this.width -= 0.05; // original
