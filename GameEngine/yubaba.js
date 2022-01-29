@@ -68,7 +68,7 @@ class Yubaba {
         this.elapsedTime += this.game.clockTick;
         if (this.elapsedTime > this.fireRate) { 
             this.elapsedTime = 0;
-            this.game.addEntity(new Crow(this.game, this.x, this.y+this.height*this.scale, this.target));
+            this.game.addEntity(new Crow(this.game, this.x, this.y, this.target));
         }
        }
     };
@@ -107,33 +107,47 @@ class Crow{
         this.speedX = 0;
         this.speedY = this.speed;
 
+        this.removeFromWorld = false;
+        this.new = true;
+
     };
 
     loadAnimations(){
-         /* right = 0, left = 1*/
-        this.dir = 0;
-        this.animations = [];
-        this.animations[0] = new Animator(this.path, this.x, this.y, this.width, 
-                this.height, this.frameCount, this.frameDuration, 0, false, true);
-        this.animations[1] = new Animator(this.path, this.x, this.y+this.height, this.width, 
-                this.height, this.frameCount, this.frameDuration, 0, false, true);
-        this.animator = this.animations[0];
-    }
+        /* right = 0, left = 1*/
+       this.dir = 0;
+       this.animations = [];
+       this.animations[0] = new Animator(this.path, 0, 0, this.width, 
+               this.height, this.frameCount, this.frameDuration, 0, false, true);
+       this.animations[1] = new Animator(this.path, 0, 0+this.height, this.width, 
+               this.height, this.frameCount, this.frameDuration, 0, false, true);
+       this.animator = this.animations[0];
+   }
 
     update(){
-        // console.log(this.toString());
-        // console.log(this.target.toString());
-
-        console.log(this.target.y <= this.y);
-        if(this.y + this.height/2*this.scale  >= this.target.y){ // once at same y-level as Chihiro 
+        /* create different modes: 
+           1. falling
+           2. some honing
+           3. aggressive honing? 
+        */
+        if(this.y  >= this.target.y ){ // once at same y-level as Chihiro 
             this.speedY = 0;
+        }else{
+            this.speedY = this.speed; //jumping wont 
+            this.speedX = 0; // how to make sure can still crouch? 
+                                      // how else to adjust motion? 
         }
+
         if(this.speedY == 0 && this.speedX == 0){ 
             // if this x is to the right of Chihiro
-            if(this.x + this.width/2*this.scale > (this.target.x - this.game.camera.x)){ // go left towards chihiro 
-                this.speedX = -this.speed;
-            }else{ //else go right
+            // go left
+            if(this.x > this.target.x && this.x < this.target.x + this.target.width*this.target.scale - this.width*this.scale){
                 this.speedY = this.speed;
+            }else if(this.x + this.width/2*this.scale > this.target.x){ // go left towards chihiro 
+                this.animator = this.animations[1];
+                this.speedX = -this.speed;
+
+            }else{ //else go right
+                this.speedX = this.speed;
             }
         }
 
@@ -142,19 +156,23 @@ class Crow{
        // this.x += this.speedX * this.game.clockTick;
         this.BB = new BoundingBox(this.x+this.width*3/8*this.scale, this.y+this.height*1/8*this.scale, this.width*3/8*this.scale, this.height*3/4*this.scale);
         
-        /*
-        if(){ //moved off screen? Delete entity 
-
-        }else if(){
-
-        }*/
+        
+        if(this.x < this.target.x - PARAMS.CANVAS_WIDTH|| this.x > this.target.x + PARAMS.CANVAS_WIDTH){ //moved off screen? Delete entity 
+            this.removeFromWorld = true;
+        }
     };
 
     /*
     *  param: context that we want to draw to 
     */
     draw(ctx){ 
-        this.animator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
+        if(this.new){
+            this.new = false;
+            this.animator.drawFrame(this.game.clockTick, ctx, this.x , this.y, this.scale);
+        }else{
+            this.animator.drawFrame(this.game.clockTick, ctx, this.x- this.game.camera.x , this.y, this.scale);
+        }
+       
         // ctx.strokeStyle = "Black";
         // ctx.fillStyle = "Black";
         // ctx.arc(this.x, this.y, this.width*this.scale, 0, Math.PI*2);
@@ -162,7 +180,7 @@ class Crow{
 
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
-            ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
+            ctx.strokeRect(this.BB.x-this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);           
         }
     };
 

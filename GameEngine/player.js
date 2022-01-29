@@ -246,14 +246,15 @@ class Player {
                         that.breathwidth -= 2;
                         that.breathbar.update(that.breathwidth);
                         entity.dead = true;
-                        if (that.BB.collide(entity.leftBB)) { // left collision
-                            that.x = entity.leftBB.left - 32 * 2 + 10;   // to prevent ricochet against collisions we have to add padding.
-                            if (that.velocity.x > 0) that.velocity.x = 0;
-                        } else if (that.BB.collide(entity.rightBB)) {
-                            that.x = entity.rightBB.right - 10;
-                            if (that.velocity.x < 0) that.velocity.x = 0;
-                        }
                     }
+
+                    // Collision with crows
+                    if (entity instanceof Crow ) {
+                        that.breathwidth -= 5;
+                        that.breathbar.update(that.breathwidth);
+                        entity.removeFromWorld = true;
+                    }
+
                     // Collision with coins
                     if (entity instanceof Coins) {
                         entity.removeFromWorld = true;
