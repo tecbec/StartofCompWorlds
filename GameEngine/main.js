@@ -14,9 +14,15 @@ ASSET_MANAGER.queueDownload("./sprites/haku_spritesheet.png");
 ASSET_MANAGER.queueDownload("./sprites/yubaba.png");
 ASSET_MANAGER.queueDownload("./sprites/title.png");
 
+// music
+ASSET_MANAGER.queueDownload("./audio/OneSummersDay.mp3");
+
 ASSET_MANAGER.downloadAll(() => {
 	let canvas = document.getElementById("gameWorld");
 	let ctx = canvas.getContext("2d");
+
+	ASSET_MANAGER.autoRepeat("./audio/OneSummersDay.mp3");
+
 	PARAMS.CANVAS_WIDTH = canvas.width;
 	PARAMS.CANVAS_HEIGHT = canvas.height;
 

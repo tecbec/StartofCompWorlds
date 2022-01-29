@@ -1,5 +1,6 @@
 // TODO: move this when we create a level.js
 var LEVEL = {
+    music: "./audio/OneSummersDay.mp3",
     START_CANVAS: {X: -200, Y: 0},
     END_CANVAS: {X: 940}
 }
@@ -11,10 +12,12 @@ class SceneManager {
 
         this.title = true;
         this.level = 1;
+        //music = ASSET_MANAGER.getAsset("./audio/OneSummersDay.mp3");
 
         this.chihiro = new Player(this.game, CHIHIRO.INITIAL_POSITION.X, CHIHIRO.INITIAL_POSITION.Y);
 
         this.loadLevel(this.level, this.title);
+
     };
 
     clearEntities() {
@@ -23,12 +26,20 @@ class SceneManager {
         });
     };
 
+    updateAudio() {
+        var mute = document.getElementById("mute").checked;
+        var volume = document.getElementById("volume").value;
+
+        ASSET_MANAGER.muteAudio(mute);
+        ASSET_MANAGER.adjustVolume(volume);
+
+    };
+
     loadLevel(level, title){
         this.title = title;
         this.level = level;
 
         this.clearEntities();
-
         // chihiro falling from the sky and land on the ground
 
         this.ground = new Ground(gameEngine, LEVEL.START_CANVAS.X, PARAMS.CANVAS_WIDTH - CHIHIRO.SIZE * CHIHIRO.SCALE, PARAMS.CANVAS_WIDTH * BACKGROUND.CANVAS_SCALE);
@@ -71,9 +82,9 @@ class SceneManager {
 
 
         // don't play music unless it's not the title page
-        if (level.music && !this.title) {
-            // ASSET_MANAGER.pauseBackgroundMusic();
-            // ASSET_MANAGER.playAsset(level.music);
+        if (LEVEL.music && !this.title) {
+             ASSET_MANAGER.pauseBackgroundMusic();
+             ASSET_MANAGER.playAsset(LEVEL.music);
         }
 
     };
@@ -105,6 +116,9 @@ class SceneManager {
     };
 
     update(){
+
+        this.updateAudio();
+
         // canvas width = 400
         // blockwidth = 32 * 1 = 32
         // 200 -16 = 164
@@ -117,9 +131,6 @@ class SceneManager {
         }
 
         let midPoint = PARAMS.CANVAS_WIDTH / 2 - CHIHIRO.SIZE;
-
-        console.log(midPoint);
-
         // stop camera from moving (reach dead end on the left)
         if (this.chihiro.x < 0) {
             if (this.chihiro.x < LEVEL.START_CANVAS.X) {
