@@ -299,7 +299,7 @@ class Player {
                 }
 
                 //Collision with Yubaba
-                //...
+                //for now have Yubaba push Chihiro? but later  kills on impact 
 
                 // collision with Haku
                 if (entity instanceof Haku && that.BB.collide(entity.BB)) {
@@ -307,9 +307,8 @@ class Player {
                     that.breathwidth +=  CHIHIRO.BREATH_BAR.MAX - that.breathwidth;
                     that.breathbar.update(that.breathwidth);
 
-                    //entity.dead = true; //Haku regenerate should always exist
+                    entity.dead = true; //Haku regenerate should always exist
 
-                    /*
                     if (that.BB.collide(entity.leftBB)) { // left collision
                         that.x = entity.leftBB.left - CHIHIRO.SIZE * CHIHIRO.SCALE + CHIHIRO.BB_PADDING;
                         if (that.velocity.x > 0) that.velocity.x = 0;
@@ -317,7 +316,7 @@ class Player {
                         that.x = entity.rightBB.right - CHIHIRO.BB_PADDING;
                         if (that.velocity.x < 0) that.velocity.x = 0;
                     }
-                    */
+                    
                 }
                 
                 // collision with soot

@@ -129,6 +129,7 @@ class Crow{
            2. some honing
            3. aggressive honing? 
         */
+
         if(this.y  >= this.target.y ){ // once at same y-level as Chihiro 
             this.speedY = 0;
         }else{

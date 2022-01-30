@@ -6,38 +6,14 @@ var LEVEL = {
 class SceneManager {
     constructor(game) {
         this.game = game;
-/*<<<<<<< HEAD
-        
-
-        // x, y, w
-        // TODO: fix these measurements
-        this.ground = new Ground(gameEngine, -200, PARAMS.CANVAS_WIDTH - 64, PARAMS.CANVAS_WIDTH * 3);
-        this.background = new BackGround(gameEngine, -200, 0);
-
-        // when y is too close to the ground it falls off ? when jumping right below ; not sure why
-        this.platform = new Platform(gameEngine, 140, 240, 32);
-        this.platform1 = new Platform(gameEngine, 300, 150, 32);
-        this.platform2 = new Platform(gameEngine, 90, 100, 32);
-
-        // set the number of soots to create
-        this.Num_Soots = 10;
-        this.soot = [];
-        for(let i = 0; i < this.Num_Soots; i++) {
-            let dir = getRandomInteger(0,1);
-            this.soot[i] = new Soot(gameEngine, 150, 190, dir);
-        }
-*/
         this.game.camera = this; // focusing camera on chihiro
         // this.midPoint = 0;
         this.gameOver = false;
         this.title = true;
         this.level = 1;
-//>>>>>>> origin/chau
 
         // chihiro falling from the sky and land on the ground
         this.chihiro = new Player(this.game, CHIHIRO.TITLE_POSITION.X, CHIHIRO.TITLE_POSITION.Y);
-        this.game.player = this.chihiro;
-
         this.loadLevel(this.level, this.title);
     };
 
@@ -60,6 +36,7 @@ class SceneManager {
         if(!this.title){
             // chihiro falling from the sky and land on the ground
             this.chihiro = new Player(this.game, CHIHIRO.INITIAL_POSITION.X, CHIHIRO.INITIAL_POSITION.Y);
+            this.game.player = this.chihiro;
             // entity locations on the screen
             const nofacelocation = {x: 300, y: 50};
             const sootlocation = {x: 150, y: 190};
