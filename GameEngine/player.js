@@ -293,6 +293,7 @@ class Player {
                 // collision with Haku
                 if (entity instanceof Haku && that.BB.collide(entity.BB)) {
                     // instantly heal stamina bar
+                    that.game.camera.breathwidth = CHIHIRO.BREATH_BAR.MAX;
                     that.game.camera.changeBreath(CHIHIRO.BREATH_BAR.MAX) ;
                     entity.dead = true;
 
@@ -306,7 +307,8 @@ class Player {
                 }
                 // collision with soot
                 if (entity instanceof Soot ) {
-                    that.game.camera.changeBreath(-3) ;
+                    that.game.camera.breathwidth -= 3;
+                    that.game.camera.changeBreath() ;
                     entity.dead = true;
                     if (that.BB.collide(entity.leftBB)) { // left collision
                         if (that.velocity.x > 0) that.velocity.x = 0;
@@ -317,7 +319,9 @@ class Player {
                 // collision with coins
                 if (entity instanceof Coins) {
                     entity.removeFromWorld = true;
-                    that.game.camera.changeBreath(2.5) ;
+                    
+                    that.game.camera.breathwidth += 2.5;
+                    that.game.camera.changeBreath();
 
                     // that.coinCounter.coinCount ++;
                 }
@@ -351,9 +355,8 @@ class Player {
         if (this.velocity.x < 0) this.facing = 1;
         if (this.velocity.x > 0) this.facing = 0;
 
-        console.log(this.game.camera.breathwidth );
 
-        if (that.game.camera.breathwidth <= 0) {
+        if (this.game.camera.breathwidth <= 0) {
             this.game.camera.chihiro.dead = true;
         } else {
             this.game.camera.chihiro.dead = false;

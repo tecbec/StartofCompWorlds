@@ -11,6 +11,7 @@ class SceneManager {
         this.gameOver = false;
         this.title = true;
         this.level = 1;
+        this.gameOverCounter  = 0;
 
         //Breath
         this.breathwidth = 100;
@@ -29,15 +30,13 @@ class SceneManager {
         this.level = level;
 
         this.clearEntities();
-        
+
         // chihiro falling from the sky and land on the ground
         this.chihiro = new Player(this.game, CHIHIRO.TITLE_POSITION.X, CHIHIRO.TITLE_POSITION.Y);
         this.ground = new Ground(gameEngine, LEVEL.START_CANVAS.X, PARAMS.CANVAS_WIDTH - CHIHIRO.SIZE * CHIHIRO.SCALE, PARAMS.CANVAS_WIDTH * BACKGROUND.CANVAS_SCALE);
         this.background = new BackGround(gameEngine, LEVEL.START_CANVAS.X,  LEVEL.START_CANVAS.Y);
 
         if(!this.title){
-            // chihiro falling from the sky and land on the ground
-            this.chihiro = new Player(this.game, CHIHIRO.INITIAL_POSITION.X, CHIHIRO.INITIAL_POSITION.Y);
             // entity locations on the screen
             const nofacelocation = {x: 300, y: 50};
             const sootlocation = {x: 150, y: 190};
@@ -69,7 +68,6 @@ class SceneManager {
             this.coinCounter = new CoinCounter(this.game, CHIHIRO.COIN_COUNTER.X, CHIHIRO.COIN_COUNTER.Y);
             this.breathbar = new BreathBar(this.game, CHIHIRO.BREATH_BAR.X, CHIHIRO.BREATH_BAR.Y, this.breathwidth,
                 CHIHIRO.BREATH_BAR.HEIGHT, CHIHIRO.BREATH_BAR.MAX);
-
         }
 
         this.loadGame();
@@ -109,14 +107,8 @@ class SceneManager {
         }
     };
 
-    changeBreath(breath) {
-        // that.breathwidth += CHIHIRO.BREATH_BAR.MAX - breath;
-        this.breathwidth += breath;
-        if(this.breathwidth > 100) {
-            this.breathbar.updateOnFly(100);
-        } else {
-            this.breathbar.updateOnFly(this.breathwidth);
-        }
+    changeBreath() {
+        this.breathbar.updateOnFly(this.breathwidth);
     };
 
     update() {
@@ -128,10 +120,8 @@ class SceneManager {
             }
         }
 
-        if (!this.title && this.chihiro.dead && this.chihiro.removeFromWorld) {
+        if (!this.title && this.chihiro.dead) {
             this.gameOver = true;
-            this.title = true;
-            this.loadLevel(1, this.title);
         } else {
 
         }
@@ -150,6 +140,15 @@ class SceneManager {
             this.x = this.chihiro.x - midPoint; // force centering
         }
 
+        if (this.gameOver) {
+            this.gameOverCounter += this.game.clockTick;
+            if (this.gameOverCounter > 1) {
+                this.title = true;
+                this.breathwidth = 100;
+                this.chihiro.dead = false;
+                this.loadLevel(1, this.title);
+            }
+        }
 
         PARAMS.DEBUG = document.getElementById("debug").checked;
     };
@@ -183,7 +182,7 @@ class SceneManager {
             ctx.fillText(xP, 100, 15);
             ctx.fillText(yP, 100, 30);
 
-            // bounding box 
+            // bounding box
             let bX ="xB=" + Math.floor(this.game.chihiro.BB.left);
             let bY ="yB=" + Math.floor(this.game.chihiro.BB.top);
             ctx.fillText(bX, 160, 15);
