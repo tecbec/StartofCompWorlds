@@ -18,6 +18,8 @@ class GameEngine {
         this.left = false;
         this.right = false;
         this.up = false;
+        this.mouse = false;
+        this.click = false;
 
         // Options and the Details
         this.options = options || {
@@ -53,8 +55,25 @@ class GameEngine {
 
     startInput() {
         var that = this; 
-        // add the listeners and detect key inputs
-        // pass in the event to the function
+ 
+        // From Mario Bros
+        var getXandY = function (e) {
+            var x = e.clientX - that.ctx.canvas.getBoundingClientRect().left;
+            var y = e.clientY - that.ctx.canvas.getBoundingClientRect().top;
+            return { x: x, y: y, radius: 0 };
+        }
+
+        // From Mario Bros
+        this.ctx.canvas.addEventListener("mousemove", function (e) {
+            that.mouse = getXandY(e);
+        }, false);
+
+        // From Mario Bros
+        this.ctx.canvas.addEventListener("click", function (e) {
+            that.click = getXandY(e);
+        }, false);
+
+        // Key pressed 
         this.ctx.canvas.addEventListener("keydown", function (e) {
             switch(e.code) {
                 case "ArrowLeft":
@@ -74,7 +93,7 @@ class GameEngine {
                     break;
             }
         }, false);
-
+        // Key released
         this.ctx.canvas.addEventListener("keyup", function (e) {
             switch(e.code) {
                 case "ArrowLeft":
@@ -104,7 +123,6 @@ class GameEngine {
     draw() {
         // Clear the whole canvas with transparent color (rgba(0, 0, 0, 0))
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
-
         //this.ctx.fillStyle = 'red';
         //this.ctx.fillRect(0,0,20,20);
         // Draw latest things first
@@ -112,7 +130,10 @@ class GameEngine {
         for (var i = 0; i < this.entities.length; i++) {
             this.entities[i].draw(this.ctx);
         }
+        this.camera.draw(this.ctx);
 
+        // Need this to update when the camera is deleted from the work when a new level is entered.
+        this.camera.draw(this.ctx);
     };
 
     update() {
@@ -121,6 +142,9 @@ class GameEngine {
 
         // Remove dead things
         this.entities = this.entities.filter(entity => !entity.removeFromWorld);
+
+        // Need this so camera will move with change in levels.
+        this.camera.update();
 
         // Add new things
         this.entities = this.entities.concat(this.entitiesToAdd);
@@ -133,6 +157,8 @@ class GameEngine {
         this.draw();
         // if want one input to only trigger once 
         // this.up = false;
+
+        // this.click = null;
     };
 
     get["deltaTime"]() { return this.clockTick; }
