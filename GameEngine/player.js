@@ -158,7 +158,6 @@ class Player {
 
     shoot(){
         if(this.game.bubble) {
-            console.log("Bubble");
             const speed = 2;
             const delayBubble = 5;
             const damage = 1; 

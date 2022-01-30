@@ -3,11 +3,12 @@ class BubblesController{
     timeTillNextBubble = 0;
     constructor( game) {
         Object.assign(this, {game});
+       // this.game = game;
     }
 
     update( bubbleX, bubbleY, speed, damage, delay) {
         if(this.timeTillNextBubble <= 0){
-            this.bubble.push(new Bubbles(bubbleX, bubbleY, speed, damage));
+            this.bubble.push(new Bubbles(this.game, bubbleX, bubbleY, speed, damage));
             this.timeTillNextBubble = delay; 
         }
         this.timeTillNextBubble--;
@@ -24,15 +25,14 @@ class BubblesController{
             }); 
     }
     isBubbleOffScreen(bubble) {
-     //  console.log(bubble.x);
-       //console.log(this.game.x );
-        return bubble.x <= this.game.width ;//- this.game.camera.x ;//PARAMS.CANVAS_WIDTH - this.game.camera.x ;//bubble.width;
+        return bubble.x >= PARAMS.CANVAS_WIDTH ;//bubble.width;
     }
 }
 
 class Bubbles{
-    constructor( x,y, speed, damage , delay) {
-        Object.assign(this, {x, y,speed, damage , delay});
+    constructor( game, x,y, speed, damage , delay) {
+        Object.assign(this, {game, x, y,speed, damage , delay});
+        //import bubble animation here 
         this.x = x; 
         this.y = y;
         this.speed = speed; 
