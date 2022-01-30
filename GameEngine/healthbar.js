@@ -9,8 +9,6 @@ class BreathBar {
 
         this.maxHealth = 100; // this sets the width of the whole breath bar
 
-        this.velocity = -2 * 16;
-        console.log(this.width);
     };
 
     update() {
@@ -31,11 +29,11 @@ class BreathBar {
         ctx.strokeRect(this.x, this.y, this.maxHealth, this.height);
     };
 
-    // updateOnFly(val) {
-    //     if( val >= 0) { // we want our player to die when the val is less then zero
-    //         this.width = (val /this.maxHealth) *this.maxHealth;
-    //         this.update();
-    //     }
-    // }
+    updateOnFly(val) {
+        if( val >= 0) { // we want our player to die when the val is less then zero
+            this.width = (val /this.maxHealth) *this.maxHealth;
+            this.update();
+        }
+    };
 };
 

@@ -18,7 +18,7 @@ var CHIHIRO = {
 class Player {
     constructor(game, x, y) {
         Object.assign(this, {game, x, y});
-        this.game.chihiro = this;
+        this.game.chihiro = this;  // chihiro adds a reference to herself into the game engine
         this.game.x = this;
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/chihiro_spritesheet.png");
 
@@ -293,44 +293,32 @@ class Player {
                 // collision with Haku
                 if (entity instanceof Haku && that.BB.collide(entity.BB)) {
                     // instantly heal stamina bar
-                    that.game.camera.breathwidth =  CHIHIRO.BREATH_BAR.MAX ;
-                    // that.breathbar.update();
-                    // that.game.addEntity(new BreathBar(this.game, CHIHIRO.BREATH_BAR.X, CHIHIRO.BREATH_BAR.Y, this.breathwidth,
-                        // CHIHIRO.BREATH_BAR.HEIGHT, CHIHIRO.BREATH_BAR.MAX));
-                    // that.breathbar.update(that.breathwidth);
-                    // that.game.addEntity(new BreathBar(this.game, CHIHIRO.BREATH_BAR.X, CHIHIRO.BREATH_BAR.Y, this.breathwidth,
-                    //     CHIHIRO.BREATH_BAR.HEIGHT, CHIHIRO.BREATH_BAR.MAX));
+                    that.game.camera.changeBreath(CHIHIRO.BREATH_BAR.MAX) ;
                     entity.dead = true;
+
                     if (that.BB.collide(entity.leftBB)) { // left collision
-                        that.x = entity.leftBB.left - CHIHIRO.SIZE * CHIHIRO.SCALE + CHIHIRO.BB_PADDING;
+                        // that.x = entity.leftBB.left - CHIHIRO.SIZE * CHIHIRO.SCALE + CHIHIRO.BB_PADDING;
                         if (that.velocity.x > 0) that.velocity.x = 0;
                     } else if (that.BB.collide(entity.rightBB)) { // right
-                        that.x = entity.rightBB.right - CHIHIRO.BB_PADDING;
+                        // that.x = entity.rightBB.right - CHIHIRO.BB_PADDING;
                         if (that.velocity.x < 0) that.velocity.x = 0;
                     }
                 }
                 // collision with soot
                 if (entity instanceof Soot ) {
-                    // that.breathwidth -= 10; // lose breath upon contact (can change)
-                    // that.breathbar.update(that.breathwidth);
+                    that.game.camera.changeBreath(-3) ;
                     entity.dead = true;
                     if (that.BB.collide(entity.leftBB)) { // left collision
-                        // that.x = entity.leftBB.left - CHIHIRO.SIZE * CHIHIRO.SCALE + CHIHIRO.BB_PADDING;  // check these out for push back
                         if (that.velocity.x > 0) that.velocity.x = 0;
                     } else if (that.BB.collide(entity.rightBB)) {
-                        // that.x = entity.rightBB.right - CHIHIRO.BB_PADDING;  // check these out for push back
                         if (that.velocity.x < 0) that.velocity.x = 0;
                     }
                 }
                 // collision with coins
                 if (entity instanceof Coins) {
                     entity.removeFromWorld = true;
-                    // if (that.breathbar < CHIHIRO.BREATH_BAR.MAX) {
-                    //     that.breathwidth += 25; // gain breath upon contact (for testing ONLY)
-                    //     that.breathbar.update(that.breathwidth);
-                    // }
-                    // that.breathwidth += CHIHIRO.BREATH_BAR.MAX - that.breathwidth;
-                    // that.breathbar.update(that.breathwidth);
+                    that.game.camera.changeBreath(2.5) ;
+
                     // that.coinCounter.coinCount ++;
                 }
             }
@@ -363,14 +351,12 @@ class Player {
         if (this.velocity.x < 0) this.facing = 1;
         if (this.velocity.x > 0) this.facing = 0;
 
-        // updating the breath bar
-        // this.breathwidth -= 0.05; // changes for testing
-        // this.breathbar.update(this.breathwidth);
+        console.log(this.game.camera.breathwidth );
 
-        // if (this.breathwidth <= 0) {
-        //     this.dead = true;
-        // } else {
-        //     this.dead = false;
-        // }
+        if (that.game.camera.breathwidth <= 0) {
+            this.game.camera.chihiro.dead = true;
+        } else {
+            this.game.camera.chihiro.dead = false;
+        }
     };
 };

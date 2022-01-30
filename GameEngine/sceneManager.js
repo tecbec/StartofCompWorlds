@@ -109,6 +109,16 @@ class SceneManager {
         }
     };
 
+    changeBreath(breath) {
+        // that.breathwidth += CHIHIRO.BREATH_BAR.MAX - breath;
+        this.breathwidth += breath;
+        if(this.breathwidth > 100) {
+            this.breathbar.updateOnFly(100);
+        } else {
+            this.breathbar.updateOnFly(this.breathwidth);
+        }
+    };
+
     update() {
         if (this.title && this.game.click) {
             if (this.game.click && this.game.click.y > 220 && this.game.click.y < 245) {
@@ -117,6 +127,7 @@ class SceneManager {
                 this.game.click = false;
             }
         }
+
         if (!this.title && this.chihiro.dead && this.chihiro.removeFromWorld) {
             this.gameOver = true;
             this.title = true;
@@ -138,6 +149,7 @@ class SceneManager {
         } else {
             this.x = this.chihiro.x - midPoint; // force centering
         }
+
 
         PARAMS.DEBUG = document.getElementById("debug").checked;
     };
