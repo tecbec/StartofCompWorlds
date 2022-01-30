@@ -1,6 +1,4 @@
 class BreathBar {
-    // the agent is the player it is a has a relationship chihiro has a breath bar 
-    // use this to avoid inheriting a health bar 
     constructor(game, x, y, width, height, maxHealth) {
         Object.assign(this, {game, x, y, width, height, maxHealth});
     };
@@ -18,9 +16,9 @@ class BreathBar {
 
     update(val) {
         if( val >= 0) { // we want our player to die when the val is less then zero
-            this.heath = val; 
-            this.width = (this.heath /this.maxHealth) *this.maxHealth;
+            this.health = val; 
+            this.width = (this.health /this.maxHealth) *this.maxHealth;
         }       
-    }
+    };
 };
 

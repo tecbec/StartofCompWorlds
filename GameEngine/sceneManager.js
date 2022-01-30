@@ -47,6 +47,8 @@ class SceneManager {
         this.background = new BackGround(gameEngine, LEVEL.START_CANVAS.X,  LEVEL.START_CANVAS.Y);
 
         if(!this.title){
+          //  this.bubbleController = new BubblesController(gameEngine, this.ctx);
+            
             // chihiro falling from the sky and land on the ground
             this.chihiro = new Player(this.game, CHIHIRO.INITIAL_POSITION.X, CHIHIRO.INITIAL_POSITION.Y);
             // entity locations on the screen
@@ -78,6 +80,8 @@ class SceneManager {
             this.coin2 = new Coins(gameEngine, 300, 300);
             this.coin3 = new Coins(gameEngine, 340, 110);
             this.coin4 = new Coins(gameEngine, 100, 60);
+
+          //  this.bubbleController = new Bubbles(gameEngine);
 
         }
     

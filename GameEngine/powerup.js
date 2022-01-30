@@ -1,8 +1,56 @@
-class Bubbles{
-    constructor(game, x,y, target) {
-        Object.assign(this, {game, x,y, target});
+class BubblesController{
+    bubble = [];
+    timeTillNextBubble = 0;
+    constructor( game) {
+        Object.assign(this, {game});
+    }
+
+    update( bubbleX, bubbleY, speed, damage, delay) {
+        if(this.timeTillNextBubble <= 0){
+            this.bubble.push(new Bubbles(bubbleX, bubbleY, speed, damage));
+            this.timeTillNextBubble = delay; 
+        }
+        this.timeTillNextBubble--;
+    };
+
+    draw(ctx){
+        console.log(this.bubble.length);
+        this.bubble.forEach((bubble) =>{
+            if(this.isBubbleOffScreen(bubble)){
+                const index = this.bubble.indexOf(bubble);
+                this.bubble.splice(index, 1);
+            }
+             bubble.draw(ctx) 
+            }); 
+    }
+    isBubbleOffScreen(bubble) {
+     //  console.log(bubble.x);
+       //console.log(this.game.x );
+        return bubble.x <= this.game.width ;//- this.game.camera.x ;//PARAMS.CANVAS_WIDTH - this.game.camera.x ;//bubble.width;
     }
 }
+
+class Bubbles{
+    constructor( x,y, speed, damage , delay) {
+        Object.assign(this, {x, y,speed, damage , delay});
+        this.x = x; 
+        this.y = y;
+        this.speed = speed; 
+        this.damage = damage; 
+
+        this.width =7; 
+        this.height = 5; 
+        this.color = "red";
+
+    }
+    update() {
+    };
+    draw(ctx){
+        ctx.fillStyle = this.color; 
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+        this.x = this.speed + this.x; 
+    };
+};
 
 class Coins {
     constructor( game, x, y) {
