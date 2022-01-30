@@ -148,6 +148,7 @@ class Crow{
 
             }else{ //else go right
                 this.speedX = this.speed;
+                this.animator = this.animations[0];
             }
         }
 
