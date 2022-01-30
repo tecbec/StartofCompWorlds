@@ -9,6 +9,8 @@ class BreathBar {
 
         this.maxHealth = 100; // this sets the width of the whole breath bar
 
+        this.game.camera.breathwidth = this.width;
+
     };
 
     update() {
@@ -16,8 +18,9 @@ class BreathBar {
 
         if(this.width >= 0) {
             // this.width -= 0.05; // original
-            this.width -= 1; // changes for testing
+            this.width -= .5; // changes for testing
             this.width = (this.width /this.maxHealth) *this.maxHealth;
+            this.game.camera.breathwidth = this.width;
         }
     };
 
@@ -32,6 +35,7 @@ class BreathBar {
     updateOnFly(val) {
         if( val >= 0) { // we want our player to die when the val is less then zero
             this.width = (val /this.maxHealth) *this.maxHealth;
+            this.game.camera.breathwidth = this.width;
             this.update();
         }
     };
