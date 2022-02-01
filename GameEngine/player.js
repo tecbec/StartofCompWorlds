@@ -35,6 +35,8 @@ class Player {
         this.facing = 0; // 0 = right; 1 = left
         this.state = 0;  // 0 = idle, 1 = walking, 2 = jumping/falling, 3 = crouching, 4 = death
 
+        this.bubbleController = new BubblesController(this.game);
+
         this.animations = [];
         this.updateBB();
         this.loadAnimations();
@@ -140,6 +142,21 @@ class Player {
             // ctx.strokeRect(this.BBbottom.x - this.game.camera.x, this.BBbottom.y, this.BBbottom.width, this.BBbottom.height);
         }
         ctx.imageSmoothingEnabled = false;
+        // this.breathbar.draw(ctx);
+        // this.coinCounter.draw(ctx);
+        this.bubbleController.draw(ctx);
+        this.shoot();
+    };
+
+    shoot(){
+        if(this.game.bubble) {
+            const speed = 2;
+            const delayBubble = 5;
+            const damage = 1; 
+            const bubbleX = this.x + CHIHIRO.SIZE /2 - this.game.camera.x ; 
+            const bubbleY = this.y+ CHIHIRO.SIZE /2; 
+            this.bubbleController.update( bubbleX, bubbleY, speed, damage, delayBubble);
+        }
     };
 
     update() {

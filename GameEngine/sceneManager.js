@@ -1,5 +1,6 @@
 // TODO: move this when we create a level.js
 var LEVEL = {
+    music: "./audio/OneSummersDay.mp3",
     START_CANVAS: {X: -200, Y: 0},
     END_CANVAS: {X: 940}
 }
@@ -17,12 +18,22 @@ class SceneManager {
         this.breathwidth = 100;
 
         this.loadLevel(this.level, this.title);
+
     };
 
     clearEntities() {
         this.game.entities.forEach(function (entity) {
             entity.removeFromWorld = true;
         });
+    };
+
+    updateAudio() {
+        var mute = document.getElementById("mute").checked;
+        var volume = document.getElementById("volume").value;
+
+        ASSET_MANAGER.muteAudio(mute);
+        ASSET_MANAGER.adjustVolume(volume);
+
     };
 
     loadLevel(level, title){
@@ -73,9 +84,9 @@ class SceneManager {
         this.loadGame();
 
         // don't play music unless it's not the title page
-        if (level.music && !this.title) {
-            // ASSET_MANAGER.pauseBackgroundMusic();
-            // ASSET_MANAGER.playAsset(level.music);
+        if (LEVEL.music && !this.title) {
+             ASSET_MANAGER.pauseBackgroundMusic();
+             ASSET_MANAGER.playAsset(LEVEL.music);
         }
 
     };
@@ -112,6 +123,12 @@ class SceneManager {
     };
 
     update() {
+
+        this.updateAudio();
+
+        // canvas width = 400
+        // blockwidth = 32 * 1 = 32
+        // 200 -16 = 164
         if (this.title && this.game.click) {
             if (this.game.click && this.game.click.y > 220 && this.game.click.y < 245) {
                 this.title = false;
@@ -126,7 +143,6 @@ class SceneManager {
 
         }
         let midPoint = PARAMS.CANVAS_WIDTH / 2 - CHIHIRO.SIZE;
-
         // stop camera from moving (reach dead end on the left)
         if (this.chihiro.x < 0) {
             if (this.chihiro.x < LEVEL.START_CANVAS.X) {

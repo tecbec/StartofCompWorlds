@@ -88,6 +88,9 @@ class GameEngine {
                 case "ArrowDown": //crouching 
                     that.crouch = true; 
                     break;
+                case "Space": //shoot would be cool to have the player change the arrow direction with the mouse
+                    that.bubble = true; 
+                    break;
             }
         }, false);
         // Key released
@@ -108,6 +111,9 @@ class GameEngine {
                 case "ArrowDown":
                     that.crouch = false; 
                     break;
+                case "Space": //shoot 
+                    that.bubble = false; 
+                    break;
             }
         }, false);
 
@@ -120,9 +126,6 @@ class GameEngine {
     draw() {
         // Clear the whole canvas with transparent color (rgba(0, 0, 0, 0))
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
-        //this.ctx.fillStyle = 'red';
-        //this.ctx.fillRect(0,0,20,20);
-        // Draw latest things first
         this.ctx.save();
         for (var i = 0; i < this.entities.length; i++) {
             this.entities[i].draw(this.ctx);
@@ -152,13 +155,7 @@ class GameEngine {
         this.clockTick = this.timer.tick();
         this.update();
         this.draw();
-        // if want one input to only trigger once 
-        // this.up = false;
-
-        // this.click = null;
     };
 
     get["deltaTime"]() { return this.clockTick; }
 };
-
-// KV Le was here :)
