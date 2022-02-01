@@ -22,10 +22,6 @@ class Player {
         this.game.x = this;
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/chihiro_spritesheet.png");
 
-        // // initialization of the breath bar and counter
-
-        this.coinCounter = new CoinCounter(this.game, CHIHIRO.COIN_COUNTER.X, CHIHIRO.COIN_COUNTER.Y);
-
         // default values
         this.velocity = { x: 0, y: 0};
         this.isGrounded = false;
@@ -144,8 +140,6 @@ class Player {
             // ctx.strokeRect(this.BBbottom.x - this.game.camera.x, this.BBbottom.y, this.BBbottom.width, this.BBbottom.height);
         }
         ctx.imageSmoothingEnabled = false;
-        // this.breathbar.draw(ctx);
-        this.coinCounter.draw(ctx);
     };
 
     update() {
@@ -274,8 +268,8 @@ class Player {
                 // collision with no face
                 if (entity instanceof NoFace && that.BB.collide(entity.BB)) {
                     // Set a maximum amount of coins upon interact
-                    if (that.coinCounter.coinCount <= 10) {
-                        that.coinCounter.coinCount += 10;
+                    if (that.game.camera.coinCounter.coinCount <= 10) {
+                        that.game.camera.coinCounter.coinCount += 10;
                     }
                     entity.dead = true;
                     if (that.BB.collide(entity.leftBB)) { // left collision
@@ -315,11 +309,7 @@ class Player {
                 // collision with coins
                 if (entity instanceof Coins) {
                     entity.removeFromWorld = true;
-                    
-                    that.coinCounter.coinCount ++;
-                    
-                    // that.game.camera.breathwidth += 2.5;
-                    // that.game.camera.changeBreath();
+                    that.game.camera.coinCounter.coinCount ++;
 
                 }
             }

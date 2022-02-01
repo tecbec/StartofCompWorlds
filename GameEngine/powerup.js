@@ -47,9 +47,9 @@ class CoinCounter {
     };
 
     draw(ctx){
-        this.animation.drawFrame(this.game.clockTick, ctx, 
+        this.animation.drawFrame(this.game.clockTick, ctx,
             this.x, this.y, PARAMS.SCALE * 2);
-        
+
         ctx.fillStyle = "Black";
         ctx.fillText(this.coinCount,  this.x + 22, this.y + 13);
 
