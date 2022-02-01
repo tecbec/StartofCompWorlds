@@ -142,7 +142,7 @@ class SceneManager {
 
         if (this.gameOver) {
             this.gameOverCounter += this.game.clockTick;
-            if (this.gameOverCounter > 1) {
+            if (this.gameOverCounter > 2) {
                 this.title = true;
                 this.breathwidth = 100;
                 this.chihiro.dead = false;
