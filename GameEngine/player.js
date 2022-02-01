@@ -300,13 +300,14 @@ class Player {
 
                 // Collision with crows
                 if (entity instanceof Crow ) {
-                    that.breathwidth -= 5;
-                    that.breathbar.update(that.breathwidth);
+
+                    that.game.camera.breathwidth -= 5;
+                    that.game.camera.changeBreath() ;
                     entity.removeFromWorld = true;
                 }
 
                 //Collision with Yubaba
-                //for now have Yubaba push Chihiro? but later  kills on impact 
+                //for now have Yubaba push Chihiro? but later  kills on impact
 
                 // collision with Haku
                 if (entity instanceof Haku && that.BB.collide(entity.BB)) {
@@ -330,19 +331,11 @@ class Player {
                     that.game.camera.breathwidth -= 3;
                     that.game.camera.changeBreath() ;
                     entity.dead = true;
-                    /*
-                    if (that.BB.collide(entity.leftBB)) { // left collision
-                        if (that.velocity.x > 0) that.velocity.x = 0;
-                    } else if (that.BB.collide(entity.rightBB)) {
-                        if (that.velocity.x < 0) that.velocity.x = 0;
-                    }
-                    */
                 }
                 // collision with coins
                 if (entity instanceof Coins) {
                     entity.removeFromWorld = true;
                     that.game.camera.coinCounter.coinCount ++;
-
                 }
             }
         });

@@ -50,7 +50,7 @@ class SceneManager {
         if(!this.title){
             // chihiro falling from the sky and land on the ground
             // this.chihiro = new Player(this.game, CHIHIRO.INITIAL_POSITION.X, CHIHIRO.INITIAL_POSITION.Y);
-            // this.game.player = this.chihiro;
+            this.game.player = this.chihiro;
             // entity locations on the screen
             const nofacelocation = {x: 300, y: 50};
             const sootlocation = {x: 150, y: 190};
