@@ -297,6 +297,17 @@ class Player {
                         if (that.velocity.x < 0) that.velocity.x = 0;
                     }
                 }
+
+                // Collision with crows
+                if (entity instanceof Crow ) {
+                    that.breathwidth -= 5;
+                    that.breathbar.update(that.breathwidth);
+                    entity.removeFromWorld = true;
+                }
+
+                //Collision with Yubaba
+                //for now have Yubaba push Chihiro? but later  kills on impact 
+
                 // collision with Haku
                 if (entity instanceof Haku && that.BB.collide(entity.BB)) {
                     // instantly heal stamina bar
@@ -311,17 +322,21 @@ class Player {
                         // that.x = entity.rightBB.right - CHIHIRO.BB_PADDING;
                         if (that.velocity.x < 0) that.velocity.x = 0;
                     }
+
                 }
+
                 // collision with soot
                 if (entity instanceof Soot ) {
                     that.game.camera.breathwidth -= 3;
                     that.game.camera.changeBreath() ;
                     entity.dead = true;
+                    /*
                     if (that.BB.collide(entity.leftBB)) { // left collision
                         if (that.velocity.x > 0) that.velocity.x = 0;
                     } else if (that.BB.collide(entity.rightBB)) {
                         if (that.velocity.x < 0) that.velocity.x = 0;
                     }
+                    */
                 }
                 // collision with coins
                 if (entity instanceof Coins) {
@@ -366,4 +381,9 @@ class Player {
             this.game.camera.chihiro.dead = false;
         }
     };
+
+    toString(){
+        return "Player: x-" + this.x + " y-" + this.y;
+    };
 };
+

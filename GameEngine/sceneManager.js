@@ -7,7 +7,7 @@ var LEVEL = {
 class SceneManager {
     constructor(game) {
         this.game = game;
-        this.game.camera = this; // camera focus on chihiro
+        this.game.camera = this; // focusing camera on chihiro
         // this.midPoint = 0;
         this.gameOver = false;
         this.title = true;
@@ -48,6 +48,9 @@ class SceneManager {
         this.background = new BackGround(gameEngine, LEVEL.START_CANVAS.X,  LEVEL.START_CANVAS.Y);
 
         if(!this.title){
+            // chihiro falling from the sky and land on the ground
+            // this.chihiro = new Player(this.game, CHIHIRO.INITIAL_POSITION.X, CHIHIRO.INITIAL_POSITION.Y);
+            // this.game.player = this.chihiro;
             // entity locations on the screen
             const nofacelocation = {x: 300, y: 50};
             const sootlocation = {x: 150, y: 190};
