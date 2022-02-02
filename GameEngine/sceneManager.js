@@ -145,7 +145,7 @@ class SceneManager {
         }
         //console.log(this.chihiro.dead);
         // chihiro dead never get set to true;
-        if (!this.title && this.chihiro.dead) {
+        if (!this.title && this.chihiro.dead && this.chihiro.removeFromWorld) {
             this.gameOver = true;
         } else {
 
@@ -165,14 +165,12 @@ class SceneManager {
         }
 
         if (this.gameOver) {
-            this.gameOverCounter += this.game.clockTick;
-            if (this.gameOverCounter > 2) {
-                this.title = true;
+
                 this.breathwidth = 100;
                 this.chihiro.dead = false;
-                // this.loadLevel(1, this.title);
-            } 
-        }
+ 
+            this.title = true;
+        } 
 
         PARAMS.DEBUG = document.getElementById("debug").checked;
     };
