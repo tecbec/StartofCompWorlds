@@ -41,6 +41,7 @@ class SceneManager {
         this.level = level;
 
         this.clearEntities();
+
         // chihiro falling from the sky and land on the ground
         this.chihiro = new Player(this.game, CHIHIRO.TITLE_POSITION.X, CHIHIRO.TITLE_POSITION.Y);
         this.ground = new Ground(gameEngine, LEVEL.START_CANVAS.X, PARAMS.CANVAS_WIDTH - CHIHIRO.SIZE * CHIHIRO.SCALE, PARAMS.CANVAS_WIDTH * BACKGROUND.CANVAS_SCALE);
@@ -49,9 +50,7 @@ class SceneManager {
         if(!this.title){
             // chihiro falling from the sky and land on the ground
             // this.chihiro = new Player(this.game, CHIHIRO.INITIAL_POSITION.X, CHIHIRO.INITIAL_POSITION.Y);
-
-            this.game.player = this.chihiro;    // Why do we have this and when/where does it get used? 
-
+            this.game.player = this.chihiro;
             // entity locations on the screen
             const nofacelocation = {x: 300, y: 50};
             const sootlocation = {x: 150, y: 190};
@@ -143,8 +142,7 @@ class SceneManager {
                 this.game.click = false;
             }
         }
-        //console.log(this.chihiro.dead);
-        // chihiro dead never get set to true;
+
         if (!this.title && this.chihiro.dead) {
             this.gameOver = true;
         } else {
@@ -170,8 +168,8 @@ class SceneManager {
                 this.title = true;
                 this.breathwidth = 100;
                 this.chihiro.dead = false;
-                // this.loadLevel(1, this.title);
-            } 
+                this.loadLevel(1, this.title);
+            }
         }
 
         PARAMS.DEBUG = document.getElementById("debug").checked;

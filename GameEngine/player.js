@@ -388,11 +388,11 @@ class Player {
         if (this.velocity.x < 0) this.facing = 1;
         if (this.velocity.x > 0) this.facing = 0;
 
+
         if (this.game.camera.breathwidth <= 0) {
-            this.dead = true;
+            this.game.camera.chihiro.dead = true;
         } else {
-            this.dead = false;
-            // this.game.camera.chihiro.dead = false;
+            this.game.camera.chihiro.dead = false;
         }
     };
 
