@@ -40,6 +40,7 @@ class SceneManager {
             // entity locations on the screen
             const nofacelocation = {x: 300, y: 50};
             const sootlocation = {x: 150, y: 190};
+            const chickLocation = {x: 85, y: 265, minX:85, maxX:300}; // minX & maxX determine the x range the chick paces
 
             // TODO: put the Platform's (x, y) in LEVEL once we finalized the coordinates
             this.platform = new Platform(gameEngine, 140, 230, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE);
@@ -60,6 +61,7 @@ class SceneManager {
             this.noface = new NoFace(gameEngine, nofacelocation.x, nofacelocation.y);
             this.haku = new Haku(gameEngine, -85, PARAMS.CANVAS_WIDTH - 69 - 64);
             this.yubaba = new Yubaba(gameEngine, 0, 0);
+            this.chick = new Chick(gameEngine, chickLocation.x, chickLocation.y, chickLocation.minX, chickLocation.maxX);
 
             // TODO: put the Coins's (x, y) in LEVEL once we finalized the coordinates
             this.coin1 = new Coins(gameEngine, 200, 300);
@@ -97,6 +99,7 @@ class SceneManager {
             this.game.addEntity(this.noface);
             this.game.addEntity(this.haku);
             this.game.addEntity(this.yubaba);
+            this.game.addEntity(this.chick);
             this.game.addEntity(this.coin1);
             this.game.addEntity(this.coin2);
             this.game.addEntity(this.coin3);

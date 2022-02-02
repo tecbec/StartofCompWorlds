@@ -6,9 +6,9 @@ var CHIHIRO = {
     SCALE: 1,
     BB_PADDING: 10,
     IDLE:   {RIGHT: {X: 0,  Y: 0},    LEFT: {X: 0,  Y: 70},   FRAME: 4, SPEED: 0.4,  PADDING: 0, REVERSE: false, LOOP: true}, 
-    WALK:   {RIGHT: {X: 0,  Y: 140},  LEFT: {X: 0,  Y: 210},  FRAME: 4, SPEED: 0.2,  PADDING: 0, REVERSE: false, LOOP: true},
+    WALK:   {RIGHT: {X: 0,  Y: 140},  LEFT: {X: 0,  Y: 210},  FRAME: 4, SPEED: 0.1,  PADDING: 0, REVERSE: false, LOOP: true},
     JUMP:   {RIGHT: {X: 0,  Y: 280},  LEFT: {X: 0,  Y: 350},  FRAME: 7, SPEED: 0.1, PADDING: 0, REVERSE: false, LOOP: true}, 
-    CROUCH: {RIGHT: {X: 0,  Y: 280},  LEFT: {X: 0,  Y: 350},  FRAME: 1, SPEED: 0.33, PADDING: 0, REVERSE: false, LOOP: true},
+    CROUCH: {RIGHT: {X: 0,  Y: 280},  LEFT: {X: 0,  Y: 350},  FRAME: 1, SPEED: 0.01, PADDING: 0, REVERSE: false, LOOP: true},
     RUN:    {RIGHT: {X: 0,  Y: 140},  LEFT: {X: 0,  Y: 210},  FRAME: 4, SPEED: 0.1, PADDING: 0, REVERSE: false, LOOP: true},
     DEAD:   {RIGHT: {X: 0,  Y: 420},  LEFT: {X: 0,  Y: 490},  FRAME: 3, SPEED: 0.3, PADDING: 0, REVERSE: false, LOOP: false}, 
     BREATH_BAR: {X: 275, Y: 10, HEIGHT: 10, MAX: 100},
@@ -301,13 +301,33 @@ class Player {
                 //Collision with Yubaba
                 //for now have Yubaba push Chihiro? but later  kills on impact 
 
+                // collision with Chicks
+                if (entity instanceof Chick && that.BB.collide(entity.BB)) {
+                    that.breathwidth -= CHIHIRO.BREATH_BAR.MAX/4;
+                    that.breathbar.update(that.breathwidth);
+
+                    if (that.BB.collide(entity.leftBB)) { // left collision
+                       // maybe replace with a push animation? 
+                       that.x += 20
+                       that.velocity.x = 100;
+                    } else if (that.BB.collide(entity.rightBB)) { // right
+                        that.x -= 20
+                        that.velocity.x = -100;
+                    }else if (that.BB.collide(entity.topBB)) { // right
+                        that.y -= 20
+                        that.velocity.y = -100;
+                    }
+                    that.updateBB();
+                    
+                }
+
                 // collision with Haku
                 if (entity instanceof Haku && that.BB.collide(entity.BB)) {
                     // instantly heal stamina bar
                     that.breathwidth +=  CHIHIRO.BREATH_BAR.MAX - that.breathwidth;
                     that.breathbar.update(that.breathwidth);
 
-                    entity.dead = true; //Haku regenerate should always exist
+                    //entity.dead = true; //Haku regenerate should always exist
 
                     if (that.BB.collide(entity.leftBB)) { // left collision
                         that.x = entity.leftBB.left - CHIHIRO.SIZE * CHIHIRO.SCALE + CHIHIRO.BB_PADDING;
