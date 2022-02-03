@@ -390,7 +390,7 @@ class Player {
                 this.game.camera.title = true;
                 this.game.camera.breathwidth = 100;
                 this.deadCounter = 0;
-                this.game.camera.loadLevel(1, true);
+                this.game.camera.loadLevel(1, this.game.camera.title);
             }
         } else {
             // do nothing
