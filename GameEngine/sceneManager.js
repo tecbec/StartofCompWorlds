@@ -56,28 +56,29 @@ class SceneManager {
         this.background = new BackGround(gameEngine, LEVEL.START_CANVAS.X,  LEVEL.START_CANVAS.Y);
 
         if(!this.title){
-            // this.game.player = this.chihiro;
+            this.game.player = this.chihiro;
             // entity locations on the screen
-            // const nofacelocation = {x: 300, y: 50};
-            // const sootlocation = {x: 150, y: 190};
+            const nofacelocation = {x: 300, y: 50};
+            const sootlocation = {x: 150, y: 190};
 
             // set the number of soots to create
-            // this.Num_Soots = 10;
-            // this.soot = [];
-            // for(let i = 0; i < this.Num_Soots; i++) {
-            //     let dir = getRandomInteger(0,1);
-            //     this.soot[i] = new Soot(gameEngine, sootlocation.x, sootlocation.y, dir);
-            // }
+            this.Num_Soots = 10;
+            this.soot = [];
+            for(let i = 0; i < this.Num_Soots; i++) {
+                let dir = getRandomInteger(0,1);
+                this.soot[i] = new Soot(gameEngine, sootlocation.x, sootlocation.y, dir);
+            }
             // TODO: fix no face position
-            // this.haku = new Haku(gameEngine, HAKU.INITIAL_POSITION.X, PARAMS.CANVAS_WIDTH - HAKU.SIZE * HAKU.SCALE - BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE);
-            // this.noface = new NoFace(gameEngine, nofacelocation.x, nofacelocation.y);
-            // this.yubaba = new Yubaba(gameEngine, 0, 0);
+            this.haku = new Haku(gameEngine, HAKU.INITIAL_POSITION.X, PARAMS.CANVAS_WIDTH - HAKU.SIZE * HAKU.SCALE - BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE);
+            this.noface = new NoFace(gameEngine, nofacelocation.x, nofacelocation.y);
+            this.yubaba = new Yubaba(gameEngine, 0, 0);
+            this.chick = new Chick(gameEngine, chickLocation.x, chickLocation.y, chickLocation.minX, chickLocation.maxX);
 
             // TODO: put the Coins's (x, y) in LEVEL once we finalized the coordinates
-            // this.coin1 = new Coins(gameEngine, 200, 300);
-            // this.coin2 = new Coins(gameEngine, 300, 300);
-            // this.coin3 = new Coins(gameEngine, 340, 110);
-            // this.coin4 = new Coins(gameEngine, 100, 60);
+            this.coin1 = new Coins(gameEngine, 200, 300);
+            this.coin2 = new Coins(gameEngine, 300, 300);
+            this.coin3 = new Coins(gameEngine, 340, 110);
+            this.coin4 = new Coins(gameEngine, 100, 60);
 
             // initialization of the breath bar and counter
             this.coinCounter = new CoinCounter(this.game, CHIHIRO.COIN_COUNTER.X, CHIHIRO.COIN_COUNTER.Y);
@@ -109,16 +110,17 @@ class SceneManager {
                 this.game.addEntity(new Platform(this.game, platform.X, platform.Y, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE));
             }
 
-            // for(let i = 0; i < this.Num_Soots; i++) {
-            //     this.game.addEntity(this.soot[i]);
-            // }
-            // this.game.addEntity(this.noface);
-            // this.game.addEntity(this.haku);
-            // this.game.addEntity(this.yubaba);
-            // this.game.addEntity(this.coin1);
-            // this.game.addEntity(this.coin2);
-            // this.game.addEntity(this.coin3);
-            // this.game.addEntity(this.coin4);
+            for(let i = 0; i < this.Num_Soots; i++) {
+                this.game.addEntity(this.soot[i]);
+            }
+            this.game.addEntity(this.noface);
+            this.game.addEntity(this.haku);
+            this.game.addEntity(this.yubaba);
+            this.game.addEntity(this.chick);
+            this.game.addEntity(this.coin1);
+            this.game.addEntity(this.coin2);
+            this.game.addEntity(this.coin3);
+            this.game.addEntity(this.coin4);
             this.game.addEntity(this.breathbar);
             this.game.addEntity(this.coinCounter);
         }
