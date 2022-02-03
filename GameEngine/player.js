@@ -26,7 +26,6 @@ class Player {
         this.velocity = { x: 0, y: 0};
         this.isGrounded = false;
         this.dead = false;
-        this.deadCounter = 0;
 
         // testing
         this.sootCount = 0;
@@ -38,8 +37,10 @@ class Player {
         this.bubbleController = new BubblesController(this.game);
 
         this.animations = [];
+
         this.updateBB();
         this.loadAnimations();
+
     };
 
     /* Load the following animations from the sprite sheet for Chihiro's current state and direction */
@@ -142,8 +143,6 @@ class Player {
             // ctx.strokeRect(this.BBbottom.x - this.game.camera.x, this.BBbottom.y, this.BBbottom.width, this.BBbottom.height);
         }
         ctx.imageSmoothingEnabled = false;
-        // this.breathbar.draw(ctx);
-        // this.coinCounter.draw(ctx);
         this.bubbleController.draw(ctx);
         this.shoot();
     };
@@ -152,9 +151,9 @@ class Player {
         if(this.game.bubble) {
             const speed = 2;
             const delayBubble = 5;
-            const damage = 1; 
-            const bubbleX = this.x + CHIHIRO.SIZE /2 - this.game.camera.x ; 
-            const bubbleY = this.y+ CHIHIRO.SIZE /2; 
+            const damage = 1;
+            const bubbleX = this.x + CHIHIRO.SIZE /2 - this.game.camera.x ;
+            const bubbleY = this.y+ CHIHIRO.SIZE /2;
             this.bubbleController.update( bubbleX, bubbleY, speed, damage, delayBubble);
         }
     };
@@ -227,6 +226,7 @@ class Player {
             if (this.game.left) {
                 this.velocity.x = -Math.abs(this.velocity.x);
             }
+
             if (this.game.right) {
                 this.velocity.x = Math.abs(this.velocity.x);
             }
@@ -246,9 +246,9 @@ class Player {
 
         // collision handling
         var that = this; //need this because we are creating
-        this.game.entities.forEach(function (entity) {  // this will look at all entities in relation to chihiro
+        this.game.entities.forEach(function (entity) {          // this will look at all entities in relation to chihiro
             if (entity.BB && that.BB.collide(entity.BB)) {      // is there an entity bb & check to see if they collide
-                if (that.velocity.y > 0) { // chihiro is falling
+                if (that.velocity.y > 0) {                      // chihiro is falling
                     if((entity instanceof Ground || entity instanceof Platform || entity instanceof Haku || entity instanceof NoFace)
                     && (that.lastBB.bottom <= entity.BB.top)) { // bottom of chihiro hits the top of the entity
                         that.isGrounded = true;
@@ -300,7 +300,6 @@ class Player {
 
                 // Collision with crows
                 if (entity instanceof Crow ) {
-
                     that.game.camera.breathwidth -= 5;
                     that.game.camera.changeBreath() ;
                     entity.removeFromWorld = true;
@@ -340,6 +339,12 @@ class Player {
             }
         });
 
+        if (this.game.camera.breathwidth <= 0) {
+            this.dead = true;
+        } else {
+            this.dead = false;
+        }
+
         // update state
         if (this.state !== 2 || this.state !== 5) {  // NOT jump or dead
             if (this.game.crouch) this.state = 3;    // crouching state
@@ -348,6 +353,7 @@ class Player {
         } else {
 
         }
+
         if (this.velocity.y < 0) {
             this.state = 2;
         }
@@ -355,24 +361,13 @@ class Player {
         if (this.dead) {
             this.state = 5;
             this.velocity.x = 0;
-            this.deadCounter += this.game.clockTick;
-            if (this.deadCounter > 1) {
-                this.removeFromWorld = true;
-                this.game.camera.loadLevel(1, true)
-            }
         } else {
             // do nothing
         }
-         // update direction
+
+        // update direction
         if (this.velocity.x < 0) this.facing = 1;
         if (this.velocity.x > 0) this.facing = 0;
-
-
-        if (this.game.camera.breathwidth <= 0) {
-            this.game.camera.chihiro.dead = true;
-        } else {
-            this.game.camera.chihiro.dead = false;
-        }
     };
 
     toString(){
