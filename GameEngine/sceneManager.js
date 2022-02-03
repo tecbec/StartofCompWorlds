@@ -1,8 +1,9 @@
 // TODO: move this when we create a level.js
 var LEVEL = {
     music: "./audio/OneSummersDay.mp3",
-    START_CANVAS: {X: -200, Y: 0},
-    END_CANVAS: {X: 940}
+    START_CANVAS: {X: -600, Y: 0},
+    END_CANVAS: {X: 940}, // change this later when we figure out the exact ending canvas measurement
+    FRAME_COUNT: 5 // This is the factor that determine how wide the actual game is. 
 }
 class SceneManager {
     constructor(game) {
@@ -47,7 +48,8 @@ class SceneManager {
         this.clearEntities();
         // chihiro falling from the sky and land on the ground
         this.chihiro = new Player(this.game, CHIHIRO.TITLE_POSITION.X, CHIHIRO.TITLE_POSITION.Y);
-        this.ground = new Ground(gameEngine, LEVEL.START_CANVAS.X, PARAMS.CANVAS_WIDTH - CHIHIRO.SIZE * CHIHIRO.SCALE, PARAMS.CANVAS_WIDTH * BACKGROUND.CANVAS_SCALE);
+        // x , y , w
+        this.ground = new Ground(gameEngine, LEVEL.START_CANVAS.X, PARAMS.CANVAS_HEIGHT - BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE, PARAMS.CANVAS_WIDTH * LEVEL.FRAME_COUNT, BACKGROUND.GROUND.SCALE * BACKGROUND.GROUND.SIZE);
         this.background = new BackGround(gameEngine, LEVEL.START_CANVAS.X,  LEVEL.START_CANVAS.Y);
 
         if(!this.title){
@@ -133,7 +135,7 @@ class SceneManager {
         // blockwidth = 32 * 1 = 32
         // 200 -16 = 164
         if (this.title && this.game.click) {
-            if (this.game.click && this.game.click.y > 220 && this.game.click.y < 245) {
+            if (this.game.click && this.game.click.y > 412 && this.game.click.y < 425) {
                 this.title = false;
                 this.loadLevel(1, this.title);
                 this.game.click = false;
@@ -148,19 +150,21 @@ class SceneManager {
         }
 
         let midPoint = PARAMS.CANVAS_WIDTH / 2 - CHIHIRO.SIZE;
-        // stop camera from moving (reach dead end on the left)
-        if (this.chihiro.x < 0) {
-            if (this.chihiro.x < LEVEL.START_CANVAS.X) {
-                this.chihiro.x =  LEVEL.START_CANVAS.X;
-            }
-        } else if (this.chihiro.x > LEVEL.END_CANVAS.X - midPoint) {
-            if (this.chihiro.x > LEVEL.END_CANVAS.X) {
-                this.chihiro.x = LEVEL.END_CANVAS.X;
-            }
-        } else {
-            this.x = this.chihiro.x - midPoint; // force centering
-        }
 
+        // // stop camera from moving (reach dead end on the left)
+        // if (this.chihiro.x < 0) {
+        //     if (this.chihiro.x < LEVEL.START_CANVAS.X) {
+        //         this.chihiro.x =  LEVEL.START_CANVAS.X;
+        //     }
+        // } else if (this.chihiro.x > LEVEL.END_CANVAS.X - midPoint) {
+        //     if (this.chihiro.x > LEVEL.END_CANVAS.X) {
+        //         this.chihiro.x = LEVEL.END_CANVAS.X;
+        //     }
+        // } else {
+           
+        // }
+
+        this.x = this.chihiro.x - midPoint; // force centering
         if (this.gameOver) {
             this.gameOverCounter += this.game.clockTick;
             if (this.gameOverCounter > 1) {
@@ -181,11 +185,13 @@ class SceneManager {
         if (this.title || this.chihiro.dead && this.chihiro.removeFromWorld) {
             var width = 176;
             var height = 88;
-            ctx.drawImage(ASSET_MANAGER.getAsset("./sprites/title.png"), 2.5 * PARAMS.BLOCKWIDTH, 2 * PARAMS.BLOCKWIDTH, width * PARAMS.SCALE, height * PARAMS.SCALE);
-            ctx.fillStyle = this.game.mouse && this.game.mouse.y > 220 && this.game.mouse.y < 255 ? "LightCoral" : "Black";
-            ctx.fillText("Start", 170,240); //280
-            ctx.fillStyle = this.game.mouse && this.game.mouse.y > 245 && this.game.mouse.y < 280 ? "LightCoral" : "Black";
-            ctx.fillText("Instructions", 150,260); //300
+            // fix the tile location to be middle of the screen 
+            // fix these nums later 
+            ctx.drawImage(ASSET_MANAGER.getAsset("./sprites/title.png"), PARAMS.CANVAS_WIDTH / 2 - width * PARAMS.SCALE / 2 , PARAMS.CANVAS_HEIGHT / 2 - height * PARAMS.SCALE, width * PARAMS.SCALE, height * PARAMS.SCALE);
+            ctx.fillStyle = this.game.mouse && this.game.mouse.y > 405 && this.game.mouse.y < 430 ? "LightCoral" : "Black";
+            ctx.fillText("Start", 615,424); //280
+            ctx.fillStyle = this.game.mouse && this.game.mouse.y > 440 && this.game.mouse.y < 460 ? "LightCoral" : "Black";
+            ctx.fillText("Instructions", 595,450); //300
         }
 
         if (PARAMS.DEBUG && !this.title) {
