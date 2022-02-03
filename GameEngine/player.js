@@ -317,7 +317,7 @@ class Player {
                     that.game.camera.changeBreath();
 
                     if (that.BB.collide(entity.leftBB)) { // left collision
-                       // maybe replace with a push animation? 
+                       // maybe replace with a push animation?
                        that.x += 20
                        that.velocity.x = 100;
                     } else if (that.BB.collide(entity.rightBB)) { // right
