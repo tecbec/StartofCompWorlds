@@ -3,7 +3,9 @@ var LEVEL = {
     music: "./audio/OneSummersDay.mp3",
     START_CANVAS: {X: -600, Y: 0},
     END_CANVAS: {X: 940}, // change this later when we figure out the exact ending canvas measurement
-    FRAME_COUNT: 5 // This is the factor that determine how wide the actual game is. 
+    FRAME_COUNT: 5, // This is the factor that determine how wide the actual game is. 
+
+    PLATFORM_LOCATION: [{X: 339, Y: 560}, {X: 449, Y: 460}, {X: 559, Y: 490}, {X: 670, Y: 390}, {X: 800, Y: 490}] 
 }
 class SceneManager {
     constructor(game) {
@@ -57,12 +59,7 @@ class SceneManager {
             // entity locations on the screen
             const nofacelocation = {x: 300, y: 50};
             const sootlocation = {x: 150, y: 190};
-
-            // TODO: put the Platform's (x, y) in LEVEL once we finalized the coordinates
-            this.platform = new Platform(gameEngine, 140, 230, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE);
-            this.platform1 = new Platform(gameEngine, 300, 150, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE);
-            this.platform2 = new Platform(gameEngine, 90, 100, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE);
-
+            
             // set the number of soots to create
             this.Num_Soots = 10;
             this.soot = [];
@@ -105,9 +102,12 @@ class SceneManager {
             this.game.addEntity(this.background);
             this.game.addEntity(this.chihiro);
             this.game.addEntity(this.ground);
-            this.game.addEntity(this.platform);
-            this.game.addEntity(this.platform1);
-            this.game.addEntity(this.platform2);
+
+            for (var i = 0; i < LEVEL.PLATFORM_LOCATION.length; i++) {
+                let platform = LEVEL.PLATFORM_LOCATION[i];
+                this.game.addEntity(new Platform(this.game, platform.X, platform.Y, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE));
+            }
+
             for(let i = 0; i < this.Num_Soots; i++) {
                 this.game.addEntity(this.soot[i]);
             }

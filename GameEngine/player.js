@@ -11,8 +11,8 @@ var CHIHIRO = {
     CROUCH: {RIGHT: {X: 0,  Y: 280},  LEFT: {X: 0,  Y: 350},  FRAME: 1, SPEED: 0.33, PADDING: 0, REVERSE: false, LOOP: true},
     RUN:    {RIGHT: {X: 0,  Y: 140},  LEFT: {X: 0,  Y: 210},  FRAME: 4, SPEED: 0.1, PADDING: 0, REVERSE: false, LOOP: true},
     DEAD:   {RIGHT: {X: 0,  Y: 420},  LEFT: {X: 0,  Y: 490},  FRAME: 3, SPEED: 0.3, PADDING: 0, REVERSE: false, LOOP: false}, 
-    BREATH_BAR: {X: 275, Y: 10, HEIGHT: 10, MAX: 100},
-    COIN_COUNTER: {X: 225, Y: 7.25}
+    BREATH_BAR: {X: 1150, Y: 10, HEIGHT: 10, MAX: 100},
+    COIN_COUNTER: {X: 1110, Y: 7.25}
 };
 /* Chihiro, the main character of the game */
 class Player {
