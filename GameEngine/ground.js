@@ -273,7 +273,7 @@ class Lamp {
             BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE);
 
         // default values to draw platform
-        let LOCATION = 1;    
+        let LOCATION = 1;
 
         // middle platform
         for (var i = 1; i < BACKGROUND.PLATFORM.COUNT; i++) {
