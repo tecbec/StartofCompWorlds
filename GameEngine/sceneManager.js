@@ -5,7 +5,7 @@ var LEVEL = {
     END_CANVAS: {X: 940}, // change this later when we figure out the exact ending canvas measurement
     FRAME_COUNT: 5, // This is the factor that determine how wide the actual game is. 
     // add a platform length: short, medium, long.
-    PLATFORM_LOCATION: [{X: 300, Y: 770}, {X: 600, Y: 620}, {X: 850, Y: 650}, {X: 1200, Y: 450}, {X: 1600, Y: 680}] 
+    PLATFORM_LOCATION: [{X: 300, Y: 750}, {X: 600, Y: 620}, {X: 850, Y: 650}, {X: 1200, Y: 450}, {X: 1600, Y: 680}] 
 }
 class SceneManager {
     constructor(game) {

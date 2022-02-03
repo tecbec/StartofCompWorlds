@@ -4,7 +4,7 @@ var CHIHIRO = {
     INITIAL_POSITION: {X: 0, Y: 0},
     SIZE: 70,
     SCALE: 2,
-    BB_PADDING: 10,
+    BB_PADDING: 20,
     IDLE:   {RIGHT: {X: 0,  Y: 0},    LEFT: {X: 0,  Y: 70},   FRAME: 4, SPEED: 0.4,  PADDING: 0, REVERSE: false, LOOP: true}, 
     WALK:   {RIGHT: {X: 0,  Y: 140},  LEFT: {X: 0,  Y: 210},  FRAME: 4, SPEED: 0.2,  PADDING: 0, REVERSE: false, LOOP: true},
     JUMP:   {RIGHT: {X: 0,  Y: 280},  LEFT: {X: 0,  Y: 350},  FRAME: 7, SPEED: 0.1, PADDING: 0, REVERSE: false, LOOP: true}, 
@@ -127,8 +127,8 @@ class Player {
     updateBB() {
         this.lastBB = this.BB;
         this.lastBBbottom = this.BBbottom;
-        this.BB = new BoundingBox(this.x + CHIHIRO.BB_PADDING, this.y + CHIHIRO.BB_PADDING,
-                                    CHIHIRO.SIZE * CHIHIRO.SCALE - CHIHIRO.BB_PADDING - CHIHIRO.BB_PADDING, // both side
+        this.BB = new BoundingBox(this.x + CHIHIRO.BB_PADDING * CHIHIRO.SCALE, this.y + CHIHIRO.BB_PADDING,
+                                    CHIHIRO.SIZE * CHIHIRO.SCALE - CHIHIRO.BB_PADDING * CHIHIRO.SCALE - CHIHIRO.BB_PADDING * CHIHIRO.SCALE, // both side
                                     CHIHIRO.SIZE * CHIHIRO.SCALE - CHIHIRO.BB_PADDING); // KD changed the bounding box dimensions to hug the sprite
 
     };
