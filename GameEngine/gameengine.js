@@ -138,6 +138,7 @@ class GameEngine {
     };
 
     update() {
+        
         // Update Entities
         this.entities.forEach(entity => entity.update(this));
 
