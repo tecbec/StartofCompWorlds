@@ -68,6 +68,7 @@ class GameEngine {
         // From Mario Bros
         this.ctx.canvas.addEventListener("click", function (e) {
             that.click = getXandY(e);
+            console.log(that.click);
         }, false);
 
         // Key pressed 
