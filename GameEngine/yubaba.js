@@ -31,7 +31,7 @@ class Yubaba {
         //     }
         // }
 
-        this.target = this.game.player;
+        this.target = this.game.camera.chihiro;
     };
 
     loadAnimations(){

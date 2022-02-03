@@ -29,9 +29,6 @@ class GameEngine {
             },
             debugging: false,
         };
-
-        //For direct access to chihiro for enemies that follow her
-        this.player;
     };
 
     init(ctx) {

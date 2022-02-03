@@ -16,6 +16,9 @@ class SceneManager {
 
         //Breath
         this.breathwidth = 100;
+        
+        // chihiro falling from the sky and land on the ground
+        // this.chihiro = new Player(this.game, CHIHIRO.TITLE_POSITION.X, CHIHIRO.TITLE_POSITION.Y);
 
         this.loadLevel(this.level, this.title);
 
@@ -37,6 +40,7 @@ class SceneManager {
     };
 
     loadLevel(level, title){
+
         this.title = title;
         this.level = level;
 
@@ -47,11 +51,7 @@ class SceneManager {
         this.background = new BackGround(gameEngine, LEVEL.START_CANVAS.X,  LEVEL.START_CANVAS.Y);
 
         if(!this.title){
-            // chihiro falling from the sky and land on the ground
-            // this.chihiro = new Player(this.game, CHIHIRO.INITIAL_POSITION.X, CHIHIRO.INITIAL_POSITION.Y);
-
-            this.game.player = this.chihiro;    // Why do we have this and when/where does it get used? 
-
+            // this.game.player = this.chihiro;
             // entity locations on the screen
             const nofacelocation = {x: 300, y: 50};
             const sootlocation = {x: 150, y: 190};
@@ -92,7 +92,6 @@ class SceneManager {
              ASSET_MANAGER.pauseBackgroundMusic();
              ASSET_MANAGER.playAsset(LEVEL.music);
         }
-
     };
 
     loadGame() {
@@ -140,13 +139,14 @@ class SceneManager {
                 this.game.click = false;
             }
         }
-        //console.log(this.chihiro.dead);
-        // chihiro dead never get set to true;
-        if (!this.title && this.chihiro.dead && this.chihiro.removeFromWorld) {
+
+        // if (!this.title && this.chihiro.dead && this.chihiro.removeFromWorld) {
+        if (!this.title && this.chihiro.dead) {
             this.gameOver = true;
         } else {
 
         }
+
         let midPoint = PARAMS.CANVAS_WIDTH / 2 - CHIHIRO.SIZE;
         // stop camera from moving (reach dead end on the left)
         if (this.chihiro.x < 0) {
@@ -162,12 +162,15 @@ class SceneManager {
         }
 
         if (this.gameOver) {
-
+            this.gameOverCounter += this.game.clockTick;
+            if (this.gameOverCounter > 1) {
+                this.title = true;
                 this.breathwidth = 100;
-                this.chihiro.dead = false;
- 
-            this.title = true;
-        } 
+                this.gameOver = false;
+                this.gameOverCounter = 0;
+                this.loadLevel(1, this.title);
+            }
+        }
 
         PARAMS.DEBUG = document.getElementById("debug").checked;
     };
