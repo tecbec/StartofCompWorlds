@@ -1,8 +1,56 @@
-class Bubbles{
-    constructor(game, x,y, target) {
-        Object.assign(this, {game, x,y, target});
+class BubblesController{
+    bubble = [];
+    timeTillNextBubble = 0;
+    constructor( game) {
+        Object.assign(this, {game});
+       // this.game = game;
+    }
+
+    update( bubbleX, bubbleY, speed, damage, delay) {
+        if(this.timeTillNextBubble <= 0){
+            this.bubble.push(new Bubbles(this.game, bubbleX, bubbleY, speed, damage));
+            this.timeTillNextBubble = delay; 
+        }
+        this.timeTillNextBubble--;
+    };
+
+    draw(ctx){
+        console.log(this.bubble.length);
+        this.bubble.forEach((bubble) =>{
+            if(this.isBubbleOffScreen(bubble)){
+                const index = this.bubble.indexOf(bubble);
+                this.bubble.splice(index, 1);
+            }
+             bubble.draw(ctx) 
+            }); 
+    }
+    isBubbleOffScreen(bubble) {
+        return bubble.x >= PARAMS.CANVAS_WIDTH ;//bubble.width;
     }
 }
+
+class Bubbles{
+    constructor( game, x,y, speed, damage , delay) {
+        Object.assign(this, {game, x, y,speed, damage , delay});
+        //import bubble animation here 
+        this.x = x; 
+        this.y = y;
+        this.speed = speed; 
+        this.damage = damage; 
+
+        this.width =7; 
+        this.height = 5; 
+        this.color = "red";
+
+    }
+    update() {
+    };
+    draw(ctx){
+        ctx.fillStyle = this.color; 
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+        this.x = this.speed + this.x; 
+    };
+};
 
 class Coins {
     constructor( game, x, y) {
@@ -47,9 +95,9 @@ class CoinCounter {
     };
 
     draw(ctx){
-        this.animation.drawFrame(this.game.clockTick, ctx, 
+        this.animation.drawFrame(this.game.clockTick, ctx,
             this.x, this.y, PARAMS.SCALE * 2);
-        
+
         ctx.fillStyle = "Black";
         ctx.fillText(this.coinCount,  this.x + 22, this.y + 13);
 

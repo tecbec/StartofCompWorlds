@@ -1,5 +1,6 @@
 // TODO: move this when we create a level.js
 var LEVEL = {
+    music: "./audio/OneSummersDay.mp3",
     START_CANVAS: {X: -200, Y: 0},
     END_CANVAS: {X: 940}
 }
@@ -11,10 +12,16 @@ class SceneManager {
         this.gameOver = false;
         this.title = true;
         this.level = 1;
+        this.gameOverCounter  = 0;
 
+        //Breath
+        this.breathwidth = 100;
+        
         // chihiro falling from the sky and land on the ground
-        this.chihiro = new Player(this.game, CHIHIRO.TITLE_POSITION.X, CHIHIRO.TITLE_POSITION.Y);
+        // this.chihiro = new Player(this.game, CHIHIRO.TITLE_POSITION.X, CHIHIRO.TITLE_POSITION.Y);
+
         this.loadLevel(this.level, this.title);
+
     };
 
     clearEntities() {
@@ -23,20 +30,29 @@ class SceneManager {
         });
     };
 
+    updateAudio() {
+        var mute = document.getElementById("mute").checked;
+        var volume = document.getElementById("volume").value;
+
+        ASSET_MANAGER.muteAudio(mute);
+        ASSET_MANAGER.adjustVolume(volume);
+
+    };
+
     loadLevel(level, title){
+
         this.title = title;
         this.level = level;
 
         this.clearEntities();
 
-        
+        // chihiro falling from the sky and land on the ground
+        this.chihiro = new Player(this.game, CHIHIRO.TITLE_POSITION.X, CHIHIRO.TITLE_POSITION.Y);
         this.ground = new Ground(gameEngine, LEVEL.START_CANVAS.X, PARAMS.CANVAS_WIDTH - CHIHIRO.SIZE * CHIHIRO.SCALE, PARAMS.CANVAS_WIDTH * BACKGROUND.CANVAS_SCALE);
         this.background = new BackGround(gameEngine, LEVEL.START_CANVAS.X,  LEVEL.START_CANVAS.Y);
 
         if(!this.title){
-            // chihiro falling from the sky and land on the ground
-            this.chihiro = new Player(this.game, CHIHIRO.INITIAL_POSITION.X, CHIHIRO.INITIAL_POSITION.Y);
-            this.game.player = this.chihiro;
+            // this.game.player = this.chihiro;
             // entity locations on the screen
             const nofacelocation = {x: 300, y: 50};
             const sootlocation = {x: 150, y: 190};
@@ -55,11 +71,8 @@ class SceneManager {
                 this.soot[i] = new Soot(gameEngine, sootlocation.x, sootlocation.y, dir);
             }
             // TODO: fix no face position
-            this.noface = new NoFace(gameEngine, 325, PARAMS.CANVAS_WIDTH - 75 - BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE);
             this.haku = new Haku(gameEngine, HAKU.INITIAL_POSITION.X, PARAMS.CANVAS_WIDTH - HAKU.SIZE * HAKU.SCALE - BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE);
-
             this.noface = new NoFace(gameEngine, nofacelocation.x, nofacelocation.y);
-            this.haku = new Haku(gameEngine, -85, PARAMS.CANVAS_WIDTH - 69 - 64);
             this.yubaba = new Yubaba(gameEngine, 0, 0);
             this.chick = new Chick(gameEngine, chickLocation.x, chickLocation.y, chickLocation.minX, chickLocation.maxX);
 
@@ -69,16 +82,19 @@ class SceneManager {
             this.coin3 = new Coins(gameEngine, 340, 110);
             this.coin4 = new Coins(gameEngine, 100, 60);
 
+            // initialization of the breath bar and counter
+            this.coinCounter = new CoinCounter(this.game, CHIHIRO.COIN_COUNTER.X, CHIHIRO.COIN_COUNTER.Y);
+            this.breathbar = new BreathBar(this.game, CHIHIRO.BREATH_BAR.X, CHIHIRO.BREATH_BAR.Y, this.breathwidth,
+                CHIHIRO.BREATH_BAR.HEIGHT, CHIHIRO.BREATH_BAR.MAX);
         }
-    
+
         this.loadGame();
 
         // don't play music unless it's not the title page
-        if (level.music && !this.title) {
-            // ASSET_MANAGER.pauseBackgroundMusic();
-            // ASSET_MANAGER.playAsset(level.music);
+        if (LEVEL.music && !this.title) {
+             ASSET_MANAGER.pauseBackgroundMusic();
+             ASSET_MANAGER.playAsset(LEVEL.music);
         }
-
     };
 
     loadGame() {
@@ -104,26 +120,38 @@ class SceneManager {
             this.game.addEntity(this.coin2);
             this.game.addEntity(this.coin3);
             this.game.addEntity(this.coin4);
+            this.game.addEntity(this.breathbar);
+            this.game.addEntity(this.coinCounter);
         }
     };
 
+    changeBreath() {
+        this.breathbar.updateOnFly(this.breathwidth);
+    };
+
     update() {
+
+        this.updateAudio();
+
+        // canvas width = 400
+        // blockwidth = 32 * 1 = 32
+        // 200 -16 = 164
         if (this.title && this.game.click) {
             if (this.game.click && this.game.click.y > 220 && this.game.click.y < 245) {
                 this.title = false;
                 this.loadLevel(1, this.title);
                 this.game.click = false;
-            } 
+            }
         }
-        if (!this.title && this.chihiro.dead && this.chihiro.removeFromWorld) {
+
+        // if (!this.title && this.chihiro.dead && this.chihiro.removeFromWorld) {
+        if (!this.title && this.chihiro.dead) {
             this.gameOver = true;
-            this.title = true; 
-            this.clearEntities();
         } else {
 
         }
-        let midPoint = PARAMS.CANVAS_WIDTH / 2 - CHIHIRO.SIZE;
 
+        let midPoint = PARAMS.CANVAS_WIDTH / 2 - CHIHIRO.SIZE;
         // stop camera from moving (reach dead end on the left)
         if (this.chihiro.x < 0) {
             if (this.chihiro.x < LEVEL.START_CANVAS.X) {
@@ -136,6 +164,18 @@ class SceneManager {
         } else {
             this.x = this.chihiro.x - midPoint; // force centering
         }
+
+        if (this.gameOver) {
+            this.gameOverCounter += this.game.clockTick;
+            if (this.gameOverCounter > 1) {
+                this.title = true;
+                this.breathwidth = 100;
+                this.gameOver = false;
+                this.gameOverCounter = 0;
+                this.loadLevel(1, this.title);
+            }
+        }
+
         PARAMS.DEBUG = document.getElementById("debug").checked;
     };
 
@@ -168,7 +208,7 @@ class SceneManager {
             ctx.fillText(xP, 100, 15);
             ctx.fillText(yP, 100, 30);
 
-            // bounding box 
+            // bounding box
             let bX ="xB=" + Math.floor(this.game.chihiro.BB.left);
             let bY ="yB=" + Math.floor(this.game.chihiro.BB.top);
             ctx.fillText(bX, 160, 15);

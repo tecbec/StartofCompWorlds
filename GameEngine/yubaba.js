@@ -19,7 +19,6 @@ class Yubaba {
 
         // speed stuff
         this.speed = 50;
-        
         this.target = this.game.camera.chihiro;
     };
 

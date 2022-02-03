@@ -4,7 +4,7 @@ var CHIHIRO = {
     INITIAL_POSITION: {X: 0, Y: 0},
     SIZE: 70,
     SCALE: 1,
-    BB_PADDING: 10,
+    BB_PADDING: 20,
     IDLE:   {RIGHT: {X: 0,  Y: 0},    LEFT: {X: 0,  Y: 70},   FRAME: 4, SPEED: 0.4,  PADDING: 0, REVERSE: false, LOOP: true}, 
     WALK:   {RIGHT: {X: 0,  Y: 140},  LEFT: {X: 0,  Y: 210},  FRAME: 4, SPEED: 0.1,  PADDING: 0, REVERSE: false, LOOP: true},
     JUMP:   {RIGHT: {X: 0,  Y: 280},  LEFT: {X: 0,  Y: 350},  FRAME: 7, SPEED: 0.1, PADDING: 0, REVERSE: false, LOOP: true}, 
@@ -18,22 +18,15 @@ var CHIHIRO = {
 class Player {
     constructor(game, x, y) {
         Object.assign(this, {game, x, y});
-        this.game.chihiro = this;
+        this.game.chihiro = this;  // chihiro adds a reference to herself into the game engine
         this.game.x = this;
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/chihiro_spritesheet.png");
-
-        // initialization of the breath bar and counter
-        this.breathwidth = 100;
-        this.coinCounter = new CoinCounter(this.game, CHIHIRO.COIN_COUNTER.X, CHIHIRO.COIN_COUNTER.Y);
-        this.breathbar = new BreathBar(this.game, CHIHIRO.BREATH_BAR.X, CHIHIRO.BREATH_BAR.Y, this.breathwidth,
-            CHIHIRO.BREATH_BAR.HEIGHT, CHIHIRO.BREATH_BAR.MAX);
 
         // default values
         this.velocity = { x: 0, y: 0};
         this.isGrounded = false;
         this.dead = false;
-        this.deadCounter = 0;
-        this.breathwidth = 100;
+
         // testing
         this.sootCount = 0;
         this.nofaceCount = 0;
@@ -41,9 +34,13 @@ class Player {
         this.facing = 0; // 0 = right; 1 = left
         this.state = 0;  // 0 = idle, 1 = walking, 2 = jumping/falling, 3 = crouching, 4 = death
 
+        this.bubbleController = new BubblesController(this.game);
+
         this.animations = [];
+
         this.updateBB();
         this.loadAnimations();
+
     };
 
     /* Load the following animations from the sprite sheet for Chihiro's current state and direction */
@@ -63,7 +60,7 @@ class Player {
 
         // idle -> left
         this.animations[0][1] = new Animator (this.spritesheet, CHIHIRO.IDLE.LEFT.X, CHIHIRO.IDLE.LEFT.Y,
-            CHIHIRO.SIZE, CHIHIRO.SIZE, 
+            CHIHIRO.SIZE, CHIHIRO.SIZE,
             CHIHIRO.IDLE.FRAME, CHIHIRO.IDLE.SPEED,
             CHIHIRO.IDLE.PADDING, CHIHIRO.IDLE.REVERSE, CHIHIRO.IDLE.LOOP);
 
@@ -133,9 +130,7 @@ class Player {
         this.BB = new BoundingBox(this.x + CHIHIRO.BB_PADDING, this.y + CHIHIRO.BB_PADDING,
                                     CHIHIRO.SIZE * CHIHIRO.SCALE - CHIHIRO.BB_PADDING - CHIHIRO.BB_PADDING, // both side
                                     CHIHIRO.SIZE * CHIHIRO.SCALE - CHIHIRO.BB_PADDING); // KD changed the bounding box dimensions to hug the sprite
-        // this.BBbottom = new BoundingBox(this.x + CHIHIRO.BB_PADDING + CHIHIRO.BB_PADDING, this.y - CHIHIRO.BB_PADDING + CHIHIRO.SIZE * CHIHIRO.SCALE,
-        //     CHIHIRO.BB_PADDING + CHIHIRO.BB_PADDING, // both side
-        //     CHIHIRO.BB_PADDING); // KD changed the bounding box dimensions to hug the sprite
+
     };
 
     /* Draw the images onto the screen */
@@ -148,8 +143,19 @@ class Player {
             // ctx.strokeRect(this.BBbottom.x - this.game.camera.x, this.BBbottom.y, this.BBbottom.width, this.BBbottom.height);
         }
         ctx.imageSmoothingEnabled = false;
-        this.breathbar.draw(ctx);
-        this.coinCounter.draw(ctx);
+        this.bubbleController.draw(ctx);
+        this.shoot();
+    };
+
+    shoot(){
+        if(this.game.bubble) {
+            const speed = 2;
+            const delayBubble = 5;
+            const damage = 1;
+            const bubbleX = this.x + CHIHIRO.SIZE /2 - this.game.camera.x ;
+            const bubbleY = this.y+ CHIHIRO.SIZE /2;
+            this.bubbleController.update( bubbleX, bubbleY, speed, damage, delayBubble);
+        }
     };
 
     update() {
@@ -220,6 +226,7 @@ class Player {
             if (this.game.left) {
                 this.velocity.x = -Math.abs(this.velocity.x);
             }
+
             if (this.game.right) {
                 this.velocity.x = Math.abs(this.velocity.x);
             }
@@ -239,9 +246,9 @@ class Player {
 
         // collision handling
         var that = this; //need this because we are creating
-        this.game.entities.forEach(function (entity) {  // this will look at all entities in relation to chihiro
+        this.game.entities.forEach(function (entity) {          // this will look at all entities in relation to chihiro
             if (entity.BB && that.BB.collide(entity.BB)) {      // is there an entity bb & check to see if they collide
-                if (that.velocity.y > 0) { // chihiro is falling
+                if (that.velocity.y > 0) {                      // chihiro is falling
                     if((entity instanceof Ground || entity instanceof Platform || entity instanceof Haku || entity instanceof NoFace)
                     && (that.lastBB.bottom <= entity.BB.top)) { // bottom of chihiro hits the top of the entity
                         that.isGrounded = true;
@@ -265,21 +272,21 @@ class Player {
                 // left & right bounding boxes for platform
                 if (entity instanceof Platform && that.BB.collide(entity.BB)) {
                     if (that.BB.collide(entity.leftBB) && (that.lastBB.right <= entity.leftBB.left)) { // left collision
-                        that.x -= 3; // so that the player won't move up 
+                        that.x -= 3; // so that the player won't move up
                         // that.x = entity.leftBB.left - CHIHIRO.SIZE * CHIHIRO.SCALE;
                         if (that.velocity.x > 0) that.velocity.x = 0;
                     } else if (that.BB.collide(entity.rightBB) && (that.lastBB.left >= entity.rightBB.right)) { // right collision
                         that.x += 3;
                         // that.x = entity.rightBB.right;
                         if (that.velocity.x < 0) that.velocity.x = 0;
-                    } 
+                    }
                     that.updateBB();
                 }
                 // collision with no face
                 if (entity instanceof NoFace && that.BB.collide(entity.BB)) {
                     // Set a maximum amount of coins upon interact
-                    if (that.coinCounter.coinCount <= 10) {
-                        that.coinCounter.coinCount += 10;
+                    if (that.game.camera.coinCounter.coinCount <= 10) {
+                        that.game.camera.coinCounter.coinCount += 10;
                     }
                     entity.dead = true;
                     if (that.BB.collide(entity.leftBB)) { // left collision
@@ -293,18 +300,18 @@ class Player {
 
                 // Collision with crows
                 if (entity instanceof Crow ) {
-                    that.breathwidth -= 5;
-                    that.breathbar.update(that.breathwidth);
+                    that.game.camera.breathwidth -= 5;
+                    that.game.camera.changeBreath() ;
                     entity.removeFromWorld = true;
                 }
 
                 //Collision with Yubaba
-                //for now have Yubaba push Chihiro? but later  kills on impact 
+                //for now have Yubaba push Chihiro? but later  kills on impact
 
                 // collision with Chicks
                 if (entity instanceof Chick && that.BB.collide(entity.BB)) {
-                    that.breathwidth -= CHIHIRO.BREATH_BAR.MAX/4;
-                    that.breathbar.update(that.breathwidth);
+                    that.game.camera.breathwidth -= CHIHIRO.BREATH_BAR.MAX/4;
+                    that.game.camera.changeBreath();
 
                     if (that.BB.collide(entity.leftBB)) { // left collision
                        // maybe replace with a push animation? 
@@ -324,86 +331,63 @@ class Player {
                 // collision with Haku
                 if (entity instanceof Haku && that.BB.collide(entity.BB)) {
                     // instantly heal stamina bar
-                    that.breathwidth +=  CHIHIRO.BREATH_BAR.MAX - that.breathwidth;
-                    that.breathbar.update(that.breathwidth);
-
-                    //entity.dead = true; //Haku regenerate should always exist
+                    that.game.camera.breathwidth = CHIHIRO.BREATH_BAR.MAX;
+                    that.game.camera.changeBreath(CHIHIRO.BREATH_BAR.MAX);
+                    //entity.dead = true;
 
                     if (that.BB.collide(entity.leftBB)) { // left collision
-                        that.x = entity.leftBB.left - CHIHIRO.SIZE * CHIHIRO.SCALE + CHIHIRO.BB_PADDING;
+                         that.x = entity.leftBB.left - CHIHIRO.SIZE * CHIHIRO.SCALE + CHIHIRO.BB_PADDING;
                         if (that.velocity.x > 0) that.velocity.x = 0;
                     } else if (that.BB.collide(entity.rightBB)) { // right
-                        that.x = entity.rightBB.right - CHIHIRO.BB_PADDING;
+                         that.x = entity.rightBB.right - CHIHIRO.BB_PADDING;
                         if (that.velocity.x < 0) that.velocity.x = 0;
                     }
-                    
+
                 }
-                
+
                 // collision with soot
                 if (entity instanceof Soot ) {
-                    that.breathwidth -= 2; // lose breath upon contact (can change)
-                    that.breathbar.update(that.breathwidth);
+                    that.game.camera.breathwidth -= 3;
+                    that.game.camera.changeBreath() ;
                     entity.dead = true;
-                    /*
-                    if (that.BB.collide(entity.leftBB)) { // left collision
-                        // that.x = entity.leftBB.left - CHIHIRO.SIZE * CHIHIRO.SCALE + CHIHIRO.BB_PADDING;  // check these out for push back
-                        if (that.velocity.x > 0) that.velocity.x = 0;
-                    } else if (that.BB.collide(entity.rightBB)) {
-                        // that.x = entity.rightBB.right - CHIHIRO.BB_PADDING;  // check these out for push back
-                        if (that.velocity.x < 0) that.velocity.x = 0;
-                    }
-                    */
                 }
                 // collision with coins
                 if (entity instanceof Coins) {
                     entity.removeFromWorld = true;
-                    if (that.breathbar < CHIHIRO.BREATH_BAR.MAX) {
-                        that.breathwidth += 25; // gain breath upon contact (for testing ONLY)
-                        that.breathbar.update(that.breathwidth);
-                    }
-                    that.breathwidth += CHIHIRO.BREATH_BAR.MAX - that.breathwidth;
-                    that.breathbar.update(that.breathwidth);
-                    that.coinCounter.coinCount ++;
+                    that.game.camera.coinCounter.coinCount ++;
                 }
             }
         });
 
-        // update state
-        if (this.state !== 2 || this.state !== 5) {  // NOT jump or dead 
-            if (this.game.crouch) this.state = 3;    // crouching state
-            else if (Math.abs(this.velocity.x) > 0) this.state = 1;        // walking state
-            else if (Math.abs(this.velocity.x) > MIN_WALK) this.state = 4; // running state
-           
-        } else {
-            
-        }
-        if (this.velocity.y < 0) {
-            this.state = 2;
-        }
-        
-        if (this.dead) {
-            this.state = 5;
-            this.velocity.x = 0;
-            this.deadCounter += this.game.clockTick;
-            if (this.deadCounter > 1) {
-                this.removeFromWorld = true;
-            }
-        } else {
-            // do nothing
-        }
-         // update direction
-        if (this.velocity.x < 0) this.facing = 1;
-        if (this.velocity.x > 0) this.facing = 0;
-
-        // updating the breath bar
-        this.breathwidth -= .05; // changes for testing
-        this.breathbar.update(this.breathwidth);
-
-        if (this.breathwidth <= 0) {
+        if (this.game.camera.breathwidth <= 0) {
             this.dead = true;
         } else {
             this.dead = false;
         }
+
+        // update state
+        if (this.state !== 2 || this.state !== 5) {  // NOT jump or dead
+            if (this.game.crouch) this.state = 3;    // crouching state
+            else if (Math.abs(this.velocity.x) > 0) this.state = 1;        // walking state
+            else if (Math.abs(this.velocity.x) > MIN_WALK) this.state = 4; // running state
+        } else {
+
+        }
+
+        if (this.velocity.y < 0) {
+            this.state = 2;
+        }
+
+        if (this.dead) {
+            this.state = 5;
+            this.velocity.x = 0;
+        } else {
+            // do nothing
+        }
+
+        // update direction
+        if (this.velocity.x < 0) this.facing = 1;
+        if (this.velocity.x > 0) this.facing = 0;
     };
 
     toString(){
