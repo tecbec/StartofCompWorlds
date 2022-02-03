@@ -3,7 +3,7 @@ var CHIHIRO = {
     TITLE_POSITION: {X: 0, Y: 260},
     INITIAL_POSITION: {X: 0, Y: 0},
     SIZE: 70,
-    SCALE: 1,
+    SCALE: 2,
     BB_PADDING: 10,
     IDLE:   {RIGHT: {X: 0,  Y: 0},    LEFT: {X: 0,  Y: 70},   FRAME: 4, SPEED: 0.4,  PADDING: 0, REVERSE: false, LOOP: true}, 
     WALK:   {RIGHT: {X: 0,  Y: 140},  LEFT: {X: 0,  Y: 210},  FRAME: 4, SPEED: 0.2,  PADDING: 0, REVERSE: false, LOOP: true},
@@ -11,8 +11,8 @@ var CHIHIRO = {
     CROUCH: {RIGHT: {X: 0,  Y: 280},  LEFT: {X: 0,  Y: 350},  FRAME: 1, SPEED: 0.33, PADDING: 0, REVERSE: false, LOOP: true},
     RUN:    {RIGHT: {X: 0,  Y: 140},  LEFT: {X: 0,  Y: 210},  FRAME: 4, SPEED: 0.1, PADDING: 0, REVERSE: false, LOOP: true},
     DEAD:   {RIGHT: {X: 0,  Y: 420},  LEFT: {X: 0,  Y: 490},  FRAME: 3, SPEED: 0.3, PADDING: 0, REVERSE: false, LOOP: false}, 
-    BREATH_BAR: {X: 1150, Y: 10, HEIGHT: 10, MAX: 100},
-    COIN_COUNTER: {X: 1110, Y: 7.25}
+    BREATH_BAR: {X: 1700, Y: 10, HEIGHT: 10, MAX: 100},
+    COIN_COUNTER: {X: 1620, Y: 7.25}
 };
 /* Chihiro, the main character of the game */
 class Player {
@@ -161,11 +161,11 @@ class Player {
     update() {
         const TICK = this.game.clockTick;
         const TICK_SCALE = 2;
-        const MAX_FALL = 240;
-        const MAX_RUN = 250;
-        const MIN_WALK = 100;
-        const RUN_ACC = 400;
-        const FALL_ACC = 562.5;
+        const MAX_FALL = 240 * PARAMS.SCALE;
+        const MAX_RUN = 250 * PARAMS.SCALE;
+        const MIN_WALK = 100 * PARAMS.SCALE;
+        const RUN_ACC = 400 * PARAMS.SCALE;
+        const FALL_ACC = 562.5 * PARAMS.SCALE;
 
         // TODO: add crouch speed
         // can only move while on the ground AND jump after has been grounded for x ticks
@@ -209,7 +209,7 @@ class Player {
             }
             if (this.game.up) {  // jumping
                 this.jumping = true;
-                this.velocity.y = -250;
+                this.velocity.y = -250 * PARAMS.SCALE;
                 this.state = 2;
             } else {
                 this.state = 0;
