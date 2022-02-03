@@ -328,7 +328,7 @@ class Player {
                         that.velocity.y = -100;
                     }
                     that.updateBB();
-                    
+
                 }
 
                 // collision with HAKU
