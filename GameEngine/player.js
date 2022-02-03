@@ -218,7 +218,7 @@ class Player {
         } else {
             // fall straight down if did not jump
             if (this.velocity.y > 0 && !this.jumping) {
-                this.state = 2;
+                //this.state = 2;
                 this.velocity.x = 0;
             }
 
@@ -271,12 +271,14 @@ class Player {
                 }
                 // left & right bounding boxes for platform
                 if (entity instanceof Platform && that.BB.collide(entity.BB)) {
-                    if (that.BB.collide(entity.leftBB) && (that.lastBB.right <= entity.leftBB.left)) { // left collision
+                    if (that.BB.collide(entity.leftBB) && (that.lastBB.right >= entity.leftBB.left)) { // left collision
                         that.x -= 3; // so that the player won't move up
+                        that.y -= 1;
                         // that.x = entity.leftBB.left - CHIHIRO.SIZE * CHIHIRO.SCALE;
                         if (that.velocity.x > 0) that.velocity.x = 0;
-                    } else if (that.BB.collide(entity.rightBB) && (that.lastBB.left >= entity.rightBB.right)) { // right collision
+                    } else if (that.BB.collide(entity.rightBB) && (that.lastBB.left <= entity.rightBB.right)) { // right collision
                         that.x += 3;
+                        that.y -= 1;
                         // that.x = entity.rightBB.right;
                         if (that.velocity.x < 0) that.velocity.x = 0;
                     }
@@ -354,9 +356,9 @@ class Player {
 
         }
 
-        if (this.velocity.y < 0) {
-            this.state = 2;
-        }
+        // if (this.velocity.y < 0) {
+        //     this.state = 2;
+        // }
 
         if (this.dead) {
             this.state = 5;
