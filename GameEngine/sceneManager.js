@@ -3,9 +3,13 @@ var LEVEL = {
     music: "./audio/OneSummersDay.mp3",
     START_CANVAS: {X: -900, Y: 0},
     END_CANVAS: {X: 940}, // change this later when we figure out the exact ending canvas measurement
-    FRAME_COUNT: 5, // This is the factor that determine how wide the actual game is. 
+    FRAME_COUNT: 5, // This is the factor that determine how wide the actual game is.
     // add a platform length: short, medium, long.
-    PLATFORM_LOCATION: [{X: 300, Y: 770}, {X: 600, Y: 620}, {X: 850, Y: 650}, {X: 1200, Y: 450}, {X: 1600, Y: 680}] 
+    PLATFORM_LOCATION: [{X: 350, Y: 770}, {X: 600, Y: 620}, {X: 850, Y: 650}, {X: 1200, Y: 450}, {X: 1600, Y: 680}],
+    CLOUD_PLATFORM_LOCATION: [{X: 200, Y: 770}, {X: 500, Y: 620}, {X: 750, Y: 650}, {X: 1100, Y: 450}, {X: 1500, Y: 680}],
+    STONE_LAMP_LOCATION: {X: 1000, Y: 800},
+    LAMP_LOCATION: {X: 150, Y: 750},
+    RAILING_LOCATION: {X: 150, Y: 830},
 }
 class SceneManager {
     constructor(game) {
@@ -19,7 +23,7 @@ class SceneManager {
 
         //Breath
         this.breathwidth = 100;
-        
+
         // chihiro falling from the sky and land on the ground
         // this.chihiro = new Player(this.game, CHIHIRO.TITLE_POSITION.X, CHIHIRO.TITLE_POSITION.Y);
 
@@ -46,17 +50,19 @@ class SceneManager {
 
         this.title = title;
         this.level = level;
+        const chickLocation = {x: 80, y: 850, minX:85, maxX:300}; // minX & maxX determine the x range the chick paces
 
         this.clearEntities();
+
         // chihiro falling from the sky and land on the ground
         this.chihiro = new Player(this.game, CHIHIRO.TITLE_POSITION.X, CHIHIRO.TITLE_POSITION.Y);
+
         // x , y , w
         this.ground = new Ground(gameEngine, LEVEL.START_CANVAS.X, PARAMS.CANVAS_HEIGHT - BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE, PARAMS.CANVAS_WIDTH * LEVEL.FRAME_COUNT,
             BACKGROUND.GROUND.SCALE * BACKGROUND.GROUND.SIZE);
         this.background = new BackGround(gameEngine, LEVEL.START_CANVAS.X,  LEVEL.START_CANVAS.Y);
 
         if(!this.title){
-            this.game.player = this.chihiro;
             // entity locations on the screen
             const nofacelocation = {x: 300, y: 50};
             const sootlocation = {x: 150, y: 190};
@@ -79,6 +85,12 @@ class SceneManager {
             this.coin2 = new Coins(gameEngine, 300, 300);
             this.coin3 = new Coins(gameEngine, 340, 110);
             this.coin4 = new Coins(gameEngine, 100, 60);
+
+
+            // Background stuff
+            this.stonelamp = new StoneLamp(this.game, LEVEL.STONE_LAMP_LOCATION.X, LEVEL.STONE_LAMP_LOCATION.Y, BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE);
+            this.lamp = new Lamp(this.game, LEVEL.LAMP_LOCATION.X, LEVEL.LAMP_LOCATION.Y, BACKGROUND.LAMP.SIZE * BACKGROUND.LAMP.SCALE);
+            this.railing = new Railing(this.game, LEVEL.RAILING_LOCATION.X, LEVEL.RAILING_LOCATION.Y, BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE);
 
             // initialization of the breath bar and counter
             this.coinCounter = new CoinCounter(this.game, CHIHIRO.COIN_COUNTER.X, CHIHIRO.COIN_COUNTER.Y);
@@ -105,33 +117,42 @@ class SceneManager {
             this.game.addEntity(this.chihiro);
             this.game.addEntity(this.ground);
 
-            for (var i = 0; i < LEVEL.PLATFORM_LOCATION.length; i++) {
-                let platform = LEVEL.PLATFORM_LOCATION[i];
-                this.game.addEntity(new Platform(this.game, platform.X, platform.Y, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE));
-            }
+            // for (var i = 0; i < LEVEL.PLATFORM_LOCATION.length; i++) {
+            //     let platform = LEVEL.PLATFORM_LOCATION[i];
+            //     this.game.addEntity(new Platform(this.game, platform.X, platform.Y, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE));
+            // }
+
+            // for (var i = 0; i < LEVEL.CLOUD_PLATFORM_LOCATION.length; i++) {
+            //     let cloudPlatform = LEVEL.CLOUD_PLATFORM_LOCATION[i];
+            //     this.game.addEntity(new CloudPlatform(this.game, cloudPlatform.X, cloudPlatform.Y, BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE));
+            // }
+
+            this.game.addEntity(this.railing);
+            this.game.addEntity(this.stonelamp);
+            // this.game.addEntity(this.lamp);
+
 
             for(let i = 0; i < this.Num_Soots; i++) {
                 this.game.addEntity(this.soot[i]);
             }
-            this.game.addEntity(this.noface);
-            this.game.addEntity(this.haku);
-            this.game.addEntity(this.yubaba);
-            this.game.addEntity(this.chick);
-            this.game.addEntity(this.coin1);
-            this.game.addEntity(this.coin2);
-            this.game.addEntity(this.coin3);
-            this.game.addEntity(this.coin4);
+            // this.game.addEntity(this.noface);
+            // this.game.addEntity(this.haku);
+            // this.game.addEntity(this.yubaba);
+            // this.game.addEntity(this.chick);
+            // this.game.addEntity(this.coin1);
+            // this.game.addEntity(this.coin2);
+            // this.game.addEntity(this.coin3);
+            // this.game.addEntity(this.coin4);
             this.game.addEntity(this.breathbar);
             this.game.addEntity(this.coinCounter);
         }
     };
 
     changeBreath() {
-        this.breathbar.updateOnFly(this.breathwidth);
+        this.breathbar.width = this.breathwidth;
     };
 
     update() {
-
         this.updateAudio();
 
         // canvas width = 400
@@ -164,10 +185,11 @@ class SceneManager {
         //         this.chihiro.x = LEVEL.END_CANVAS.X;
         //     }
         // } else {
-           
+
         // }
 
         this.x = this.chihiro.x - midPoint; // force centering
+        
         if (this.gameOver) {
             this.gameOver = false;
         }

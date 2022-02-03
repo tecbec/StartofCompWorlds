@@ -4,7 +4,7 @@ var CHIHIRO = {
     INITIAL_POSITION: {X: 0, Y: 0},
     SIZE: 70,
     SCALE: 2,
-    BB_PADDING: 10,
+    BB_PADDING: 30,
     IDLE:   {RIGHT: {X: 0,  Y: 0},    LEFT: {X: 0,  Y: 70},   FRAME: 4, SPEED: 0.4,  PADDING: 0, REVERSE: false, LOOP: true}, 
     WALK:   {RIGHT: {X: 0,  Y: 140},  LEFT: {X: 0,  Y: 210},  FRAME: 4, SPEED: 0.2,  PADDING: 0, REVERSE: false, LOOP: true},
     JUMP:   {RIGHT: {X: 0,  Y: 280},  LEFT: {X: 0,  Y: 350},  FRAME: 7, SPEED: 0.1, PADDING: 0, REVERSE: false, LOOP: true}, 
@@ -250,7 +250,9 @@ class Player {
         this.game.entities.forEach(function (entity) {          // this will look at all entities in relation to chihiro
             if (entity.BB && that.BB.collide(entity.BB)) {      // is there an entity bb & check to see if they collide
                 if (that.velocity.y > 0) {                      // chihiro is falling
-                    if((entity instanceof Ground || entity instanceof Platform || entity instanceof Haku || entity instanceof NoFace)
+                    if((entity instanceof Ground || entity instanceof Platform || entity instanceof CloudPlatform ||
+                        entity instanceof Lamp || entity instanceof Railing ||
+                        entity instanceof StoneLamp || entity instanceof Haku || entity instanceof NoFace )
                     && (that.lastBB.bottom <= entity.BB.top)) { // bottom of chihiro hits the top of the entity
                         that.isGrounded = true;
                         that.y = entity.BB.top - CHIHIRO.SIZE * CHIHIRO.SCALE;
@@ -261,6 +263,11 @@ class Player {
                         that.isGrounded = false;
                     }
                 }
+
+
+
+
+
                 if (that.velocity.y < 0) { // chihiro is jumping up
                     if((entity instanceof Platform) // collision with platform
                         && (that.lastBB.top >= entity.BB.bottom)) { // top of chihiro goes above the bottom of the platform
@@ -271,7 +278,9 @@ class Player {
                     }
                 }
                 // left & right bounding boxes for platform
-                if (entity instanceof Platform && that.BB.collide(entity.BB)) {
+                if ((entity instanceof Platform || entity instanceof CloudPlatform || entity instanceof StoneLamp) && 
+                    that.BB.collide(entity.BB)) {
+
                     if (that.BB.collide(entity.leftBB) && (that.lastBB.right <= entity.leftBB.left)) { // left collision
                         that.x -= 3; // so that the player won't move up
                         // that.x = entity.leftBB.left - CHIHIRO.SIZE * CHIHIRO.SCALE;
@@ -353,6 +362,7 @@ class Player {
                     that.game.camera.breathwidth -= 1;
                     entity.dead = true;
                     that.game.camera.changeBreath();
+                    that.updateBB()
                 }
 
                 // collision with COINS
@@ -365,6 +375,7 @@ class Player {
 
         if (this.game.camera.breathwidth <= 0) {
             this.dead = true;
+            this.state = 5;
         } else {
             this.dead = false;
         }
@@ -382,11 +393,12 @@ class Player {
             this.state = 2;
         }
 
-        if (this.dead) {
-            this.state = 5;
+        if (this.dead || this.state === 5) {
             this.velocity.x = 0;
-            this.deadCounter += that.game.clockTick;
-            if (this.deadCounter > 1) {
+
+            this.deadCounter += this.game.clockTick;
+            if (this.deadCounter > 0.25) {
+                this.state = 0;
                 this.game.camera.title = true;
                 this.game.camera.breathwidth = 100;
                 this.deadCounter = 0;

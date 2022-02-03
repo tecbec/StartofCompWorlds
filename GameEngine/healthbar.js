@@ -14,8 +14,8 @@ class BreathBar {
         this.elapsed += this.game.clockTick;
 
         if(this.width >= 0) {
-            // this.width -= 0.05; // original
-            this.width -= 0.25; // changes for testing
+            this.width -= 0.05; // original
+            // this.width -= 0.25; // changes for testing
             this.width = (this.width / this.maxHealth) * this.maxHealth;
             this.game.camera.breathwidth = this.width;
         } else {
@@ -29,10 +29,6 @@ class BreathBar {
         ctx.fillStyle = ratio < 0.2 ? "Red" : ratio < 0.5 ? "Pink" : "Blue";
         ctx.fillRect(this.x, this.y, this.width * PARAMS.SCALE, this.height);
         ctx.strokeRect(this.x, this.y, this.maxHealth * PARAMS.SCALE, this.height);
-    };
-
-    updateOnFly(val) {
-        this.width = val;
     };
 };
 
