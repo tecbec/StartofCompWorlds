@@ -163,14 +163,7 @@ class SceneManager {
         }
 
         if (this.gameOver) {
-            this.gameOverCounter += this.game.clockTick;
-            if (this.gameOverCounter > 1) {
-                this.title = true;
-                this.breathwidth = 100;
-                this.gameOver = false;
-                this.gameOverCounter = 0;
-                this.loadLevel(1, this.title);
-            }
+            this.gameOver = false;
         }
 
         PARAMS.DEBUG = document.getElementById("debug").checked;

@@ -15,7 +15,6 @@ class BubblesController{
     };
 
     draw(ctx){
-        console.log(this.bubble.length);
         this.bubble.forEach((bubble) =>{
             if(this.isBubbleOffScreen(bubble)){
                 const index = this.bubble.indexOf(bubble);

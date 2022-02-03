@@ -25,6 +25,7 @@ class Player {
         // default values
         this.velocity = { x: 0, y: 0};
         this.isGrounded = false;
+        this.deadCounter = 0;
         this.dead = false;
 
         // testing
@@ -296,23 +297,24 @@ class Player {
                         that.x = entity.rightBB.right - CHIHIRO.BB_PADDING;
                         if (that.velocity.x < 0) that.velocity.x = 0;
                     }
+                    that.updateBB();
                 }
 
-                // Collision with crows
+                // Collision with CROWS
                 if (entity instanceof Crow ) {
                     that.game.camera.breathwidth -= 5;
-                    that.game.camera.changeBreath() ;
+                    that.game.camera.changeBreath();
                     entity.removeFromWorld = true;
                 }
 
                 //Collision with Yubaba
                 //for now have Yubaba push Chihiro? but later  kills on impact
 
-                // collision with Haku
+                // collision with HAKU
                 if (entity instanceof Haku && that.BB.collide(entity.BB)) {
                     // instantly heal stamina bar
                     that.game.camera.breathwidth = CHIHIRO.BREATH_BAR.MAX;
-                    that.game.camera.changeBreath(CHIHIRO.BREATH_BAR.MAX) ;
+                    that.game.camera.changeBreath();
                     entity.dead = true;
 
                     if (that.BB.collide(entity.leftBB)) { // left collision
@@ -322,16 +324,17 @@ class Player {
                         // that.x = entity.rightBB.right - CHIHIRO.BB_PADDING;
                         if (that.velocity.x < 0) that.velocity.x = 0;
                     }
-
+                    that.updateBB();
                 }
 
-                // collision with soot
+                // collision with SOOTS
                 if (entity instanceof Soot ) {
-                    that.game.camera.breathwidth -= 3;
-                    that.game.camera.changeBreath() ;
+                    that.game.camera.breathwidth -= 1;
                     entity.dead = true;
+                    that.game.camera.changeBreath();
                 }
-                // collision with coins
+
+                // collision with COINS
                 if (entity instanceof Coins) {
                     entity.removeFromWorld = true;
                     that.game.camera.coinCounter.coinCount ++;
@@ -361,6 +364,13 @@ class Player {
         if (this.dead) {
             this.state = 5;
             this.velocity.x = 0;
+            this.deadCounter += that.game.clockTick;
+            if (this.deadCounter > 1) {
+                this.game.camera.title = true;
+                this.game.camera.breathwidth = 100;
+                this.deadCounter = 0;
+                this.game.camera.loadLevel(1, true);
+            }
         } else {
             // do nothing
         }
