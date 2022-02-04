@@ -58,9 +58,9 @@ class SceneManager {
         this.chihiro = new Player(this.game, CHIHIRO.TITLE_POSITION.X, CHIHIRO.TITLE_POSITION.Y);
 
         // x , y , w
-        this.ground = new Ground(gameEngine, LEVEL.START_CANVAS.X, PARAMS.CANVAS_HEIGHT - BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE, PARAMS.CANVAS_WIDTH * LEVEL.FRAME_COUNT,
+        this.ground = new Ground(this.game, LEVEL.START_CANVAS.X, PARAMS.CANVAS_HEIGHT - BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE, PARAMS.CANVAS_WIDTH * LEVEL.FRAME_COUNT,
             BACKGROUND.GROUND.SCALE * BACKGROUND.GROUND.SIZE);
-        this.background = new BackGround(gameEngine, LEVEL.START_CANVAS.X,  LEVEL.START_CANVAS.Y);
+        this.background = new BackGround(this.game, LEVEL.START_CANVAS.X,  LEVEL.START_CANVAS.Y);
 
         if(!this.title){
             // entity locations on the screen
@@ -75,22 +75,23 @@ class SceneManager {
                 this.soot[i] = new Soot(gameEngine, sootlocation.x, sootlocation.y, dir);
             }
             // TODO: fix no face position
-            this.haku = new Haku(gameEngine, HAKU.INITIAL_POSITION.X, PARAMS.CANVAS_WIDTH - HAKU.SIZE * HAKU.SCALE - BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE);
-            this.noface = new NoFace(gameEngine, nofacelocation.x, nofacelocation.y);
-            this.yubaba = new Yubaba(gameEngine, 0, 0);
-            this.chick = new Chick(gameEngine, chickLocation.x, chickLocation.y, chickLocation.minX, chickLocation.maxX);
+            this.haku = new Haku(this.game, HAKU.INITIAL_POSITION.X, PARAMS.CANVAS_WIDTH - HAKU.SIZE * HAKU.SCALE - BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE);
+            this.noface = new NoFace(this.game, nofacelocation.x, nofacelocation.y);
+            this.yubaba = new Yubaba(this.game, 0, 0);
+            this.chick = new Chick(this.game, chickLocation.x, chickLocation.y, chickLocation.minX, chickLocation.maxX);
 
             // TODO: put the Coins's (x, y) in LEVEL once we finalized the coordinates
-            this.coin1 = new Coins(gameEngine, 200, 300);
-            this.coin2 = new Coins(gameEngine, 300, 300);
-            this.coin3 = new Coins(gameEngine, 340, 110);
-            this.coin4 = new Coins(gameEngine, 100, 60);
+            this.coin1 = new Coins(this.game, 200, 300);
+            this.coin2 = new Coins(this.game, 300, 300);
+            this.coin3 = new Coins(this.game, 340, 110);
+            this.coin4 = new Coins(this.game, 100, 60);
 
 
             // Background stuff
             this.stonelamp = new StoneLamp(this.game, LEVEL.STONE_LAMP_LOCATION.X, LEVEL.STONE_LAMP_LOCATION.Y, BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE);
             this.lamp = new Lamp(this.game, LEVEL.LAMP_LOCATION.X, LEVEL.LAMP_LOCATION.Y, BACKGROUND.LAMP.SIZE * BACKGROUND.LAMP.SCALE);
-            this.railing = new Railing(this.game, LEVEL.RAILING_LOCATION.X, LEVEL.RAILING_LOCATION.Y, BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE);
+            this.railing = new Railing(this.game, LEVEL.START_CANVAS.X, 795, PARAMS.CANVAS_WIDTH * LEVEL.FRAME_COUNT,
+                BACKGROUND.GROUND.SCALE * BACKGROUND.GROUND.SIZE);
 
             // initialization of the breath bar and counter
             this.coinCounter = new CoinCounter(this.game, CHIHIRO.COIN_COUNTER.X, CHIHIRO.COIN_COUNTER.Y);
@@ -114,6 +115,8 @@ class SceneManager {
             this.game.addEntity(this.ground);
         } else {
             this.game.addEntity(this.background);
+
+            this.game.addEntity(this.railing);
             this.game.addEntity(this.chihiro);
             this.game.addEntity(this.ground);
 
@@ -127,9 +130,9 @@ class SceneManager {
             //     this.game.addEntity(new CloudPlatform(this.game, cloudPlatform.X, cloudPlatform.Y, BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE));
             // }
 
-            this.game.addEntity(this.railing);
+
             this.game.addEntity(this.stonelamp);
-            this.game.addEntity(this.lamp);
+            // this.game.addEntity(this.lamp);
 
 
             for(let i = 0; i < this.Num_Soots; i++) {
@@ -138,7 +141,7 @@ class SceneManager {
             this.game.addEntity(this.noface);
             this.game.addEntity(this.haku);
             this.game.addEntity(this.yubaba);
-            this.game.addEntity(this.chick);
+            // this.game.addEntity(this.chick);
             this.game.addEntity(this.coin1);
             this.game.addEntity(this.coin2);
             this.game.addEntity(this.coin3);
@@ -189,7 +192,7 @@ class SceneManager {
         // }
 
         this.x = this.chihiro.x - midPoint; // force centering
-        
+
         if (this.gameOver) {
             this.gameOver = false;
         }

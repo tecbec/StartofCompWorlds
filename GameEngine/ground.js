@@ -5,7 +5,7 @@ var BACKGROUND = {
     SIZE: {W: 288, H: 208},
     SCALE: 1,
     GROUND: {X: 32, Y: 0, SIZE: 32, SCALE: 4},
-    STONE_LAMP: {X: 0, Y: 0, SIZE: 64, SCALE: 4, BB_SIZE: {W: 5, H: 64}},
+    STONE_LAMP: {X: 0, Y: 0, SIZE: 64, SCALE: 4, BB_SIZE: {W: 10, H: 64}},
     LAMP: {X: 0, Y: 0, SIZE: 64, SCALE: 4, BB_SIZE: {W: 5, H: 10}, PADDING: {W: 100, H: 13}},
     RAILING: {X: 0, Y: 0, SIZE: 64, SCALE: 2.5, BB_SIZE: {W: 5, H: 10}, PADDING: 20},
     PLATFORM: {LEFT: {X: 0, Y: 32}, MID: {X: 16, Y: 32}, RIGHT: {X: 32, Y: 32}, SIZE: 16, SCALE: 4, COUNT: 2, BB_SIZE: {W: 5, H: 16}},
@@ -228,8 +228,8 @@ class StoneLamp {
         this.topBB = new BoundingBox(this.x, this.y,
             BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE, BACKGROUND.STONE_LAMP.BB_SIZE.H);
 
-        this.bottomBB = new BoundingBox(this.x, this.y,
-            BACKGROUND.STONE_LAMP.SIZE, BACKGROUND.STONE_LAMP.BB_SIZE.H);
+        this.bottomBB = new BoundingBox(this.x, this.y ,
+            BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE, BACKGROUND.STONE_LAMP.BB_SIZE.H);
 
         this.leftBB = new BoundingBox(this.x, this.y,
             BACKGROUND.STONE_LAMP.BB_SIZE.W, BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE);
@@ -238,7 +238,7 @@ class StoneLamp {
             BACKGROUND.STONE_LAMP.BB_SIZE.W, BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE);
 
         if (PARAMS.DEBUG) {
-            ctx.strokeStyle = 'Red';
+            ctx.strokeStyle = 'Green';
             ctx.strokeRect(this.BB.x -this.game.camera.x, this.BB.y,
                 BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE,
                 BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE);
@@ -296,6 +296,11 @@ class Railing {
     constructor(game, x, y, w) {
         Object.assign(this, { game, x, y, w});
         this.spritesheet = this.spritesheet = ASSET_MANAGER.getAsset("./sprites/railing.png");
+
+        this.BB = new BoundingBox(this.x, this.y,
+            BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE, BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE);
+
+
     }
 
     update() {
@@ -304,18 +309,22 @@ class Railing {
 
     draw(ctx) {
 
-        // RAILING: {X: 0, Y: 0, SIZE: 64, SCALE: 2, BB_SIZE: {W: 5, H: 64}},
-
-        ctx.drawImage(this.spritesheet, BACKGROUND.RAILING.X, BACKGROUND.RAILING.Y,
-            BACKGROUND.RAILING.SIZE, BACKGROUND.RAILING.SIZE,
-            this.x - this.game.camera.x, this.y,
-            BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE, BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE);
+        let COUNT = PARAMS.CANVAS_WIDTH * LEVEL.FRAME_COUNT / BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE;
+        for (var i = 0; i < COUNT; i ++) {
+            ctx.drawImage(this.spritesheet, BACKGROUND.RAILING.X, BACKGROUND.RAILING.Y,
+                BACKGROUND.RAILING.SIZE, BACKGROUND.RAILING.SIZE,
+                this.x - this.game.camera.x, this.y,
+                BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE, BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE);
+        }
 
         this.topBB = new BoundingBox(this.x, this.y+BACKGROUND.RAILING.PADDING,
             BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE,  BACKGROUND.RAILING.BB_SIZE.H);
 
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
+            ctx.strokeRect(this.BB.x -this.game.camera.x, this.BB.y,
+                BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE,
+                BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE);
             ctx.strokeStyle = 'Orange';
             ctx.strokeRect(this.topBB.x - this.game.camera.x, this.topBB.y, this.topBB.width, this.topBB.height);
         }

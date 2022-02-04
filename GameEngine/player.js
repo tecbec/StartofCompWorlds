@@ -33,7 +33,7 @@ class Player {
         this.nofaceCount = 0;
         // animation
         this.facing = 0; // 0 = right; 1 = left
-        this.state = 0;  // 0 = idle, 1 = walking, 2 = jumping/falling, 3 = crouching, 4 = death
+        this.state = 0;  // 0 = idle, 1 = walking, 2 = jumping/falling, 3 = crouching, 4 = running, 5 = death
 
         this.bubbleController = new BubblesController(this.game);
 
@@ -130,7 +130,7 @@ class Player {
         this.lastBBbottom = this.BBbottom;
         this.BB = new BoundingBox(this.x + CHIHIRO.BB_PADDING, this.y + CHIHIRO.BB_PADDING,
                                     CHIHIRO.SIZE * CHIHIRO.SCALE - CHIHIRO.BB_PADDING - CHIHIRO.BB_PADDING, // both side
-                                    CHIHIRO.SIZE * CHIHIRO.SCALE - CHIHIRO.BB_PADDING); // KD changed the bounding box dimensions to hug the sprite
+                                    CHIHIRO.SIZE * CHIHIRO.SCALE - CHIHIRO.BB_PADDING); 
 
     };
 
@@ -180,31 +180,31 @@ class Player {
 
             if (Math.abs(this.velocity.x) < MIN_WALK) { // walking
                 this.velocity.x = 0;
-                if (this.game.left) {
+                if (this.game.left && !this.game.deactivate) {
                     this.velocity.x -= MIN_WALK;
                 }
-                if (this.game.right) {
+                if (this.game.right && !this.game.deactivate) {
                     this.velocity.x += MIN_WALK;
                 }
             } else if (Math.abs(this.velocity.x) >= MIN_WALK) { // running
                 if (this.facing === 0) {                        // if going left
-                    if (this.game.right && !this.game.left) {   // make sure that only one button is pressed at a time
+                    if (this.game.right && !this.game.left && !this.game.deactivate) {   // make sure that only one button is pressed at a time
                         if (this.game.run) {                    // when player press shift + arrow
                             this.velocity.x += RUN_ACC * TICK;
                         }
                     } else {
                         this.velocity.x = 0;
-                        this.state = 4;
+                        // this.state = 4;
                     }
                 }
                 if (this.facing === 1) {                        // if going right
-                    if (this.game.left && !this.game.right) {
+                    if (this.game.left && !this.game.right && !this.game.deactivate) {
                         if (this.game.run) {
                             this.velocity.x -= RUN_ACC * TICK;
                         }
                     } else {
                         this.velocity.x = 0;
-                        this.state = 4;
+                        // this.state = 4;
                     }
                 }
             }
@@ -248,22 +248,30 @@ class Player {
         // collision handling
         var that = this; //need this because we are creating
         this.game.entities.forEach(function (entity) {          // this will look at all entities in relation to chihiro
+
             if (entity.BB && that.BB.collide(entity.BB)) {      // is there an entity bb & check to see if they collide
+
+
                 if (that.velocity.y > 0) {                      // chihiro is falling
+
                     if((entity instanceof Ground || entity instanceof Platform || entity instanceof CloudPlatform ||
-                        entity instanceof StoneLamp || entity instanceof Haku || entity instanceof NoFace )
+                        entity instanceof StoneLamp || entity instanceof Haku || entity instanceof NoFace ||
+                        entity instanceof Railing)
                     && (that.lastBB.bottom <= entity.BB.top)) { // bottom of chihiro hits the top of the entity
                         that.isGrounded = true;
                         that.y = entity.BB.top - CHIHIRO.SIZE * CHIHIRO.SCALE;
-                        that.velocity.y === 0;
+                        that.velocity.y = 0;
                         that.updateBB();
+                        
+                        console.log(that.BB.collide(entity.BB));
                     }
                     else {
                         that.isGrounded = false;
                     }
                 }
                 if (that.velocity.y < 0) { // chihiro is jumping up
-                    if((entity instanceof Platform) // collision with platform
+                    if((entity instanceof Platform ||
+                        entity instanceof Railing) // collision with platform
                         && (that.lastBB.top >= entity.BB.bottom)) { // top of chihiro goes above the bottom of the platform
                         that.velocity.y = 0;
                         that.updateBB();
@@ -274,12 +282,19 @@ class Player {
                 // left & right bounding boxes for platform
                 if ((entity instanceof Platform || entity instanceof CloudPlatform || entity instanceof StoneLamp) &&
                     that.BB.collide(entity.BB)) {
-                        if (that.BB.collide(entity.leftBB)) { // left collision
-                        that.x -= 10; // so that the player won't move up
-                        if (that.velocity.x > 0) that.velocity.x = 0;
-                    } else if (that.BB.collide(entity.rightBB)) { // right collision
-                        that.x += 10;
-                        if (that.velocity.x < 0) that.velocity.x = 0;
+
+                        that.game.deactivate = true;
+
+                        // console.log(that.BB.collide(entity.leftBB));
+
+                        if (that.BB.collide(entity.leftBB) && that.lastBB.right >= entity.leftBB.left ) { // left collision
+                            that.x -= 1; // so that the player won't move up
+                            if (that.velocity.x > 0) that.velocity.x = 0;
+                            that.velocity.y = 0;
+                        } else if (that.BB.collide(entity.rightBB) && that.lastBB.left <= entity.rightBB.right ) { // right collision
+                            that.x += 1;
+                            if (that.velocity.x < 0) that.velocity.x = 0;
+                            that.velocity.y = 0;
                     }
                     that.updateBB();
                 }
@@ -361,32 +376,19 @@ class Player {
                     entity.removeFromWorld = true;
                     that.game.camera.coinCounter.coinCount ++;
                 }
-            }
 
-            if (that.velocity.y > 0) {                      // chihiro is falling
+                // if ((entity instanceof Railing || entity instanceof Lamp) && that.BB.collide(entity.topBB)) {
                 if ((entity instanceof Lamp) && that.BB.collide(entity.topBB)) {
+
+                    console.log("the top of the railing", entity.topBB.top);
+
                     that.isGrounded = true;
                     that.y = entity.topBB.top - CHIHIRO.SIZE * CHIHIRO.SCALE;
-                    that.velocity.y === 0;
-                    that.updateBB();
-                } else if ((entity instanceof Railing) && that.BB.collide(entity.topBB)) {
-                    that.isGrounded = false;
-                }
-            } else {
-                if ((entity instanceof Railing || entity instanceof Lamp) && that.BB.collide(entity.topBB)) {
-                    that.isGrounded = true;
-                    that.y = entity.topBB.top - CHIHIRO.SIZE * CHIHIRO.SCALE;
-                    that.velocity.y === 0;
+                    that.velocity.y = 0;
                     that.updateBB();
                 }
             }
 
-            if ((entity instanceof Railing || entity instanceof Lamp) && that.BB.collide(entity.topBB)) {
-                that.isGrounded = true;
-                that.y = entity.topBB.top - CHIHIRO.SIZE * CHIHIRO.SCALE;
-                that.velocity.y === 0;
-                that.updateBB();
-            }
         });
 
         if (this.game.camera.breathwidth <= 0) {
@@ -405,13 +407,9 @@ class Player {
 
         }
 
-        if (this.velocity.y < 0) {
-            this.state = 2;
-        }
 
         if (this.dead || this.state === 5) {
             this.velocity.x = 0;
-
             this.deadCounter += this.game.clockTick;
             if (this.deadCounter > 0.25) {
                 this.state = 0;
