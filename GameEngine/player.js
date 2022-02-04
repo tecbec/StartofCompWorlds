@@ -4,7 +4,8 @@ var CHIHIRO = {
     INITIAL_POSITION: {X: 0, Y: 0},
     SIZE: 70,
     SCALE: 2,
-    BB_PADDING: 30,
+    // BB_PADDING: 30,
+    BB_PADDING: 0,
     IDLE:   {RIGHT: {X: 0,  Y: 0},    LEFT: {X: 0,  Y: 70},   FRAME: 4, SPEED: 0.4,  PADDING: 0, REVERSE: false, LOOP: true}, 
     WALK:   {RIGHT: {X: 0,  Y: 140},  LEFT: {X: 0,  Y: 210},  FRAME: 4, SPEED: 0.2,  PADDING: 0, REVERSE: false, LOOP: true},
     JUMP:   {RIGHT: {X: 0,  Y: 280},  LEFT: {X: 0,  Y: 350},  FRAME: 7, SPEED: 0.1, PADDING: 0, REVERSE: false, LOOP: true}, 
@@ -251,7 +252,6 @@ class Player {
 
             if (entity.BB && that.BB.collide(entity.BB)) {      // is there an entity bb & check to see if they collide
 
-
                 if (that.velocity.y > 0) {                      // chihiro is falling
 
                     if((entity instanceof Ground || entity instanceof Platform || entity instanceof CloudPlatform ||
@@ -262,16 +262,14 @@ class Player {
                         that.y = entity.BB.top - CHIHIRO.SIZE * CHIHIRO.SCALE;
                         that.velocity.y = 0;
                         that.updateBB();
-                        
-                        console.log(that.BB.collide(entity.BB));
                     }
                     else {
                         that.isGrounded = false;
                     }
                 }
-                if (that.velocity.y < 0) { // chihiro is jumping up
-                    if((entity instanceof Platform ||
-                        entity instanceof Railing) // collision with platform
+
+                if (that.velocity.y < 0) {     // chihiro is jumping up and hits the bottom of a platform
+                    if((entity instanceof Platform )    // collision w/ bottom of platform
                         && (that.lastBB.top >= entity.BB.bottom)) { // top of chihiro goes above the bottom of the platform
                         that.velocity.y = 0;
                         that.updateBB();
@@ -279,25 +277,29 @@ class Player {
                         that.isGrounded = false;
                     }
                 }
-                // left & right bounding boxes for platform
+
+                // SIDE COLLISIONS --> left & right bounding boxes for platform
                 if ((entity instanceof Platform || entity instanceof CloudPlatform || entity instanceof StoneLamp) &&
                     that.BB.collide(entity.BB)) {
 
-                        that.game.deactivate = true;
-
-                        // console.log(that.BB.collide(entity.leftBB));
+                        that.game.deactivate = true;   // don't let player access key press once collision happens
 
                         if (that.BB.collide(entity.leftBB) && that.lastBB.right >= entity.leftBB.left ) { // left collision
-                            that.x -= 1; // so that the player won't move up
+                            that.x = entity.BB.left - CHIHIRO.SIZE * CHIHIRO.SCALE; // so that the player won't stick to the bb of the entity
                             if (that.velocity.x > 0) that.velocity.x = 0;
                             that.velocity.y = 0;
                         } else if (that.BB.collide(entity.rightBB) && that.lastBB.left <= entity.rightBB.right ) { // right collision
-                            that.x += 1;
+                            that.x = entity.BB.right; // so that the player won't stick to the bb of the entity
                             if (that.velocity.x < 0) that.velocity.x = 0;
                             that.velocity.y = 0;
                     }
                     that.updateBB();
                 }
+
+
+                /** ***************************************************************
+                 * NON-PLATFORM ENTITIES
+                 * ***************************************************************/
                 // collision with no face
                 if (entity instanceof NoFace && that.BB.collide(entity.BB)) {
                     // Set a maximum amount of coins upon interact
@@ -376,19 +378,7 @@ class Player {
                     entity.removeFromWorld = true;
                     that.game.camera.coinCounter.coinCount ++;
                 }
-
-                // if ((entity instanceof Railing || entity instanceof Lamp) && that.BB.collide(entity.topBB)) {
-                if ((entity instanceof Lamp) && that.BB.collide(entity.topBB)) {
-
-                    console.log("the top of the railing", entity.topBB.top);
-
-                    that.isGrounded = true;
-                    that.y = entity.topBB.top - CHIHIRO.SIZE * CHIHIRO.SCALE;
-                    that.velocity.y = 0;
-                    that.updateBB();
-                }
             }
-
         });
 
         if (this.game.camera.breathwidth <= 0) {

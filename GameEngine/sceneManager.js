@@ -5,9 +5,9 @@ var LEVEL = {
     END_CANVAS: {X: 940}, // change this later when we figure out the exact ending canvas measurement
     FRAME_COUNT: 5, // This is the factor that determine how wide the actual game is.
     // add a platform length: short, medium, long.
-    PLATFORM_LOCATION: [{X: 350, Y: 770}, {X: 600, Y: 620}, {X: 850, Y: 650}, {X: 1200, Y: 450}, {X: 1600, Y: 680}],
+    PLATFORM_LOCATION: [{X: 75, Y: 800}, {X: 500, Y: 745}, {X: 850, Y: 0}, {X: 1200, Y:0}, {X: 1600, Y: 0}],
     CLOUD_PLATFORM_LOCATION: [{X: 200, Y: 770}, {X: 500, Y: 620}, {X: 750, Y: 650}, {X: 1100, Y: 450}, {X: 1500, Y: 680}],
-    STONE_LAMP_LOCATION: {X: 500, Y: 700},
+    STONE_LAMP_LOCATION: {X: 800, Y: 700},
     LAMP_LOCATION: {X:300, Y: 700},
     RAILING_LOCATION: {X: 0, Y: 795},
 }

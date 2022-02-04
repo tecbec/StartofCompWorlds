@@ -99,30 +99,31 @@ class GameEngine {
         }, false);
         // Key released
         this.ctx.canvas.addEventListener("keyup", function (e) {
+            that.deactivate = false;
             switch(e.code) {
                 case "ArrowLeft":
                     that.left = false;
-                    that.deactivate = false;
+                    // that.deactivate = false;
                     break;
                 case "ArrowRight":
                     that.right = false;
-                    that.deactivate = false;
+                    // that.deactivate = false;
                     break;
                 case "ArrowUp":
                     that.up = false;
-                    that.deactivate = false;
+                    // that.deactivate = false;
                     break;
                 case "ShiftLeft":
                     that.run = false;
-                    that.deactivate = false;
+                    // that.deactivate = false;
                     break;
                 case "ArrowDown":
                     that.crouch = false; 
-                    that.deactivate = false;
+                    // that.deactivate = false;
                     break;
                 case "Space": //shoot 
                     that.bubble = false; 
-                    that.deactivate = false;
+                    // that.deactivate = false;
                     break;
             }
         }, false);
