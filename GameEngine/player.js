@@ -194,7 +194,6 @@ class Player {
                         }
                     } else {
                         this.velocity.x = 0;
-                        // this.state = 4;
                     }
                 }
                 if (this.facing === 1) {                        // if going right
@@ -204,25 +203,24 @@ class Player {
                         }
                     } else {
                         this.velocity.x = 0;
-                        // this.state = 4;
                     }
                 }
-            }
+            } 
             if (this.game.up) {  // jumping
                 this.jumping = true;
                 this.velocity.y = -250 * PARAMS.SCALE;
-                this.state = 2;
+                this.state = 2; 
             } else {
+                // set the default idle if not anything else.
                 this.state = 0;
                 this.velocity.y = 0;
             }
+            
         } else {
             // fall straight down if did not jump
             if (this.velocity.y > 0 && !this.jumping) {
-                //this.state = 2;
                 this.velocity.x = 0;
             }
-
             // can change direction they are falling
             if (this.game.left) {
                 this.velocity.x = -Math.abs(this.velocity.x);
@@ -250,10 +248,7 @@ class Player {
         this.game.entities.forEach(function (entity) {          // this will look at all entities in relation to chihiro
 
             if (entity.BB && that.BB.collide(entity.BB)) {      // is there an entity bb & check to see if they collide
-
-
                 if (that.velocity.y > 0) {                      // chihiro is falling
-
                     if((entity instanceof Ground || entity instanceof Platform || entity instanceof CloudPlatform ||
                         entity instanceof StoneLamp || entity instanceof Haku || entity instanceof NoFace ||
                         entity instanceof Railing)
@@ -282,20 +277,18 @@ class Player {
                 // left & right bounding boxes for platform
                 if ((entity instanceof Platform || entity instanceof CloudPlatform || entity instanceof StoneLamp) &&
                     that.BB.collide(entity.BB)) {
-
                         that.game.deactivate = true;
-
-                        // console.log(that.BB.collide(entity.leftBB));
-
-                        if (that.BB.collide(entity.leftBB) && that.lastBB.right >= entity.leftBB.left ) { // left collision
-                            that.x -= 1; // so that the player won't move up
+                        if (that.BB.collide(entity.leftBB)) { // left collision
+                            that.x -= 1; 
+                            that.y -= 1;
                             if (that.velocity.x > 0) that.velocity.x = 0;
-                            that.velocity.y = 0;
-                        } else if (that.BB.collide(entity.rightBB) && that.lastBB.left <= entity.rightBB.right ) { // right collision
+                        } else if (that.BB.collide(entity.rightBB)) { // right collision
                             that.x += 1;
+                            that.y -= 1;
                             if (that.velocity.x < 0) that.velocity.x = 0;
-                            that.velocity.y = 0;
-                    }
+                        } else {
+                            
+                        }
                     that.updateBB();
                 }
                 // collision with no face
@@ -354,10 +347,10 @@ class Player {
                     entity.dead = true;
 
                     if (that.BB.collide(entity.leftBB)) { // left collision
-                         that.x = entity.leftBB.left - CHIHIRO.SIZE * CHIHIRO.SCALE + CHIHIRO.BB_PADDING;
+                        that.x -= 1;
                         if (that.velocity.x > 0) that.velocity.x = 0;
                     } else if (that.BB.collide(entity.rightBB)) { // right
-                         that.x = entity.rightBB.right - CHIHIRO.BB_PADDING;
+                         that.x += 1;
                         if (that.velocity.x < 0) that.velocity.x = 0;
                     }
                     that.updateBB();
@@ -379,9 +372,7 @@ class Player {
 
                 // if ((entity instanceof Railing || entity instanceof Lamp) && that.BB.collide(entity.topBB)) {
                 if ((entity instanceof Lamp) && that.BB.collide(entity.topBB)) {
-
                     console.log("the top of the railing", entity.topBB.top);
-
                     that.isGrounded = true;
                     that.y = entity.topBB.top - CHIHIRO.SIZE * CHIHIRO.SCALE;
                     that.velocity.y = 0;
@@ -399,14 +390,11 @@ class Player {
         }
 
         // update state
-        if (this.state !== 2 || this.state !== 5) {  // NOT jump or dead
+        if (this.state !== 2 && this.state !== 5) {  // NOT jump
             if (this.game.crouch) this.state = 3;    // crouching state
             else if (Math.abs(this.velocity.x) > 0) this.state = 1;        // walking state
             else if (Math.abs(this.velocity.x) > MIN_WALK) this.state = 4; // running state
-        } else {
-
-        }
-
+        } 
 
         if (this.dead || this.state === 5) {
             this.velocity.x = 0;
@@ -418,8 +406,6 @@ class Player {
                 this.deadCounter = 0;
                 this.game.camera.loadLevel(1, this.game.camera.title);
             }
-        } else {
-            // do nothing
         }
 
         // update direction
