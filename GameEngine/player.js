@@ -251,7 +251,6 @@ class Player {
             if (entity.BB && that.BB.collide(entity.BB)) {      // is there an entity bb & check to see if they collide
                 if (that.velocity.y > 0) {                      // chihiro is falling
                     if((entity instanceof Ground || entity instanceof Platform || entity instanceof CloudPlatform ||
-                        entity instanceof Lamp || entity instanceof Railing ||
                         entity instanceof StoneLamp || entity instanceof Haku || entity instanceof NoFace )
                     && (that.lastBB.bottom <= entity.BB.top)) { // bottom of chihiro hits the top of the entity
                         that.isGrounded = true;
@@ -263,11 +262,6 @@ class Player {
                         that.isGrounded = false;
                     }
                 }
-
-
-
-
-
                 if (that.velocity.y < 0) { // chihiro is jumping up
                     if((entity instanceof Platform) // collision with platform
                         && (that.lastBB.top >= entity.BB.bottom)) { // top of chihiro goes above the bottom of the platform
@@ -278,16 +272,13 @@ class Player {
                     }
                 }
                 // left & right bounding boxes for platform
-                if ((entity instanceof Platform || entity instanceof CloudPlatform || entity instanceof StoneLamp) && 
+                if ((entity instanceof Platform || entity instanceof CloudPlatform || entity instanceof StoneLamp) &&
                     that.BB.collide(entity.BB)) {
-
-                    if (that.BB.collide(entity.leftBB) && (that.lastBB.right <= entity.leftBB.left)) { // left collision
-                        that.x -= 3; // so that the player won't move up
-                        // that.x = entity.leftBB.left - CHIHIRO.SIZE * CHIHIRO.SCALE;
+                        if (that.BB.collide(entity.leftBB)) { // left collision
+                        that.x -= 10; // so that the player won't move up
                         if (that.velocity.x > 0) that.velocity.x = 0;
-                    } else if (that.BB.collide(entity.rightBB) && (that.lastBB.left >= entity.rightBB.right)) { // right collision
-                        that.x += 3;
-                        // that.x = entity.rightBB.right;
+                    } else if (that.BB.collide(entity.rightBB)) { // right collision
+                        that.x += 10;
                         if (that.velocity.x < 0) that.velocity.x = 0;
                     }
                     that.updateBB();
@@ -370,6 +361,31 @@ class Player {
                     entity.removeFromWorld = true;
                     that.game.camera.coinCounter.coinCount ++;
                 }
+            }
+
+            if (that.velocity.y > 0) {                      // chihiro is falling
+                if ((entity instanceof Lamp) && that.BB.collide(entity.topBB)) {
+                    that.isGrounded = true;
+                    that.y = entity.topBB.top - CHIHIRO.SIZE * CHIHIRO.SCALE;
+                    that.velocity.y === 0;
+                    that.updateBB();
+                } else if ((entity instanceof Railing) && that.BB.collide(entity.topBB)) {
+                    that.isGrounded = false;
+                }
+            } else {
+                if ((entity instanceof Railing || entity instanceof Lamp) && that.BB.collide(entity.topBB)) {
+                    that.isGrounded = true;
+                    that.y = entity.topBB.top - CHIHIRO.SIZE * CHIHIRO.SCALE;
+                    that.velocity.y === 0;
+                    that.updateBB();
+                }
+            }
+
+            if ((entity instanceof Railing || entity instanceof Lamp) && that.BB.collide(entity.topBB)) {
+                that.isGrounded = true;
+                that.y = entity.topBB.top - CHIHIRO.SIZE * CHIHIRO.SCALE;
+                that.velocity.y === 0;
+                that.updateBB();
             }
         });
 

@@ -7,9 +7,9 @@ var LEVEL = {
     // add a platform length: short, medium, long.
     PLATFORM_LOCATION: [{X: 350, Y: 770}, {X: 600, Y: 620}, {X: 850, Y: 650}, {X: 1200, Y: 450}, {X: 1600, Y: 680}],
     CLOUD_PLATFORM_LOCATION: [{X: 200, Y: 770}, {X: 500, Y: 620}, {X: 750, Y: 650}, {X: 1100, Y: 450}, {X: 1500, Y: 680}],
-    STONE_LAMP_LOCATION: {X: 1000, Y: 800},
-    LAMP_LOCATION: {X: 150, Y: 750},
-    RAILING_LOCATION: {X: 150, Y: 830},
+    STONE_LAMP_LOCATION: {X: 500, Y: 700},
+    LAMP_LOCATION: {X:300, Y: 700},
+    RAILING_LOCATION: {X: 0, Y: 795},
 }
 class SceneManager {
     constructor(game) {
@@ -117,10 +117,10 @@ class SceneManager {
             this.game.addEntity(this.chihiro);
             this.game.addEntity(this.ground);
 
-            // for (var i = 0; i < LEVEL.PLATFORM_LOCATION.length; i++) {
-            //     let platform = LEVEL.PLATFORM_LOCATION[i];
-            //     this.game.addEntity(new Platform(this.game, platform.X, platform.Y, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE));
-            // }
+            for (var i = 0; i < LEVEL.PLATFORM_LOCATION.length; i++) {
+                let platform = LEVEL.PLATFORM_LOCATION[i];
+                this.game.addEntity(new Platform(this.game, platform.X, platform.Y, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE));
+            }
 
             // for (var i = 0; i < LEVEL.CLOUD_PLATFORM_LOCATION.length; i++) {
             //     let cloudPlatform = LEVEL.CLOUD_PLATFORM_LOCATION[i];
@@ -129,20 +129,20 @@ class SceneManager {
 
             this.game.addEntity(this.railing);
             this.game.addEntity(this.stonelamp);
-            // this.game.addEntity(this.lamp);
+            this.game.addEntity(this.lamp);
 
 
             for(let i = 0; i < this.Num_Soots; i++) {
                 this.game.addEntity(this.soot[i]);
             }
-            // this.game.addEntity(this.noface);
-            // this.game.addEntity(this.haku);
-            // this.game.addEntity(this.yubaba);
-            // this.game.addEntity(this.chick);
-            // this.game.addEntity(this.coin1);
-            // this.game.addEntity(this.coin2);
-            // this.game.addEntity(this.coin3);
-            // this.game.addEntity(this.coin4);
+            this.game.addEntity(this.noface);
+            this.game.addEntity(this.haku);
+            this.game.addEntity(this.yubaba);
+            this.game.addEntity(this.chick);
+            this.game.addEntity(this.coin1);
+            this.game.addEntity(this.coin2);
+            this.game.addEntity(this.coin3);
+            this.game.addEntity(this.coin4);
             this.game.addEntity(this.breathbar);
             this.game.addEntity(this.coinCounter);
         }
