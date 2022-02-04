@@ -256,7 +256,7 @@ class Player {
 
                     if((entity instanceof Ground || entity instanceof Platform || entity instanceof CloudPlatform ||
                         entity instanceof StoneLamp || entity instanceof Haku || entity instanceof NoFace ||
-                        entity instanceof Railing)
+                        entity instanceof Railing || entity instanceof Lamp)
                     && (that.lastBB.bottom <= entity.BB.top)) { // bottom of chihiro hits the top of the entity
                         that.isGrounded = true;
                         that.y = entity.BB.top - CHIHIRO.SIZE * CHIHIRO.SCALE;
@@ -279,7 +279,7 @@ class Player {
                 }
 
                 // SIDE COLLISIONS --> left & right bounding boxes for platform
-                if ((entity instanceof Platform || entity instanceof CloudPlatform || entity instanceof StoneLamp) &&
+                if ((entity instanceof Platform || entity instanceof StoneLamp) &&
                     that.BB.collide(entity.BB)) {
 
                         that.game.deactivate = true;   // don't let player access key press once collision happens

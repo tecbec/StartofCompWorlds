@@ -262,6 +262,8 @@ class Lamp {
     constructor(game, x, y, w) {
         Object.assign(this, { game, x, y, w});
         this.spritesheet = this.spritesheet = ASSET_MANAGER.getAsset("./sprites/lamp.png");
+
+
     }
 
     update() {
@@ -275,6 +277,8 @@ class Lamp {
             this.x - this.game.camera.x, this.y,
             BACKGROUND.LAMP.SIZE * BACKGROUND.LAMP.SCALE, BACKGROUND.LAMP.SIZE * BACKGROUND.LAMP.SCALE);
 
+        this.BB = new BoundingBox(this.x+BACKGROUND.LAMP.PADDING.W, this.y,
+            BACKGROUND.LAMP.SIZE * BACKGROUND.LAMP.SCALE-BACKGROUND.LAMP.PADDING.W, BACKGROUND.LAMP.SIZE * BACKGROUND.LAMP.SCALE);
 
         this.topBB = new BoundingBox(this.x+BACKGROUND.LAMP.PADDING.W, this.y+BACKGROUND.LAMP.PADDING.H,
             BACKGROUND.LAMP.SIZE * BACKGROUND.LAMP.SCALE-BACKGROUND.LAMP.PADDING.W, BACKGROUND.LAMP.BB_SIZE.H);
@@ -282,6 +286,9 @@ class Lamp {
 
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
+            ctx.strokeRect(this.BB.x -this.game.camera.x, this.BB.y,
+                BACKGROUND.LAMP.SIZE * BACKGROUND.LAMP.SCALE,
+                BACKGROUND.LAMP.SIZE * BACKGROUND.LAMP.SCALE);
             ctx.strokeStyle = 'Orange';
             ctx.strokeRect(this.topBB.x - this.game.camera.x, this.topBB.y, this.topBB.width, this.topBB.height);
         }

@@ -5,10 +5,10 @@ var LEVEL = {
     END_CANVAS: {X: 940}, // change this later when we figure out the exact ending canvas measurement
     FRAME_COUNT: 5, // This is the factor that determine how wide the actual game is.
     // add a platform length: short, medium, long.
-    PLATFORM_LOCATION: [{X: 75, Y: 800}, {X: 500, Y: 745}, {X: 850, Y: 0}, {X: 1200, Y:0}, {X: 1600, Y: 0}],
-    CLOUD_PLATFORM_LOCATION: [{X: 200, Y: 770}, {X: 500, Y: 620}, {X: 750, Y: 650}, {X: 1100, Y: 450}, {X: 1500, Y: 680}],
-    STONE_LAMP_LOCATION: {X: 800, Y: 700},
-    LAMP_LOCATION: {X:300, Y: 700},
+    PLATFORM_LOCATION: [{X: 75, Y: 800}, {X: 500, Y: 0}, {X: 850, Y: 0}, {X: 1200, Y:0}, {X: 1600, Y: 0}],
+    CLOUD_PLATFORM_LOCATION: [{X: 200, Y: 550}, {X: 500, Y: 0}, {X: 750, Y:0}, {X: 1100, Y: 0}, {X: 1500, Y: 0}],
+    STONE_LAMP_LOCATION: {X: 1000, Y: 700},
+    LAMP_LOCATION: {X:500, Y: 700},
     RAILING_LOCATION: {X: 0, Y: 795},
 }
 class SceneManager {
@@ -125,14 +125,14 @@ class SceneManager {
                 this.game.addEntity(new Platform(this.game, platform.X, platform.Y, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE));
             }
 
-            // for (var i = 0; i < LEVEL.CLOUD_PLATFORM_LOCATION.length; i++) {
-            //     let cloudPlatform = LEVEL.CLOUD_PLATFORM_LOCATION[i];
-            //     this.game.addEntity(new CloudPlatform(this.game, cloudPlatform.X, cloudPlatform.Y, BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE));
-            // }
+            for (var i = 0; i < LEVEL.CLOUD_PLATFORM_LOCATION.length; i++) {
+                let cloudPlatform = LEVEL.CLOUD_PLATFORM_LOCATION[i];
+                this.game.addEntity(new CloudPlatform(this.game, cloudPlatform.X, cloudPlatform.Y, BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE));
+            }
 
 
             this.game.addEntity(this.stonelamp);
-            // this.game.addEntity(this.lamp);
+            this.game.addEntity(this.lamp);
 
 
             for(let i = 0; i < this.Num_Soots; i++) {
