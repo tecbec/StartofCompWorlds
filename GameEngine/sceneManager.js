@@ -1,4 +1,7 @@
 // TODO: move this when we create a level.js
+/**
+ * THIS IS WHERE WE PUT THE ENTITIES IN THE CANVAS
+ */
 var LEVEL = {
     music: "./audio/OneSummersDay.mp3",
     START_CANVAS: {X: -900, Y: 0},
@@ -9,7 +12,7 @@ var LEVEL = {
     CLOUD_PLATFORM_LOCATION: [{X: 200, Y: 550}, {X: 500, Y: 0}, {X: 750, Y:0}, {X: 1100, Y: 0}, {X: 1500, Y: 0}],
     STONE_LAMP_LOCATION: {X: 1000, Y: 700},
     LAMP_LOCATION: {X:500, Y: 700},
-    RAILING_LOCATION: {X: 0, Y: 795},
+    RAILING_LOCATION: {X: 500, Y: 795},
 }
 class SceneManager {
     constructor(game) {
@@ -90,7 +93,7 @@ class SceneManager {
             // Background stuff
             this.stonelamp = new StoneLamp(this.game, LEVEL.STONE_LAMP_LOCATION.X, LEVEL.STONE_LAMP_LOCATION.Y, BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE);
             this.lamp = new Lamp(this.game, LEVEL.LAMP_LOCATION.X, LEVEL.LAMP_LOCATION.Y, BACKGROUND.LAMP.SIZE * BACKGROUND.LAMP.SCALE);
-            this.railing = new Railing(this.game, LEVEL.START_CANVAS.X, 795, PARAMS.CANVAS_WIDTH * LEVEL.FRAME_COUNT,
+            this.railing = new Railing(this.game, LEVEL.RAILING_LOCATION.X, LEVEL.RAILING_LOCATION.Y, PARAMS.CANVAS_WIDTH * LEVEL.FRAME_COUNT,
                 BACKGROUND.GROUND.SCALE * BACKGROUND.GROUND.SIZE);
 
             // initialization of the breath bar and counter

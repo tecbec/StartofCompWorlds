@@ -13,6 +13,7 @@ ASSET_MANAGER.queueDownload("./sprites/lamp.png");
 ASSET_MANAGER.queueDownload("./sprites/railing.png");
 ASSET_MANAGER.queueDownload("./sprites/platform_sheet.png");
 ASSET_MANAGER.queueDownload("./sprites/background.png");
+// ASSET_MANAGER.queueDownload("./sprites/background-nightsky.png");
 ASSET_MANAGER.queueDownload("./sprites/noface-spritesheet-fade-aura.png");
 ASSET_MANAGER.queueDownload("./sprites/coins.png");
 ASSET_MANAGER.queueDownload("./sprites/haku_spritesheet.png");

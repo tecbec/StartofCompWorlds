@@ -257,6 +257,14 @@ class Player {
                     }
                 }
 
+                if(entity instanceof Railing && that.game.crouch) // if she's crouching she'll fall to ground
+                {
+                    that.isGrounded = false;
+                    that.y = entity.BB.top - CHIHIRO.SIZE * CHIHIRO.SCALE + 1; // the 1 is just to get her past the bb of the railing
+                    that.velocity.y += FALL_ACC + TICK;
+                    that.updateBB();
+                }
+
                 if (that.velocity.y < 0) {     // chihiro is jumping up and hits the bottom of a platform
                     if((entity instanceof Platform )    // collision w/ bottom of platform
                         && (that.lastBB.top >= entity.BB.bottom)) { // top of chihiro goes above the bottom of the platform
