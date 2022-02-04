@@ -8,14 +8,11 @@ class BreathBar {
         /* this.width and this.height are for the dimensions of the blue bar */
 
         this.maxHealth = 100; // this sets the width of the whole breath bar
-
         this.game.camera.breathwidth = this.width;
-
     };
 
     update() {
         this.elapsed += this.game.clockTick;
-
         if(this.width >= 0) {
             this.width -= 0.05; // original
             // this.width -= .2; // changes for testing

@@ -1,11 +1,14 @@
 class BubblesController{
-    bubble = [];
-    timeTillNextBubble = 0;
-    constructor( game) {
-        Object.assign(this, {game});
-       // this.game = game;
+    //x, y are the x and y locations of the bubble
+    //direction - facing param from the player class
+    constructor(game, x, y, damage, direction) {
+        Object.assign(this, {game,x, y, damage, direction });
+        const maxSpeed = 1; // pixels per second   
+        this.timeTillNextBubble =0;
+        this.velocity = {x: 10, y: 0  };
+     this.elapsedTime = 0;
     }
-
+/*
     update( bubbleX, bubbleY, speed, damage, delay) {
         if(this.timeTillNextBubble <= 0){
             this.bubble.push(new Bubbles(this.game, bubbleX, bubbleY, speed, damage));
@@ -13,44 +16,39 @@ class BubblesController{
         }
         this.timeTillNextBubble--;
     };
-
-    draw(ctx){
-        console.log(this.bubble.length);
-        this.bubble.forEach((bubble) =>{
-            if(this.isBubbleOffScreen(bubble)){
-                const index = this.bubble.indexOf(bubble);
-                this.bubble.splice(index, 1);
-            }
-             bubble.draw(ctx) 
-            }); 
-    }
-    isBubbleOffScreen(bubble) {
-        return bubble.x >= PARAMS.CANVAS_WIDTH ;//bubble.width;
+*/
+ update() {
+    this.elapsedTime += this.game.clockTick;
+     if(this.direction === 1) { 
+        this.x -= ( this.velocity.x )* this.elapsedTime ; //maybe include the change in y??
+     } else {
+        this.x += this.velocity.x * this.elapsedTime ;
+     }
+        this.y += this.game.clockTick; 
+    if(this.elapsedTime > 5) {
+        this.elapsedTime ==0;
     }
 }
-
-class Bubbles{
-    constructor( game, x,y, speed, damage , delay) {
-        Object.assign(this, {game, x, y,speed, damage , delay});
-        //import bubble animation here 
-        this.x = x; 
-        this.y = y;
-        this.speed = speed; 
-        this.damage = damage; 
-
-        this.width =7; 
-        this.height = 5; 
-        this.color = "red";
-
-    }
-    update() {
-    };
     draw(ctx){
-        ctx.fillStyle = this.color; 
-        ctx.fillRect(this.x, this.y, this.width, this.height);
-        this.x = this.speed + this.x; 
-    };
-};
+        //console.log("Bubble"); 
+        const width = 2; 
+        const height = 5; 
+        const color = "blue";
+        ctx.fillStyle = color; 
+        var xOffset = 3;
+
+        if(this.x <=PARAMS.CANVAS_WIDTH ) {
+            console.log(this.x);
+            if(this.direction === 1) {//going left
+                ctx.fillRect(this.x -xOffset, this.y, width, height);
+            } else {
+                ctx.fillRect(this.x +xOffset, this.y, width, height);
+            }
+        } else{
+
+        }
+    }
+}
 
 class Coins {
     constructor( game, x, y) {

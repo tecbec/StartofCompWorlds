@@ -35,7 +35,7 @@ class Player {
         this.facing = 0; // 0 = right; 1 = left
         this.state = 0;  // 0 = idle, 1 = walking, 2 = jumping/falling, 3 = crouching, 4 = death
 
-        this.bubbleController = new BubblesController(this.game);
+       // this.bubbleController = new BubblesController(this.game);
 
         this.animations = [];
         this.updateBB();
@@ -144,22 +144,11 @@ class Player {
         ctx.imageSmoothingEnabled = false;
         // this.breathbar.draw(ctx);
         // this.coinCounter.draw(ctx);
-        this.bubbleController.draw(ctx);
-        this.shoot();
-    };
 
-    shoot(){
-        if(this.game.bubble) {
-            const speed = 2;
-            const delayBubble = 5;
-            const damage = 1; 
-            const bubbleX = this.x + CHIHIRO.SIZE /2 - this.game.camera.x ; 
-            const bubbleY = this.y+ CHIHIRO.SIZE /2; 
-            this.bubbleController.update( bubbleX, bubbleY, speed, damage, delayBubble);
-        }
     };
-
+    
     update() {
+
         const TICK = this.game.clockTick;
         const TICK_SCALE = 2;
         const MAX_FALL = 240;
@@ -367,12 +356,16 @@ class Player {
         if (this.velocity.x < 0) this.facing = 1;
         if (this.velocity.x > 0) this.facing = 0;
 
-
+        if(this.game.shoot){
+            this.game.addEntity(new BubblesController(this.game, this.x + CHIHIRO.SIZE /2 - this.game.camera.x ,
+                 this.y+ CHIHIRO.SIZE /2,  0, this.facing));
+         }
         if (this.game.camera.breathwidth <= 0) {
             this.game.camera.chihiro.dead = true;
         } else {
             this.game.camera.chihiro.dead = false;
         }
+
     };
 
     toString(){

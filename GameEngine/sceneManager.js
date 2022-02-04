@@ -82,6 +82,9 @@ class SceneManager {
             this.coinCounter = new CoinCounter(this.game, CHIHIRO.COIN_COUNTER.X, CHIHIRO.COIN_COUNTER.Y);
             this.breathbar = new BreathBar(this.game, CHIHIRO.BREATH_BAR.X, CHIHIRO.BREATH_BAR.Y, this.breathwidth,
                 CHIHIRO.BREATH_BAR.HEIGHT, CHIHIRO.BREATH_BAR.MAX);
+            
+            //const damage =0;//damage inflicited on other things 
+          //  this.bubbleController = new BubblesController(this.game, this.game.player.x,this.game.player.y,  damage); //I want this in in the sceneManager
         }
 
         this.loadGame();
@@ -126,9 +129,7 @@ class SceneManager {
     };
 
     update() {
-
         this.updateAudio();
-
         // canvas width = 400
         // blockwidth = 32 * 1 = 32
         // 200 -16 = 164

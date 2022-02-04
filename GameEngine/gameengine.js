@@ -92,7 +92,7 @@ class GameEngine {
                     that.crouch = true; 
                     break;
                 case "Space": //shoot would be cool to have the player change the arrow direction with the mouse
-                    that.bubble = true; 
+                    that.shoot = true; 
                     break;
             }
         }, false);
@@ -115,13 +115,14 @@ class GameEngine {
                     that.crouch = false; 
                     break;
                 case "Space": //shoot 
-                    that.bubble = false; 
+                    that.shoot = false; 
                     break;
             }
         }, false);
 
     };
 
+    
     addEntity(entity) {
         this.entitiesToAdd.push(entity);
     };
