@@ -36,8 +36,6 @@ class Player {
         this.facing = 0; // 0 = right; 1 = left
         this.state = 0;  // 0 = idle, 1 = walking, 2 = jumping/falling, 3 = crouching, 4 = running, 5 = death
 
-       // this.bubbleController = new BubblesController(this.game);
-
         this.animations = [];
 
         this.updateBB();
@@ -317,7 +315,6 @@ class Player {
 
                 //Collision with Yubaba
                 //for now have Yubaba push Chihiro? but later  kills on impact
-
 
                 // collision with Chicks
                 if (entity instanceof Chick && that.BB.collide(entity.BB)) {
