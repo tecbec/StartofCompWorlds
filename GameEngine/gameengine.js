@@ -70,7 +70,7 @@ class GameEngine {
         // From Mario Bros
         this.ctx.canvas.addEventListener("click", function (e) {
             that.click = getXandY(e);
-            // console.log(that.click);       // USED FOR TROUBLESHOOTING THE PLACEMENT OF THE PLATFORMS
+            console.log(that.click);       // USED FOR TROUBLESHOOTING THE PLACEMENT OF THE PLATFORMS
         }, false);
 
         // Key pressed 
