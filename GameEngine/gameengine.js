@@ -21,6 +21,8 @@ class GameEngine {
         this.mouse = false;
         this.click = false;
 
+        this.deactivate = false;    // use for pausing the key press
+
         // Options and the Details
         this.options = options || {
             prevent: {
@@ -29,9 +31,6 @@ class GameEngine {
             },
             debugging: false,
         };
-
-        //For direct access to chihiro for enemies that follow her
-        this.player;
     };
 
     init(ctx) {
@@ -71,10 +70,12 @@ class GameEngine {
         // From Mario Bros
         this.ctx.canvas.addEventListener("click", function (e) {
             that.click = getXandY(e);
+            // console.log(that.click);       // USED FOR TROUBLESHOOTING THE PLACEMENT OF THE PLATFORMS
         }, false);
 
         // Key pressed 
         this.ctx.canvas.addEventListener("keydown", function (e) {
+
             switch(e.code) {
                 case "ArrowLeft":
                     that.left = true;
@@ -98,21 +99,27 @@ class GameEngine {
         }, false);
         // Key released
         this.ctx.canvas.addEventListener("keyup", function (e) {
+            that.deactivate = false;
             switch(e.code) {
                 case "ArrowLeft":
                     that.left = false;
+                    // that.deactivate = false;
                     break;
                 case "ArrowRight":
                     that.right = false;
+                    // that.deactivate = false;
                     break;
                 case "ArrowUp":
                     that.up = false;
+                    // that.deactivate = false;
                     break;
                 case "ShiftLeft":
                     that.run = false;
+                    // that.deactivate = false;
                     break;
                 case "ArrowDown":
                     that.crouch = false; 
+                    // that.deactivate = false;
                     break;
                 case "Space": //shoot 
                     that.shoot = false; 
@@ -159,6 +166,7 @@ class GameEngine {
         this.clockTick = this.timer.tick();
         this.update();
         this.draw();
+
     };
 
     get["deltaTime"]() { return this.clockTick; }

@@ -97,7 +97,7 @@ class CoinCounter {
             this.x, this.y, PARAMS.SCALE * 2);
 
         ctx.fillStyle = "Black";
-        ctx.fillText(this.coinCount,  this.x + 22, this.y + 13);
+        ctx.fillText(this.coinCount,  this.x + 22 * PARAMS.SCALE, this.y + 13 * PARAMS.SCALE);
 
     };
 };
