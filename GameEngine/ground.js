@@ -238,16 +238,18 @@ class StoneLamp {
             BACKGROUND.STONE_LAMP.BB_SIZE.W, BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE);
 
         if (PARAMS.DEBUG) {
+            // ctx.lineWidth = 2;
             ctx.strokeStyle = 'Green';
             ctx.strokeRect(this.BB.x -this.game.camera.x, this.BB.y,
                 BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE,
                 BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE);
-            ctx.strokeStyle = 'Orange';
+            // ctx.lineWidth = 1;
+            ctx.strokeStyle = 'Red';
             ctx.strokeRect(this.topBB.x - this.game.camera.x, this.topBB.y, this.topBB.width, this.topBB.height);
             ctx.strokeRect(this.bottomBB.x - this.game.camera.x, this.bottomBB.y, this.bottomBB.width, this.bottomBB.height);
             ctx.strokeRect(this.leftBB.x - this.game.camera.x, this.leftBB.y, this.leftBB.width, this.leftBB.height);
             ctx.strokeRect(this.rightBB.x - this.game.camera.x, this.rightBB.y, this.rightBB.width, this.rightBB.height);
-        } 
+        }
         ctx.imageSmoothingEnabled = false;
     }
 }
