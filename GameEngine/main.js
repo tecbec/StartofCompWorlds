@@ -22,13 +22,11 @@ ASSET_MANAGER.downloadAll(() => {
 	let canvas = document.getElementById("gameCanvas");
 	let ctx = canvas.getContext("2d");
 	ASSET_MANAGER.autoRepeat("./audio/OneSummersDay.mp3");
-        
-	PARAMS.CANVAS_WIDTH = canvas.width
-	PARAMS.CANVAS_HEIGHT = canvas.height
-	// PARAMS.CANVAS_WIDTH = canvas.width
-	// PARAMS.CANVAS_HEIGHT = canvas.height
-	
-	//may need to change bitwidth or scale in Util
+
+	PARAMS.CANVAS_WIDTH = canvas.width;
+	PARAMS.CANVAS_HEIGHT = canvas.height;
+
+    //may need to change bitwidth or scale in Util
 	PARAMS.BLOCKWIDTH = PARAMS.BITWIDTH * PARAMS.SCALE;
 	gameEngine.init(ctx);
 	gameEngine.addEntity(new SceneManager(gameEngine));
@@ -54,7 +52,7 @@ function resizeGame() {
         gameArea.style.width = newWidth + 'px';
         gameArea.style.height = newHeight + 'px';
     }
-	
+
 	// gameArea.style.fontSize = (newWidth / 1920) + 'em';
 
     gameArea.style.marginTop = (-newHeight / 2) + 'px';
