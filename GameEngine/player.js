@@ -347,7 +347,8 @@ class Player {
 
                 // collision with soot
                 if (entity instanceof Soot ) {
-                    that.game.camera.breathwidth -= 3;
+                   // that.game.camera.breathwidth -= 3;
+                    that.game.camera.breathwidth -= 20;
                     that.game.camera.changeBreath() ;
                     entity.dead = true;
                 }
