@@ -5,6 +5,7 @@
         "breathbar",
         "breathbarheight",
         "breathwidth",
+        "framedur",
         "Googler",
         "healthbar",
         "Ladd's",
@@ -13,8 +14,12 @@
         "randomy",
         "sootlocation",
         "spritesheets",
+        "stonelamp",
+        "subheight",
+        "subwidth",
         "velocityx",
         "velocityy",
+        "Xand",
         "yubaba"
     ]
 }

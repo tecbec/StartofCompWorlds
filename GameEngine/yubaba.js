@@ -85,6 +85,8 @@ class Crow{
         this.frameDuration = 0.15; 
         this.scale = 0.1; 
 
+        this.dead = false;
+
         this.loadAnimations();
 
         //bounding box
