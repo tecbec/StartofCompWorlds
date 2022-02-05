@@ -8,9 +8,10 @@ var LEVEL = {
     END_CANVAS: {X: 940}, // change this later when we figure out the exact ending canvas measurement
     FRAME_COUNT: 5, // This is the factor that determine how wide the actual game is.
     // add a platform length: short, medium, long.
-    PLATFORM_LOCATION: [{X: 75, Y: 800}, {X: 500, Y: 0}, {X: 850, Y: 0}, {X: 1200, Y:0}, {X: 1600, Y: 0}],
+    PLATFORM_LOCATION: [{X: 75, Y: 800},  {X: 900, Y: 505}, {X: 1100, Y: 350}, {X: 1400, Y: 400}, {X: 1770, Y:250}, {X: 2400, Y: 390},
+        {X: 2400, Y: 390}, {X: 2700, Y: 390}, {X: 3000, Y: 390}, {X: 3300, Y: 390}],
     CLOUD_PLATFORM_LOCATION: [{X: 200, Y: 550}, {X: 500, Y: 0}, {X: 750, Y:0}, {X: 1100, Y: 0}, {X: 1500, Y: 0}],
-    STONE_LAMP_LOCATION: {X: 1000, Y: 700},
+    STONE_LAMP_LOCATION: [{X: 1000, Y: 700}, {X: 1800, Y: 700}],
     LAMP_LOCATION: [{X:500, Y: 650}, {X:2402, Y: 650}],
     RAILING_LOCATION: {X: 500, Y: 820},
 }
@@ -91,7 +92,7 @@ class SceneManager {
 
 
             // Background stuff
-            this.stonelamp = new StoneLamp(this.game, LEVEL.STONE_LAMP_LOCATION.X, LEVEL.STONE_LAMP_LOCATION.Y, BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE);
+            //this.stonelamp = new StoneLamp(this.game, LEVEL.STONE_LAMP_LOCATION.X, LEVEL.STONE_LAMP_LOCATION.Y, BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE);
             this.railing = new Railing(this.game, LEVEL.RAILING_LOCATION.X, LEVEL.RAILING_LOCATION.Y, PARAMS.CANVAS_WIDTH * LEVEL.FRAME_COUNT,
                 BACKGROUND.RAILING.SCALE * BACKGROUND.RAILING.SIZE);
 
@@ -137,7 +138,11 @@ class SceneManager {
                 this.game.addEntity(new Lamp(this.game, lamp.X, lamp.Y, BACKGROUND.LAMP.SIZE * BACKGROUND.LAMP.SCALE.W) );
             }
 
-            this.game.addEntity(this.stonelamp);
+            for(var i=0; i < LEVEL.LAMP_LOCATION.length; i++){
+                let stone_lamp = LEVEL.STONE_LAMP_LOCATION[i];
+                this.game.addEntity(new StoneLamp(this.game, stone_lamp.X, stone_lamp.Y, BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE) );
+            }
+           // this.game.addEntity(this.stonelamp);
             //this.game.addEntity(this.lamp);
 
 
