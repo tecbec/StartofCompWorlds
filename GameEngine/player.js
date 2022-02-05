@@ -236,8 +236,9 @@ class Player {
         // collision handling
         var that = this; //need this because we are creating
         this.game.entities.forEach(function (entity) {          // this will look at all entities in relation to chihiro
-
+            
             if (entity.BB && that.BB.collide(entity.BB)) {      // is there an entity bb & check to see if they collide
+
                 if (that.velocity.y > 0) {                      // chihiro is falling
                     if((entity instanceof Ground || entity instanceof Platform || entity instanceof CloudPlatform ||
                         entity instanceof StoneLamp || entity instanceof Haku || entity instanceof NoFace ||
@@ -275,15 +276,16 @@ class Player {
                 // SIDE COLLISIONS --> left & right bounding boxes for platform
                 if ((entity instanceof Platform || entity instanceof StoneLamp) &&
                     that.BB.collide(entity.BB)) {
-
+                        console.log(that.BB.collide(entity.BB));
                         that.game.deactivate = true;   // don't let player access key press once collision happens
-
                         if (that.BB.collide(entity.leftBB) && that.lastBB.right >= entity.leftBB.left ) { // left collision
                             that.x = entity.BB.left - CHIHIRO.SIZE * CHIHIRO.SCALE; // so that the player won't stick to the bb of the entity
+                            that.y -= 1;
                             if (that.velocity.x > 0) that.velocity.x = 0;
                             that.velocity.y = 0;
                         } else if (that.BB.collide(entity.rightBB) && that.lastBB.left <= entity.rightBB.right ) { // right collision
                             that.x = entity.BB.right; // so that the player won't stick to the bb of the entity
+                            that.y -= 1;
                             if (that.velocity.x < 0) that.velocity.x = 0;
                         } else {
                             

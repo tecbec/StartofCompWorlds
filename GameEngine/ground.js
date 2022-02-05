@@ -5,7 +5,7 @@ var BACKGROUND = {
     SIZE: {W: 288, H: 208},
     SCALE: 1,
     GROUND: {X: 32, Y: 0, SIZE: 32, SCALE: 4},
-    STONE_LAMP: {X: 0, Y: 0, SIZE: 64, SCALE: 4, BB_SIZE: {W: 10, H: 64}},
+    STONE_LAMP: {X: 0, Y: 0, SIZE: 64, SCALE: 4, BB_SIZE: {W: 10, H: 10}},
     LAMP: {X: 0, Y: 0, SIZE: 64, SCALE:  {W: 3, H: 5}, BB_SIZE: {W: 5, H: 10}, PADDING: {W: 50, H: 13}},
     RAILING: {X: 0, Y: 10, SIZE: 64, SCALE: 2.5, BB_SIZE: {W: 5, H: 10}, PADDING: 20},
     PLATFORM: {LEFT: {X: 0, Y: 32}, MID: {X: 16, Y: 32}, RIGHT: {X: 32, Y: 32}, SIZE: 16, SCALE: 4, COUNT: 2, BB_SIZE: {W: 5, H: 16}},
@@ -221,11 +221,11 @@ class StoneLamp {
         this.bottomBB = new BoundingBox(this.x, this.y ,
             BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE, BACKGROUND.STONE_LAMP.BB_SIZE.H);
 
-        this.leftBB = new BoundingBox(this.x, this.y,
-            BACKGROUND.STONE_LAMP.BB_SIZE.W, BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE);
+        this.leftBB = new BoundingBox(this.x, this.y + 10,
+            BACKGROUND.STONE_LAMP.BB_SIZE.W, BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE - 20);
 
-        this.rightBB = new BoundingBox(this.BB.right - BACKGROUND.PLATFORM.BB_SIZE.W, this.y,
-            BACKGROUND.STONE_LAMP.BB_SIZE.W, BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE);
+        this.rightBB = new BoundingBox(this.BB.right - BACKGROUND.PLATFORM.BB_SIZE.W - 5, this.y + 10,
+            BACKGROUND.STONE_LAMP.BB_SIZE.W, BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE - 20);
 
         if (PARAMS.DEBUG) {
             // ctx.lineWidth = 2;
