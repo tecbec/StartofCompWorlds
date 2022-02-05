@@ -12,7 +12,7 @@ var LEVEL = {
     CLOUD_PLATFORM_LOCATION: [{X: 200, Y: 550}, {X: 500, Y: 0}, {X: 750, Y:0}, {X: 1100, Y: 0}, {X: 1500, Y: 0}],
     STONE_LAMP_LOCATION: {X: 1000, Y: 700},
     LAMP_LOCATION: {X:500, Y: 700},
-    RAILING_LOCATION: {X: 500, Y: 795},
+    RAILING_LOCATION: {X: 500, Y: 820},
 }
 class SceneManager {
     constructor(game) {
@@ -160,7 +160,6 @@ class SceneManager {
 
     update() {
         this.updateAudio();
-
         // canvas width = 400
         // blockwidth = 32 * 1 = 32
         // 200 -16 = 164

@@ -36,8 +36,6 @@ class Player {
         this.facing = 0; // 0 = right; 1 = left
         this.state = 0;  // 0 = idle, 1 = walking, 2 = jumping/falling, 3 = crouching, 4 = running, 5 = death
 
-        this.bubbleController = new BubblesController(this.game);
-
         this.animations = [];
 
         this.updateBB();
@@ -145,22 +143,13 @@ class Player {
             // ctx.strokeRect(this.BBbottom.x - this.game.camera.x, this.BBbottom.y, this.BBbottom.width, this.BBbottom.height);
         }
         ctx.imageSmoothingEnabled = false;
-        this.bubbleController.draw(ctx);
-        this.shoot();
-    };
+        // this.breathbar.draw(ctx);
+        // this.coinCounter.draw(ctx);
 
-    shoot(){
-        if(this.game.bubble) {
-            const speed = 2;
-            const delayBubble = 5;
-            const damage = 1;
-            const bubbleX = this.x + CHIHIRO.SIZE /2 - this.game.camera.x ;
-            const bubbleY = this.y+ CHIHIRO.SIZE /2;
-            this.bubbleController.update( bubbleX, bubbleY, speed, damage, delayBubble);
-        }
     };
-
+    
     update() {
+
         const TICK = this.game.clockTick;
         const TICK_SCALE = 2;
         const MAX_FALL = 240 * PARAMS.SCALE;
@@ -267,8 +256,8 @@ class Player {
                         that.isGrounded = false;
                     }
                 }
-
-                if(entity instanceof Railing && that.game.crouch) // if she's crouching she'll fall to ground
+                
+                if(entity instanceof Railing && that.game.crouch ) // if she's crouching she'll fall to ground
                 {
                     that.isGrounded = false;
                     that.y = entity.BB.top - CHIHIRO.SIZE * CHIHIRO.SCALE + 1; // the 1 is just to get her past the bb of the railing
@@ -334,7 +323,6 @@ class Player {
 
                 //Collision with Yubaba
                 //for now have Yubaba push Chihiro? but later  kills on impact
-
 
                 // collision with Chicks
                 if (entity instanceof Chick && that.BB.collide(entity.BB)) {
@@ -423,6 +411,17 @@ class Player {
         // update direction
         if (this.velocity.x < 0) this.facing = 1;
         if (this.velocity.x > 0) this.facing = 0;
+
+        if(this.game.shoot){
+            this.game.addEntity(new BubblesController(this.game, this.x + CHIHIRO.SIZE /2 - this.game.camera.x ,
+                 this.y+ CHIHIRO.SIZE /2,  0, this.facing));
+         }
+        if (this.game.camera.breathwidth <= 0) {
+            this.game.camera.chihiro.dead = true;
+        } else {
+            this.game.camera.chihiro.dead = false;
+        }
+
     };
 
     toString(){

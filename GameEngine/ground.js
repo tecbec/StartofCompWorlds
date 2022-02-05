@@ -7,7 +7,7 @@ var BACKGROUND = {
     GROUND: {X: 32, Y: 0, SIZE: 32, SCALE: 4},
     STONE_LAMP: {X: 0, Y: 0, SIZE: 64, SCALE: 4, BB_SIZE: {W: 10, H: 64}},
     LAMP: {X: 0, Y: 0, SIZE: 64, SCALE: 4, BB_SIZE: {W: 5, H: 10}, PADDING: {W: 100, H: 13}},
-    RAILING: {X: 0, Y: 0, SIZE: 64, SCALE: 2.5, BB_SIZE: {W: 5, H: 10}, PADDING: 20},
+    RAILING: {X: 0, Y: 10, SIZE: 64, SCALE: 2.5, BB_SIZE: {W: 5, H: 10}, PADDING: 20},
     PLATFORM: {LEFT: {X: 0, Y: 32}, MID: {X: 16, Y: 32}, RIGHT: {X: 32, Y: 32}, SIZE: 16, SCALE: 4, COUNT: 2, BB_SIZE: {W: 5, H: 16}},
     CLOUD_PLATFORM: {LEFT: {X: 0, Y: 0}, MID: {X: 0, Y: 0}, RIGHT: {X: 0, Y: 0}, SIZE: 16, SCALE: 4, COUNT: 2, BB_SIZE: {W: 5, H: 16}}
     // PLATFORM_SHORT: {LEFT: {X: 0, Y: 32}, MID: {X: 16, Y: 32}, RIGHT: {X: 32, Y: 32}, SIZE: 16, SCALE: 2, COUNT: 2, BB_SIZE: {W: 5, H: 16}}
@@ -20,9 +20,7 @@ class Ground { //bridge
 
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/platform_sheet.png");
         this.BB = new BoundingBox(this.x , this.y, this.w, BACKGROUND.GROUND.SCALE * BACKGROUND.GROUND.SIZE);
-
     };
-
     update() {
 
     };
@@ -306,11 +304,10 @@ class Railing {
         Object.assign(this, { game, x, y, w});
         this.spritesheet = this.spritesheet = ASSET_MANAGER.getAsset("./sprites/railing.png");
 
-        this.BB = new BoundingBox(this.x, this.y,
-            this.w, BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE);
-        this.topBB = new BoundingBox(this.x, this.y+BACKGROUND.RAILING.PADDING,
-            this.w,  BACKGROUND.RAILING.BB_SIZE.H);
-
+       this.BB = new BoundingBox(this.x, this.y,
+           this.w, BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE);
+       this.topBB = new BoundingBox(this.x, this.y+BACKGROUND.RAILING.PADDING,
+           this.w,  BACKGROUND.RAILING.BB_SIZE.H);
 
     }
 
@@ -324,13 +321,15 @@ class Railing {
         for (var i = 0; i < COUNT; i ++) {
             ctx.drawImage(this.spritesheet, BACKGROUND.RAILING.X, BACKGROUND.RAILING.Y,
                 BACKGROUND.RAILING.SIZE, BACKGROUND.RAILING.SIZE,
-                this.x -BACKGROUND.RAILING.SIZE *BACKGROUND.RAILING.SCALE*i - this.game.camera.x, this.y,
+                this.x + BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE * i  - this.game.camera.x, this.y,
                 BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE, BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE);
         }
 
-        if (PARAMS.DEBUG) {
+       if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
-            ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y,this.BB.width, this.BB.height);
+            ctx.strokeRect(this.BB.x -this.game.camera.x, this.BB.y,
+              this.BB.width,//  BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE,
+                this.BB.height);//BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE);
             ctx.strokeStyle = 'Orange';
             ctx.strokeRect(this.topBB.x - this.game.camera.x, this.topBB.y, this.topBB.width, this.topBB.height);
         }
