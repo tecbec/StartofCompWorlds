@@ -377,12 +377,12 @@ class Player {
             }
         });
 
-        if (this.game.camera.breathwidth <= 0) {
-            this.dead = true;
-            this.state = 5;
-        } else {
-            this.dead = false;
-        }
+        // if (this.game.camera.breathwidth <= 0) {
+        //     this.dead = true;
+        //     this.state = 5;
+        // } else {
+        //     this.dead = false;
+        // }
 
         // update state
         if (this.state !== 2 || this.state !== 5) {  // NOT jump or dead

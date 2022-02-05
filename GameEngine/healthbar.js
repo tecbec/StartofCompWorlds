@@ -13,14 +13,14 @@ class BreathBar {
 
     update() {
         this.elapsed += this.game.clockTick;
-        if(this.width >= 0) {
-            this.width -= 0.05; // original
-            // this.width -= 0.25; // changes for testing
-            this.width = (this.width / this.maxHealth) * this.maxHealth;
-            this.game.camera.breathwidth = this.width;
-        } else {
-            this.width = 0;
-        }
+        // if(this.width >= 0) {
+        //     this.width -= 0.05; // original
+        //     // this.width -= 0.25; // changes for testing
+        //     this.width = (this.width / this.maxHealth) * this.maxHealth;
+        //     this.game.camera.breathwidth = this.width;
+        // } else {
+        //     this.width = 0;
+        // }
     };
 
     draw(ctx) {

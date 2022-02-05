@@ -11,7 +11,7 @@ var LEVEL = {
     PLATFORM_LOCATION: [{X: 75, Y: 800}, {X: 500, Y: 0}, {X: 850, Y: 0}, {X: 1200, Y:0}, {X: 1600, Y: 0}],
     CLOUD_PLATFORM_LOCATION: [{X: 200, Y: 550}, {X: 500, Y: 0}, {X: 750, Y:0}, {X: 1100, Y: 0}, {X: 1500, Y: 0}],
     STONE_LAMP_LOCATION: {X: 1000, Y: 700},
-    LAMP_LOCATION: {X:500, Y: 700},
+    LAMP_LOCATION: [{X:500, Y: 650}, {X:2302, Y: 650}],
     RAILING_LOCATION: {X: 500, Y: 820},
 }
 class SceneManager {
@@ -92,7 +92,6 @@ class SceneManager {
 
             // Background stuff
             this.stonelamp = new StoneLamp(this.game, LEVEL.STONE_LAMP_LOCATION.X, LEVEL.STONE_LAMP_LOCATION.Y, BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE);
-            this.lamp = new Lamp(this.game, LEVEL.LAMP_LOCATION.X, LEVEL.LAMP_LOCATION.Y, BACKGROUND.LAMP.SIZE * BACKGROUND.LAMP.SCALE);
             this.railing = new Railing(this.game, LEVEL.RAILING_LOCATION.X, LEVEL.RAILING_LOCATION.Y, PARAMS.CANVAS_WIDTH * LEVEL.FRAME_COUNT,
                 BACKGROUND.RAILING.SCALE * BACKGROUND.RAILING.SIZE);
 
@@ -133,9 +132,13 @@ class SceneManager {
                 this.game.addEntity(new CloudPlatform(this.game, cloudPlatform.X, cloudPlatform.Y, BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE));
             }
 
+            for(var i=0; i < LEVEL.LAMP_LOCATION.length; i++){
+                let lamp = LEVEL.LAMP_LOCATION[i];
+                this.game.addEntity(new Lamp(this.game, lamp.X, lamp.Y, BACKGROUND.LAMP.SIZE * BACKGROUND.LAMP.SCALE.W) );
+            }
 
             this.game.addEntity(this.stonelamp);
-            this.game.addEntity(this.lamp);
+            //this.game.addEntity(this.lamp);
 
 
             for(let i = 0; i < this.Num_Soots; i++) {
@@ -143,7 +146,7 @@ class SceneManager {
             }
             this.game.addEntity(this.noface);
             this.game.addEntity(this.haku);
-            this.game.addEntity(this.yubaba);
+            //this.game.addEntity(this.yubaba);
             // this.game.addEntity(this.chick);
             this.game.addEntity(this.coin1);
             this.game.addEntity(this.coin2);
