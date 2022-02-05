@@ -266,15 +266,12 @@ class Player {
                     } else {
                         that.isGrounded = false;
                     }
-
-
                 }
 
-                
+
                 // SIDE COLLISIONS --> left & right bounding boxes for platform
                 if ((entity instanceof Platform || entity instanceof StoneLamp) &&
                     that.BB.collide(entity.BB)) {
-
                         that.game.deactivate = true;   // don't let player access key press once collision happens
 
                         if (that.BB.collide(entity.leftBB) && that.lastBB.right >= entity.leftBB.left ) { // left collision
@@ -296,8 +293,6 @@ class Player {
                     that.velocity.y += FALL_ACC + TICK;
                     that.updateBB();
                 }
-
-
 
 
 
