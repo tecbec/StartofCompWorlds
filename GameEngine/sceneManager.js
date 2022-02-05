@@ -11,7 +11,7 @@ var LEVEL = {
     PLATFORM_LOCATION: [{X: 75, Y: 800}, {X: 500, Y: 0}, {X: 850, Y: 0}, {X: 1200, Y:0}, {X: 1600, Y: 0}],
     CLOUD_PLATFORM_LOCATION: [{X: 200, Y: 550}, {X: 500, Y: 0}, {X: 750, Y:0}, {X: 1100, Y: 0}, {X: 1500, Y: 0}],
     STONE_LAMP_LOCATION: {X: 1000, Y: 700},
-    LAMP_LOCATION: [{X:500, Y: 650}, {X:2302, Y: 650}],
+    LAMP_LOCATION: [{X:500, Y: 650}, {X:2402, Y: 650}],
     RAILING_LOCATION: {X: 500, Y: 820},
 }
 class SceneManager {
