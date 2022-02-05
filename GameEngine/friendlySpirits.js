@@ -12,7 +12,7 @@ class NoFace {
 
         this.dead = false;
         this.deadCounter = 0;
-        this.scale = .3;
+        this.scale = .5;
 
         // bounding box
         this.updateBB();

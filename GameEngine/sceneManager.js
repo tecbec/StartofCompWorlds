@@ -8,12 +8,17 @@ var LEVEL = {
     END_CANVAS: {X: 940}, // change this later when we figure out the exact ending canvas measurement
     FRAME_COUNT: 5, // This is the factor that determine how wide the actual game is.
     // add a platform length: short, medium, long.
-    PLATFORM_LOCATION: [{X: 75, Y: 800},  {X: 900, Y: 505}, {X: 1100, Y: 350}, {X: 1400, Y: 400}, {X: 1770, Y:250}, {X: 2400, Y: 390},
-        {X: 2400, Y: 390}, {X: 2700, Y: 390}, {X: 3000, Y: 390}, {X: 3300, Y: 390}],
-    CLOUD_PLATFORM_LOCATION: [{X: 200, Y: 550}, {X: 500, Y: 0}, {X: 750, Y:0}, {X: 1100, Y: 0}, {X: 1500, Y: 0}],
-    STONE_LAMP_LOCATION: [{X: 1000, Y: 700}, {X: 1800, Y: 700}],
-    LAMP_LOCATION: [{X:500, Y: 650}, {X:2402, Y: 650}],
+    PLATFORM_LOCATION:       [{X: 790, Y: 550}, {X: 1100, Y: 345}, {X: 1400, Y: 500}, {X: 1900, Y:390}, {X: 2200, Y: 590},     // scene 2
+                              {X: 2600, Y: 590}, {X: 2750, Y: 450}, {X: 3300, Y: 575}, {X: 3500, Y: 400}, {X: 4000, Y: 600}],                 // scene 3
+    CLOUD_PLATFORM_LOCATION: [{X: 2800, Y: 250}, {X: 3200, Y: 300}, {X: 3400, Y:150}, {X: 3750, Y: 250}, {X: 4000, Y: 300}],
+    STONE_LAMP_LOCATION: [{X: 1000, Y: 700}, {X: 1800, Y: 700}, {X: 2902, Y: 700}, {X: 3702, Y: 700}],
+    LAMP_LOCATION: [{X:500, Y: 650}, {X:2402, Y: 650}, {X:4304, Y: 650}],
     RAILING_LOCATION: {X: 500, Y: 820},
+    SOOT_LOCATION: [{X: 1100, Y: 310}, {X: 1500, Y: 920}, {X: 3350, Y: 540}, {X: 3350, Y: 920}],
+    SOOT_AREA: [{W: 100, H: 15}, {W: 200, H: 15}, {W: 100, H: 15}, {W: 200, H: 15}],
+    SOOT_NUM: [10, 20, 10, 20],
+    COIN_LOCATION: [{X: 0, Y: 0}, {X: 0, Y: 0}, {X: 0, Y: 0}, {X: 0, Y: 0}],
+    NOFACE_LOCATION: {X: 1950, Y: 200},
 }
 class SceneManager {
     constructor(game) {
@@ -67,20 +72,10 @@ class SceneManager {
         this.background = new BackGround(this.game, LEVEL.START_CANVAS.X,  LEVEL.START_CANVAS.Y);
 
         if(!this.title){
-            // entity locations on the screen
-            const nofacelocation = {x: 300, y: 50};
-            const sootlocation = {x: 150, y: 190};
 
-            // set the number of soots to create
-            this.Num_Soots = 10;
-            this.soot = [];
-            for(let i = 0; i < this.Num_Soots; i++) {
-                let dir = getRandomInteger(0,1);
-                this.soot[i] = new Soot(gameEngine, sootlocation.x, sootlocation.y, dir);
-            }
             // TODO: fix no face position
             this.haku = new Haku(this.game, HAKU.INITIAL_POSITION.X, PARAMS.CANVAS_WIDTH - HAKU.SIZE * HAKU.SCALE - BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE);
-            this.noface = new NoFace(this.game, nofacelocation.x, nofacelocation.y);
+            this.noface = new NoFace(this.game, LEVEL.NOFACE_LOCATION.X, LEVEL.NOFACE_LOCATION.Y);
             this.yubaba = new Yubaba(this.game, 0, 0);
             this.chick = new Chick(this.game, chickLocation.x, chickLocation.y, chickLocation.minX, chickLocation.maxX);
 
@@ -138,17 +133,22 @@ class SceneManager {
                 this.game.addEntity(new Lamp(this.game, lamp.X, lamp.Y, BACKGROUND.LAMP.SIZE * BACKGROUND.LAMP.SCALE.W) );
             }
 
-            for(var i=0; i < LEVEL.LAMP_LOCATION.length; i++){
+
+            for(var i=0; i < LEVEL.STONE_LAMP_LOCATION.length; i++){
+
                 let stone_lamp = LEVEL.STONE_LAMP_LOCATION[i];
                 this.game.addEntity(new StoneLamp(this.game, stone_lamp.X, stone_lamp.Y, BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE) );
             }
-           // this.game.addEntity(this.stonelamp);
-            //this.game.addEntity(this.lamp);
 
-
-            for(let i = 0; i < this.Num_Soots; i++) {
-                this.game.addEntity(this.soot[i]);
+            for(var i=0; i < LEVEL.SOOT_LOCATION.length; i++){
+                this.soot = [];
+                for(let j = 0; j < LEVEL.SOOT_NUM[i]; j++) {
+                    let dir = getRandomInteger(0,1);
+                    this.soot[j] = new Soot(gameEngine, LEVEL.SOOT_LOCATION[i].X, LEVEL.SOOT_LOCATION[i].Y, dir, LEVEL.SOOT_AREA[i].W, LEVEL.SOOT_AREA[i].H);
+                    this.game.addEntity(this.soot[j]);
+                }
             }
+
             this.game.addEntity(this.noface);
             this.game.addEntity(this.haku);
             // this.game.addEntity(this.yubaba);
