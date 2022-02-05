@@ -1,15 +1,18 @@
 // TODO: move this when we create a level.js
+/**
+ * THIS IS WHERE WE PUT THE ENTITIES IN THE CANVAS
+ */
 var LEVEL = {
     music: "./audio/OneSummersDay.mp3",
     START_CANVAS: {X: -900, Y: 0},
     END_CANVAS: {X: 940}, // change this later when we figure out the exact ending canvas measurement
     FRAME_COUNT: 5, // This is the factor that determine how wide the actual game is.
     // add a platform length: short, medium, long.
-    PLATFORM_LOCATION: [{X: 350, Y: 770}, {X: 600, Y: 620}, {X: 850, Y: 650}, {X: 1200, Y: 450}, {X: 1600, Y: 680}],
-    CLOUD_PLATFORM_LOCATION: [{X: 200, Y: 770}, {X: 500, Y: 620}, {X: 750, Y: 650}, {X: 1100, Y: 450}, {X: 1500, Y: 680}],
-    STONE_LAMP_LOCATION: {X: 500, Y: 700},
-    LAMP_LOCATION: {X:300, Y: 700},
-    RAILING_LOCATION: {X: 0, Y: 795},
+    PLATFORM_LOCATION: [{X: 75, Y: 800}, {X: 500, Y: 0}, {X: 850, Y: 0}, {X: 1200, Y:0}, {X: 1600, Y: 0}],
+    CLOUD_PLATFORM_LOCATION: [{X: 200, Y: 550}, {X: 500, Y: 0}, {X: 750, Y:0}, {X: 1100, Y: 0}, {X: 1500, Y: 0}],
+    STONE_LAMP_LOCATION: {X: 1000, Y: 700},
+    LAMP_LOCATION: [{X:500, Y: 650}, {X:2402, Y: 650}],
+    RAILING_LOCATION: {X: 500, Y: 820},
 }
 class SceneManager {
     constructor(game) {
@@ -89,9 +92,8 @@ class SceneManager {
 
             // Background stuff
             this.stonelamp = new StoneLamp(this.game, LEVEL.STONE_LAMP_LOCATION.X, LEVEL.STONE_LAMP_LOCATION.Y, BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE);
-            this.lamp = new Lamp(this.game, LEVEL.LAMP_LOCATION.X, LEVEL.LAMP_LOCATION.Y, BACKGROUND.LAMP.SIZE * BACKGROUND.LAMP.SCALE);
-            this.railing = new Railing(this.game, LEVEL.START_CANVAS.X, 795, PARAMS.CANVAS_WIDTH * LEVEL.FRAME_COUNT,
-                BACKGROUND.GROUND.SCALE * BACKGROUND.GROUND.SIZE);
+            this.railing = new Railing(this.game, LEVEL.RAILING_LOCATION.X, LEVEL.RAILING_LOCATION.Y, PARAMS.CANVAS_WIDTH * LEVEL.FRAME_COUNT,
+                BACKGROUND.RAILING.SCALE * BACKGROUND.RAILING.SIZE);
 
             // initialization of the breath bar and counter
             this.coinCounter = new CoinCounter(this.game, CHIHIRO.COIN_COUNTER.X, CHIHIRO.COIN_COUNTER.Y);
@@ -125,14 +127,18 @@ class SceneManager {
                 this.game.addEntity(new Platform(this.game, platform.X, platform.Y, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE));
             }
 
-            // for (var i = 0; i < LEVEL.CLOUD_PLATFORM_LOCATION.length; i++) {
-            //     let cloudPlatform = LEVEL.CLOUD_PLATFORM_LOCATION[i];
-            //     this.game.addEntity(new CloudPlatform(this.game, cloudPlatform.X, cloudPlatform.Y, BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE));
-            // }
+            for (var i = 0; i < LEVEL.CLOUD_PLATFORM_LOCATION.length; i++) {
+                let cloudPlatform = LEVEL.CLOUD_PLATFORM_LOCATION[i];
+                this.game.addEntity(new CloudPlatform(this.game, cloudPlatform.X, cloudPlatform.Y, BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE));
+            }
 
+            for(var i=0; i < LEVEL.LAMP_LOCATION.length; i++){
+                let lamp = LEVEL.LAMP_LOCATION[i];
+                this.game.addEntity(new Lamp(this.game, lamp.X, lamp.Y, BACKGROUND.LAMP.SIZE * BACKGROUND.LAMP.SCALE.W) );
+            }
 
             this.game.addEntity(this.stonelamp);
-            // this.game.addEntity(this.lamp);
+            //this.game.addEntity(this.lamp);
 
 
             for(let i = 0; i < this.Num_Soots; i++) {
@@ -140,7 +146,7 @@ class SceneManager {
             }
             this.game.addEntity(this.noface);
             this.game.addEntity(this.haku);
-            this.game.addEntity(this.yubaba);
+            // this.game.addEntity(this.yubaba);
             // this.game.addEntity(this.chick);
             this.game.addEntity(this.coin1);
             this.game.addEntity(this.coin2);
@@ -157,7 +163,6 @@ class SceneManager {
 
     update() {
         this.updateAudio();
-
         // canvas width = 400
         // blockwidth = 32 * 1 = 32
         // 200 -16 = 164

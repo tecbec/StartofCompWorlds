@@ -6,9 +6,9 @@ var BACKGROUND = {
     SCALE: 1,
     GROUND: {X: 32, Y: 0, SIZE: 32, SCALE: 4},
     STONE_LAMP: {X: 0, Y: 0, SIZE: 64, SCALE: 4, BB_SIZE: {W: 10, H: 64}},
-    LAMP: {X: 0, Y: 0, SIZE: 64, SCALE: 4, BB_SIZE: {W: 5, H: 10}, PADDING: {W: 100, H: 13}},
-    RAILING: {X: 0, Y: 0, SIZE: 64, SCALE: 2.5, BB_SIZE: {W: 5, H: 10}, PADDING: 20},
-    PLATFORM: {LEFT: {X: 0, Y: 32}, MID: {X: 16, Y: 32}, RIGHT: {X: 32, Y: 32}, SIZE: 16, SCALE: 4, COUNT: 2, BB_SIZE: {W: 10, H: 16}},
+    LAMP: {X: 0, Y: 0, SIZE: 64, SCALE:  {W: 3, H: 5}, BB_SIZE: {W: 5, H: 10}, PADDING: {W: 50, H: 13}},
+    RAILING: {X: 0, Y: 10, SIZE: 64, SCALE: 2.5, BB_SIZE: {W: 5, H: 10}, PADDING: 20},
+    PLATFORM: {LEFT: {X: 0, Y: 32}, MID: {X: 16, Y: 32}, RIGHT: {X: 32, Y: 32}, SIZE: 16, SCALE: 4, COUNT: 2, BB_SIZE: {W: 5, H: 16}},
     CLOUD_PLATFORM: {LEFT: {X: 0, Y: 0}, MID: {X: 0, Y: 0}, RIGHT: {X: 0, Y: 0}, SIZE: 16, SCALE: 4, COUNT: 2, BB_SIZE: {W: 5, H: 16}}
     // PLATFORM_SHORT: {LEFT: {X: 0, Y: 32}, MID: {X: 16, Y: 32}, RIGHT: {X: 32, Y: 32}, SIZE: 16, SCALE: 2, COUNT: 2, BB_SIZE: {W: 5, H: 16}}
     // PLATFORM_LONG: {LEFT: {X: 0, Y: 0}, MID: {X: 16, Y: 32}, RIGHT: {X: 32, Y: 32}, SIZE: 16, SCALE: 2, COUNT: 5, BB_SIZE: {W: 5, H: 16}}
@@ -20,9 +20,7 @@ class Ground { //bridge
 
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/platform_sheet.png");
         this.BB = new BoundingBox(this.x , this.y, this.w, BACKGROUND.GROUND.SCALE * BACKGROUND.GROUND.SIZE);
-
     };
-
     update() {
 
     };
@@ -230,16 +228,18 @@ class StoneLamp {
             BACKGROUND.STONE_LAMP.BB_SIZE.W, BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE);
 
         if (PARAMS.DEBUG) {
+            // ctx.lineWidth = 2;
             ctx.strokeStyle = 'Green';
             ctx.strokeRect(this.BB.x -this.game.camera.x, this.BB.y,
                 BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE,
                 BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE);
-            ctx.strokeStyle = 'Orange';
+            // ctx.lineWidth = 10;
+            ctx.strokeStyle = 'Red';
             ctx.strokeRect(this.topBB.x - this.game.camera.x, this.topBB.y, this.topBB.width, this.topBB.height);
             ctx.strokeRect(this.bottomBB.x - this.game.camera.x, this.bottomBB.y, this.bottomBB.width, this.bottomBB.height);
             ctx.strokeRect(this.leftBB.x - this.game.camera.x, this.leftBB.y, this.leftBB.width, this.leftBB.height);
             ctx.strokeRect(this.rightBB.x - this.game.camera.x, this.rightBB.y, this.rightBB.width, this.rightBB.height);
-        } 
+        }
         ctx.imageSmoothingEnabled = false;
     }
 }
@@ -252,6 +252,12 @@ class Lamp {
     constructor(game, x, y, w) {
         Object.assign(this, { game, x, y, w});
         this.spritesheet = this.spritesheet = ASSET_MANAGER.getAsset("./sprites/lamp.png");
+        this.BB = new BoundingBox(this.x+BACKGROUND.LAMP.PADDING.W, this.y,
+            BACKGROUND.LAMP.SIZE * BACKGROUND.LAMP.SCALE.W-BACKGROUND.LAMP.PADDING.W, BACKGROUND.LAMP.SIZE * BACKGROUND.LAMP.SCALE.H);
+
+        this.topBB = new BoundingBox(this.x+BACKGROUND.LAMP.PADDING.W, this.y+BACKGROUND.LAMP.PADDING.H,
+            BACKGROUND.LAMP.SIZE * BACKGROUND.LAMP.SCALE.W-BACKGROUND.LAMP.PADDING.W, BACKGROUND.LAMP.BB_SIZE.H);
+
     }
 
     update() {
@@ -263,15 +269,13 @@ class Lamp {
         ctx.drawImage(this.spritesheet, BACKGROUND.LAMP.X, BACKGROUND.LAMP.Y,
             BACKGROUND.LAMP.SIZE, BACKGROUND.LAMP.SIZE,
             this.x - this.game.camera.x, this.y,
-            BACKGROUND.LAMP.SIZE * BACKGROUND.LAMP.SCALE, BACKGROUND.LAMP.SIZE * BACKGROUND.LAMP.SCALE);
-
-
-        this.topBB = new BoundingBox(this.x+BACKGROUND.LAMP.PADDING.W, this.y+BACKGROUND.LAMP.PADDING.H,
-            BACKGROUND.LAMP.SIZE * BACKGROUND.LAMP.SCALE-BACKGROUND.LAMP.PADDING.W, BACKGROUND.LAMP.BB_SIZE.H);
-
+            BACKGROUND.LAMP.SIZE * BACKGROUND.LAMP.SCALE.W, BACKGROUND.LAMP.SIZE * BACKGROUND.LAMP.SCALE.H);
 
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
+            ctx.strokeRect(this.BB.x -this.game.camera.x, this.BB.y,
+                this.BB.width,
+                this.BB.height);
             ctx.strokeStyle = 'Orange';
             ctx.strokeRect(this.topBB.x - this.game.camera.x, this.topBB.y, this.topBB.width, this.topBB.height);
         }
@@ -288,11 +292,10 @@ class Railing {
     constructor(game, x, y, w) {
         Object.assign(this, { game, x, y, w});
         this.spritesheet = this.spritesheet = ASSET_MANAGER.getAsset("./sprites/railing.png");
-
-        this.BB = new BoundingBox(this.x, this.y,
-            BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE, BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE);
-
-
+       this.BB = new BoundingBox(this.x, this.y,
+           this.w, BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE);
+       this.topBB = new BoundingBox(this.x, this.y+BACKGROUND.RAILING.PADDING,
+           this.w,  BACKGROUND.RAILING.BB_SIZE.H);
     }
 
     update() {
@@ -300,23 +303,19 @@ class Railing {
     };
 
     draw(ctx) {
-
-        let COUNT = PARAMS.CANVAS_WIDTH * LEVEL.FRAME_COUNT / BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE;
+        let COUNT = PARAMS.CANVAS_WIDTH * LEVEL.FRAME_COUNT / BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE;
         for (var i = 0; i < COUNT; i ++) {
             ctx.drawImage(this.spritesheet, BACKGROUND.RAILING.X, BACKGROUND.RAILING.Y,
                 BACKGROUND.RAILING.SIZE, BACKGROUND.RAILING.SIZE,
-                this.x - this.game.camera.x, this.y,
+                this.x + BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE * i  - this.game.camera.x, this.y,
                 BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE, BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE);
         }
 
-        this.topBB = new BoundingBox(this.x, this.y+BACKGROUND.RAILING.PADDING,
-            BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE,  BACKGROUND.RAILING.BB_SIZE.H);
-
-        if (PARAMS.DEBUG) {
+       if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
             ctx.strokeRect(this.BB.x -this.game.camera.x, this.BB.y,
-                BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE,
-                BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE);
+              this.BB.width,//  BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE,
+                this.BB.height);//BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE);
             ctx.strokeStyle = 'Orange';
             ctx.strokeRect(this.topBB.x - this.game.camera.x, this.topBB.y, this.topBB.width, this.topBB.height);
         }

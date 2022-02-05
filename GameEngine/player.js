@@ -4,7 +4,8 @@ var CHIHIRO = {
     INITIAL_POSITION: {X: 0, Y: 0},
     SIZE: 70,
     SCALE: 2,
-    BB_PADDING: 30,
+    // BB_PADDING: 30,
+    BB_PADDING: 0,
     IDLE:   {RIGHT: {X: 0,  Y: 0},    LEFT: {X: 0,  Y: 70},   FRAME: 4, SPEED: 0.4,  PADDING: 0, REVERSE: false, LOOP: true}, 
     WALK:   {RIGHT: {X: 0,  Y: 140},  LEFT: {X: 0,  Y: 210},  FRAME: 4, SPEED: 0.2,  PADDING: 0, REVERSE: false, LOOP: true},
     JUMP:   {RIGHT: {X: 0,  Y: 280},  LEFT: {X: 0,  Y: 350},  FRAME: 4, SPEED: 0.1, PADDING: 0, REVERSE: false, LOOP: true}, 
@@ -34,8 +35,6 @@ class Player {
         // animation
         this.facing = 0; // 0 = right; 1 = left
         this.state = 0;  // 0 = idle, 1 = walking, 2 = jumping/falling, 3 = crouching, 4 = running, 5 = death
-
-        this.bubbleController = new BubblesController(this.game);
 
         this.animations = [];
 
@@ -144,22 +143,13 @@ class Player {
             // ctx.strokeRect(this.BBbottom.x - this.game.camera.x, this.BBbottom.y, this.BBbottom.width, this.BBbottom.height);
         }
         ctx.imageSmoothingEnabled = false;
-        this.bubbleController.draw(ctx);
-        this.shoot();
-    };
+        // this.breathbar.draw(ctx);
+        // this.coinCounter.draw(ctx);
 
-    shoot(){
-        if(this.game.bubble) {
-            const speed = 2;
-            const delayBubble = 5;
-            const damage = 1;
-            const bubbleX = this.x + CHIHIRO.SIZE /2 - this.game.camera.x ;
-            const bubbleY = this.y+ CHIHIRO.SIZE /2;
-            this.bubbleController.update( bubbleX, bubbleY, speed, damage, delayBubble);
-        }
     };
-
+    
     update() {
+
         const TICK = this.game.clockTick;
         const TICK_SCALE = 2;
         const MAX_FALL = 240 * PARAMS.SCALE;
@@ -251,22 +241,28 @@ class Player {
                 if (that.velocity.y > 0) {                      // chihiro is falling
                     if((entity instanceof Ground || entity instanceof Platform || entity instanceof CloudPlatform ||
                         entity instanceof StoneLamp || entity instanceof Haku || entity instanceof NoFace ||
-                        entity instanceof Railing)
+                        entity instanceof Railing || entity instanceof Lamp)
                     && (that.lastBB.bottom <= entity.BB.top)) { // bottom of chihiro hits the top of the entity
                         that.isGrounded = true;
                         that.y = entity.BB.top - CHIHIRO.SIZE * CHIHIRO.SCALE;
                         that.velocity.y = 0;
                         that.updateBB();
-                        
-                        console.log(that.BB.collide(entity.BB));
                     }
                     else {
                         that.isGrounded = false;
                     }
                 }
-                if (that.velocity.y < 0) { // chihiro is jumping up
-                    if((entity instanceof Platform ||
-                        entity instanceof Railing) // collision with platform
+                
+                if(entity instanceof Railing && that.game.crouch ) // if she's crouching she'll fall to ground
+                {
+                    that.isGrounded = false;
+                    that.y = entity.BB.top - CHIHIRO.SIZE * CHIHIRO.SCALE + 1; // the 1 is just to get her past the bb of the railing
+                    that.velocity.y += FALL_ACC + TICK;
+                    that.updateBB();
+                }
+
+                if (that.velocity.y < 0) {     // chihiro is jumping up and hits the bottom of a platform
+                    if((entity instanceof Platform )    // collision w/ bottom of platform
                         && (that.lastBB.top >= entity.BB.bottom)) { // top of chihiro goes above the bottom of the platform
                         that.velocity.y = 0;
                         that.updateBB();
@@ -274,23 +270,30 @@ class Player {
                         that.isGrounded = false;
                     }
                 }
-                // left & right bounding boxes for platform
-                if ((entity instanceof Platform || entity instanceof CloudPlatform || entity instanceof StoneLamp) &&
+
+                // SIDE COLLISIONS --> left & right bounding boxes for platform
+                if ((entity instanceof Platform || entity instanceof StoneLamp) &&
                     that.BB.collide(entity.BB)) {
-                        that.game.deactivate = true;
-                        if (that.BB.collide(entity.leftBB)) { // left collision
-                            that.x -= 1; 
-                            that.y -= 1;
+
+                        that.game.deactivate = true;   // don't let player access key press once collision happens
+
+                        if (that.BB.collide(entity.leftBB) && that.lastBB.right >= entity.leftBB.left ) { // left collision
+                            that.x = entity.BB.left - CHIHIRO.SIZE * CHIHIRO.SCALE; // so that the player won't stick to the bb of the entity
                             if (that.velocity.x > 0) that.velocity.x = 0;
-                        } else if (that.BB.collide(entity.rightBB)) { // right collision
-                            that.x += 1;
-                            that.y -= 1;
+                            that.velocity.y = 0;
+                        } else if (that.BB.collide(entity.rightBB) && that.lastBB.left <= entity.rightBB.right ) { // right collision
+                            that.x = entity.BB.right; // so that the player won't stick to the bb of the entity
                             if (that.velocity.x < 0) that.velocity.x = 0;
                         } else {
                             
                         }
                     that.updateBB();
                 }
+
+
+                /** ***************************************************************
+                 * NON-PLATFORM ENTITIES
+                 * ***************************************************************/
                 // collision with no face
                 if (entity instanceof NoFace && that.BB.collide(entity.BB)) {
                     // Set a maximum amount of coins upon interact
@@ -317,7 +320,6 @@ class Player {
 
                 //Collision with Yubaba
                 //for now have Yubaba push Chihiro? but later  kills on impact
-
 
                 // collision with Chicks
                 if (entity instanceof Chick && that.BB.collide(entity.BB)) {
@@ -369,25 +371,15 @@ class Player {
                     entity.removeFromWorld = true;
                     that.game.camera.coinCounter.coinCount ++;
                 }
-
-                // if ((entity instanceof Railing || entity instanceof Lamp) && that.BB.collide(entity.topBB)) {
-                if ((entity instanceof Lamp) && that.BB.collide(entity.topBB)) {
-                    console.log("the top of the railing", entity.topBB.top);
-                    that.isGrounded = true;
-                    that.y = entity.topBB.top - CHIHIRO.SIZE * CHIHIRO.SCALE;
-                    that.velocity.y = 0;
-                    that.updateBB();
-                }
             }
-
         });
 
-        if (this.game.camera.breathwidth <= 0) {
-            this.dead = true;
-            this.state = 5;
-        } else {
-            this.dead = false;
-        }
+        // if (this.game.camera.breathwidth <= 0) {
+        //     this.dead = true;
+        //     this.state = 5;
+        // } else {
+        //     this.dead = false;
+        // }
 
         // update state
         if (this.state !== 2 && this.state !== 5) {  // NOT jump
@@ -411,6 +403,17 @@ class Player {
         // update direction
         if (this.velocity.x < 0) this.facing = 1;
         if (this.velocity.x > 0) this.facing = 0;
+
+        if(this.game.shoot){
+            this.game.addEntity(new BubblesController(this.game, this.x + CHIHIRO.SIZE /2 - this.game.camera.x ,
+                 this.y+ CHIHIRO.SIZE /2,  0, this.facing));
+         }
+        if (this.game.camera.breathwidth <= 0) {
+            this.game.camera.chihiro.dead = true;
+        } else {
+            this.game.camera.chihiro.dead = false;
+        }
+
     };
 
     toString(){
