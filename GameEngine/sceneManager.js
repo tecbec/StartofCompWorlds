@@ -12,7 +12,7 @@ var LEVEL = {
     CLOUD_PLATFORM_LOCATION: [{X: 200, Y: 550}, {X: 500, Y: 0}, {X: 750, Y:0}, {X: 1100, Y: 0}, {X: 1500, Y: 0}],
     STONE_LAMP_LOCATION: {X: 1000, Y: 700},
     LAMP_LOCATION: {X:500, Y: 700},
-    RAILING_LOCATION: {X: 500, Y: 795},
+    RAILING_LOCATION: {X: 500, Y: 820},
 }
 class SceneManager {
     constructor(game) {
@@ -94,7 +94,7 @@ class SceneManager {
             this.stonelamp = new StoneLamp(this.game, LEVEL.STONE_LAMP_LOCATION.X, LEVEL.STONE_LAMP_LOCATION.Y, BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE);
             this.lamp = new Lamp(this.game, LEVEL.LAMP_LOCATION.X, LEVEL.LAMP_LOCATION.Y, BACKGROUND.LAMP.SIZE * BACKGROUND.LAMP.SCALE);
             this.railing = new Railing(this.game, LEVEL.RAILING_LOCATION.X, LEVEL.RAILING_LOCATION.Y, PARAMS.CANVAS_WIDTH * LEVEL.FRAME_COUNT,
-                BACKGROUND.GROUND.SCALE * BACKGROUND.GROUND.SIZE);
+                BACKGROUND.RAILING.SCALE * BACKGROUND.RAILING.SIZE);
 
             // initialization of the breath bar and counter
             this.coinCounter = new CoinCounter(this.game, CHIHIRO.COIN_COUNTER.X, CHIHIRO.COIN_COUNTER.Y);

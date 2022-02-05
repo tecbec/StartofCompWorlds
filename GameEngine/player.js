@@ -256,8 +256,8 @@ class Player {
                         that.isGrounded = false;
                     }
                 }
-
-                if(entity instanceof Railing && that.game.crouch) // if she's crouching she'll fall to ground
+                
+                if(entity instanceof Railing && that.game.crouch ) // if she's crouching she'll fall to ground
                 {
                     that.isGrounded = false;
                     that.y = entity.BB.top - CHIHIRO.SIZE * CHIHIRO.SCALE + 1; // the 1 is just to get her past the bb of the railing
