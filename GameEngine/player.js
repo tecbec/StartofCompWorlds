@@ -253,12 +253,13 @@ class Player {
                     }
                 }
                 
-                if(entity instanceof Railing && that.game.crouch ) // if she's crouching she'll fall to ground
-                {
-                    that.isGrounded = false;
-                    that.y = entity.BB.top - CHIHIRO.SIZE * CHIHIRO.SCALE + 1; // the 1 is just to get her past the bb of the railing
-                    that.velocity.y += FALL_ACC + TICK;
-                    that.updateBB();
+                if(entity instanceof Railing) {// if she's crouching she'll fall to ground
+                    if (that.BB.bottom <= entity.BB.top && that.game.crouch) {
+                        that.isGrounded = false;
+                        that.y = entity.BB.top - CHIHIRO.SIZE * CHIHIRO.SCALE + 1; // the 1 is just to get her past the bb of the railing
+                        that.velocity.y += FALL_ACC + TICK;
+                        that.updateBB();;
+                    } 
                 }
 
                 if (that.velocity.y < 0) {     // chihiro is jumping up and hits the bottom of a platform
