@@ -94,7 +94,7 @@ class SceneManager {
             this.stonelamp = new StoneLamp(this.game, LEVEL.STONE_LAMP_LOCATION.X, LEVEL.STONE_LAMP_LOCATION.Y, BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE);
             this.lamp = new Lamp(this.game, LEVEL.LAMP_LOCATION.X, LEVEL.LAMP_LOCATION.Y, BACKGROUND.LAMP.SIZE * BACKGROUND.LAMP.SCALE);
             this.railing = new Railing(this.game, LEVEL.RAILING_LOCATION.X, LEVEL.RAILING_LOCATION.Y, PARAMS.CANVAS_WIDTH * LEVEL.FRAME_COUNT,
-                BACKGROUND.GROUND.SCALE * BACKGROUND.GROUND.SIZE);
+                BACKGROUND.RAILING.SCALE * BACKGROUND.RAILING.SIZE);
 
             // initialization of the breath bar and counter
             this.coinCounter = new CoinCounter(this.game, CHIHIRO.COIN_COUNTER.X, CHIHIRO.COIN_COUNTER.Y);
@@ -143,7 +143,7 @@ class SceneManager {
             }
             this.game.addEntity(this.noface);
             this.game.addEntity(this.haku);
-            this.game.addEntity(this.yubaba);
+            // this.game.addEntity(this.yubaba);
             // this.game.addEntity(this.chick);
             this.game.addEntity(this.coin1);
             this.game.addEntity(this.coin2);

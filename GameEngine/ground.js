@@ -243,7 +243,7 @@ class StoneLamp {
             ctx.strokeRect(this.BB.x -this.game.camera.x, this.BB.y,
                 BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE,
                 BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE);
-            // ctx.lineWidth = 1;
+            // ctx.lineWidth = 10;
             ctx.strokeStyle = 'Red';
             ctx.strokeRect(this.topBB.x - this.game.camera.x, this.topBB.y, this.topBB.width, this.topBB.height);
             ctx.strokeRect(this.bottomBB.x - this.game.camera.x, this.bottomBB.y, this.bottomBB.width, this.bottomBB.height);
@@ -307,7 +307,9 @@ class Railing {
         this.spritesheet = this.spritesheet = ASSET_MANAGER.getAsset("./sprites/railing.png");
 
         this.BB = new BoundingBox(this.x, this.y,
-            BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE, BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE);
+            this.w, BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE);
+        this.topBB = new BoundingBox(this.x, this.y+BACKGROUND.RAILING.PADDING,
+            this.w,  BACKGROUND.RAILING.BB_SIZE.H);
 
 
     }
@@ -318,22 +320,17 @@ class Railing {
 
     draw(ctx) {
 
-        let COUNT = PARAMS.CANVAS_WIDTH * LEVEL.FRAME_COUNT / BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE;
+        let COUNT = PARAMS.CANVAS_WIDTH * LEVEL.FRAME_COUNT / BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE;
         for (var i = 0; i < COUNT; i ++) {
             ctx.drawImage(this.spritesheet, BACKGROUND.RAILING.X, BACKGROUND.RAILING.Y,
                 BACKGROUND.RAILING.SIZE, BACKGROUND.RAILING.SIZE,
-                this.x - this.game.camera.x, this.y,
+                this.x -BACKGROUND.RAILING.SIZE *BACKGROUND.RAILING.SCALE*i - this.game.camera.x, this.y,
                 BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE, BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE);
         }
 
-        this.topBB = new BoundingBox(this.x, this.y+BACKGROUND.RAILING.PADDING,
-            BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE,  BACKGROUND.RAILING.BB_SIZE.H);
-
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
-            ctx.strokeRect(this.BB.x -this.game.camera.x, this.BB.y,
-                BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE,
-                BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE);
+            ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y,this.BB.width, this.BB.height);
             ctx.strokeStyle = 'Orange';
             ctx.strokeRect(this.topBB.x - this.game.camera.x, this.topBB.y, this.topBB.width, this.topBB.height);
         }
