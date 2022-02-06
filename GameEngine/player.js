@@ -4,14 +4,7 @@ var CHIHIRO = {
     INITIAL_POSITION: {X: 0, Y: 0},
     SIZE: 70,
     SCALE: 2,
-    // change so padding is just PADDING_W and PADDING_H and BB and SPRITE PADDING are the same
-    PADDING: {X: 25, Y: 25},
-    /*
-    SPRITE_PADDING: 25, 
-    BB_PADDING_W: 25, 
-    BB_PADDING_H: 25,
-    */
-    BB_PADDING: 50, //get rid of this once fully implemented padding
+    PADDING: {X: 28, Y: 20}, // same padding for BB and imaginary x,y,w,h calculations
     IDLE:   {RIGHT: {X: 0,  Y: 0},    LEFT: {X: 0,  Y: 70},   FRAME: 4, SPEED: 0.4,  PADDING: 0, REVERSE: false, LOOP: true}, 
     WALK:   {RIGHT: {X: 0,  Y: 140},  LEFT: {X: 0,  Y: 210},  FRAME: 4, SPEED: 0.2,  PADDING: 0, REVERSE: false, LOOP: true},
     JUMP:   {RIGHT: {X: 0,  Y: 280},  LEFT: {X: 0,  Y: 350},  FRAME: 7, SPEED: 0.1, PADDING: 0, REVERSE: false, LOOP: true}, 
@@ -133,16 +126,6 @@ class Player {
     updateBB() {
         this.lastBB = this.BB;
         this.lastBBbottom = this.BBbottom;
-        /*
-        var xx = this.x + CHIHIRO.BB_PADDING_W;
-        var yy = this.y + CHIHIRO.BB_PADDING_H;
-        var w = (CHIHIRO.SIZE - (CHIHIRO.BB_PADDING_W * 2))* CHIHIRO.SCALE;
-        var h = (CHIHIRO.SIZE- CHIHIRO.BB_PADDING_H)* CHIHIRO.SCALE;
-        console.log("BB x: " + xx);
-        console.log("BB y: " + yy);
-        console.log("BB w: " + w);
-        console.log("BB h: " + h); 
-        */
         this.BB = new BoundingBox(this.x + CHIHIRO.PADDING.X*CHIHIRO.SCALE, this.y + CHIHIRO.PADDING.Y*CHIHIRO.SCALE,
                                     (CHIHIRO.SIZE - (CHIHIRO.PADDING.X * 2))* CHIHIRO.SCALE, // padding on left and right
                                     (CHIHIRO.SIZE- CHIHIRO.PADDING.Y) * CHIHIRO.SCALE); // padding on top
@@ -287,36 +270,17 @@ class Player {
 
                 
                 // SIDE COLLISIONS --> left & right bounding boxes for platform
-                if ((entity instanceof Platform) &&
+                if ((entity instanceof Platform || entity instanceof StoneLamp) &&
                     that.BB.collide(entity.BB)) {
 
                         that.game.deactivate = true;   // don't let player access key press once collision happens
 
                         if (that.BB.collide(entity.leftBB) && that.lastBB.right >= entity.leftBB.left ) { // left collision
-                            that.x = entity.BB.left - CHIHIRO.SIZE * CHIHIRO.SCALE; // so that the player won't stick to the bb of the entity
-                            if (that.velocity.x > 0) that.velocity.x = 0;
-                            that.velocity.y = 0;
-                        } else if (that.BB.collide(entity.rightBB) && that.lastBB.left <= entity.rightBB.right ) { // right collision
-                            that.x = entity.BB.right; // so that the player won't stick to the bb of the entity
-                            if (that.velocity.x < 0) that.velocity.x = 0;
-                            that.velocity.y = 0;
-                    }
-                    that.updateBB();
-                }
-
-                    // SIDE COLLISIONS --> left & right bounding boxes for platform
-                    if ((entity instanceof StoneLamp) &&
-                    that.BB.collide(entity.BB)) {
-
-                        that.game.deactivate = true;   // don't let player access key press once collision happens
-
-                        if (that.BB.collide(entity.leftBB) && that.lastBB.right >= entity.leftBB.left ) { // left collision
-                            console.log("Stone lamp left " + entity.BB.left);
                             that.setX(entity.BB.left - that.getWidth()); // so that the player won't stick to the bb of the entity
                             if (that.velocity.x > 0) that.velocity.x = 0;
                             that.velocity.y = 0;
                         } else if (that.BB.collide(entity.rightBB) && that.lastBB.left <= entity.rightBB.right ) { // right collision
-                            that.setX(entity.BB.right); // so that the player won't stick to the bb of the entity
+                            that.setX(entity.BB.right);// so that the player won't stick to the bb of the entity
                             if (that.velocity.x < 0) that.velocity.x = 0;
                             that.velocity.y = 0;
                     }
@@ -326,7 +290,7 @@ class Player {
                 if(entity instanceof Railing && that.game.crouch ) // if she's crouching she'll fall to ground
                 {
                     that.isGrounded = false;
-                    that.y = entity.BB.top - CHIHIRO.SIZE * CHIHIRO.SCALE + 1; // the 1 is just to get her past the bb of the railing
+                    that.setY(entity.BB.top - that.getHeight() + 1); // the 1 is just to get her past the bb of the railing
                     that.velocity.y += FALL_ACC + TICK;
                     that.updateBB();
                 }
@@ -346,10 +310,10 @@ class Player {
                     }
                     entity.dead = true;
                     if (that.BB.collide(entity.leftBB)) { // left collision
-                        that.x = entity.leftBB.left - CHIHIRO.SIZE * CHIHIRO.SCALE + CHIHIRO.BB_PADDING;
+                        that.setX(entity.BB.left - that.getWidth());
                         if (that.velocity.x > 0) that.velocity.x = 0;
                     } else if (that.BB.collide(entity.rightBB)) { // right
-                        that.x = entity.rightBB.right - CHIHIRO.BB_PADDING;
+                        that.setX(entity.BB.right);
                         if (that.velocity.x < 0) that.velocity.x = 0;
                     }
                     that.updateBB();
@@ -372,13 +336,13 @@ class Player {
 
                     if (that.BB.collide(entity.leftBB)) { // left collision
                        // maybe replace with a push animation?
-                       that.x += 20
+                       that.setX(that.getX() + 20);
                        that.velocity.x = 100;
                     } else if (that.BB.collide(entity.rightBB)) { // right
-                        that.x -= 20
+                        that.setX(that.getX() - 20);
                         that.velocity.x = -100;
                     }else if (that.BB.collide(entity.topBB)) { // right
-                        that.y -= 20
+                        that.setY(that.getY() - 20);
                         that.velocity.y = -100;
                     }
                     that.updateBB();
@@ -393,10 +357,10 @@ class Player {
                     entity.dead = true;
 
                     if (that.BB.collide(entity.leftBB)) { // left collision
-                         that.x = entity.leftBB.left - CHIHIRO.SIZE * CHIHIRO.SCALE + CHIHIRO.BB_PADDING;
+                        that.setX(entity.BB.left - that.getWidth());
                         if (that.velocity.x > 0) that.velocity.x = 0;
                     } else if (that.BB.collide(entity.rightBB)) { // right
-                         that.x = entity.rightBB.right - CHIHIRO.BB_PADDING;
+                        that.setX(entity.BB.right);
                         if (that.velocity.x < 0) that.velocity.x = 0;
                     }
                     that.updateBB();
@@ -455,8 +419,8 @@ class Player {
         if (this.velocity.x > 0) this.facing = 0;
 
         if(this.game.shoot){
-            this.game.addEntity(new BubblesController(this.game, this.x + CHIHIRO.SIZE /2 - this.game.camera.x ,
-                 this.y+ CHIHIRO.SIZE /2,  0, this.facing));
+            this.game.addEntity(new BubblesController(this.game, this.getX() + this.getWidth() - this.game.camera.x ,
+                 this.getY()+ this.getHeight()/2,  0, this.facing));
          }
         if (this.game.camera.breathwidth <= 0) {
             this.game.camera.chihiro.dead = true;
@@ -477,15 +441,11 @@ class Player {
 
     //sets an x value while removing the padding 
     setX(newX){
-       // var temp = newX - (CHIHIRO.SPRITE_PADDING * CHIHIRO.SCALE);
-       // console.log("Setting x from: " + this.x + " to " + temp);
         this.x = newX - (CHIHIRO.PADDING.X * CHIHIRO.SCALE);
         
     };
 
     setY(newY){
-       // var temp = newY - CHIHIRO.SPRITE_PADDING*CHIHIRO.SCALE;
-       // console.log("Setting y from: " + this.y + " to " + temp);
         this.y = newY - (CHIHIRO.PADDING.Y*CHIHIRO.SCALE);
         
     };
@@ -503,9 +463,6 @@ class Player {
 
     //gets width while removing the padding 
     getWidth(){
-       // var temp = (CHIHIRO.SIZE - (CHIHIRO.BB_PADDING_W * 2))*CHIHIRO.SCALE;
-       // console.log("Hello");
-       // console.log("Width is: " + temp);
         return (CHIHIRO.SIZE - (CHIHIRO.PADDING.X * 2))*CHIHIRO.SCALE;
     };
 
