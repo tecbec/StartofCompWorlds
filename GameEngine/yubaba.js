@@ -19,18 +19,6 @@ class Yubaba {
 
         // speed stuff
         this.speed = 50;
-
-        // set up target ... more efficient way to do this than searching? 
-        // console.log("Begin search for Chihiro");
-        // for (var i = 0; i < this.game.entities.length; i++) {
-        //     var ent = this.game.entities[i];  
-        //     if(ent instanceof Player){
-        //         console.log("Found Chihiro: " + ent.toString());  // ... never finds chihiro? 
-        //         this.target = ent;
-        //         break;
-        //     }
-        // }
-
         this.target = this.game.camera.chihiro;
     };
 
@@ -96,6 +84,8 @@ class Crow{
         this.frameCount = 14;
         this.frameDuration = 0.15; 
         this.scale = 0.1; 
+
+        this.dead = false;
 
         this.loadAnimations();
 

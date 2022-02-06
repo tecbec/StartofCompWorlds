@@ -1,11 +1,14 @@
 class BubblesController{
-    bubble = [];
-    timeTillNextBubble = 0;
-    constructor( game) {
-        Object.assign(this, {game});
-       // this.game = game;
+    //x, y are the x and y locations of the bubble
+    //direction - facing param from the player class
+    constructor(game, x, y, damage, direction) {
+        Object.assign(this, {game,x, y, damage, direction });
+        const maxSpeed = 1; // pixels per second   
+        this.timeTillNextBubble =0;
+        this.velocity = {x: 10, y: 0  };
+     this.elapsedTime = 0;
     }
-
+/*
     update( bubbleX, bubbleY, speed, damage, delay) {
         if(this.timeTillNextBubble <= 0){
             this.bubble.push(new Bubbles(this.game, bubbleX, bubbleY, speed, damage));
@@ -50,6 +53,39 @@ class Bubbles{
         this.x = this.speed + this.x;
     };
 };
+*/
+ update() {
+    this.elapsedTime += this.game.clockTick;
+     if(this.direction === 1) { 
+        this.x -= ( this.velocity.x )* this.elapsedTime ; //maybe include the change in y??
+     } else {
+        this.x += this.velocity.x * this.elapsedTime ;
+     }
+        this.y += this.game.clockTick; 
+    if(this.elapsedTime > 5) {
+        this.elapsedTime ==0;
+    }
+}
+    draw(ctx){
+        //console.log("Bubble"); 
+        const width = 2; 
+        const height = 5; 
+        const color = "blue";
+        ctx.fillStyle = color; 
+        var xOffset = 3;
+
+        if(this.x <=PARAMS.CANVAS_WIDTH ) {
+            console.log(this.x);
+            if(this.direction === 1) {//going left
+                ctx.fillRect(this.x -xOffset, this.y, width, height);
+            } else {
+                ctx.fillRect(this.x +xOffset, this.y, width, height);
+            }
+        } else{
+
+        }
+    }
+}
 
 class Coins {
     constructor( game, x, y) {
