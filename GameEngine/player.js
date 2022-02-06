@@ -291,10 +291,16 @@ class Player {
 
                         if (that.BB.collide(entity.leftBB) && that.lastBB.right >= entity.leftBB.left ) { // left collision
                             that.x = entity.BB.left - CHIHIRO.SIZE * CHIHIRO.SCALE; // so that the player won't stick to the bb of the entity
+
+                            that.y -= 1;
+
                             if (that.velocity.x > 0) that.velocity.x = 0;
                             that.velocity.y = 0;
                         } else if (that.BB.collide(entity.rightBB) && that.lastBB.left <= entity.rightBB.right ) { // right collision
                             that.x = entity.BB.right; // so that the player won't stick to the bb of the entity
+
+                            that.y -= 1;
+
                             if (that.velocity.x < 0) that.velocity.x = 0;
                             that.velocity.y = 0;
                     }
@@ -310,10 +316,16 @@ class Player {
                         if (that.BB.collide(entity.leftBB) && that.lastBB.right >= entity.leftBB.left ) { // left collision
                             console.log("Stone lamp left " + entity.BB.left);
                             that.setX(entity.BB.left - that.getWidth()); // so that the player won't stick to the bb of the entity
+                            
+                            that.y -= 1;
+
                             if (that.velocity.x > 0) that.velocity.x = 0;
                             that.velocity.y = 0;
                         } else if (that.BB.collide(entity.rightBB) && that.lastBB.left <= entity.rightBB.right ) { // right collision
                             that.setX(entity.BB.right); // so that the player won't stick to the bb of the entity
+
+                            that.y -= 1;
+                            
                             if (that.velocity.x < 0) that.velocity.x = 0;
                             that.velocity.y = 0;
                     }
