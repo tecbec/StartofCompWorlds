@@ -268,11 +268,15 @@ class Player {
                         && (that.lastBB.top >= entity.BB.bottom)) { // top of chihiro goes above the bottom of the platform
                         that.velocity.y = 0;
                         that.updateBB();
+
                     } else {
                         that.isGrounded = false;
                     }
+
+
                 }
 
+                
                 // SIDE COLLISIONS --> left & right bounding boxes for platform
                 if ((entity instanceof Platform || entity instanceof StoneLamp) &&
                     that.BB.collide(entity.BB)) {
@@ -292,6 +296,17 @@ class Player {
                         }
                     that.updateBB();
                 }
+
+                if(entity instanceof Railing && that.game.crouch ) // if she's crouching she'll fall to ground
+                {
+                    that.isGrounded = false;
+                    that.y = entity.BB.top - CHIHIRO.SIZE * CHIHIRO.SCALE + 1; // the 1 is just to get her past the bb of the railing
+                    that.velocity.y += FALL_ACC + TICK;
+                    that.updateBB();
+                }
+
+
+
 
 
                 /** ***************************************************************
