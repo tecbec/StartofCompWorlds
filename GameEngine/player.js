@@ -4,8 +4,7 @@ var CHIHIRO = {
     INITIAL_POSITION: {X: 0, Y: 0},
     SIZE: 70,
     SCALE: 2,
-    // BB_PADDING: 30,
-    BB_PADDING: 0,
+    PADDING: {X: 28, Y: 20}, // same padding for BB and imaginary x,y,w,h calculations
     IDLE:   {RIGHT: {X: 0,  Y: 0},    LEFT: {X: 0,  Y: 70},   FRAME: 4, SPEED: 0.4,  PADDING: 0, REVERSE: false, LOOP: true}, 
     WALK:   {RIGHT: {X: 0,  Y: 140},  LEFT: {X: 0,  Y: 210},  FRAME: 4, SPEED: 0.2,  PADDING: 0, REVERSE: false, LOOP: true},
     JUMP:   {RIGHT: {X: 0,  Y: 280},  LEFT: {X: 0,  Y: 350},  FRAME: 4, SPEED: 0.1, PADDING: 0, REVERSE: false, LOOP: true}, 
@@ -127,10 +126,9 @@ class Player {
     updateBB() {
         this.lastBB = this.BB;
         this.lastBBbottom = this.BBbottom;
-        this.BB = new BoundingBox(this.x + CHIHIRO.BB_PADDING, this.y + CHIHIRO.BB_PADDING,
-                                    CHIHIRO.SIZE * CHIHIRO.SCALE - CHIHIRO.BB_PADDING - CHIHIRO.BB_PADDING, // both side
-                                    CHIHIRO.SIZE * CHIHIRO.SCALE - CHIHIRO.BB_PADDING); 
-
+        this.BB = new BoundingBox(this.x + CHIHIRO.PADDING.X*CHIHIRO.SCALE, this.y + CHIHIRO.PADDING.Y*CHIHIRO.SCALE,
+                                    (CHIHIRO.SIZE - (CHIHIRO.PADDING.X * 2))* CHIHIRO.SCALE, // padding on left and right
+                                    (CHIHIRO.SIZE- CHIHIRO.PADDING.Y) * CHIHIRO.SCALE); // padding on top
     };
 
     /* Draw the images onto the screen */
@@ -245,7 +243,7 @@ class Player {
                         entity instanceof Railing || entity instanceof Lamp)
                     && (that.lastBB.bottom <= entity.BB.top)) { // bottom of chihiro hits the top of the entity
                         that.isGrounded = true;
-                        that.y = entity.BB.top - CHIHIRO.SIZE * CHIHIRO.SCALE;
+                        that.setY(entity.BB.top - that.getHeight());
                         that.velocity.y = 0;
                         that.updateBB();
                     }
@@ -283,13 +281,11 @@ class Player {
                         console.log(that.BB.collide(entity.BB));
                         that.game.deactivate = true;   // don't let player access key press once collision happens
                         if (that.BB.collide(entity.leftBB) && that.lastBB.right >= entity.leftBB.left ) { // left collision
-                            that.x = entity.BB.left - CHIHIRO.SIZE * CHIHIRO.SCALE; // so that the player won't stick to the bb of the entity
-                            that.y -= 1;
+                            that.setX(entity.BB.left - that.getWidth()); // so that the player won't stick to the bb of the entity
                             if (that.velocity.x > 0) that.velocity.x = 0;
                             that.velocity.y = 0;
                         } else if (that.BB.collide(entity.rightBB) && that.lastBB.left <= entity.rightBB.right ) { // right collision
-                            that.x = entity.BB.right; // so that the player won't stick to the bb of the entity
-                            that.y -= 1;
+                            that.setX(entity.BB.right);// so that the player won't stick to the bb of the entity
                             if (that.velocity.x < 0) that.velocity.x = 0;
                         } else {
                             
@@ -300,7 +296,7 @@ class Player {
                 if(entity instanceof Railing && that.game.crouch ) // if she's crouching she'll fall to ground
                 {
                     that.isGrounded = false;
-                    that.y = entity.BB.top - CHIHIRO.SIZE * CHIHIRO.SCALE + 1; // the 1 is just to get her past the bb of the railing
+                    that.setY(entity.BB.top - that.getHeight() + 1); // the 1 is just to get her past the bb of the railing
                     that.velocity.y += FALL_ACC + TICK;
                     that.updateBB();
                 }
@@ -320,10 +316,10 @@ class Player {
                     }
                     entity.dead = true;
                     if (that.BB.collide(entity.leftBB)) { // left collision
-                        that.x = entity.leftBB.left - CHIHIRO.SIZE * CHIHIRO.SCALE + CHIHIRO.BB_PADDING;
+                        that.setX(entity.BB.left - that.getWidth());
                         if (that.velocity.x > 0) that.velocity.x = 0;
                     } else if (that.BB.collide(entity.rightBB)) { // right
-                        that.x = entity.rightBB.right - CHIHIRO.BB_PADDING;
+                        that.setX(entity.BB.right);
                         if (that.velocity.x < 0) that.velocity.x = 0;
                     }
                     that.updateBB();
@@ -346,13 +342,13 @@ class Player {
 
                     if (that.BB.collide(entity.leftBB)) { // left collision
                        // maybe replace with a push animation?
-                       that.x += 20
+                       that.setX(that.getX() + 20);
                        that.velocity.x = 100;
                     } else if (that.BB.collide(entity.rightBB)) { // right
-                        that.x -= 20
+                        that.setX(that.getX() - 20);
                         that.velocity.x = -100;
                     }else if (that.BB.collide(entity.topBB)) { // right
-                        that.y -= 20
+                        that.setY(that.getY() - 20);
                         that.velocity.y = -100;
                     }
                     that.updateBB();
@@ -367,10 +363,10 @@ class Player {
                     entity.dead = true;
 
                     if (that.BB.collide(entity.leftBB)) { // left collision
-                        that.x -= 1;
+                        that.setX(entity.BB.left - that.getWidth());
                         if (that.velocity.x > 0) that.velocity.x = 0;
                     } else if (that.BB.collide(entity.rightBB)) { // right
-                         that.x += 1;
+                        that.setX(entity.BB.right);
                         if (that.velocity.x < 0) that.velocity.x = 0;
                     }
                     that.updateBB();
@@ -379,6 +375,7 @@ class Player {
                 // collision with SOOTS
                 if (entity instanceof Soot ) {
                     that.game.camera.breathwidth -= 1;
+                    // for testing make soot breath -=20;
                     entity.dead = true;
                     that.game.camera.changeBreath();
                     that.updateBB()
@@ -423,8 +420,8 @@ class Player {
         if (this.velocity.x > 0) this.facing = 0;
 
         if(this.game.shoot){
-            this.game.addEntity(new BubblesController(this.game, this.x + CHIHIRO.SIZE /2 - this.game.camera.x ,
-                 this.y+ CHIHIRO.SIZE /2,  0, this.facing));
+            this.game.addEntity(new BubblesController(this.game, this.getX() + this.getWidth() - this.game.camera.x ,
+                 this.getY()+ this.getHeight()/2,  0, this.facing));
          }
         if (this.game.camera.breathwidth <= 0) {
             this.game.camera.chihiro.dead = true;
@@ -432,6 +429,47 @@ class Player {
             this.game.camera.chihiro.dead = false;
         }
 
+    };
+
+    /*
+
+    SETTERS AND GETTERS 
+
+    THESE ALREADY ACCOUNT FOR PADDING & SCALE
+
+    */
+    // adjust these to have if statements that adjust the padding based on the current animation 
+
+    //sets an x value while removing the padding 
+    setX(newX){
+        this.x = newX - (CHIHIRO.PADDING.X * CHIHIRO.SCALE);
+        
+    };
+
+    setY(newY){
+        this.y = newY - (CHIHIRO.PADDING.Y*CHIHIRO.SCALE);
+        
+    };
+
+    //gets the fake x value 
+    getX(){
+        return this.x + (CHIHIRO.PADDING.X) *CHIHIRO.SCALE;
+    };
+
+    //gets the fake y value
+    getY(){
+        return this.y + (CHIHIRO.PADDING.Y) *CHIHIRO.SCALE;
+                       // padding only on the top
+    };
+
+    //gets width while removing the padding 
+    getWidth(){
+        return (CHIHIRO.SIZE - (CHIHIRO.PADDING.X * 2))*CHIHIRO.SCALE;
+    };
+
+    //gets height while removing the padding 
+    getHeight(){
+        return (CHIHIRO.SIZE - CHIHIRO.PADDING.Y)*CHIHIRO.SCALE;
     };
 
     toString(){
