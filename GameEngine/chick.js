@@ -7,7 +7,7 @@ class Chick {
         this.height = 100;
         this.frameCount = 6;
         this.frameDuration = 0.25; 
-        this.scale = 0.75; 
+        this.scale = 2.0; 
         this.BBThickness = 5;
 
         this.loadAnimations();

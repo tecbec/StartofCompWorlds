@@ -1,16 +1,16 @@
 /* Chihiro's Params */
 var CHIHIRO = {
     TITLE_POSITION: {X: 0, Y: 800},
-    INITIAL_POSITION: {X: 2000, Y: 0},
+    INITIAL_POSITION: {X: 0, Y: 0}, 
     SIZE: 70,
     SCALE: 2,
     PADDING: {X: 28, Y: 20}, // same padding for BB and imaginary x,y,w,h calculations
-    IDLE:   {RIGHT: {X: 0,  Y: 0},    LEFT: {X: 0,  Y: 70},   FRAME: 4, SPEED: 0.4,  PADDING: 0, REVERSE: false, LOOP: true}, 
+    IDLE:   {RIGHT: {X: 0,  Y: 0},    LEFT: {X: 0,  Y: 70},   FRAME: 4, SPEED: 0.4,  PADDING: 0, REVERSE: false, LOOP: true},
     WALK:   {RIGHT: {X: 0,  Y: 140},  LEFT: {X: 0,  Y: 210},  FRAME: 4, SPEED: 0.2,  PADDING: 0, REVERSE: false, LOOP: true},
-    JUMP:   {RIGHT: {X: 0,  Y: 280},  LEFT: {X: 0,  Y: 350},  FRAME: 4, SPEED: 0.1, PADDING: 0, REVERSE: false, LOOP: true}, 
+    JUMP:   {RIGHT: {X: 0,  Y: 280},  LEFT: {X: 0,  Y: 350},  FRAME: 4, SPEED: 0.1, PADDING: 0, REVERSE: false, LOOP: true},
     CROUCH: {RIGHT: {X: 0,  Y: 280},  LEFT: {X: 0,  Y: 350},  FRAME: 1, SPEED: 0.33, PADDING: 0, REVERSE: false, LOOP: true},
     RUN:    {RIGHT: {X: 0,  Y: 140},  LEFT: {X: 0,  Y: 210},  FRAME: 4, SPEED: 0.1, PADDING: 0, REVERSE: false, LOOP: true},
-    DEAD:   {RIGHT: {X: 0,  Y: 420},  LEFT: {X: 0,  Y: 490},  FRAME: 3, SPEED: 0.3, PADDING: 0, REVERSE: false, LOOP: false}, 
+    DEAD:   {RIGHT: {X: 0,  Y: 420},  LEFT: {X: 0,  Y: 490},  FRAME: 3, SPEED: 0.3, PADDING: 0, REVERSE: false, LOOP: false},
     BREATH_BAR: {X: 1700, Y: 10, HEIGHT: 10, MAX: 100},
     COIN_COUNTER: {X: 1620, Y: 7.25}
 };
@@ -426,25 +426,21 @@ class Player {
 
     /*
 
-    SETTERS AND GETTERS 
-
+    SETTERS AND GETTERS
     THESE ALREADY ACCOUNT FOR PADDING & SCALE
-
     */
-    // adjust these to have if statements that adjust the padding based on the current animation 
+    // adjust these to have if statements that adjust the padding based on the current animation
 
-    //sets an x value while removing the padding 
+    //sets an x value while removing the padding
     setX(newX){
         this.x = newX - (CHIHIRO.PADDING.X * CHIHIRO.SCALE);
-        
     };
 
     setY(newY){
         this.y = newY - (CHIHIRO.PADDING.Y*CHIHIRO.SCALE - 1);
-        
     };
 
-    //gets the fake x value 
+    //gets the fake x value
     getX(){
         return this.x + (CHIHIRO.PADDING.X) *CHIHIRO.SCALE;
     };
@@ -455,12 +451,12 @@ class Player {
                        // padding only on the top
     };
 
-    //gets width while removing the padding 
+    //gets width while removing the padding
     getWidth(){
         return (CHIHIRO.SIZE - (CHIHIRO.PADDING.X * 2))*CHIHIRO.SCALE;
     };
 
-    //gets height while removing the padding 
+    //gets height while removing the padding
     getHeight(){
         return (CHIHIRO.SIZE - CHIHIRO.PADDING.Y)*CHIHIRO.SCALE;
     };

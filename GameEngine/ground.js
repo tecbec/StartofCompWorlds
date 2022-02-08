@@ -2,8 +2,8 @@
 var BACKGROUND = {
     X: 0,
     Y: 0,
-    SIZE: {W: 288, H: 208},
-    SCALE: 1,
+    SIZE: {W: 1000, H: 500},
+    SCALE: 2,
     GROUND: {X: 32, Y: 0, SIZE: 32, SCALE: 4},
     STONE_LAMP: {X: 0, Y: 0, SIZE: 64, SCALE: 4, BB_SIZE: {W: 10, H: 10}},
     LAMP: {X: 0, Y: 0, SIZE: 64, SCALE:  {W: 3, H: 5}, BB_SIZE: {W: 5, H: 10}, PADDING: {W: 50, H: 13}},
@@ -31,7 +31,7 @@ class Ground { //bridge
             ctx.drawImage(this.spritesheet, BACKGROUND.GROUND.X, BACKGROUND.GROUND.Y,
                 BACKGROUND.GROUND.SIZE, BACKGROUND.GROUND.SIZE,
                 this.x + BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE * i  - this.game.camera.x, this.y,
-                BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE, BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE);
+                BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE, BACKGROUND.GROUND.SIZE * 7);
         }
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
@@ -45,7 +45,7 @@ class Ground { //bridge
 class BackGround {
     constructor(game, x, y) {
         Object.assign(this, { game, x, y});
-        this.spritesheet = ASSET_MANAGER.getAsset("./sprites/background.png");
+        this.spritesheet = ASSET_MANAGER.getAsset("./sprites/background_nightsky.png");
     }
 
     update() {
@@ -53,6 +53,7 @@ class BackGround {
     };
 
     draw(ctx) {
+        // console.log(PARAMS.CANVAS_WIDTH, LEVEL.FRAME_COUNT, BACKGROUND.SIZE.W, BACKGROUND.SIZE.H, BACKGROUND.SCALE)
         let COUNT = PARAMS.CANVAS_WIDTH * LEVEL.FRAME_COUNT / BACKGROUND.SIZE.W * BACKGROUND.SIZE.H * BACKGROUND.SCALE;
         for (var i = 0; i < COUNT; i++) {
              ctx.drawImage(this.spritesheet, BACKGROUND.X, BACKGROUND.Y,
