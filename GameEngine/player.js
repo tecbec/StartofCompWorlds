@@ -240,7 +240,7 @@ class Player {
                 if (that.velocity.y > 0) {                      // chihiro is falling
                     if((entity instanceof Ground || entity instanceof Platform || entity instanceof CloudPlatform ||
                         entity instanceof StoneLamp || entity instanceof Haku || entity instanceof NoFace ||
-                        entity instanceof Railing || entity instanceof Lamp) && (that.lastBB.bottom - 1 <= entity.BB.top)) // minus one?? idk how this works
+                        entity instanceof Railing || entity instanceof Lamp) && (that.lastBB.bottom - 6 <= entity.BB.top)) // minus one?? idk how this works
                   { // bottom of chihiro hits the top of the entity
                         that.isGrounded = true;
                         that.setY(entity.BB.top - that.getHeight());
@@ -284,7 +284,7 @@ class Player {
                 if(entity instanceof Railing) {// if she's crouching she'll fall to ground
                     if (that.BB.bottom <= entity.BB.top && that.game.crouch) {
                         that.isGrounded = false;
-                        that.setY(entity.BB.top - that.getHeight() + 2); // the 1 is just to get her past the bb of the railing
+                        that.setY(entity.BB.top - that.getHeight() + 7); // the 1 is just to get her past the bb of the railing
                         that.updateBB();;
                     } 
                 }
