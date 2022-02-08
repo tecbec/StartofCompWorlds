@@ -19,7 +19,7 @@ var LEVEL = {
     SOOT_LOCATION: [{X: 1100, Y: 310}, {X: 1500, Y: 920}, {X: 3350, Y: 540}, {X: 3350, Y: 920}],
     SOOT_AREA: [{W: 100, H: 15}, {W: 200, H: 15}, {W: 100, H: 15}, {W: 200, H: 15}],
     SOOT_NUM: [10, 20, 10, 20],
-    COIN_LOCATION: [{X: 0, Y: 0}, {X: 0, Y: 0}, {X: 0, Y: 0}, {X: 0, Y: 0}],
+    COIN_LOCATION: [{X: 100, Y: 895}, {X: 150, Y: 895}, {X: 200, Y: 895}, {X: 250, Y: 895}],
     NOFACE_LOCATION: {X: 1950, Y: 200},
 }
 class SceneManager {
@@ -80,13 +80,6 @@ class SceneManager {
             this.noface = new NoFace(this.game, LEVEL.NOFACE_LOCATION.X, LEVEL.NOFACE_LOCATION.Y);
             this.yubaba = new Yubaba(this.game, 0, 0);
             this.chick = new Chick(this.game, chickLocation.x, chickLocation.y, chickLocation.minX, chickLocation.maxX);
-
-            // TODO: put the Coins's (x, y) in LEVEL once we finalized the coordinates
-            this.coin1 = new Coins(this.game, 200, 300);
-            this.coin2 = new Coins(this.game, 300, 300);
-            this.coin3 = new Coins(this.game, 340, 110);
-            this.coin4 = new Coins(this.game, 100, 60);
-
 
             // Background stuff
             //this.stonelamp = new StoneLamp(this.game, LEVEL.STONE_LAMP_LOCATION.X, LEVEL.STONE_LAMP_LOCATION.Y, BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE);
@@ -155,10 +148,13 @@ class SceneManager {
             this.game.addEntity(this.haku);
             // this.game.addEntity(this.yubaba);
             // this.game.addEntity(this.chick);
-            this.game.addEntity(this.coin1);
-            this.game.addEntity(this.coin2);
-            this.game.addEntity(this.coin3);
-            this.game.addEntity(this.coin4);
+
+            for (var i = 0; i < LEVEL.COIN_LOCATION.length; i++) {
+                let coin = LEVEL.COIN_LOCATION[i];
+                this.game.addEntity(new Coins(this.game, coin.X, coin.Y));
+            }
+
+
             this.game.addEntity(this.breathbar);
             this.game.addEntity(this.coinCounter);
         }
