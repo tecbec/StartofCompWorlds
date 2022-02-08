@@ -6,19 +6,29 @@ var LEVEL = {
     music: "./audio/OneSummersDay.mp3",
     START_CANVAS: {X: -900, Y: 0},
     END_CANVAS: {X: 940}, // change this later when we figure out the exact ending canvas measurement
-    FRAME_COUNT: 5, // This is the factor that determine how wide the actual game is.
+    FRAME_COUNT: 7, // This is the factor that determine how wide the actual game is.
     // add a platform length: short, medium, long.
-    PLATFORM_LOCATION:       [{X: 790, Y: 550}, {X: 1100, Y: 345}, {X: 1400, Y: 500}, {X: 1900, Y:390}, {X: 2300, Y: 690},     // scene 2
-                              {X: 2600, Y: 590}, {X: 2750, Y: 450}, {X: 3300, Y: 575}, {X: 3500, Y: 400}, {X: 4000, Y: 600}],                 // scene 3
+    PLATFORM_LOCATION:       [{X: 790, Y: 550}, {X: 1100, Y: 375}, {X: 1400, Y: 500}, {X: 1900, Y:390}, {X: 2200, Y: 590},     // scene 2
+                              {X: 2600, Y: 590}, {X: 2750, Y: 450}, {X: 3300, Y: 575}, {X: 3500, Y: 400}, {X: 4000, Y: 600}],  // scene 3
     CLOUD_PLATFORM_LOCATION: [{X: 2800, Y: 250}, {X: 3200, Y: 300}, {X: 3400, Y:150}, {X: 3750, Y: 250}, {X: 4000, Y: 300}],
     STONE_LAMP_LOCATION: [{X: 1000, Y: 700}, {X: 1800, Y: 700}, {X: 2902, Y: 700}, {X: 3702, Y: 700}],
-    LAMP_LOCATION: [{X:500, Y: 650}, {X:2402, Y: 650}, {X:4304, Y: 650}],
+
+    LAMP_LOCATION: [{X:500, Y: 650}, {X:2402, Y: 650}, {X:4304, Y: 650}, {X:6206, Y: 650}, {X:8108, Y: 650}, {X:10010, Y: 650},
+                    {X:11912, Y: 650}, {X:13814, Y: 650}, {X:15716, Y: 650}],
+
     RAILING_LOCATION: {X: 500, Y: 820},
-    SOOT_LOCATION: [{X: 1100, Y: 310}, {X: 1500, Y: 920}, {X: 3350, Y: 540}, {X: 3350, Y: 920}],
+    SOOT_LOCATION: [{X: 1100, Y: 335}, {X: 1500, Y: 920}, {X: 3350, Y: 540}, {X: 3350, Y: 920}],
     SOOT_AREA: [{W: 100, H: 15}, {W: 200, H: 15}, {W: 100, H: 15}, {W: 200, H: 15}],
     SOOT_NUM: [10, 20, 10, 20],
-    COIN_LOCATION: [{X: 0, Y: 0}, {X: 0, Y: 0}, {X: 0, Y: 0}, {X: 0, Y: 0}],
-    NOFACE_LOCATION: {X: 1950, Y: 200},
+    COIN_LOCATION: [{X: -100, Y: 895},{X: -50, Y: 895}, {X: 0, Y: 895}, {X: 50, Y: 895}, {X: 100, Y: 895}, {X: 150, Y: 895},
+                    {X: 200, Y: 895}, {X: 250, Y: 895}, {X: 250, Y: 895}, {X: 300, Y: 895}, // scene 0
+                    {X: 900, Y: 500},{X: 1200, Y: 295}, {X: 1500, Y: 450}, {X: 2000, Y: 340}, {X: 2300, Y: 540}, {X: 1100, Y: 650},
+                    {X: 1900, Y: 650}, {X: 1400, Y: 900}, {X: 1550, Y: 900}, {X: 1700, Y: 900}, {X: 2100, Y: 900}, // scene 1
+
+                    {X: 2675, Y: 525},{X: 2800, Y: 390}, {X: 3400, Y: 520}, {X: 3600, Y: 330}, {X: 4050, Y: 540}, {X: 3800, Y: 650},
+                    {X: 3000, Y: 650}, {X: 3350, Y: 900}, {X: 3400, Y: 900}, {X: 3450, Y: 900}, {X: 4100, Y: 900}], // scene 2
+    NOFACE_LOCATION: {X: 3200, Y: 100},
+    CHICK_LOCATION: [{X: 2402, Y: 785, MIN: 500, MAX: 2402}, {X: 2900, Y: 785, MIN: 2402, MAX: 4304}, {X: 3800, Y: 785, MIN: 2402, MAX: 4304}],
 }
 class SceneManager {
     constructor(game) {
@@ -63,8 +73,8 @@ class SceneManager {
 
         this.clearEntities();
 
-        // chihiro falling from the sky and land on the ground
-        this.chihiro = new Player(this.game, CHIHIRO.INITIAL_POSITION.X, CHIHIRO.INITIAL_POSITION.Y);
+        // Title Chihiro
+        this.chihiro = new Player(this.game, CHIHIRO.TITLE_POSITION.X, CHIHIRO.TITLE_POSITION.Y);
 
         // x , y , w
         this.ground = new Ground(this.game, LEVEL.START_CANVAS.X, PARAMS.CANVAS_HEIGHT - BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE, PARAMS.CANVAS_WIDTH * LEVEL.FRAME_COUNT,
@@ -73,17 +83,13 @@ class SceneManager {
 
         if(!this.title){
 
+            // Falling chihiro for game play
+            this.chihiro = new Player(this.game, CHIHIRO.INITIAL_POSITION.X, CHIHIRO.INITIAL_POSITION.Y);
+
             // TODO: fix no face position
             this.haku = new Haku(this.game, HAKU.INITIAL_POSITION.X, PARAMS.CANVAS_WIDTH - HAKU.SIZE * HAKU.SCALE - BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE);
             this.noface = new NoFace(this.game, LEVEL.NOFACE_LOCATION.X, LEVEL.NOFACE_LOCATION.Y);
             this.yubaba = new Yubaba(this.game, 0, 0);
-            this.chick = new Chick(this.game, chickLocation.x, chickLocation.y, chickLocation.minX, chickLocation.maxX);
-
-            // TODO: put the Coins's (x, y) in LEVEL once we finalized the coordinates
-            this.coin1 = new Coins(this.game, 200, 300);
-            this.coin2 = new Coins(this.game, 300, 300);
-            this.coin3 = new Coins(this.game, 340, 110);
-            this.coin4 = new Coins(this.game, 100, 60);
 
 
             // Background stuff
@@ -133,9 +139,7 @@ class SceneManager {
                 this.game.addEntity(new Lamp(this.game, lamp.X, lamp.Y, BACKGROUND.LAMP.SIZE * BACKGROUND.LAMP.SCALE.W) );
             }
 
-
             for(var i=0; i < LEVEL.STONE_LAMP_LOCATION.length; i++){
-
                 let stone_lamp = LEVEL.STONE_LAMP_LOCATION[i];
                 this.game.addEntity(new StoneLamp(this.game, stone_lamp.X, stone_lamp.Y, BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE) );
             }
@@ -152,11 +156,19 @@ class SceneManager {
             this.game.addEntity(this.noface);
             this.game.addEntity(this.haku);
             // this.game.addEntity(this.yubaba);
-            // this.game.addEntity(this.chick);
-            this.game.addEntity(this.coin1);
-            this.game.addEntity(this.coin2);
-            this.game.addEntity(this.coin3);
-            this.game.addEntity(this.coin4);
+            ;
+
+            for (var i = 0; i < LEVEL.COIN_LOCATION.length; i++) {
+                let coin = LEVEL.COIN_LOCATION[i];
+                this.game.addEntity(new Coins(this.game, coin.X, coin.Y));
+            }
+
+            for (var i = 0; i < LEVEL.CHICK_LOCATION.length; i++) {
+                let chick = LEVEL.CHICK_LOCATION[i];
+                this.game.addEntity(new Chick(this.game, chick.X, chick.Y, chick.MIN, chick.MAX));
+            }
+
+
             this.game.addEntity(this.breathbar);
             this.game.addEntity(this.coinCounter);
         }
@@ -172,7 +184,7 @@ class SceneManager {
         // blockwidth = 32 * 1 = 32
         // 200 -16 = 164
         if (this.title && this.game.click) {
-            if (this.game.click && this.game.click.y > 500 && this.game.click.y < 550) {
+            if (this.game.click && this.game.click.y > 600 && this.game.click.y < 650) {
                 this.title = false;
                 this.loadLevel(1, this.title);
                 this.game.click = false;
@@ -217,7 +229,7 @@ class SceneManager {
             var width = 176;
             var height = 88;
             ctx.drawImage(ASSET_MANAGER.getAsset("./sprites/title.png"), PARAMS.CANVAS_WIDTH / 2 - width * PARAMS.SCALE / 2 , PARAMS.CANVAS_HEIGHT / 2 - height * PARAMS.SCALE, width * PARAMS.SCALE, height * PARAMS.SCALE);
-            ctx.fillStyle = this.game.mouse && this.game.mouse.y >  500 && this.game.mouse.y < 550? "LightCoral" : "Black";
+            ctx.fillStyle = this.game.mouse && this.game.mouse.y > 600 && this.game.mouse.y < 650? "LightCoral" : "Grey";
             ctx.fillText("Start", 925, 600); //280
             //ctx.fillStyle = this.game.mouse && this.game.mouse.y > 614 && this.game.mouse.y < 649 ? "LightCoral" : "Black";
             //ctx.fillText("Instructions", PARAMS.CANVAS_WIDTH /  PARAMS.SCALE - 80, PARAMS.CANVAS_HEIGHT/  PARAMS.SCALE + 100); //300

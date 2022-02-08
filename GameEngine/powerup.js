@@ -133,7 +133,7 @@ class CoinCounter {
         this.animation.drawFrame(this.game.clockTick, ctx,
             this.x, this.y, PARAMS.SCALE * 2);
 
-        ctx.fillStyle = "Black";
+        ctx.fillStyle = "Pink";
         ctx.fillText(this.coinCount,  this.x + 22 * PARAMS.SCALE, this.y + 13 * PARAMS.SCALE);
 
     };

@@ -1,16 +1,16 @@
 /* Chihiro's Params */
 var CHIHIRO = {
-    TITLE_POSITION: {X: 0, Y: 260},
-    INITIAL_POSITION: {X: 2000, Y: 0},
+    TITLE_POSITION: {X: 0, Y: 800},
+    INITIAL_POSITION: {X: 0, Y: 0}, 
     SIZE: 70,
     SCALE: 2,
     PADDING: {X: 28, Y: 20}, // same padding for BB and imaginary x,y,w,h calculations
-    IDLE:   {RIGHT: {X: 0,  Y: 0},    LEFT: {X: 0,  Y: 70},   FRAME: 4, SPEED: 0.4,  PADDING: 0, REVERSE: false, LOOP: true}, 
+    IDLE:   {RIGHT: {X: 0,  Y: 0},    LEFT: {X: 0,  Y: 70},   FRAME: 4, SPEED: 0.4,  PADDING: 0, REVERSE: false, LOOP: true},
     WALK:   {RIGHT: {X: 0,  Y: 140},  LEFT: {X: 0,  Y: 210},  FRAME: 4, SPEED: 0.2,  PADDING: 0, REVERSE: false, LOOP: true},
-    JUMP:   {RIGHT: {X: 0,  Y: 280},  LEFT: {X: 0,  Y: 350},  FRAME: 4, SPEED: 0.1, PADDING: 0, REVERSE: false, LOOP: true}, 
+    JUMP:   {RIGHT: {X: 0,  Y: 280},  LEFT: {X: 0,  Y: 350},  FRAME: 4, SPEED: 0.1, PADDING: 0, REVERSE: false, LOOP: true},
     CROUCH: {RIGHT: {X: 0,  Y: 280},  LEFT: {X: 0,  Y: 350},  FRAME: 1, SPEED: 0.33, PADDING: 0, REVERSE: false, LOOP: true},
     RUN:    {RIGHT: {X: 0,  Y: 140},  LEFT: {X: 0,  Y: 210},  FRAME: 4, SPEED: 0.1, PADDING: 0, REVERSE: false, LOOP: true},
-    DEAD:   {RIGHT: {X: 0,  Y: 420},  LEFT: {X: 0,  Y: 490},  FRAME: 3, SPEED: 0.3, PADDING: 0, REVERSE: false, LOOP: false}, 
+    DEAD:   {RIGHT: {X: 0,  Y: 420},  LEFT: {X: 0,  Y: 490},  FRAME: 3, SPEED: 0.3, PADDING: 0, REVERSE: false, LOOP: false},
     BREATH_BAR: {X: 1700, Y: 10, HEIGHT: 10, MAX: 100},
     COIN_COUNTER: {X: 1620, Y: 7.25}
 };
@@ -251,7 +251,7 @@ class Player {
                         that.isGrounded = false;
                     }
                 }
-                
+
                 if (that.velocity.y < 0) {     // chihiro is jumping up and hits the bottom of a platform
                     if((entity instanceof Platform )    // collision w/ bottom of platform
                         && (that.lastBB.top >= entity.BB.bottom)) { // top of chihiro goes above the bottom of the platform
@@ -270,13 +270,19 @@ class Player {
                         if (that.BB.collide(entity.leftBB) && that.lastBB.right >= entity.leftBB.left ) { // left collision
                             that.setX(entity.BB.left - that.getWidth()); // so that the player won't stick to the bb of the entity
                             that.velocity.y = 0;
+
+                            that.y -= 6;
+
                             if (that.velocity.x > 0) that.velocity.x = 0;
                         } else if (that.BB.collide(entity.rightBB) && that.lastBB.left <= entity.rightBB.right ) { // right collision
                             that.setX(entity.BB.right);// so that the player won't stick to the bb of the entity
                             that.velocity.y = 0;
+
+                            that.y -= 6;
+
                             if (that.velocity.x < 0) that.velocity.x = 0;
                         } else {
-                           
+
                         }
                         that.updateBB(); 
                 }
@@ -286,113 +292,115 @@ class Player {
                         that.isGrounded = false;
                         that.setY(entity.BB.top - that.getHeight() + 7); // the 1 is just to get her past the bb of the railing
                         that.updateBB();;
-                    } 
+                    }
                 }
 
+                /** ***************************************************************
+                 * NON-PLATFORM ENTITIES
+                 * ***************************************************************/
+                // collision with no face
+                if (entity instanceof NoFace && that.BB.collide(entity.BB)) {
+                    // Set a maximum amount of coins upon interact
+                    if (that.game.camera.coinCounter.coinCount <= 10) {
+                        that.game.camera.coinCounter.coinCount += 10;
+                    }
+                    entity.dead = true;
+                    if (that.BB.collide(entity.leftBB)) { // left collision
+                        that.setX(entity.BB.left - that.getWidth());
+                        if (that.velocity.x > 0) that.velocity.x = 0;
+                    } else if (that.BB.collide(entity.rightBB)) { // right
+                        that.setX(entity.BB.right);
+                        if (that.velocity.x < 0) that.velocity.x = 0;
+                    }
+                    that.updateBB();
+                }
 
-                // /** ***************************************************************
-                //  * NON-PLATFORM ENTITIES
-                //  * ***************************************************************/
-                // // collision with no face
-                // if (entity instanceof NoFace && that.BB.collide(entity.BB)) {
-                //     // Set a maximum amount of coins upon interact
-                //     if (that.game.camera.coinCounter.coinCount <= 10) {
-                //         that.game.camera.coinCounter.coinCount += 10;
-                //     }
-                //     entity.dead = true;
-                //     if (that.BB.collide(entity.leftBB)) { // left collision
-                //         that.setX(entity.BB.left - that.getWidth());
-                //         if (that.velocity.x > 0) that.velocity.x = 0;
-                //     } else if (that.BB.collide(entity.rightBB)) { // right
-                //         that.setX(entity.BB.right);
-                //         if (that.velocity.x < 0) that.velocity.x = 0;
-                //     }
-                //     that.updateBB();
-                // }
+                // Collision with CROWS
+                if (entity instanceof Crow ) {
+                    that.game.camera.breathwidth -= 5;
+                    that.game.camera.changeBreath();
+                    entity.removeFromWorld = true;
+                }
 
-                // // Collision with CROWS
-                // if (entity instanceof Crow ) {
-                //     that.game.camera.breathwidth -= 5;
-                //     that.game.camera.changeBreath();
-                //     entity.removeFromWorld = true;
-                // }
+                //Collision with Yubaba
+                //for now have Yubaba push Chihiro? but later  kills on impact
 
-                // //Collision with Yubaba
-                // //for now have Yubaba push Chihiro? but later  kills on impact
+                // collision with Chicks
+                if (entity instanceof Chick && that.BB.collide(entity.BB)) {
+                    that.game.camera.breathwidth -= CHIHIRO.BREATH_BAR.MAX/4;
+                    that.game.camera.changeBreath();
 
-                // // collision with Chicks
-                // if (entity instanceof Chick && that.BB.collide(entity.BB)) {
-                //     that.game.camera.breathwidth -= CHIHIRO.BREATH_BAR.MAX/4;
-                //     that.game.camera.changeBreath();
+                    if (that.BB.collide(entity.leftBB)) { // left collision
+                       // maybe replace with a push animation?
+                       that.setX(that.getX() + 20);
+                       that.velocity.x = 100;
+                    } else if (that.BB.collide(entity.rightBB)) { // right
+                        that.setX(that.getX() - 20);
+                        that.velocity.x = -100;
+                    }else if (that.BB.collide(entity.topBB)) { // right
+                        that.setY(that.getY() - 20);
+                        that.velocity.y = -100;
+                    }
+                    that.updateBB();
 
-                //     if (that.BB.collide(entity.leftBB)) { // left collision
-                //        // maybe replace with a push animation?
-                //        that.setX(that.getX() + 20);
-                //        that.velocity.x = 100;
-                //     } else if (that.BB.collide(entity.rightBB)) { // right
-                //         that.setX(that.getX() - 20);
-                //         that.velocity.x = -100;
-                //     }else if (that.BB.collide(entity.topBB)) { // right
-                //         that.setY(that.getY() - 20);
-                //         that.velocity.y = -100;
-                //     }
-                //     that.updateBB();
+                }
 
-                // }
+                // collision with HAKU
+                if (entity instanceof Haku && that.BB.collide(entity.BB)) {
+                    // instantly heal stamina bar
+                    that.game.camera.breathwidth = CHIHIRO.BREATH_BAR.MAX;
+                    that.game.camera.changeBreath();
+                    entity.dead = true;
 
-                // // collision with HAKU
-                // if (entity instanceof Haku && that.BB.collide(entity.BB)) {
-                //     // instantly heal stamina bar
-                //     that.game.camera.breathwidth = CHIHIRO.BREATH_BAR.MAX;
-                //     that.game.camera.changeBreath();
-                //     entity.dead = true;
+                    if (that.BB.collide(entity.leftBB)) { // left collision
+                        that.setX(entity.BB.left - that.getWidth());
+                        if (that.velocity.x > 0) that.velocity.x = 0;
+                    } else if (that.BB.collide(entity.rightBB)) { // right
+                        that.setX(entity.BB.right);
+                        if (that.velocity.x < 0) that.velocity.x = 0;
+                    }
+                    that.updateBB();
+                }
 
-                //     if (that.BB.collide(entity.leftBB)) { // left collision
-                //         that.setX(entity.BB.left - that.getWidth());
-                //         if (that.velocity.x > 0) that.velocity.x = 0;
-                //     } else if (that.BB.collide(entity.rightBB)) { // right
-                //         that.setX(entity.BB.right);
-                //         if (that.velocity.x < 0) that.velocity.x = 0;
-                //     }
-                //     that.updateBB();
-                // }
+                // collision with SOOTS
+                if (entity instanceof Soot ) {
+                    that.game.camera.breathwidth -= 1;
+                    // for testing make soot breath -=20;
+                    entity.dead = true;
+                    that.game.camera.changeBreath();
+                    that.updateBB()
+                }
 
-                // // collision with SOOTS
-                // if (entity instanceof Soot ) {
-                //     that.game.camera.breathwidth -= 1;
-                //     // for testing make soot breath -=20;
-                //     entity.dead = true;
-                //     that.game.camera.changeBreath();
-                //     that.updateBB()
-                // }
-
-                // // collision with COINS
-                // if (entity instanceof Coins) {
-                //     entity.removeFromWorld = true;
-                //     that.game.camera.coinCounter.coinCount ++;
-                // }
+                // collision with COINS
+                if (entity instanceof Coins) {
+                    entity.removeFromWorld = true;
+                    that.game.camera.coinCounter.coinCount ++;
+                }
             }
         });
 
-        // if (this.game.camera.breathwidth <= 0) {
-        //     this.dead = true;
-        //     this.state = 5;
-        // } else {
-        //     this.dead = false;
-        // }
+        if (this.game.camera.breathwidth <= 0) {
+            this.dead = true;
+            this.state = 5;
+        } else {
+            this.dead = false;
+        }
 
         // update state
         if (this.state !== 2 && this.state !== 5) {  // NOT jump
             if (this.game.crouch) this.state = 3;    // crouching state
             else if (Math.abs(this.velocity.x) > 0) this.state = 1;        // walking state
             else if (Math.abs(this.velocity.x) > MIN_WALK) this.state = 4; // running state
-        } 
+        }
 
         if (this.dead || this.state === 5) {
+
             this.velocity.x = 0;
+
             this.deadCounter += this.game.clockTick;
-            if (this.deadCounter > 0.25) {
-                this.state = 0;
+
+            if (this.deadCounter > 0.5) this.state = 0;
+            if (this.deadCounter > 0.55) {
                 this.game.camera.title = true;
                 this.game.camera.breathwidth = 100;
                 this.deadCounter = 0;
@@ -418,25 +426,21 @@ class Player {
 
     /*
 
-    SETTERS AND GETTERS 
-
+    SETTERS AND GETTERS
     THESE ALREADY ACCOUNT FOR PADDING & SCALE
-
     */
-    // adjust these to have if statements that adjust the padding based on the current animation 
+    // adjust these to have if statements that adjust the padding based on the current animation
 
-    //sets an x value while removing the padding 
+    //sets an x value while removing the padding
     setX(newX){
         this.x = newX - (CHIHIRO.PADDING.X * CHIHIRO.SCALE);
-        
     };
 
     setY(newY){
         this.y = newY - (CHIHIRO.PADDING.Y*CHIHIRO.SCALE - 1);
-        
     };
 
-    //gets the fake x value 
+    //gets the fake x value
     getX(){
         return this.x + (CHIHIRO.PADDING.X) *CHIHIRO.SCALE;
     };
@@ -447,12 +451,12 @@ class Player {
                        // padding only on the top
     };
 
-    //gets width while removing the padding 
+    //gets width while removing the padding
     getWidth(){
         return (CHIHIRO.SIZE - (CHIHIRO.PADDING.X * 2))*CHIHIRO.SCALE;
     };
 
-    //gets height while removing the padding 
+    //gets height while removing the padding
     getHeight(){
         return (CHIHIRO.SIZE - CHIHIRO.PADDING.Y)*CHIHIRO.SCALE;
     };

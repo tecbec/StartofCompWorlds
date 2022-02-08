@@ -103,23 +103,23 @@ class GameEngine {
             switch(e.code) {
                 case "ArrowLeft":
                     that.left = false;
-                    // that.deactivate = false;
+
                     break;
                 case "ArrowRight":
                     that.right = false;
-                    // that.deactivate = false;
+
                     break;
                 case "ArrowUp":
                     that.up = false;
-                    // that.deactivate = false;
+
                     break;
                 case "ShiftLeft":
                     that.run = false;
-                    // that.deactivate = false;
+
                     break;
                 case "ArrowDown":
                     that.crouch = false; 
-                    // that.deactivate = false;
+
                     break;
                 case "Space": //shoot 
                     that.shoot = false; 
