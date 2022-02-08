@@ -112,11 +112,11 @@ class Platform {  // tree
         //     BACKGROUND.PLATFORM.SIZE * LOCATION, BACKGROUND.PLATFORM.BB_SIZE.H);
 
 
-        this.leftBB = new BoundingBox(this.x, this.y + 10,
-            BACKGROUND.PLATFORM.BB_SIZE.W, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE - 20);
+        this.leftBB = new BoundingBox(this.x, this.y + 20,
+            BACKGROUND.PLATFORM.BB_SIZE.W, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE - 40);
 
-        this.rightBB = new BoundingBox(this.BB.right - BACKGROUND.PLATFORM.BB_SIZE.W, this.y + 10,
-            BACKGROUND.PLATFORM.BB_SIZE.W, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE - 20);
+        this.rightBB = new BoundingBox(this.BB.right - BACKGROUND.PLATFORM.BB_SIZE.W, this.y + 30,
+            BACKGROUND.PLATFORM.BB_SIZE.W, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE - 40);
 
 
         if (PARAMS.DEBUG) {
@@ -231,11 +231,11 @@ class StoneLamp {
         // this.bottomBB = new BoundingBox(this.x, this.y ,
         //     BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE, BACKGROUND.STONE_LAMP.BB_SIZE.H);
 
-        this.leftBB = new BoundingBox(this.x, this.y + 10,
-            BACKGROUND.STONE_LAMP.BB_SIZE.W, BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE - 20);
+        this.leftBB = new BoundingBox(this.x, this.y + 20,
+            BACKGROUND.STONE_LAMP.BB_SIZE.W, BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE - 40);
 
-        this.rightBB = new BoundingBox(this.BB.right - BACKGROUND.STONE_LAMP.BB_SIZE.W, this.y + 10,
-            BACKGROUND.STONE_LAMP.BB_SIZE.W, BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE - 20);
+        this.rightBB = new BoundingBox(this.BB.right - BACKGROUND.STONE_LAMP.BB_SIZE.W, this.y + 20,
+            BACKGROUND.STONE_LAMP.BB_SIZE.W, BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE - 40);
 
         if (PARAMS.DEBUG) {
             // ctx.lineWidth = 2;

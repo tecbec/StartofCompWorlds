@@ -1,16 +1,17 @@
 /* Chihiro's Params */
 var CHIHIRO = {
     TITLE_POSITION: {X: 0, Y: 800},
-    INITIAL_POSITION: {X: 2000, Y: 0}, 
+    INITIAL_POSITION: {X: 0, Y: 0}, 
     SIZE: 70,
     SCALE: 2,
     PADDING: {X: 28, Y: 20}, // same padding for BB and imaginary x,y,w,h calculations
     IDLE:   {RIGHT: {X: 0,  Y: 0},    LEFT: {X: 0,  Y: 70},   FRAME: 4, SPEED: 0.4,  PADDING: 0, REVERSE: false, LOOP: true},
     WALK:   {RIGHT: {X: 0,  Y: 140},  LEFT: {X: 0,  Y: 210},  FRAME: 4, SPEED: 0.2,  PADDING: 0, REVERSE: false, LOOP: true},
     JUMP:   {RIGHT: {X: 0,  Y: 280},  LEFT: {X: 0,  Y: 350},  FRAME: 4, SPEED: 0.1, PADDING: 0, REVERSE: false, LOOP: true},
-    CROUCH: {RIGHT: {X: 0,  Y: 280},  LEFT: {X: 0,  Y: 350},  FRAME: 1, SPEED: 0.33, PADDING: 0, REVERSE: false, LOOP: true},
+    CROUCH: {RIGHT: {X: 0,  Y: 560},  LEFT: {X: 0,  Y: 630},  FRAME: 4, SPEED: 0.33, PADDING: 0, REVERSE: false, LOOP: true},
     RUN:    {RIGHT: {X: 0,  Y: 140},  LEFT: {X: 0,  Y: 210},  FRAME: 4, SPEED: 0.1, PADDING: 0, REVERSE: false, LOOP: true},
-    DEAD:   {RIGHT: {X: 0,  Y: 420},  LEFT: {X: 0,  Y: 490},  FRAME: 3, SPEED: 0.3, PADDING: 0, REVERSE: false, LOOP: false},
+    DEAD:   {RIGHT: {X: 0,  Y: 420},  LEFT: {X: 0,  Y: 490},  FRAME: 3, SPEED: 0.2, PADDING: 0, REVERSE: false, LOOP: false},
+    CROUCH_WALK: {RIGHT: {X: 0,  Y: 700},  LEFT: {X: 0,  Y: 770},  FRAME: 4, SPEED: 0.33, PADDING: 0, REVERSE: false, LOOP: true},
     BREATH_BAR: {X: 1700, Y: 10, HEIGHT: 10, MAX: 100},
     COIN_COUNTER: {X: 1620, Y: 7.25}
 };
@@ -45,7 +46,7 @@ class Player {
     /* Load the following animations from the sprite sheet for Chihiro's current state and direction */
     loadAnimations() {
         // array with [state] [face] of the same animator
-        for (var i = 0; i < 6; i++) {
+        for (var i = 0; i < 7; i++) {
             this.animations.push([]);
             for (var j = 0; j < 2; j++) {
                 this.animations[i].push([]);
@@ -121,6 +122,20 @@ class Player {
             CHIHIRO.SIZE, CHIHIRO.SIZE,
             CHIHIRO.DEAD.FRAME, 0.12,
             CHIHIRO.DEAD.PADDING, CHIHIRO.DEAD.REVERSE, CHIHIRO.DEAD.LOOP);
+
+
+        // crouch walk -> right
+        this.animations[6][0] = new Animator (this.spritesheet, CHIHIRO.CROUCH_WALK.RIGHT.X, CHIHIRO.CROUCH_WALK.RIGHT.Y,
+            CHIHIRO.SIZE, CHIHIRO.SIZE,
+            CHIHIRO.CROUCH_WALK.FRAME, CHIHIRO.CROUCH_WALK.SPEED,
+            CHIHIRO.CROUCH_WALK.PADDING, CHIHIRO.CROUCH_WALK.REVERSE, CHIHIRO.CROUCH_WALK.LOOP);
+
+        // crouch walk -> left
+        this.animations[6][1] = new Animator (this.spritesheet, CHIHIRO.CROUCH_WALK.LEFT.X, CHIHIRO.CROUCH_WALK.LEFT.Y,
+            CHIHIRO.SIZE, CHIHIRO.SIZE,
+            CHIHIRO.CROUCH_WALK.FRAME, CHIHIRO.CROUCH_WALK.SPEED,
+            CHIHIRO.CROUCH_WALK.PADDING, CHIHIRO.CROUCH_WALK.REVERSE, CHIHIRO.CROUCH_WALK.LOOP);
+
     };
     /* Update the bounding box of the player for collision detection */
     updateBB() {
@@ -194,6 +209,7 @@ class Player {
                     }
                 }
             } 
+          
             if (this.game.up) {  // jumping
                 this.jumping = true;
                 this.velocity.y = -250 * PARAMS.SCALE;
@@ -280,9 +296,10 @@ class Player {
                 }
 
                 if(entity instanceof Railing) {// if she's crouching she'll fall to ground
-                    if (that.BB.bottom <= entity.BB.top && that.game.crouch) {
+                    if (that.BB.bottom >= entity.BB.top && that.game.crouch) {
                         that.isGrounded = false;
                         that.setY(entity.BB.top - that.getHeight() + 1); // the 1 is just to get her past the bb of the railing
+                        //that.velocity.y += FALL_ACC * TICK;
                         //that.updateBB();;
                     }
                 }
@@ -380,8 +397,9 @@ class Player {
         }
 
         // update state
-        if (this.state !== 2 && this.state !== 5) {  // NOT jump
-            if (this.game.crouch) this.state = 3;    // crouching state
+        if (this.state !== 2 && this.state !== 5 && this.state !== 3) {  // NOT jump, dead, or crouch
+            if (this.game.crouch && this.velocity.x == 0) this.state = 3;  // crouching state
+            else if (this.game.crouch && Math.abs(this.velocity.x) > 0) this.state = 6;
             else if (Math.abs(this.velocity.x) > 0) this.state = 1;        // walking state
             else if (Math.abs(this.velocity.x) > MIN_WALK) this.state = 4; // running state
         }

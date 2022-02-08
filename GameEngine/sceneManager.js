@@ -8,8 +8,8 @@ var LEVEL = {
     END_CANVAS: {X: 940}, // change this later when we figure out the exact ending canvas measurement
     FRAME_COUNT: 7, // This is the factor that determine how wide the actual game is.
     // add a platform length: short, medium, long.
-    PLATFORM_LOCATION:       [{X: 790, Y: 550}, {X: 1100, Y: 375}, {X: 1400, Y: 500}, {X: 1900, Y:390}, {X: 2300, Y: 590},     // scene 2
-                              {X: 2600, Y: 590}, {X: 2850, Y: 590}, {X: 3300, Y: 575}, {X: 3500, Y: 400}, {X: 4000, Y: 600}],  // scene 3
+    PLATFORM_LOCATION:       [{X: 790, Y: 550}, {X: 1100, Y: 375}, {X: 1400, Y: 500}, {X: 1900, Y:390}, {X: 2200, Y: 590},     // scene 2
+                              {X: 2600, Y: 590}, {X: 2750, Y: 450}, {X: 3300, Y: 575}, {X: 3500, Y: 400}, {X: 4000, Y: 600}],  // scene 3
     CLOUD_PLATFORM_LOCATION: [{X: 2800, Y: 250}, {X: 3200, Y: 300}, {X: 3400, Y:150}, {X: 3750, Y: 250}, {X: 4000, Y: 300}],
     STONE_LAMP_LOCATION: [{X: 1000, Y: 700}, {X: 1800, Y: 700}, {X: 2902, Y: 700}, {X: 3702, Y: 700}],
 
@@ -236,7 +236,7 @@ class SceneManager {
         }
 
         if (PARAMS.DEBUG && !this.title) {
-            ctx.strokeStyle = "Black";
+            ctx.strokeStyle = "White";
             ctx.fillStyle = ctx.strokeStyle;
             // the only to access objects throughout the game implementation is by including this.game and adding the chihiro in this class
             // capturing the velocity displaying useful variables
@@ -260,31 +260,31 @@ class SceneManager {
             // walk left
             ctx.strokeStyle = "Red";
             ctx.lineWidth = 1;
-            ctx.strokeStyle = this.game.left ? "Red" : "Black";
+            ctx.strokeStyle = this.game.left ? "Red" : "White";
             ctx.fillStyle = ctx.strokeStyle;
             ctx.strokeRect(35 * PARAMS.SCALE, 47 * PARAMS.SCALE, 20 * PARAMS.SCALE, 20 * PARAMS.SCALE);
             ctx.fillText("L", 42 * PARAMS.SCALE, 60 * PARAMS.SCALE);
 
             // walk right
-            ctx.strokeStyle = this.game.right ? "Red" : "Black";
+            ctx.strokeStyle = this.game.right ? "Red" : "White";
             ctx.fillStyle = ctx.strokeStyle;
             ctx.strokeRect(95 * PARAMS.SCALE, 47 * PARAMS.SCALE, 20 * PARAMS.SCALE, 20 * PARAMS.SCALE);
             ctx.fillText("R", 102 * PARAMS.SCALE, 60 * PARAMS.SCALE);
 
             // jump
-            ctx.strokeStyle = this.game.up ? "Red" : "Black";
+            ctx.strokeStyle = this.game.up ? "Red" : "White";
             ctx.fillStyle = ctx.strokeStyle;
             ctx.strokeRect(68 * PARAMS.SCALE, 16 * PARAMS.SCALE, 20 * PARAMS.SCALE, 20 * PARAMS.SCALE);
             ctx.fillText("U", 75 * PARAMS.SCALE, 30 * PARAMS.SCALE);
 
             // crouch
-            ctx.strokeStyle = this.game.crouch ? "Red" : "Black";
+            ctx.strokeStyle = this.game.crouch ? "Red" : "White";
             ctx.fillStyle = ctx.strokeStyle;
             ctx.strokeRect(68 * PARAMS.SCALE, 76 * PARAMS.SCALE, 20 * PARAMS.SCALE, 20 * PARAMS.SCALE);
             ctx.fillText("C", 75 * PARAMS.SCALE, 90 * PARAMS.SCALE);
 
             // run
-            ctx.strokeStyle = this.game.run ? "Red" : "Black";
+            ctx.strokeStyle = this.game.run ? "Red" : "White";
             ctx.fillStyle = ctx.strokeStyle;
             ctx.strokeRect(7 * PARAMS.SCALE, 47 * PARAMS.SCALE, 20 * PARAMS.SCALE, 20 * PARAMS.SCALE);
             ctx.fillText("S", 13 * PARAMS.SCALE, 60 * PARAMS.SCALE);
