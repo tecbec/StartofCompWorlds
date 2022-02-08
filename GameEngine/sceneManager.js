@@ -211,8 +211,6 @@ class SceneManager {
     };
 
     draw(ctx) {
-       
-
         ctx.font = PARAMS.BLOCKWIDTH / 2 + 'px "Press Start 2P"';
 
         if (this.title || this.chihiro.dead && this.chihiro.removeFromWorld) {

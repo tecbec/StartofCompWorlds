@@ -270,15 +270,15 @@ class Player {
                         if (that.BB.collide(entity.leftBB) && that.BB.right >= entity.leftBB.left ) { // left collision
                             that.setX(entity.BB.left - that.getWidth()); // so that the player won't stick to the bb of the entity
                             that.velocity.y = 0;
-                            that.y -=6;
-                            //that.setY(that.getY() - 1.5);
+
+                            that.y -= 6;
                             
                             if (that.velocity.x > 0) that.velocity.x = 0;
                         } else if (that.BB.collide(entity.rightBB) && that.BB.left <= entity.rightBB.right ) { // right collision
                             that.setX(entity.BB.right);// so that the player won't stick to the bb of the entity
                             that.velocity.y = 0;
-                            that.y -=6;
-                            //that.setY(that.getY() - 1.5);
+                            
+                            that.y -= 6;
                             
                             if (that.velocity.x < 0) that.velocity.x = 0;
                         } else {
