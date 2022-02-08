@@ -240,7 +240,7 @@ class Player {
                 if (that.velocity.y > 0) {                      // chihiro is falling
                     if((entity instanceof Ground || entity instanceof Platform || entity instanceof CloudPlatform ||
                         entity instanceof StoneLamp || entity instanceof Haku || entity instanceof NoFace ||
-                        entity instanceof Railing || entity instanceof Lamp) && (that.lastBB.bottom <= entity.BB.top))
+                        entity instanceof Railing || entity instanceof Lamp) && (that.lastBB.bottom - 1 <= entity.BB.top)) // minus one?? idk how this works
                   { // bottom of chihiro hits the top of the entity
                         that.isGrounded = true;
                         that.setY(entity.BB.top - that.getHeight());
@@ -267,30 +267,24 @@ class Player {
                     console.log(that.getHeight());
                         that.game.deactivate = true;   // don't let player access key press once collision happens
                         console.log(entity.BB.top);
-                        if (that.BB.collide(entity.leftBB) && that.BB.right >= entity.leftBB.left ) { // left collision
+                        if (that.BB.collide(entity.leftBB) && that.lastBB.right >= entity.leftBB.left ) { // left collision
                             that.setX(entity.BB.left - that.getWidth()); // so that the player won't stick to the bb of the entity
                             that.velocity.y = 0;
-
-                            that.y -= 6;
-                            
                             if (that.velocity.x > 0) that.velocity.x = 0;
-                        } else if (that.BB.collide(entity.rightBB) && that.BB.left <= entity.rightBB.right ) { // right collision
+                        } else if (that.BB.collide(entity.rightBB) && that.lastBB.left <= entity.rightBB.right ) { // right collision
                             that.setX(entity.BB.right);// so that the player won't stick to the bb of the entity
                             that.velocity.y = 0;
-                            
-                            that.y -= 6;
-                            
                             if (that.velocity.x < 0) that.velocity.x = 0;
                         } else {
-                            
+                           
                         }
-
+                        that.updateBB(); 
                 }
 
                 if(entity instanceof Railing) {// if she's crouching she'll fall to ground
                     if (that.BB.bottom <= entity.BB.top && that.game.crouch) {
                         that.isGrounded = false;
-                        that.setY(entity.BB.top - that.getHeight() + 1); // the 1 is just to get her past the bb of the railing
+                        that.setY(entity.BB.top - that.getHeight() + 2); // the 1 is just to get her past the bb of the railing
                         that.updateBB();;
                     } 
                 }

@@ -8,7 +8,7 @@ var BACKGROUND = {
     STONE_LAMP: {X: 0, Y: 0, SIZE: 64, SCALE: 4, BB_SIZE: {W: 10, H: 10}},
     LAMP: {X: 0, Y: 0, SIZE: 64, SCALE:  {W: 3, H: 5}, BB_SIZE: {W: 5, H: 10}, PADDING: {W: 50, H: 13}},
     RAILING: {X: 0, Y: 10, SIZE: 64, SCALE: 2.5, BB_SIZE: {W: 5, H: 10}, PADDING: 20},
-    PLATFORM: {LEFT: {X: 0, Y: 32}, MID: {X: 16, Y: 32}, RIGHT: {X: 32, Y: 32}, SIZE: 16, SCALE: 4, COUNT: 2, BB_SIZE: {W: 5, H: 16}},
+    PLATFORM: {LEFT: {X: 0, Y: 32}, MID: {X: 16, Y: 32}, RIGHT: {X: 32, Y: 32}, SIZE: 16, SCALE: 4, COUNT: 2, BB_SIZE: {W: 10, H: 10}},
     CLOUD_PLATFORM: {LEFT: {X: 0, Y: 0}, MID: {X: 0, Y: 0}, RIGHT: {X: 0, Y: 0}, SIZE: 16, SCALE: 4, COUNT: 2, BB_SIZE: {W: 5, H: 16}}
     // PLATFORM_SHORT: {LEFT: {X: 0, Y: 32}, MID: {X: 16, Y: 32}, RIGHT: {X: 32, Y: 32}, SIZE: 16, SCALE: 2, COUNT: 2, BB_SIZE: {W: 5, H: 16}}
     // PLATFORM_LONG: {LEFT: {X: 0, Y: 0}, MID: {X: 16, Y: 32}, RIGHT: {X: 32, Y: 32}, SIZE: 16, SCALE: 2, COUNT: 5, BB_SIZE: {W: 5, H: 16}}
@@ -112,10 +112,10 @@ class Platform {  // tree
 
 
         this.leftBB = new BoundingBox(this.x, this.y,
-            BACKGROUND.PLATFORM.BB_SIZE.W, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE - 20);
+            BACKGROUND.PLATFORM.BB_SIZE.W, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE );
 
         this.rightBB = new BoundingBox(this.BB.right - BACKGROUND.PLATFORM.BB_SIZE.W, this.y,
-            BACKGROUND.PLATFORM.BB_SIZE.W, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE - 20);
+            BACKGROUND.PLATFORM.BB_SIZE.W, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE );
 
 
         if (PARAMS.DEBUG) {
@@ -233,7 +233,7 @@ class StoneLamp {
         this.leftBB = new BoundingBox(this.x, this.y + 10,
             BACKGROUND.STONE_LAMP.BB_SIZE.W, BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE - 20);
 
-        this.rightBB = new BoundingBox(this.BB.right - BACKGROUND.PLATFORM.BB_SIZE.W - 5, this.y + 10,
+        this.rightBB = new BoundingBox(this.BB.right - BACKGROUND.STONE_LAMP.BB_SIZE.W, this.y + 10,
             BACKGROUND.STONE_LAMP.BB_SIZE.W, BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE - 20);
 
         if (PARAMS.DEBUG) {
@@ -262,7 +262,7 @@ class Lamp {
         Object.assign(this, { game, x, y, w});
         this.spritesheet = this.spritesheet = ASSET_MANAGER.getAsset("./sprites/lamp.png");
         this.BB = new BoundingBox(this.x+BACKGROUND.LAMP.PADDING.W, this.y,
-            BACKGROUND.LAMP.SIZE * BACKGROUND.LAMP.SCALE.W-BACKGROUND.LAMP.PADDING.W, BACKGROUND.LAMP.SIZE * BACKGROUND.LAMP.SCALE.H);
+            BACKGROUND.LAMP.SIZE * BACKGROUND.LAMP.SCALE.W-BACKGROUND.LAMP.PADDING.W + 20, BACKGROUND.LAMP.SIZE * BACKGROUND.LAMP.SCALE.H);
 
         // this.topBB = new BoundingBox(this.x+BACKGROUND.LAMP.PADDING.W, this.y+BACKGROUND.LAMP.PADDING.H,
         //     BACKGROUND.LAMP.SIZE * BACKGROUND.LAMP.SCALE.W-BACKGROUND.LAMP.PADDING.W, BACKGROUND.LAMP.BB_SIZE.H);
