@@ -75,6 +75,8 @@ class SceneManager {
 
         if(!this.title){
 
+            this.chihiro = new Player(this.game, CHIHIRO.INITIAL_POSITION.X, CHIHIRO.INITIAL_POSITION.Y);
+
             // TODO: fix no face position
             this.haku = new Haku(this.game, HAKU.INITIAL_POSITION.X, PARAMS.CANVAS_WIDTH - HAKU.SIZE * HAKU.SCALE - BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE);
             this.noface = new NoFace(this.game, LEVEL.NOFACE_LOCATION.X, LEVEL.NOFACE_LOCATION.Y);
@@ -170,7 +172,7 @@ class SceneManager {
         // blockwidth = 32 * 1 = 32
         // 200 -16 = 164
         if (this.title && this.game.click) {
-            if (this.game.click && this.game.click.y > 500 && this.game.click.y < 550) {
+            if (this.game.click && this.game.click.y > 600 && this.game.click.y < 650) {
                 this.title = false;
                 this.loadLevel(1, this.title);
                 this.game.click = false;
@@ -215,7 +217,7 @@ class SceneManager {
             var width = 176;
             var height = 88;
             ctx.drawImage(ASSET_MANAGER.getAsset("./sprites/title.png"), PARAMS.CANVAS_WIDTH / 2 - width * PARAMS.SCALE / 2 , PARAMS.CANVAS_HEIGHT / 2 - height * PARAMS.SCALE, width * PARAMS.SCALE, height * PARAMS.SCALE);
-            ctx.fillStyle = this.game.mouse && this.game.mouse.y >  500 && this.game.mouse.y < 550? "LightCoral" : "Black";
+            ctx.fillStyle = this.game.mouse && this.game.mouse.y > 600 && this.game.mouse.y < 650? "LightCoral" : "Black";
             ctx.fillText("Start", 925, 600); //280
             //ctx.fillStyle = this.game.mouse && this.game.mouse.y > 614 && this.game.mouse.y < 649 ? "LightCoral" : "Black";
             //ctx.fillText("Instructions", PARAMS.CANVAS_WIDTH /  PARAMS.SCALE - 80, PARAMS.CANVAS_HEIGHT/  PARAMS.SCALE + 100); //300
