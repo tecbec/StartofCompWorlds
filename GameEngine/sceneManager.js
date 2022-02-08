@@ -8,8 +8,8 @@ var LEVEL = {
     END_CANVAS: {X: 940}, // change this later when we figure out the exact ending canvas measurement
     FRAME_COUNT: 7, // This is the factor that determine how wide the actual game is.
     // add a platform length: short, medium, long.
-    PLATFORM_LOCATION:       [{X: 790, Y: 550}, {X: 1100, Y: 375}, {X: 1400, Y: 500}, {X: 1900, Y:390}, {X: 2200, Y: 590},     // scene 2
-                              {X: 2600, Y: 590}, {X: 2750, Y: 450}, {X: 3300, Y: 575}, {X: 3500, Y: 400}, {X: 4000, Y: 600}],  // scene 3
+    PLATFORM_LOCATION:       [{X: 790, Y: 550}, {X: 1100, Y: 375}, {X: 1400, Y: 500}, {X: 1900, Y:390}, {X: 2300, Y: 590},     // scene 2
+                              {X: 2600, Y: 590}, {X: 2850, Y: 590}, {X: 3300, Y: 575}, {X: 3500, Y: 400}, {X: 4000, Y: 600}],  // scene 3
     CLOUD_PLATFORM_LOCATION: [{X: 2800, Y: 250}, {X: 3200, Y: 300}, {X: 3400, Y:150}, {X: 3750, Y: 250}, {X: 4000, Y: 300}],
     STONE_LAMP_LOCATION: [{X: 1000, Y: 700}, {X: 1800, Y: 700}, {X: 2902, Y: 700}, {X: 3702, Y: 700}],
 
@@ -163,10 +163,10 @@ class SceneManager {
                 this.game.addEntity(new Coins(this.game, coin.X, coin.Y));
             }
 
-            for (var i = 0; i < LEVEL.CHICK_LOCATION.length; i++) {
-                let chick = LEVEL.CHICK_LOCATION[i];
-                this.game.addEntity(new Chick(this.game, chick.X, chick.Y, chick.MIN, chick.MAX));
-            }
+            // for (var i = 0; i < LEVEL.CHICK_LOCATION.length; i++) {
+            //     let chick = LEVEL.CHICK_LOCATION[i];
+            //     this.game.addEntity(new Chick(this.game, chick.X, chick.Y, chick.MIN, chick.MAX));
+            // }
 
 
             this.game.addEntity(this.breathbar);

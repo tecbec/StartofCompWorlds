@@ -240,12 +240,12 @@ class Player {
                 if (that.velocity.y > 0) {                      // chihiro is falling
                     if((entity instanceof Ground || entity instanceof Platform || entity instanceof CloudPlatform ||
                         entity instanceof StoneLamp || entity instanceof Haku || entity instanceof NoFace ||
-                        entity instanceof Railing || entity instanceof Lamp) && (that.lastBB.bottom - 6 <= entity.BB.top)) // minus one?? idk how this works
+                        entity instanceof Railing || entity instanceof Lamp) && (that.lastBB.bottom  <= entity.BB.top)) // minus one?? idk how this works
                   { // bottom of chihiro hits the top of the entity
                         that.isGrounded = true;
                         that.setY(entity.BB.top - that.getHeight());
                         that.velocity.y = 0;
-                        that.updateBB();
+                        //that.updateBB();
                     }
                     else {
                         that.isGrounded = false;
@@ -256,7 +256,7 @@ class Player {
                     if((entity instanceof Platform )    // collision w/ bottom of platform
                         && (that.lastBB.top >= entity.BB.bottom)) { // top of chihiro goes above the bottom of the platform
                         that.velocity.y = 0;
-                        that.updateBB();
+                        //that.updateBB();
                     } else {
                         that.isGrounded = false;
                     }
@@ -264,28 +264,26 @@ class Player {
  
                 // SIDE COLLISIONS --> left & right bounding boxes for platform
                 if ((entity instanceof Platform || entity instanceof StoneLamp) && that.BB.collide(entity.BB)) {
-                    console.log(that.getHeight());
-                        that.game.deactivate = true;   // don't let player access key press once collision happens
-                        console.log(entity.BB.top);
-                        if (that.BB.collide(entity.leftBB) && that.lastBB.right >= entity.leftBB.left ) { // left collision
+                        //that.game.deactivate = true;   // don't let player access key press once collision happens
+                        if (that.BB.collide(entity.leftBB) && that.BB.right >= entity.leftBB.left ) { // left collision
                             that.setX(entity.BB.left - that.getWidth()); // so that the player won't stick to the bb of the entity
-                            that.velocity.y = 0;
+                            //that.velocity.y = 0;
                             if (that.velocity.x > 0) that.velocity.x = 0;
-                        } else if (that.BB.collide(entity.rightBB) && that.lastBB.left <= entity.rightBB.right ) { // right collision
+                        } else if (that.BB.collide(entity.rightBB) && that.BB.left <= entity.rightBB.right ) { // right collision
                             that.setX(entity.BB.right);// so that the player won't stick to the bb of the entity
-                            that.velocity.y = 0;
+                            //that.velocity.y = 0;
                             if (that.velocity.x < 0) that.velocity.x = 0;
                         } else {
 
                         }
-                        that.updateBB(); 
+                        //that.updateBB(); 
                 }
 
                 if(entity instanceof Railing) {// if she's crouching she'll fall to ground
                     if (that.BB.bottom <= entity.BB.top && that.game.crouch) {
                         that.isGrounded = false;
-                        that.setY(entity.BB.top - that.getHeight() + 7); // the 1 is just to get her past the bb of the railing
-                        that.updateBB();;
+                        that.setY(entity.BB.top - that.getHeight() + 1); // the 1 is just to get her past the bb of the railing
+                        //that.updateBB();;
                     }
                 }
 
@@ -306,7 +304,7 @@ class Player {
                         that.setX(entity.BB.right);
                         if (that.velocity.x < 0) that.velocity.x = 0;
                     }
-                    that.updateBB();
+                    //that.updateBB();
                 }
 
                 // Collision with CROWS
@@ -335,7 +333,7 @@ class Player {
                         that.setY(that.getY() - 20);
                         that.velocity.y = -100;
                     }
-                    that.updateBB();
+                    //that.updateBB();
 
                 }
 
@@ -353,7 +351,7 @@ class Player {
                         that.setX(entity.BB.right);
                         if (that.velocity.x < 0) that.velocity.x = 0;
                     }
-                    that.updateBB();
+                    //that.updateBB();
                 }
 
                 // collision with SOOTS
@@ -362,7 +360,7 @@ class Player {
                     // for testing make soot breath -=20;
                     entity.dead = true;
                     that.game.camera.changeBreath();
-                    that.updateBB()
+                    //that.updateBB()
                 }
 
                 // collision with COINS
@@ -372,6 +370,7 @@ class Player {
                 }
             }
         });
+        this.updateBB();
 
         if (this.game.camera.breathwidth <= 0) {
             this.dead = true;

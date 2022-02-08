@@ -112,10 +112,10 @@ class Platform {  // tree
         //     BACKGROUND.PLATFORM.SIZE * LOCATION, BACKGROUND.PLATFORM.BB_SIZE.H);
 
 
-        this.leftBB = new BoundingBox(this.x, this.y,
+        this.leftBB = new BoundingBox(this.x, this.y + 10,
             BACKGROUND.PLATFORM.BB_SIZE.W, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE - 20);
 
-        this.rightBB = new BoundingBox(this.BB.right - BACKGROUND.PLATFORM.BB_SIZE.W, this.y,
+        this.rightBB = new BoundingBox(this.BB.right - BACKGROUND.PLATFORM.BB_SIZE.W, this.y + 10,
             BACKGROUND.PLATFORM.BB_SIZE.W, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE - 20);
 
 
