@@ -1,7 +1,7 @@
 /* Chihiro's Params */
 var CHIHIRO = {
     TITLE_POSITION: {X: 0, Y: 800},
-    INITIAL_POSITION: {X: 0, Y: 0}, 
+    INITIAL_POSITION: {X: 2000, Y: 0}, 
     SIZE: 70,
     SCALE: 2,
     PADDING: {X: 28, Y: 20}, // same padding for BB and imaginary x,y,w,h calculations
@@ -270,16 +270,10 @@ class Player {
                         if (that.BB.collide(entity.leftBB) && that.lastBB.right >= entity.leftBB.left ) { // left collision
                             that.setX(entity.BB.left - that.getWidth()); // so that the player won't stick to the bb of the entity
                             that.velocity.y = 0;
-
-                            that.y -= 6;
-
                             if (that.velocity.x > 0) that.velocity.x = 0;
                         } else if (that.BB.collide(entity.rightBB) && that.lastBB.left <= entity.rightBB.right ) { // right collision
                             that.setX(entity.BB.right);// so that the player won't stick to the bb of the entity
                             that.velocity.y = 0;
-
-                            that.y -= 6;
-
                             if (that.velocity.x < 0) that.velocity.x = 0;
                         } else {
 
