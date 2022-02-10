@@ -9,7 +9,7 @@ class Yubaba {
         this.frameDuration = 0.15; 
         this.elapsedTime = 0;
         this.fireRate = 0;
-        this.scale = 0.5; 
+        this.scale = 0.7; 
 
         this.loadAnimations();
 

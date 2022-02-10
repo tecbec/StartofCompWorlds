@@ -373,7 +373,7 @@ class Player {
                     // instantly heal stamina bar
                     that.game.camera.breathwidth = CHIHIRO.BREATH_BAR.MAX;
                     that.game.camera.changeBreath();
-                    entity.dead = true;
+                    //entity.dead = true;
 
                     if (that.BB.collide(entity.leftBB)) { // left collision
                         that.setX(entity.BB.left - that.getWidth());
