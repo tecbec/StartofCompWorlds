@@ -5,19 +5,16 @@
  */
 
 class Soot {
-    constructor( game, x, y, sootDir) {
-        Object.assign(this, { game, x, y, sootDir});
+    constructor( game, x, y, sootDir,widthSootArea,heightSootArea) {
+        Object.assign(this, { game, x, y, sootDir, widthSootArea, heightSootArea});
         // this.spritesheet_aura = ASSET_MANAGER.getAsset("./sprites/soot-jump-long_aura.png");
         this.spritesheet_aura2 = ASSET_MANAGER.getAsset("./sprites/soot-jump-long_aura2_bidir.png");
 
         this.loadAnimations();
 
-        const widthSootArea = 50;
-        const heightSootArea = 25;
-
         // sets the areas the soot will be located in
         this.minScreen = {x: x, y: y};
-        this.maxScreen = {x: x+widthSootArea, y: y+heightSootArea};
+        this.maxScreen = {x: x+this.widthSootArea, y: y+this.heightSootArea};
 
         // velocity values
         const randomx = getRandomInteger(25,50);
@@ -28,7 +25,7 @@ class Soot {
         this.velocity = {x: this.START_V.x, y: this.START_V.y};
 
         this.dead = false;
-        this.scale = 0.15;
+        this.scale = 0.2;
 
         // bounding box
         this.updateBB();

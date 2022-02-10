@@ -103,23 +103,23 @@ class GameEngine {
             switch(e.code) {
                 case "ArrowLeft":
                     that.left = false;
-                    // that.deactivate = false;
+
                     break;
                 case "ArrowRight":
                     that.right = false;
-                    // that.deactivate = false;
+
                     break;
                 case "ArrowUp":
                     that.up = false;
-                    // that.deactivate = false;
+
                     break;
                 case "ShiftLeft":
                     that.run = false;
-                    // that.deactivate = false;
+
                     break;
                 case "ArrowDown":
                     that.crouch = false; 
-                    // that.deactivate = false;
+
                     break;
                 case "Space": //shoot 
                     that.shoot = false; 
@@ -137,7 +137,6 @@ class GameEngine {
     draw() {
         // Clear the whole canvas with transparent color (rgba(0, 0, 0, 0))
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
-        this.ctx.save();
         for (var i = 0; i < this.entities.length; i++) {
             this.entities[i].draw(this.ctx);
         }
@@ -148,6 +147,7 @@ class GameEngine {
     };
 
     update() {
+        
         // Update Entities
         this.entities.forEach(entity => entity.update(this));
 
