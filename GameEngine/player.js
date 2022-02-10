@@ -38,6 +38,9 @@ class Player {
 
         this.animations = [];
 
+        this.elapsedTime = 0; 
+        this.fireRate = 1;
+
         this.updateBB();
         this.loadAnimations();
 
@@ -412,11 +415,16 @@ class Player {
         if (this.velocity.x < 0) this.facing = 1;
         if (this.velocity.x > 0) this.facing = 0;
 
-        if(this.game.shoot){
-            this.game.addEntity(new BubblesController(this.game, this.x + CHIHIRO.SIZE /2 - this.game.camera.x ,
-                 this.y+ CHIHIRO.SIZE /2,  0, this.facing));
+        this.elapsedTime += TICK; 
+        
+        if(this.game.shoot && this.elapsedTime > this.fireRate){
+            this.game.addEntity(new BubblesController(this.game, this.x + CHIHIRO.SIZE -10  - this.game.camera.x ,
+                 this.y+ CHIHIRO.SIZE /2, this.facing));
+            this.elapsedTime = 0;
+            
          }
-        if (this.game.camera.breathwidth <= 0) {
+
+        if (this.game.camera.breathwidth <= 0 ) {
             this.game.camera.chihiro.dead = true;
         } else {
             this.game.camera.chihiro.dead = false;

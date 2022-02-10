@@ -1,12 +1,18 @@
 class BubblesController{
     //x, y are the x and y locations of the bubble
     //direction - facing param from the player class
-    constructor(game, x, y, damage, direction) {
-        Object.assign(this, {game,x, y, damage, direction });
-        const maxSpeed = 1; // pixels per second   
-        this.timeTillNextBubble =0;
-        this.velocity = {x: 10, y: 0  };
-     this.elapsedTime = 0;
+    constructor(game, x, y, direction) {
+    Object.assign(this, {game,x, y, damage, direction });
+    this.velocity = {x: 200, y: 50  };
+    this.elapsedTime =0;
+
+    this.fireRate = 1;
+    
+    const heightofBubble = 10;
+     const widthofBubble = 14;
+    this.frameCount =6;
+     const framDuration = .5;
+     this.animation = new Animator (ASSET_MANAGER.getAsset("./sprites/bubble.png"), 0, 0, widthofBubble,heightofBubble, this.frameCount, framDuration, 0, false, true );
     }
 /*
     update( bubbleX, bubbleY, speed, damage, delay) {
@@ -18,35 +24,40 @@ class BubblesController{
     };
 */
  update() {
-    this.elapsedTime += this.game.clockTick;
-     if(this.direction === 1) { 
-        this.x -= ( this.velocity.x )* this.elapsedTime ; //maybe include the change in y??
-     } else {
-        this.x += this.velocity.x * this.elapsedTime ;
-     }
-        this.y += this.game.clockTick; 
-    if(this.elapsedTime > 5) {
-        this.elapsedTime ==0;
-    }
+     var count =0; 
+     
+        if(this.direction === 1) { 
+            this.x -= ( this.velocity.x )* this.game.clockTick;
+        } else  {
+            this.x += this.velocity.x * this.game.clockTick;
+        }
+        this.y += this.velocity.y * this.game.clockTick; //makes bubble flow down 
+
+        if(this.animation.currentFrame() === 5){
+                this.removeFromWorld = true;
+        }
+
+     //   this.y += this.game.clockTick; 
+        //if bubble makes collision with an entity update here
 }
     draw(ctx){
         //console.log("Bubble"); 
-        const width = 2; 
-        const height = 5; 
-        const color = "blue";
-        ctx.fillStyle = color; 
-        var xOffset = 3;
 
-        if(this.x <=PARAMS.CANVAS_WIDTH ) {
-            console.log(this.x);
-            if(this.direction === 1) {//going left
-                ctx.fillRect(this.x -xOffset, this.y, width, height);
-            } else {
-                ctx.fillRect(this.x +xOffset, this.y, width, height);
-            }
-        } else{
+        var scaleBubble = 3;
+        this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y, PARAMS.SCALE * scaleBubble );
 
-        }
+        // if(this.x <= PARAMS.CANVAS_WIDTH ) {
+        //     //console.log(this.x);
+        //     if(this.direction === 1) {//going left
+        //         console.log(this.x);
+        //         //   ctx.fillRect(this.x -xOffset, this.y, width, height);
+        //     } else {
+        //         this.animation.drawFrame(this.game.clockTick, ctx,this.x +xOffset, this.y, PARAMS.SCALE * scaleBubble )
+        //         // ctx.fillRect(this.x +xOffset, this.y, width, height);
+        //     }
+        // } else{
+
+        // }
     }
 }
 
