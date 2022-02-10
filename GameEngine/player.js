@@ -141,9 +141,18 @@ class Player {
     updateBB() {
         this.lastBB = this.BB;
         this.lastBBbottom = this.BBbottom;
-        this.BB = new BoundingBox(this.x + CHIHIRO.PADDING.X*CHIHIRO.SCALE, this.y + CHIHIRO.PADDING.Y*CHIHIRO.SCALE,
-                                    (CHIHIRO.SIZE - (CHIHIRO.PADDING.X * 2))* CHIHIRO.SCALE, // padding on left and right
-                                    (CHIHIRO.SIZE- CHIHIRO.PADDING.Y) * CHIHIRO.SCALE - 1); // padding on top
+        if(this.game.crouch && this.velocity.y == 0){ // if crouching
+            console.log("crouch");
+            var crouchHeight = ((CHIHIRO.SIZE- CHIHIRO.PADDING.Y) * CHIHIRO.SCALE)/2;
+            this.BB = new BoundingBox(this.x + CHIHIRO.PADDING.X*CHIHIRO.SCALE, 
+                                        (this.y + CHIHIRO.PADDING.Y*CHIHIRO.SCALE) + crouchHeight,
+                                        (CHIHIRO.SIZE - (CHIHIRO.PADDING.X * 2))* CHIHIRO.SCALE, // padding on left and right
+                                        crouchHeight - 1); // padding on top
+        }else{
+            this.BB = new BoundingBox(this.x + CHIHIRO.PADDING.X*CHIHIRO.SCALE, this.y + CHIHIRO.PADDING.Y*CHIHIRO.SCALE,
+                (CHIHIRO.SIZE - (CHIHIRO.PADDING.X * 2))* CHIHIRO.SCALE, // padding on left and right
+                (CHIHIRO.SIZE- CHIHIRO.PADDING.Y) * CHIHIRO.SCALE - 1); // padding on top
+        }
     };
 
     /* Draw the images onto the screen */
@@ -332,7 +341,10 @@ class Player {
                 }
 
                 //Collision with Yubaba
-                //for now have Yubaba push Chihiro? but later  kills on impact
+                if (entity instanceof Yubaba && that.BB.collide(entity.BB)) {
+                    that.game.camera.breathwidth = 0;
+                    that.game.camera.changeBreath();
+                }
 
                 // collision with Chicks
                 if (entity instanceof Chick && that.BB.collide(entity.BB)) {
