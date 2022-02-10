@@ -11,8 +11,8 @@ var LEVEL = {
     PLATFORM_LOCATION:       [{X: 790, Y: 550}, {X: 1100, Y: 375}, {X: 1400, Y: 500}, {X: 1900, Y:390}, {X: 2200, Y: 590},     // scene 2
                               {X: 2600, Y: 590}, {X: 2750, Y: 450}, {X: 3300, Y: 575}, {X: 3500, Y: 400}, {X: 4000, Y: 600}],  // scene 3
     CLOUD_PLATFORM_LOCATION: [{X: 2800, Y: 250}, {X: 3200, Y: 300}, {X: 3400, Y:150}, {X: 3750, Y: 250}, {X: 4000, Y: 300}],
-    STONE_LAMP_LOCATION: [{X: 1000, Y: 700}, {X: 1800, Y: 700}, {X: 2902, Y: 700}, {X: 3702, Y: 700}],
-
+    STONE_LAMP_LOCATION: [{X: 1000, Y: 700}, {X: 1800, Y: 700}, {X: 2902, Y: 700}, {X: 3702, Y: 700}, {X: 5255, Y: 700}],
+    /* Start of Frame:     1                 2                3                 4                5 ...*/
     LAMP_LOCATION: [{X:500, Y: 650}, {X:2402, Y: 650}, {X:4304, Y: 650}, {X:6206, Y: 650}, {X:8108, Y: 650}, {X:10010, Y: 650},
                     {X:11912, Y: 650}, {X:13814, Y: 650}, {X:15716, Y: 650}],
 
@@ -28,8 +28,12 @@ var LEVEL = {
                     {X: 2675, Y: 525},{X: 2800, Y: 390}, {X: 3400, Y: 520}, {X: 3600, Y: 330}, {X: 4050, Y: 540}, {X: 3800, Y: 650},
                     {X: 3000, Y: 650}, {X: 3350, Y: 900}, {X: 3400, Y: 900}, {X: 3450, Y: 900}, {X: 4100, Y: 900}], // scene 2
     NOFACE_LOCATION: {X: 3200, Y: 100},
-    CHICK_LOCATION: [{X: 2402, Y: 785, MIN: 500, MAX: 2402}, {X: 2900, Y: 785, MIN: 2402, MAX: 4304}, {X: 3800, Y: 785, MIN: 2402, MAX: 4304}],
+    CHICK_LOCATION: [{X: 2402, Y: 785, MIN: 500, MAX: 2402}, {X: 2900, Y: 785, MIN: 2402, MAX: 4304}, {X: 3800, Y: 785, MIN: 2402, MAX: 4304},
+                        /* {X: 3800, Y: 785, MIN: 2402, MAX: 4304}, {X: 3800, Y: 785, MIN: 2402, MAX: 4304} */ ],
+    /*    enter: frame 3,   crow drop: frame 4,       heat seeking crows:   5*/
+    YUBABA_X: [430, 6206, 8108] // x vals that trigger: entrance, crow drop, heat seeking crows
 }
+
 class SceneManager {
     constructor(game) {
         this.game = game;

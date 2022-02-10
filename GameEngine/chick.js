@@ -8,7 +8,7 @@ class Chick {
         this.frameCount = 6;
         this.frameDuration = 0.25; 
         this.scale = 2.0; 
-        this.BBThickness = 5;
+        this.BBThickness = 5;     
 
         this.loadAnimations();
 
@@ -16,12 +16,24 @@ class Chick {
         this.updateBB()
 
         // speed stuff
-        this.speed = 18;
+        if((this.maxX - this.minX) > 0){
+            this.speed = 18;
+        }else{
+            this.speed = 0;
+        }
+
+        // direction ... maybe add front facing chick animation for non moving chicks
+        if((this.maxX - this.minX) >= 0){ // non negative -> face right
+            this.dir = 0;
+        }else{
+            this.dir = 1; // negative -> face left
+        }
+
+
     };
 
     loadAnimations(){
          /* right = 0, left = 1*/
-        this.dir = 0;
         this.animations = [];
         this.animations[0] = new Animator(this.path, 0, 0, this.width, 
                 this.height, this.frameCount, this.frameDuration, 0, false, true);
@@ -31,18 +43,20 @@ class Chick {
     }
 
     update(){
-        if(this.x + this.width *this.scale >= this.maxX){ 
-            this.speed = -Math.abs(this.speed);
-            this.animator = this.animations[1];
-            this.dir = 1;
-       }else if(this.x <= this.minX){
-            this.speed = Math.abs(this.speed);   
-            this.animator = this.animations[0];  
-            this.dir = 0;     
-       }
-
-        this.x += this.speed * this.game.clockTick;
-        this.updateBB();
+        if((this.maxX - this.minX) > 0){
+            if(this.x + this.width *this.scale >= this.maxX){ 
+                this.speed = -Math.abs(this.speed);
+                this.animator = this.animations[1];
+                this.dir = 1;
+           }else if(this.x <= this.minX){
+                this.speed = Math.abs(this.speed);   
+                this.animator = this.animations[0];  
+                this.dir = 0;     
+           }
+    
+            this.x += this.speed * this.game.clockTick;
+            this.updateBB();
+        }
     };
 
     updateBB() {
