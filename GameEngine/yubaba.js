@@ -117,7 +117,8 @@ class Crow{
         this.loadAnimations();
 
         //bounding box
-        this.BB = new BoundingBox(this.x+this.width*3/8 *this.scale, this.y+this.height*1/8*this.scale, this.width*3/8*this.scale, this.height*3/4*this.scale);
+        this.BB = new BoundingBox(this.x+this.width*3/8 *this.scale, this.y+this.height*1/8*this.scale, 
+            this.width*3/8*this.scale, this.height*3/4*this.scale);
 
         // speed stuff
         this.speed = 50;

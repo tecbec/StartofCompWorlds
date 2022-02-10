@@ -2,67 +2,24 @@ class BubblesController{
     //x, y are the x and y locations of the bubble
     //direction - facing param from the player class
     constructor(game, x, y, direction) {
-    Object.assign(this, {game,x, y, damage, direction });
+    Object.assign(this, {game,x, y, direction });
     this.velocity = {x: 200, y: 50  };
     this.elapsedTime =0;
 
-    this.fireRate = 1;
+    this.scaleBubble = 3;
     
-    const heightofBubble = 10;
-     const widthofBubble = 14;
+    this.heightofBubble = 10;
+    this.widthofBubble = 14;
     this.frameCount =6;
      const framDuration = .5;
-     this.animation = new Animator (ASSET_MANAGER.getAsset("./sprites/bubble.png"), 0, 0, widthofBubble,heightofBubble, this.frameCount, framDuration, 0, false, true );
-    }
-/*
-    update( bubbleX, bubbleY, speed, damage, delay) {
-        if(this.timeTillNextBubble <= 0){
-            this.bubble.push(new Bubbles(this.game, bubbleX, bubbleY, speed, damage));
-            this.timeTillNextBubble = delay;
-        }
-        this.timeTillNextBubble--;
+     this.animation = new Animator (ASSET_MANAGER.getAsset("./sprites/bubble.png"), 0, 0, this.widthofBubble,this.heightofBubble
+        , this.frameCount, framDuration, 0, false, true );
+     this.BB = new BoundingBox(this.x + this.widthofBubble *this.scaleBubble, this.y+this.heightofBubble*this.scaleBubble 
+        , this.widthofBubble*this.scaleBubble, this.heightofBubble*this.scaleBubble);
+        console.log("that",this.BB.x, this.BB.y, this.BB.width, this.BB.height)
+
     };
-
-    draw(ctx){
-        this.bubble.forEach((bubble) =>{
-            if(this.isBubbleOffScreen(bubble)){
-                const index = this.bubble.indexOf(bubble);
-                this.bubble.splice(index, 1);
-            }
-             bubble.draw(ctx)
-            });
-    }
-    isBubbleOffScreen(bubble) {
-        return bubble.x >= PARAMS.CANVAS_WIDTH ;//bubble.width;
-    }
-}
-
-class Bubbles{
-    constructor( game, x,y, speed, damage , delay) {
-        Object.assign(this, {game, x, y,speed, damage , delay});
-        //import bubble animation here
-        this.x = x;
-        this.y = y;
-        this.speed = speed;
-        this.damage = damage;
-
-        this.width =7;
-        this.height = 5;
-        this.color = "red";
-
-    }
     update() {
-    };
-    draw(ctx){
-        ctx.fillStyle = this.color;
-        ctx.fillRect(this.x, this.y, this.width, this.height);
-        this.x = this.speed + this.x;
-    };
-};
-*/
- update() {
-     var count =0; 
-     
         if(this.direction === 1) { 
             this.x -= ( this.velocity.x )* this.game.clockTick;
         } else  {
@@ -73,16 +30,27 @@ class Bubbles{
         if(this.animation.currentFrame() === 5){
                 this.removeFromWorld = true;
         }
+        this.BB = new BoundingBox(this.x+this.widthofBubble *this.scaleBubble, this.y+this.heightofBubble*this.scaleBubble 
+            , this.widthofBubble*this.scaleBubble, this.heightofBubble*this.scaleBubble);    
 
-     //   this.y += this.game.clockTick; 
-        //if bubble makes collision with an entity update here
-}
+      //  if bubble makes collision with an entity update here
+        var that = this; //need this because we are creating
+        this.game.entities.forEach(function (entity) {   
+            if (entity.BB && that.BB.collide(entity.BB)) {      // is there an entity bb & check to see if they collide
+                if((entity instanceof Yubaba || entity instanceof Chick )&& that.BB.collide(entity.BB)){
+                    
+                    that.removeFromWorld = true;
+                }
+            }
+        });
+    };
     draw(ctx){
-        //console.log("Bubble"); 
+        this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y, PARAMS.SCALE * this.scaleBubble );
 
-        var scaleBubble = 3;
-        this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y, PARAMS.SCALE * scaleBubble );
-
+        if (PARAMS.DEBUG) {
+            ctx.strokeStyle = 'Red';
+            ctx.strokeRect(this.BB.x , this.BB.y, this.BB.width, this.BB.height);
+        }
         // if(this.x <= PARAMS.CANVAS_WIDTH ) {
         //     //console.log(this.x);
         //     if(this.direction === 1) {//going left
@@ -95,8 +63,8 @@ class Bubbles{
         // } else{
 
         // }
-    }
-}
+    };
+};
 
 class Coins {
     constructor( game, x, y) {
