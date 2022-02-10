@@ -9,14 +9,13 @@ class Yubaba {
         this.frameDuration = 0.15; 
         this.elapsedTime = 0;
         this.fireRate = 0;
-        this.scale = 0.3; 
+        this.scale = 0.5; 
 
         this.loadAnimations();
 
         //bounding box
         // magic numbers for bounding box may be adjusted, just to have the bounding box around the body of yubaba (not the wings and tail)
-        this.BB;
-        //this.BB = new BoundingBox(this.x+this.width*3/8 *this.scale, this.y+this.height*1/8*this.scale, this.width*3/8*this.scale, this.height*3/4*this.scale);
+        this.BB = new BoundingBox(this.x+this.width*3/8 *this.scale, this.y+this.height*1/8*this.scale, this.width*3/8*this.scale, this.height*3/4*this.scale);
 
         // speed stuff
         this.speed = 50;
@@ -47,6 +46,8 @@ class Yubaba {
        }
 
         this.x += this.speed * this.game.clockTick;
+        this.x += (this.target.velocity.x * this.game.clockTick)*-1;
+
 
         /* 
         this.inc[0]: enter
@@ -140,7 +141,7 @@ class Crow{
    }
 
     update(){
-        if(heatseeking){
+        if(this.heatseeking){
             if(this.y  >= this.target.y ){ // once at same y-level as Chihiro 
                 this.speedY = 0;
             }else{
@@ -164,12 +165,13 @@ class Crow{
                 }
             }
         }
+
         this.y += this.speedY * this.game.clockTick;
         this.x += this.speedX * this.game.clockTick;
         this.BB = new BoundingBox(this.x+this.width*3/8*this.scale, this.y+this.height*1/8*this.scale, this.width*3/8*this.scale, this.height*3/4*this.scale);
         
         //moved off screen? Delete entity 
-        if(this.y < PARAMS.CANVAS_HEIGHT){
+        if(this.y > PARAMS.CANVAS_HEIGHT){
             this.removeFromWorld = true;
         }
         if(this.x < this.target.x - PARAMS.CANVAS_WIDTH|| this.x > this.target.x + PARAMS.CANVAS_WIDTH){ 
@@ -187,11 +189,6 @@ class Crow{
         }else{
             this.animator.drawFrame(this.game.clockTick, ctx, this.x- this.game.camera.x , this.y, this.scale);
         }
-       
-        // ctx.strokeStyle = "Black";
-        // ctx.fillStyle = "Black";
-        // ctx.arc(this.x, this.y, this.width*this.scale, 0, Math.PI*2);
-        // ctx.fill();
 
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';

@@ -1,7 +1,7 @@
 /* Chihiro's Params */
 var CHIHIRO = {
     TITLE_POSITION: {X: 0, Y: 800},
-    INITIAL_POSITION: {X: 0, Y: 0}, 
+    INITIAL_POSITION: {X: 5255, Y: 0}, //OG X position should be -200 - before the coins, for testing: 5255
     SIZE: 70,
     SCALE: 2,
     PADDING: {X: 28, Y: 20}, // same padding for BB and imaginary x,y,w,h calculations
@@ -342,8 +342,10 @@ class Player {
 
                 //Collision with Yubaba
                 if (entity instanceof Yubaba && that.BB.collide(entity.BB)) {
-                    that.game.camera.breathwidth = 0;
-                    that.game.camera.changeBreath();
+                    if(this.target.x > this.inc[0]){
+                        that.game.camera.breathwidth = 0;
+                        that.game.camera.changeBreath();
+                    }
                 }
 
                 // collision with Chicks

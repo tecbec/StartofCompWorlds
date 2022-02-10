@@ -1,8 +1,8 @@
 // Haku's parameter
 var HAKU = {
-    INITIAL_POSITION : {X: 750},
+    INITIAL_POSITION : {X: 500},
     SIZE: 70,
-    SCALE: 1, 
+    SCALE: 2, 
     IDLE: {RIGHT: {X: 0, Y: 70}, LEFT: {X: 0, Y: 0}, FRAME: 4, SPEED: .23, PADDING: 0, REVERSE: false, LOOP: true},
     BB_PADDING: {W: 20, H: 8},
     BB_SIZE: {BIG: {W: 35, H: 60}, SMALL: {W: 5, H: 60}}
@@ -30,9 +30,14 @@ class Haku {
 
     updateBB() {
         this.lastBB = this.BB;
+        /*
         this.BB = new BoundingBox(this.x + HAKU.BB_PADDING.W, this.y + HAKU.BB_PADDING.H, HAKU.BB_SIZE.BIG.W, HAKU.BB_SIZE.BIG.H);
         this.leftBB = new BoundingBox(this.x + HAKU.BB_PADDING.W, this.y + HAKU.BB_PADDING.H, HAKU.BB_SIZE.SMALL.W, HAKU.BB_SIZE.SMALL.H);
         this.rightBB = new BoundingBox(this.BB.right - HAKU.BB_SIZE.SMALL.W, this.y + HAKU.BB_PADDING.H, HAKU.BB_SIZE.SMALL.W, HAKU.BB_SIZE.SMALL.H);
+        */
+        this.BB = new BoundingBox(this.x + HAKU.BB_PADDING.W*HAKU.SCALE, this.y + HAKU.BB_PADDING.H*HAKU.SCALE, HAKU.BB_SIZE.BIG.W*HAKU.SCALE, HAKU.BB_SIZE.BIG.H*HAKU.SCALE);
+        this.leftBB = this.BB;
+        this.rightBB = this.BB;
     };
 
     update() {

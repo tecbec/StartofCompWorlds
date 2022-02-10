@@ -1,12 +1,12 @@
 class Chick {
-    constructor(game, x, y, minX, maxX){
+    constructor(game, x, y, minX, maxX, dir){
         // sprite stuff
-        Object.assign(this, { game, x, y, minX, maxX});
+        Object.assign(this, { game, x, y, minX, maxX, dir});
         this.path = ASSET_MANAGER.getAsset("./sprites/chick.png");
         this.width = 75;
         this.height = 100;
         this.frameCount = 6;
-        this.frameDuration = 0.25; 
+        this.frameDuration = 0.30; 
         this.scale = 2.0; 
         this.BBThickness = 5;     
 
@@ -20,13 +20,6 @@ class Chick {
             this.speed = 18;
         }else{
             this.speed = 0;
-        }
-
-        // direction ... maybe add front facing chick animation for non moving chicks
-        if((this.maxX - this.minX) >= 0){ // non negative -> face right
-            this.dir = 0;
-        }else{
-            this.dir = 1; // negative -> face left
         }
 
 
