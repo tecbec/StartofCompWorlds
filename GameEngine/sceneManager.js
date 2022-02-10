@@ -32,7 +32,7 @@ var LEVEL = {
                     {X: 4304+125, Y: 90}, {X: 4855, Y: 240}, {X: 5360-30, Y: 70}, {X: 5330+490, Y: 90}, {X: 5255, Y: 650}, {X: 5440, Y: 650},
                     {X: 4304+317, Y: 895}, {X: 4304+317*2, Y: 895}, {X: 5455+317, Y: 895}, {X: 5455+317*2, Y: 895}], // scene 3
     NOFACE_LOCATION: {X: 3200, Y: 100},
-    CHICK_LOCATION: [{X: 2402, Y: 785, MIN: 500, MAX: 2402,DIR:0}, {X: 2900, Y: 785, MIN: 2402, MAX: 4304, DIR:0}, {X: 3800, Y: 785, MIN: 2402, MAX: 4304, DIR:0},
+    CHICK_LOCATION: [{X: 840, Y: 785, MIN: 0, MAX: 0,DIR:0},{X: 2402, Y: 785, MIN: 500, MAX: 2402,DIR:0}, {X: 2900, Y: 785, MIN: 2402, MAX: 4304, DIR:0}, {X: 3800, Y: 785, MIN: 2402, MAX: 4304, DIR:0},
                          {X: 4780, Y: 785, MIN: 4304, MAX: 5255, DIR:1}, {X: 5730, Y: 785, MIN: 5305, MAX: 6206, DIR:0}],
     /*    enter: frame 3,   crow drop: frame 4,       heat seeking crows:  frame 5*/
     YUBABA_INC: [4304, 6206, 8108], // x vals that trigger: entrance, crow drop, heat seeking crows

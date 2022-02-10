@@ -26,12 +26,15 @@ class Chick {
     };
 
     loadAnimations(){
-         /* right = 0, left = 1*/
+         /* right = 0, left = 1, stationary = 2*/
         this.animations = [];
         this.animations[0] = new Animator(this.path, 0, 0, this.width, 
                 this.height, this.frameCount, this.frameDuration, 0, false, true);
         this.animations[1] = new Animator(this.path, 0, this.height, this.width, 
                 this.height, this.frameCount, this.frameDuration, 0, false, true);
+        this.animator = this.animations[0];
+        this.animations[2] = new Animator(this.path, 0, this.height, this.width, 
+            this.height, 1, this.frameDuration, 0, false, true);
         this.animator = this.animations[0];
     }
 
@@ -49,6 +52,8 @@ class Chick {
     
             this.x += this.speed * this.game.clockTick;
             this.updateBB();
+        }else{
+            this.animator = this.animations[2];   
         }
     };
 
