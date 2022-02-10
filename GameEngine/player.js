@@ -238,9 +238,11 @@ class Player {
             if (this.game.left) {
                 this.velocity.x = -Math.abs(this.velocity.x);
             }
-
             if (this.game.right) {
                 this.velocity.x = Math.abs(this.velocity.x);
+            }
+            if (this.game.crouch && this.velocity.y > 0) { // if shes pressing crouch and falls, set the game crouch to false so she can only press it once.
+                this.game.crouch = false;
             }
         }
         //this makes chihiro always fall
@@ -264,7 +266,7 @@ class Player {
 
                 if (that.velocity.y > 0) {                      // chihiro is falling
                     if((entity instanceof Ground || entity instanceof Platform || entity instanceof CloudPlatform ||
-                        entity instanceof StoneLamp || entity instanceof Haku || entity instanceof NoFace ||
+                        entity instanceof StoneLamp ||
                         entity instanceof Railing || entity instanceof Lamp) && (that.lastBB.bottom  <= entity.BB.top)) // minus one?? idk how this works
                   { // bottom of chihiro hits the top of the entity
                         that.isGrounded = true;
@@ -374,14 +376,13 @@ class Player {
                     that.game.camera.breathwidth = CHIHIRO.BREATH_BAR.MAX;
                     that.game.camera.changeBreath();
                     //entity.dead = true;
-
-                    if (that.BB.collide(entity.leftBB)) { // left collision
-                        that.setX(entity.BB.left - that.getWidth());
-                        if (that.velocity.x > 0) that.velocity.x = 0;
-                    } else if (that.BB.collide(entity.rightBB)) { // right
-                        that.setX(entity.BB.right);
-                        if (that.velocity.x < 0) that.velocity.x = 0;
-                    }
+                    // if (that.BB.collide(entity.leftBB)) { // left collision
+                    //     // that.setX(entity.BB.left - that.getWidth());
+                    //     // if (that.velocity.x > 0) that.velocity.x = 0;
+                    // } else if (that.BB.collide(entity.rightBB)) { // right
+                    //     // that.setX(entity.BB.right);
+                    //     // if (that.velocity.x < 0) that.velocity.x = 0;
+                    // }
                     //that.updateBB();
                 }
 
