@@ -1,7 +1,7 @@
 /* Chihiro's Params */
 var CHIHIRO = {
     TITLE_POSITION: {X: 0, Y: 800},
-    INITIAL_POSITION: {X: -200, Y: 0}, //OG X position should be -200 - before the coins, for testing: 5255
+    INITIAL_POSITION: {X: 0, Y: 0}, 
     SIZE: 70,
     SCALE: 2,
     PADDING: {X: 28, Y: 20}, // same padding for BB and imaginary x,y,w,h calculations
@@ -228,7 +228,7 @@ class Player {
                 this.state = 0;
                 this.velocity.y = 0;
             }
-            
+
         } else {
             // fall straight down if did not jump
             if (this.velocity.y > 0 && !this.jumping) {
@@ -259,7 +259,7 @@ class Player {
         // collision handling
         var that = this; //need this because we are creating
         this.game.entities.forEach(function (entity) {          // this will look at all entities in relation to chihiro
-            
+
             if (entity.BB && that.BB.collide(entity.BB)) {      // is there an entity bb & check to see if they collide
 
                 if (that.velocity.y > 0) {                      // chihiro is falling
@@ -341,12 +341,7 @@ class Player {
                 }
 
                 //Collision with Yubaba
-                if (entity instanceof Yubaba && that.BB.collide(entity.BB)) {
-                    if(this.target.x > this.inc[0]){
-                        that.game.camera.breathwidth = 0;
-                        that.game.camera.changeBreath();
-                    }
-                }
+                //for now have Yubaba push Chihiro? but later  kills on impact
 
                 // collision with Chicks
                 if (entity instanceof Chick && that.BB.collide(entity.BB)) {
@@ -373,7 +368,7 @@ class Player {
                     // instantly heal stamina bar
                     that.game.camera.breathwidth = CHIHIRO.BREATH_BAR.MAX;
                     that.game.camera.changeBreath();
-                    //entity.dead = true;
+                    entity.dead = true;
 
                     if (that.BB.collide(entity.leftBB)) { // left collision
                         that.setX(entity.BB.left - that.getWidth());
