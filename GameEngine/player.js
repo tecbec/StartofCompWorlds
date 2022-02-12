@@ -264,7 +264,7 @@ class Player {
 
                 if (that.velocity.y > 0) {                      // chihiro is falling
                     if((entity instanceof Ground || entity instanceof Platform || entity instanceof CloudPlatform ||
-                        entity instanceof StoneLamp || entity instanceof Haku || entity instanceof NoFace ||
+                        entity instanceof StoneLamp || entity instanceof Haku  ||
                         entity instanceof Railing || entity instanceof Lamp) && (that.lastBB.bottom  <= entity.BB.top)) // minus one?? idk how this works
                   { // bottom of chihiro hits the top of the entity
                         that.isGrounded = true;
@@ -286,7 +286,7 @@ class Player {
                         that.isGrounded = false;
                     }
                 }
- 
+
                 // SIDE COLLISIONS --> left & right bounding boxes for platform
                 if ((entity instanceof Platform || entity instanceof StoneLamp) && that.BB.collide(entity.BB)) {
                         //that.game.deactivate = true;   // don't let player access key press once collision happens
@@ -323,14 +323,7 @@ class Player {
                         that.game.camera.coinCounter.coinCount += 10;
                     }
                     entity.dead = true;
-                    if (that.BB.collide(entity.leftBB)) { // left collision
-                        that.setX(entity.BB.left - that.getWidth());
-                        if (that.velocity.x > 0) that.velocity.x = 0;
-                    } else if (that.BB.collide(entity.rightBB)) { // right
-                        that.setX(entity.BB.right);
-                        if (that.velocity.x < 0) that.velocity.x = 0;
-                    }
-                    //that.updateBB();
+
                 }
 
                 // Collision with CROWS
