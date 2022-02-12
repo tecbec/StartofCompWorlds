@@ -142,7 +142,6 @@ class Player {
         this.lastBB = this.BB;
         this.lastBBbottom = this.BBbottom;
         if(this.game.crouch && this.velocity.y == 0){ // if crouching
-            console.log("crouch");
             var crouchHeight = ((CHIHIRO.SIZE- CHIHIRO.PADDING.Y) * CHIHIRO.SCALE)/2;
             this.BB = new BoundingBox(this.x + CHIHIRO.PADDING.X*CHIHIRO.SCALE, 
                                         (this.y + CHIHIRO.PADDING.Y*CHIHIRO.SCALE) + crouchHeight,
@@ -411,7 +410,7 @@ class Player {
         }
 
         // update state
-        if (this.state !== 2 && this.state !== 5 && this.state !== 3) {  // NOT jump, dead, or crouch
+        if (this.state !== 5 && this.state !== 3) {  // NOT dead, or crouch
             if (this.game.crouch && this.velocity.x == 0) this.state = 3;  // crouching state
             else if (this.game.crouch && Math.abs(this.velocity.x) > 0) this.state = 6;
             else if (Math.abs(this.velocity.x) > 0) this.state = 1;        // walking state
