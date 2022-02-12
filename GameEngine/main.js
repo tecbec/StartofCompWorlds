@@ -7,7 +7,7 @@ ASSET_MANAGER.queueDownload("./sprites/soot-jump-long_aura.png");
 ASSET_MANAGER.queueDownload("./sprites/soot-jump-long_aura2_bidir.png");
 ASSET_MANAGER.queueDownload("./sprites/spritesheet.png");
 ASSET_MANAGER.queueDownload("./sprites/chihiro_spritesheet.png");
-ASSET_MANAGER.queueDownload("./sprites/cloud.png");
+ASSET_MANAGER.queueDownload("./sprites/cloud-Sheet.png");
 ASSET_MANAGER.queueDownload("./sprites/stonelamp.png");
 ASSET_MANAGER.queueDownload("./sprites/lamp.png");
 ASSET_MANAGER.queueDownload("./sprites/railing.png");

@@ -9,6 +9,8 @@ var BACKGROUND = {
     LAMP:           {X: 0,  Y: 0, SIZE: 64, SCALE:  {W: 3, H: 5}, BB_SIZE: {W: 5, H: 10},  PADDING: {W: 50, H: 13}},
     RAILING:        {X: 0,  Y: 10,SIZE: 64, SCALE: 2.5,           BB_SIZE: {W: 5, H: 10},  PADDING: 20},
     PLATFORM:       {LEFT: {X: 0, Y: 32}, MID: {X: 16, Y: 32}, RIGHT: {X: 32, Y: 32}, SIZE: 16, SCALE: 4, COUNT: 2, BB_SIZE: {W: 10, H: 10}},
+    CLOUD: {X: 0, Y: 0, WIDTH: 192, HEIGHT:64, SCALE: 0.5},
+    CLOUD_BB:[{W: 64, H: 64}, {W: 64, H: 64}, {W: 128, H: 64}, {W: 128, H: 64}, {W: 192, H: 64}],
     CLOUD_PLATFORM: {LEFT: {X: 0, Y: 0},  MID: {X: 0, Y: 0},   RIGHT: {X: 0, Y: 0},   SIZE: 16, SCALE: 4, COUNT: 2, BB_SIZE: {W: 5, H: 16}}
 };
 
@@ -17,20 +19,23 @@ class Ground { //bridge
         Object.assign(this, { game, x, y, w});
 
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/platform_sheet.png");
-        this.BB = new BoundingBox(this.x , this.y, this.w, BACKGROUND.GROUND.SCALE * BACKGROUND.GROUND.SIZE);
+        this.BB = new BoundingBox(this.x , this.y, 
+            BACKGROUND.CLOUD_BB[this.size].W * BACKGROUND.CLOUD.SCALE, 
+            BACKGROUND.CLOUD_BB[this.size].H * BACKGROUND.CLOUD.SCALE); 
     };
+
     update() {
 
     };
 
     draw(ctx) {
-        let COUNT = PARAMS.CANVAS_WIDTH * LEVEL.FRAME_COUNT / BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE;
-        for (var i = 0; i < COUNT; i ++) {
-            ctx.drawImage(this.spritesheet, BACKGROUND.GROUND.X, BACKGROUND.GROUND.Y,
-                BACKGROUND.GROUND.SIZE, BACKGROUND.GROUND.SIZE,
-                this.x + BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE * i  - this.game.camera.x, this.y,
-                BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE, BACKGROUND.GROUND.SIZE * 7);
-        }
+        ctx.drawImage(this.spritesheet, 
+                BACKGROUND.CLOUD.X, BACKGROUND.CLOUD.Y * BACKGROUND.CLOUD.HEIGHT * this.size,
+                BACKGROUND.CLOUD.WIDTH, BACKGROUND.CLOUD.HEIGHT,
+                this.x + BACKGROUND.CLOUD.WIDTH * BACKGROUND.CLOUD.SCALE  - this.game.camera.x, this.y,
+                BACKGROUND.CLOUD.WIDTH * BACKGROUND.CLOUD.SCALE, 
+                BACKGROUND.CLOUD.HEIGHT * BACKGROUND.CLOUD.SCALE);
+
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
             ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
@@ -138,9 +143,13 @@ class Platform {  // tree
  *  Allow player to jump through from the bottom but not from any other direction.
  */
 class CloudPlatform {
-    constructor(game, x, y, w) {
-        Object.assign(this, { game, x, y, w});
-        this.spritesheet = this.spritesheet = ASSET_MANAGER.getAsset("./sprites/cloud.png");
+    constructor(game, x, y, size) {
+        Object.assign(this, { game, x, y, size});
+        this.spritesheet = this.spritesheet = ASSET_MANAGER.getAsset("./sprites/cloud-Sheet.png");
+
+        this.BB = new BoundingBox(this.x , this.y, 
+            BACKGROUND.CLOUD_BB[this.size].W * BACKGROUND.CLOUD.SCALE, 
+            BACKGROUND.CLOUD_BB[this.size].H * BACKGROUND.CLOUD.SCALE); 
     }
 
     update() {
@@ -148,51 +157,67 @@ class CloudPlatform {
     };
 
     draw(ctx) {
-        // left platform
-        ctx.drawImage(this.spritesheet, BACKGROUND.CLOUD_PLATFORM.LEFT.X, BACKGROUND.CLOUD_PLATFORM.LEFT.Y,
-            BACKGROUND.CLOUD_PLATFORM.SIZE, BACKGROUND.CLOUD_PLATFORM.SIZE,
-            this.x - this.game.camera.x, this.y,
-            BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE, BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE);
-
-        // default values to draw platform
-        let LOCATION = 1;
-
-        // middle platform
-        for (var i = 1; i < BACKGROUND.CLOUD_PLATFORM.COUNT; i++) {
-            ctx.drawImage(this.spritesheet, BACKGROUND.CLOUD_PLATFORM.MID.X, BACKGROUND.CLOUD_PLATFORM.MID.Y,
-                BACKGROUND.CLOUD_PLATFORM.SIZE, BACKGROUND.CLOUD_PLATFORM.SIZE,
-                this.x + BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE - this.game.camera.x, this.y,
-                BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE * i, 
-                BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE);
-                LOCATION++;
-        }
-
-        // right platform
-        ctx.drawImage(this.spritesheet, BACKGROUND.CLOUD_PLATFORM.RIGHT.X, BACKGROUND.CLOUD_PLATFORM.RIGHT.Y,
-            BACKGROUND.CLOUD_PLATFORM.SIZE, BACKGROUND.CLOUD_PLATFORM.SIZE,
-            this.x + BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE * LOCATION++ - this.game.camera.x, this.y,
-            BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE, BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE);
-
-        this.BB = new BoundingBox(this.x, this.y,
-            BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE * LOCATION, BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE);
-
-        this.leftBB = new BoundingBox(this.x, this.y,
-            BACKGROUND.CLOUD_PLATFORM.BB_SIZE.W, BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE);
-
-        this.rightBB = new BoundingBox(this.BB.right - BACKGROUND.CLOUD_PLATFORM.BB_SIZE.W, this.y,
-            BACKGROUND.CLOUD_PLATFORM.BB_SIZE.W, BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE);
+        ctx.drawImage(this.spritesheet, 
+                BACKGROUND.CLOUD.X, BACKGROUND.CLOUD.Y * BACKGROUND.CLOUD.HEIGHT * this.size,
+                BACKGROUND.CLOUD.WIDTH, BACKGROUND.CLOUD.HEIGHT,
+                this.x + BACKGROUND.CLOUD.WIDTH * BACKGROUND.CLOUD.SCALE  - this.game.camera.x, this.y,
+                BACKGROUND.CLOUD.WIDTH * BACKGROUND.CLOUD.SCALE, 
+                BACKGROUND.CLOUD.HEIGHT * BACKGROUND.CLOUD.SCALE);
 
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
-            ctx.strokeRect(this.BB.x -this.game.camera.x, this.BB.y,
-                 BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE * LOCATION,
-                 BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE);
-            ctx.strokeStyle = 'Orange';
-            ctx.strokeRect(this.leftBB.x - this.game.camera.x, this.leftBB.y, this.leftBB.width, this.leftBB.height);
-            ctx.strokeRect(this.rightBB.x - this.game.camera.x, this.rightBB.y, this.rightBB.width, this.rightBB.height);
+            ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
         }
         ctx.imageSmoothingEnabled = false;
-    }
+    };
+
+
+    // draw(ctx) {
+    //     // left platform
+    //     ctx.drawImage(this.spritesheet, BACKGROUND.CLOUD_PLATFORM.LEFT.X, BACKGROUND.CLOUD_PLATFORM.LEFT.Y,
+    //         BACKGROUND.CLOUD_PLATFORM.SIZE, BACKGROUND.CLOUD_PLATFORM.SIZE,
+    //         this.x - this.game.camera.x, this.y,
+    //         BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE, BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE);
+
+    //     // default values to draw platform
+    //     let LOCATION = 1;
+
+    //     // middle platform
+    //     for (var i = 1; i < BACKGROUND.CLOUD_PLATFORM.COUNT; i++) {
+    //         ctx.drawImage(this.spritesheet, BACKGROUND.CLOUD_PLATFORM.MID.X, BACKGROUND.CLOUD_PLATFORM.MID.Y,
+    //             BACKGROUND.CLOUD_PLATFORM.SIZE, BACKGROUND.CLOUD_PLATFORM.SIZE,
+    //             this.x + BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE - this.game.camera.x, this.y,
+    //             BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE * i, 
+    //             BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE);
+    //             LOCATION++;
+    //     }
+
+    //     // right platform
+    //     ctx.drawImage(this.spritesheet, BACKGROUND.CLOUD_PLATFORM.RIGHT.X, BACKGROUND.CLOUD_PLATFORM.RIGHT.Y,
+    //         BACKGROUND.CLOUD_PLATFORM.SIZE, BACKGROUND.CLOUD_PLATFORM.SIZE,
+    //         this.x + BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE * LOCATION++ - this.game.camera.x, this.y,
+    //         BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE, BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE);
+
+    //     this.BB = new BoundingBox(this.x, this.y,
+    //         BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE * LOCATION, BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE);
+
+    //     this.leftBB = new BoundingBox(this.x, this.y,
+    //         BACKGROUND.CLOUD_PLATFORM.BB_SIZE.W, BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE);
+
+    //     this.rightBB = new BoundingBox(this.BB.right - BACKGROUND.CLOUD_PLATFORM.BB_SIZE.W, this.y,
+    //         BACKGROUND.CLOUD_PLATFORM.BB_SIZE.W, BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE);
+
+    //     if (PARAMS.DEBUG) {
+    //         ctx.strokeStyle = 'Red';
+    //         ctx.strokeRect(this.BB.x -this.game.camera.x, this.BB.y,
+    //              BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE * LOCATION,
+    //              BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE);
+    //         ctx.strokeStyle = 'Orange';
+    //         ctx.strokeRect(this.leftBB.x - this.game.camera.x, this.leftBB.y, this.leftBB.width, this.leftBB.height);
+    //         ctx.strokeRect(this.rightBB.x - this.game.camera.x, this.rightBB.y, this.rightBB.width, this.rightBB.height);
+    //     }
+    //     ctx.imageSmoothingEnabled = false;
+    // }
 }
 
 

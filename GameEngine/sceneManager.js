@@ -165,7 +165,7 @@ class SceneManager {
 
             for (var i = 0; i < LEVEL.CLOUD_PLATFORM_LOCATION.length; i++) {
                 let cloudPlatform = LEVEL.CLOUD_PLATFORM_LOCATION[i];
-                this.game.addEntity(new CloudPlatform(this.game, cloudPlatform.X, cloudPlatform.Y, BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE));
+                this.game.addEntity(new CloudPlatform(this.game, cloudPlatform.X, cloudPlatform.Y, 3));
             }
 
             for(var i=0; i < LEVEL.LAMP_LOCATION.length; i++){
