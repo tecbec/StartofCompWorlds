@@ -17,9 +17,9 @@ var LEVEL = {
                               {X: 9180, Y: 525, TYPE: 1}, {X: 9320, Y: 390, TYPE: 1}, {X: 9460, Y: 525, TYPE: 1}, {X: 9600, Y: 390, TYPE: 1}, {X: 9740, Y: 525, TYPE: 0},
                              ],           
                              
-    CLOUD_PLATFORM_LOCATION: [{X: 2800, Y: 250}, {X: 3200, Y: 300}, {X: 3400, Y: 150}, {X: 3750, Y: 250}, {X: 4000, Y: 200}, 
-                              {X: 4354, Y: 120}, {X: 4780, Y: 270}, {X: 5255, Y: 100}, {X: 5315, Y: 300}, {X: 5225, Y: 500}, {X: 5632, Y: 280}, {X: 5745, Y: 120}, {X: 6166, Y: 270},
-                              {X: 6650, Y: 200}, {X: 6950, Y: 100}, {X: 7250, Y: 200}, {X: 7750, Y: 250} ],                                                                 // Scene 4                     
+    CLOUD_PLATFORM_LOCATION: [{X: 2800, Y: 250, SIZE:3}, {X: 3200, Y: 300, SIZE:3}, {X: 3400, Y: 150, SIZE:3}, {X: 3750, Y: 250, SIZE:3}, {X: 4000, Y: 200, SIZE:3}, 
+                              {X: 4354, Y: 120, SIZE:1}, {X: 4780, Y: 270, SIZE:0}, {X: 5255, Y: 100, SIZE:3}, {X: 5315, Y: 300, SIZE:3}, {X: 5225, Y: 500, SIZE:4}, {X: 5632, Y: 280, SIZE:1}, {X: 5775, Y: 120, SIZE:2}, {X: 6166, Y: 270, SIZE:3},
+                              {X: 6650, Y: 200, SIZE:3}, {X: 6950, Y: 100, SIZE:3}, {X: 7250, Y: 200, SIZE:3}, {X: 7750, Y: 250, SIZE:3} ],                                                                 // Scene 4                     
     
     STONE_LAMP_LOCATION: [{X: 1000, Y: 700}, {X: 1800, Y: 700}, {X: 2902, Y: 700}, {X: 3702, Y: 700}, {X: 5255, Y: 700},
                           {X: 6706, Y: 700}, {X: 7506, Y: 700}, // Scene 4 - 800 px between each stone lamp, 500 px between first lamp and stone lamp
@@ -50,8 +50,8 @@ var LEVEL = {
                     {X: 1900, Y: 650},{X: 1400, Y: 900}, {X: 1550, Y: 900}, {X: 1700, Y: 900}, {X: 2100, Y: 900},                      // scene 1
                     {X: 2675, Y: 525},{X: 2800, Y: 390}, {X: 3400, Y: 520}, {X: 3600, Y: 330}, {X: 4050, Y: 540}, {X: 3800, Y: 650},
                     {X: 3000, Y: 650},{X: 3350, Y: 900}, {X: 3400, Y: 900}, {X: 3450, Y: 900}, {X: 4100, Y: 900},                      // scene 2
-                    {X: 4429, Y: 90}, {X: 4855, Y: 240}, {X: 5330, Y: 70},  {X: 5820, Y: 90},  {X: 5255, Y: 650}, {X: 5440, Y: 650},
-                    {X: 4621, Y: 895},{X: 4938, Y: 895}, {X: 5772, Y: 895}, {X: 6089, Y: 895},                                         // scene 3
+                    {X: 4360, Y: 60}, {X: 4772, Y: 215}, {X: 5305, Y: 50},  {X: 5810, Y: 70},  {X: 5255, Y: 650}, {X: 5440, Y: 650},
+                    {X: 4621, Y: 895},{X: 4938, Y: 895}, {X: 4719, Y: 37}, {X: 5059, Y: 138},                                         // scene 3
                     {X: 6550, Y: 475},{X: 6750, Y: 150}, {X: 7075, Y: 240}, {X: 7175, Y: 550}, {X: 7475, Y: 350}, {X: 7975, Y: 640},
                     {X: 6500, Y: 895},{X: 7000, Y: 895}, {X: 7100, Y: 895}, {X: 7200, Y: 895},                                         // scene 4
                     {X: 8340, Y: 420},{X: 8480, Y: 285}, {X: 8620, Y: 420}, {X: 8760, Y: 285}, {X: 8900, Y: 420}, {X: 9040, Y: 285},   // Scene 5                                             
@@ -165,7 +165,7 @@ class SceneManager {
 
             for (var i = 0; i < LEVEL.CLOUD_PLATFORM_LOCATION.length; i++) {
                 let cloudPlatform = LEVEL.CLOUD_PLATFORM_LOCATION[i];
-                this.game.addEntity(new CloudPlatform(this.game, cloudPlatform.X, cloudPlatform.Y, 3));
+                this.game.addEntity(new CloudPlatform(this.game, cloudPlatform.X, cloudPlatform.Y, cloudPlatform.SIZE));
             }
 
             for(var i=0; i < LEVEL.LAMP_LOCATION.length; i++){

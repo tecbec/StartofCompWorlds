@@ -9,9 +9,9 @@ var BACKGROUND = {
     LAMP:           {X: 0,  Y: 0, SIZE: 64, SCALE:  {W: 3, H: 5}, BB_SIZE: {W: 5, H: 10},  PADDING: {W: 50, H: 13}},
     RAILING:        {X: 0,  Y: 10,SIZE: 64, SCALE: 2.5,           BB_SIZE: {W: 5, H: 10},  PADDING: 20},
     PLATFORM:       {LEFT: {X: 0, Y: 32}, MID: {X: 16, Y: 32}, RIGHT: {X: 32, Y: 32}, SIZE: 16, SCALE: 4, COUNT: 2, BB_SIZE: {W: 10, H: 10}},
-    CLOUD: {X: 0, Y: 0, WIDTH: 192, HEIGHT:64, SCALE: 0.5},
-    CLOUD_BB:[{W: 64, H: 64}, {W: 64, H: 64}, {W: 128, H: 64}, {W: 128, H: 64}, {W: 192, H: 64}],
-    CLOUD_PLATFORM: {LEFT: {X: 0, Y: 0},  MID: {X: 0, Y: 0},   RIGHT: {X: 0, Y: 0},   SIZE: 16, SCALE: 4, COUNT: 2, BB_SIZE: {W: 5, H: 16}}
+    CLOUD: {X: 0, Y: 0, WIDTH: 192, HEIGHT:64, SCALE: 1},
+    CLOUD_BB:[{W: 64, H: 54}, {W: 64, H: 54}, {W: 128, H: 54}, {W: 148, H: 54}, {W: 192, H: 54}],
+    //CLOUD_PLATFORM: {LEFT: {X: 0, Y: 0},  MID: {X: 0, Y: 0},   RIGHT: {X: 0, Y: 0},   SIZE: 16, SCALE: 4, COUNT: 2, BB_SIZE: {W: 5, H: 16}}
 };
 
 class Ground { //bridge
@@ -19,23 +19,20 @@ class Ground { //bridge
         Object.assign(this, { game, x, y, w});
 
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/platform_sheet.png");
-        this.BB = new BoundingBox(this.x , this.y, 
-            BACKGROUND.CLOUD_BB[this.size].W * BACKGROUND.CLOUD.SCALE, 
-            BACKGROUND.CLOUD_BB[this.size].H * BACKGROUND.CLOUD.SCALE); 
+        this.BB = new BoundingBox(this.x , this.y, this.w, BACKGROUND.GROUND.SCALE * BACKGROUND.GROUND.SIZE);
     };
-
     update() {
 
     };
 
     draw(ctx) {
-        ctx.drawImage(this.spritesheet, 
-                BACKGROUND.CLOUD.X, BACKGROUND.CLOUD.Y * BACKGROUND.CLOUD.HEIGHT * this.size,
-                BACKGROUND.CLOUD.WIDTH, BACKGROUND.CLOUD.HEIGHT,
-                this.x + BACKGROUND.CLOUD.WIDTH * BACKGROUND.CLOUD.SCALE  - this.game.camera.x, this.y,
-                BACKGROUND.CLOUD.WIDTH * BACKGROUND.CLOUD.SCALE, 
-                BACKGROUND.CLOUD.HEIGHT * BACKGROUND.CLOUD.SCALE);
-
+        let COUNT = PARAMS.CANVAS_WIDTH * LEVEL.FRAME_COUNT / BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE;
+        for (var i = 0; i < COUNT; i ++) {
+            ctx.drawImage(this.spritesheet, BACKGROUND.GROUND.X, BACKGROUND.GROUND.Y,
+                BACKGROUND.GROUND.SIZE, BACKGROUND.GROUND.SIZE,
+                this.x + BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE * i  - this.game.camera.x, this.y,
+                BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE, BACKGROUND.GROUND.SIZE * 7);
+        }
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
             ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
@@ -147,8 +144,8 @@ class CloudPlatform {
         Object.assign(this, { game, x, y, size});
         this.spritesheet = this.spritesheet = ASSET_MANAGER.getAsset("./sprites/cloud-Sheet.png");
 
-        this.BB = new BoundingBox(this.x , this.y, 
-            BACKGROUND.CLOUD_BB[this.size].W * BACKGROUND.CLOUD.SCALE, 
+        this.BB = new BoundingBox(this.x + 5 , this.y + 10, 
+            BACKGROUND.CLOUD_BB[this.size].W * BACKGROUND.CLOUD.SCALE - 10, 
             BACKGROUND.CLOUD_BB[this.size].H * BACKGROUND.CLOUD.SCALE); 
     }
 
@@ -158,11 +155,18 @@ class CloudPlatform {
 
     draw(ctx) {
         ctx.drawImage(this.spritesheet, 
-                BACKGROUND.CLOUD.X, BACKGROUND.CLOUD.Y * BACKGROUND.CLOUD.HEIGHT * this.size,
+                BACKGROUND.CLOUD.X, BACKGROUND.CLOUD.Y + BACKGROUND.CLOUD.HEIGHT * this.size,
                 BACKGROUND.CLOUD.WIDTH, BACKGROUND.CLOUD.HEIGHT,
-                this.x + BACKGROUND.CLOUD.WIDTH * BACKGROUND.CLOUD.SCALE  - this.game.camera.x, this.y,
+                this.x  - this.game.camera.x, this.y,
                 BACKGROUND.CLOUD.WIDTH * BACKGROUND.CLOUD.SCALE, 
                 BACKGROUND.CLOUD.HEIGHT * BACKGROUND.CLOUD.SCALE);
+/*
+                ctx.drawImage(this.spritesheet,
+                    this.xStart + frame * (this.width + this.framePadding), this.yStart,
+                    this.width, this.height,
+                    x, y,
+                    this.width * scale,
+                    this.height * scale); */
 
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
