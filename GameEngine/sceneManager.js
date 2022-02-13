@@ -187,12 +187,12 @@ class SceneManager {
                 }
             }
 
+            this.game.addEntity(new Yubaba(this.game, 0, 0, LEVEL.YUBABA_INC));
+
             for (var i = 0; i < LEVEL.HAKU_LOCATION.length; i++) {
                 let platform = LEVEL.HAKU_LOCATION[i];
                 this.game.addEntity(new Haku(this.game, LEVEL.HAKU_LOCATION[i].X, LEVEL.HAKU_LOCATION[i].Y));
             }
-
-            this.game.addEntity(new Yubaba(this.game, 0, 0, LEVEL.YUBABA_INC));
 
             for(var i=0; i < LEVEL.NOFACE_LOCATION.length; i++){
                 let noFace = LEVEL.NOFACE_LOCATION[i];
