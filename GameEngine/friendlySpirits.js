@@ -4,15 +4,17 @@
  */
 
 class NoFace {
-    constructor( game, x, y ) {
-        Object.assign(this, { game, x, y});
+    constructor( game, x, y, scale ) {
+        Object.assign(this, { game, x, y, scale});
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/noface-spritesheet-fade-aura.png");
 
         this.loadAnimations();
 
         this.dead = false;
         this.deadCounter = 0;
-        this.scale = .5;
+
+        this.height = 150;
+        this.width = 400;
 
         // bounding box
         this.updateBB();
@@ -33,15 +35,15 @@ class NoFace {
 
     updateBB() {
         const subwidth = 10;
-        let width = 30;
-        const height = 110;
+        const bbwidth = 150;
+        const bbheight = 400;
 
         this.lastBB = this.BB;
-        this.BB = new BoundingBox(this.x+subwidth, this.y, width, height);
+        this.BB = new BoundingBox(this.x, this.y, bbwidth*this.scale, bbheight*this.scale);
 
-        width = 5;
-        this.leftBB = new BoundingBox(this.x+subwidth, this.y, width, height);
-        this.rightBB = new BoundingBox(this.BB.right-subwidth, this.y, width, height);
+        // width = 5;
+        // this.leftBB = new BoundingBox(this.x, this.y, width, height);
+        // this.rightBB = new BoundingBox(this.BB.right-subwidth, this.y, width, height);
 
     };
 
@@ -60,9 +62,9 @@ class NoFace {
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
             ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
-            ctx.strokeStyle = 'Yellow';
-            ctx.strokeRect(this.leftBB.x - this.game.camera.x, this.leftBB.y, this.leftBB.width, this.leftBB.height);
-            ctx.strokeRect(this.rightBB.x - this.game.camera.x, this.rightBB.y, this.rightBB.width, this.rightBB.height);
+            // ctx.strokeStyle = 'Yellow';
+            // ctx.strokeRect(this.leftBB.x - this.game.camera.x, this.leftBB.y, this.leftBB.width, this.leftBB.height);
+            // ctx.strokeRect(this.rightBB.x - this.game.camera.x, this.rightBB.y, this.rightBB.width, this.rightBB.height);
         }
 
         ctx.imageSmoothingEnabled = false;

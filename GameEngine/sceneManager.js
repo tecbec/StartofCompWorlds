@@ -57,6 +57,7 @@ var LEVEL = {
                     {X: 8340, Y: 420},{X: 8480, Y: 285}, {X: 8620, Y: 420}, {X: 8760, Y: 285}, {X: 8900, Y: 420}, {X: 9040, Y: 285},   // Scene 5                                             
                     {X: 9180, Y: 420},{X: 9320, Y: 285}, {X: 9460, Y: 420}, {X: 9600, Y: 285}],
 
+    NOFACE_SCALE: 0.5,
     NOFACE_LOCATION: [{X: 3200, Y: 100},  // scene 2
                       {X: 7000, Y: 0}, ], // scene 4
 
@@ -106,6 +107,23 @@ class SceneManager {
 
     };
 
+    // create all entities for the Title Screen
+    titleScreen() {
+
+        let chickPlace = {x: 850, y: 75};
+        let hakuPlace = {x: -750, y: 425};
+
+        // Title Chihiro
+        this.titlePlaque = new TitlePlaque();
+        this.chihiro = new Player(this.game, CHIHIRO.TITLE_POSITION.X, CHIHIRO.TITLE_POSITION.Y);
+        this.ground = new Ground(this.game, LEVEL.START_CANVAS.X, PARAMS.CANVAS_HEIGHT - BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE,
+                                            PARAMS.CANVAS_WIDTH * LEVEL.FRAME_COUNT, BACKGROUND.GROUND.SCALE * BACKGROUND.GROUND.SIZE);
+        this.background = new BackGround(this.game, LEVEL.START_CANVAS.X,  LEVEL.START_CANVAS.Y);
+        this.chick = new Chick(this.game, chickPlace.x, chickPlace.y, chickPlace.x, chickPlace.x);
+        this.haku = new Haku(this.game, hakuPlace.x, hakuPlace.y);
+
+    }
+
     loadLevel(level, title){
 
         this.title = title;
@@ -113,13 +131,7 @@ class SceneManager {
     
         this.clearEntities();
 
-        // Title Chihiro
-        this.chihiro = new Player(this.game, CHIHIRO.TITLE_POSITION.X, CHIHIRO.TITLE_POSITION.Y);
-
-        // x , y , w
-        this.ground = new Ground(this.game, LEVEL.START_CANVAS.X, PARAMS.CANVAS_HEIGHT - BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE, PARAMS.CANVAS_WIDTH * LEVEL.FRAME_COUNT,
-            BACKGROUND.GROUND.SCALE * BACKGROUND.GROUND.SIZE);
-        this.background = new BackGround(this.game, LEVEL.START_CANVAS.X,  LEVEL.START_CANVAS.Y);
+        this.titleScreen();
 
         if(!this.title){
 
@@ -151,6 +163,9 @@ class SceneManager {
             this.game.addEntity(this.background);
             this.game.addEntity(this.chihiro);
             this.game.addEntity(this.ground);
+            this.game.addEntity(this.titlePlaque);
+            this.game.addEntity(this.chick);
+            this.game.addEntity(this.haku);
         } else {
             this.game.addEntity(this.background);
 
@@ -196,7 +211,7 @@ class SceneManager {
 
             for(var i=0; i < LEVEL.NOFACE_LOCATION.length; i++){
                 let noFace = LEVEL.NOFACE_LOCATION[i];
-                this.game.addEntity(new NoFace(this.game, noFace.X, noFace.Y) );
+                this.game.addEntity(new NoFace(this.game, noFace.X, noFace.Y, LEVEL.NOFACE_SCALE) );
             }
 
             for (var i = 0; i < LEVEL.COIN_LOCATION.length; i++) {
@@ -225,7 +240,7 @@ class SceneManager {
         // blockwidth = 32 * 1 = 32
         // 200 -16 = 164
         if (this.title && this.game.click) {
-            if (this.game.click && this.game.click.y > 600 && this.game.click.y < 650) {
+            if (this.game.click && this.game.click.y > 650 && this.game.click.y < 700) {
                 this.title = false;
                 this.loadLevel(1, this.title);
                 this.game.click = false;
@@ -267,11 +282,9 @@ class SceneManager {
         ctx.font = PARAMS.BLOCKWIDTH / 2 + 'px "Press Start 2P"';
 
         if (this.title || this.chihiro.dead && this.chihiro.removeFromWorld) {
-            var width = 176;
-            var height = 88;
-            ctx.drawImage(ASSET_MANAGER.getAsset("./sprites/title.png"), PARAMS.CANVAS_WIDTH / 2 - width * PARAMS.SCALE / 2 , PARAMS.CANVAS_HEIGHT / 2 - height * PARAMS.SCALE, width * PARAMS.SCALE, height * PARAMS.SCALE);
-            ctx.fillStyle = this.game.mouse && this.game.mouse.y > 600 && this.game.mouse.y < 650? "LightCoral" : "Grey";
-            ctx.fillText("Start", 925, 600); //280
+            ctx.font = '50px Impact';
+            ctx.fillStyle = this.game.mouse && this.game.mouse.y > 650 && this.game.mouse.y < 700? "LightCoral" : "Grey";
+            ctx.fillText("Start", 875, 700); //280
             //ctx.fillStyle = this.game.mouse && this.game.mouse.y > 614 && this.game.mouse.y < 649 ? "LightCoral" : "Black";
             //ctx.fillText("Instructions", PARAMS.CANVAS_WIDTH /  PARAMS.SCALE - 80, PARAMS.CANVAS_HEIGHT/  PARAMS.SCALE + 100); //300
         }

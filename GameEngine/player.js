@@ -285,7 +285,7 @@ class Player {
                         that.isGrounded = false;
                     }
                 }
- 
+
                 // SIDE COLLISIONS --> left & right bounding boxes for platform
                 if ((entity instanceof Platform || entity instanceof StoneLamp) && that.BB.collide(entity.BB)) {
                         //that.game.deactivate = true;   // don't let player access key press once collision happens
@@ -322,14 +322,7 @@ class Player {
                         that.game.camera.coinCounter.coinCount += 10;
                     }
                     entity.dead = true;
-                    if (that.BB.collide(entity.leftBB)) { // left collision
-                        that.setX(entity.BB.left - that.getWidth());
-                        if (that.velocity.x > 0) that.velocity.x = 0;
-                    } else if (that.BB.collide(entity.rightBB)) { // right
-                        that.setX(entity.BB.right);
-                        if (that.velocity.x < 0) that.velocity.x = 0;
-                    }
-                    //that.updateBB();
+
                 }
 
                 // Collision with CROWS

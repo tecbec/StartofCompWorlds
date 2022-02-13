@@ -14,6 +14,25 @@ var BACKGROUND = {
     //CLOUD_PLATFORM: {LEFT: {X: 0, Y: 0},  MID: {X: 0, Y: 0},   RIGHT: {X: 0, Y: 0},   SIZE: 16, SCALE: 4, COUNT: 2, BB_SIZE: {W: 5, H: 16}}
 };
 
+class TitlePlaque { //bridge
+    constructor() {
+        this.spritesheet = ASSET_MANAGER.getAsset("./sprites/title.png");
+    };
+    update() {
+
+    };
+
+    draw(ctx) {
+        var width = 800;
+        var height = 200;
+        ctx.drawImage(this.spritesheet, 
+                      PARAMS.CANVAS_WIDTH / 2 - width * PARAMS.SCALE / 2 , PARAMS.CANVAS_HEIGHT / 2 - height * PARAMS.SCALE, 
+                      width * PARAMS.SCALE, height * PARAMS.SCALE);
+        ctx.imageSmoothingEnabled = false;
+    };
+
+};
+
 class Ground { //bridge
     constructor(game, x, y, w) {
         Object.assign(this, { game, x, y, w});
@@ -27,6 +46,7 @@ class Ground { //bridge
 
     draw(ctx) {
         let COUNT = PARAMS.CANVAS_WIDTH * LEVEL.FRAME_COUNT / BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE;
+        // console.log(COUNT);
         for (var i = 0; i < COUNT; i ++) {
             ctx.drawImage(this.spritesheet, BACKGROUND.GROUND.X, BACKGROUND.GROUND.Y,
                 BACKGROUND.GROUND.SIZE, BACKGROUND.GROUND.SIZE,
@@ -38,8 +58,8 @@ class Ground { //bridge
             ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
         }
         ctx.imageSmoothingEnabled = false;
-    };
 
+    };
 };
 
 class BackGround {
