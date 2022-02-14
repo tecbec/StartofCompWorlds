@@ -9,6 +9,8 @@ var LEVEL = {
     FRAME_COUNT: 9,           // This is the factor that determine how wide the actual game is
     // Type 0: has left,middle,right piece can be adjusted to be longer
     // Type 1: is short (just middle piece)
+
+    BATHHOUSE: {X: 14730, Y: - 1200},
     PLATFORM_LOCATION:       [{X: 790,  Y: 550, TYPE: 0}, {X: 1100, Y: 375, TYPE: 0}, {X: 1400, Y: 500, TYPE: 0}, {X: 1900, Y: 390, TYPE: 0}, {X: 2200, Y: 590, TYPE: 0},    // scene 1
                               {X: 2600, Y: 590, TYPE: 0}, {X: 2750, Y: 450, TYPE: 0}, {X: 3300, Y: 575, TYPE: 0}, {X: 3500, Y: 400, TYPE: 0}, {X: 4000, Y: 600, TYPE: 0},    // scene 2
                               {X: 5602, Y: 525, TYPE: 0}, {X: 5919, Y: 525, TYPE: 0},                                                                                        // scene 3
@@ -167,9 +169,11 @@ class SceneManager {
             this.game.addEntity(this.chick);
             this.game.addEntity(this.haku);
         } else {
+            this.bathhouse = new Bathhouse(this.game, LEVEL.BATHHOUSE.X,  LEVEL.BATHHOUSE.Y);
             this.game.addEntity(this.background);
-
+        
             this.game.addEntity(this.railing);
+            this.game.addEntity(this.bathhouse);
             this.game.addEntity(this.chihiro);
             this.game.addEntity(this.ground);
 

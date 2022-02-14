@@ -11,6 +11,7 @@ var BACKGROUND = {
     PLATFORM:       {LEFT: {X: 0, Y: 32}, MID: {X: 16, Y: 32}, RIGHT: {X: 32, Y: 32}, SIZE: 16, SCALE: 4, COUNT: 2, BB_SIZE: {W: 10, H: 10}},
     CLOUD: {X: 0, Y: 0, WIDTH: 192, HEIGHT:64, SCALE: 1},
     CLOUD_BB:[{W: 64, H: 54}, {W: 64, H: 54}, {W: 128, H: 54}, {W: 148, H: 54}, {W: 192, H: 54}],
+    BATHHOUSE: {X:0, Y: 0, W: 987, H: 1104}
     //CLOUD_PLATFORM: {LEFT: {X: 0, Y: 0},  MID: {X: 0, Y: 0},   RIGHT: {X: 0, Y: 0},   SIZE: 16, SCALE: 4, COUNT: 2, BB_SIZE: {W: 5, H: 16}}
 };
 
@@ -33,6 +34,24 @@ class TitlePlaque { //bridge
 
 };
 
+class Bathhouse {
+    constructor(game, x, y) {
+        Object.assign(this, { game, x, y});
+        this.spritesheet = ASSET_MANAGER.getAsset("./sprites/Bathhouse.png");
+    }
+
+    update() {
+
+    };
+
+    draw(ctx) {
+        ctx.drawImage(this.spritesheet, 
+            BACKGROUND.BATHHOUSE.X, BACKGROUND.BATHHOUSE.Y,  BACKGROUND.BATHHOUSE.W,  BACKGROUND.BATHHOUSE.H,
+            this.x - this.game.camera.x, this.y, 
+            BACKGROUND.BATHHOUSE.W *  PARAMS.SCALE, BACKGROUND.BATHHOUSE.H *  PARAMS.SCALE);
+        ctx.imageSmoothingEnabled = false;
+    }
+};
 class Ground { //bridge
     constructor(game, x, y, w) {
         Object.assign(this, { game, x, y, w});

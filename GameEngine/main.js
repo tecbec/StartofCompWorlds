@@ -12,7 +12,7 @@ ASSET_MANAGER.queueDownload("./sprites/stonelamp.png");
 ASSET_MANAGER.queueDownload("./sprites/lamp.png");
 ASSET_MANAGER.queueDownload("./sprites/railing.png");
 ASSET_MANAGER.queueDownload("./sprites/platform_sheet.png");
-// ASSET_MANAGER.queueDownload("./sprites/background.png");
+ASSET_MANAGER.queueDownload("./sprites/Bathhouse.png");
 ASSET_MANAGER.queueDownload("./sprites/background_nightsky.png");
 ASSET_MANAGER.queueDownload("./sprites/noface-spritesheet-fade-aura.png");
 ASSET_MANAGER.queueDownload("./sprites/coins.png");
