@@ -330,21 +330,21 @@ class Player {
                 }
 
                 // Collision with CROWS
-                if (entity instanceof Crow && that.BB.collide(entity.BB)) {
+                if (entity instanceof Crow && that.BB.collide(entity.BB) && !that.dead) {
                     that.game.camera.breathwidth -= 5;
                     that.game.camera.changeBreath();
                     entity.removeFromWorld = true;
                 }
 
                 //Collision with Yubaba
-                 if (entity instanceof Yubaba && that.BB.collide(entity.BB)) {
+                 if (entity instanceof Yubaba && that.BB.collide(entity.BB) && !that.dead) {
                     that.game.camera.breathwidth -= CHIHIRO.BREATH_BAR.MAX;
                     that.game.camera.changeBreath();
                     
                 }
 
                 // collision with Chicks
-                if (entity instanceof Chick && that.BB.collide(entity.BB)) {
+                if (entity instanceof Chick && that.BB.collide(entity.BB) && !that.dead) {
                     that.game.camera.breathwidth -= CHIHIRO.BREATH_BAR.MAX/4;
                     that.game.camera.changeBreath();
 
@@ -367,11 +367,11 @@ class Player {
                 if (entity instanceof Haku && that.BB.collide(entity.BB)) {
                     // instantly heal stamina bar
                     that.game.camera.breathwidth = CHIHIRO.BREATH_BAR.MAX;
-                    that.game.camera.changeBreath();    
+                    that.game.camera.changeBreath();
                 }
 
                 // collision with SOOTS
-                if (entity instanceof Soot ) {
+                if (entity instanceof Soot && !that.dead) {
                     that.game.camera.breathwidth -= 1;
                     // for testing make soot breath -=20;
                     entity.dead = true;
