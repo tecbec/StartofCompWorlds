@@ -18,7 +18,8 @@ var BACKGROUND = {
 };
 
 class TitlePlaque { //bridge
-    constructor() {
+    constructor(game) {
+        Object.assign(this, {game});
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/title.png");
     };
     update() {
@@ -28,9 +29,11 @@ class TitlePlaque { //bridge
     draw(ctx) {
         var width = 800;
         var height = 200;
-        ctx.drawImage(this.spritesheet, 
-                      PARAMS.CANVAS_WIDTH / 2 - width * PARAMS.SCALE / 2 , PARAMS.CANVAS_HEIGHT / 2 - height * PARAMS.SCALE, 
-                      width * PARAMS.SCALE, height * PARAMS.SCALE);
+        ctx.drawImage(this.spritesheet,
+                      0, 0,                 // xstart, ystart of the sprite sheet
+                      1494, 246,            // width and height of the sprite sheet
+                      (PARAMS.CANVAS_WIDTH /15 - width * PARAMS.SCALE / 2) - this.game.camera.x, PARAMS.CANVAS_HEIGHT / 2 - height * PARAMS.SCALE, // x and y of the canvas
+                      width * PARAMS.SCALE, height * PARAMS.SCALE); // width scale, height scale
         ctx.imageSmoothingEnabled = false;
     };
 
@@ -54,6 +57,8 @@ class Bathhouse {
         ctx.imageSmoothingEnabled = false;
     }
 };
+
+
 class Ground { //bridge
     constructor(game, x, y, w) {
         Object.assign(this, { game, x, y, w});
@@ -67,8 +72,9 @@ class Ground { //bridge
 
     draw(ctx) {
         let COUNT = PARAMS.CANVAS_WIDTH * LEVEL.FRAME_COUNT / BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE;
-        // console.log(COUNT);
+        console.log(COUNT);
         for (var i = 0; i < COUNT; i ++) {
+            
             ctx.drawImage(this.spritesheet, BACKGROUND.GROUND.X, BACKGROUND.GROUND.Y,
                 BACKGROUND.GROUND.SIZE, BACKGROUND.GROUND.SIZE,
                 this.x + BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE * i  - this.game.camera.x, this.y,
@@ -97,10 +103,11 @@ class BackGround {
         // console.log(PARAMS.CANVAS_WIDTH, LEVEL.FRAME_COUNT, BACKGROUND.SIZE.W, BACKGROUND.SIZE.H, BACKGROUND.SCALE)
         let COUNT = PARAMS.CANVAS_WIDTH * LEVEL.FRAME_COUNT / BACKGROUND.SIZE.W * BACKGROUND.SIZE.H * BACKGROUND.SCALE;
         for (var i = 0; i < COUNT; i++) {
-             ctx.drawImage(this.spritesheet, BACKGROUND.X, BACKGROUND.Y,
-                BACKGROUND.SIZE.W, BACKGROUND.SIZE.H,
-                this.x - this.game.camera.x + (PARAMS.CANVAS_WIDTH * i), this.y,
-                PARAMS.CANVAS_WIDTH, PARAMS.CANVAS_HEIGHT);
+             ctx.drawImage(this.spritesheet, 
+                BACKGROUND.X, BACKGROUND.Y,             // x and y of the spritesheet
+                BACKGROUND.SIZE.W, BACKGROUND.SIZE.H,   // width and height of the spritesheet
+                this.x - this.game.camera.x + (PARAMS.CANVAS_WIDTH * i), this.y, // x and y of the canvas
+                PARAMS.CANVAS_WIDTH, PARAMS.CANVAS_HEIGHT);                      // width and height of the canvas
         }
         ctx.imageSmoothingEnabled = false;
     }

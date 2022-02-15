@@ -4,7 +4,7 @@
  */
 var LEVEL = {
     music: "./audio/OneSummersDay.mp3",
-    START_CANVAS: {X: -900, Y: 0},
+    START_CANVAS: {X: -2000, Y: 0},
     END_CANVAS:   {X: 940},   // change this later when we figure out the exact ending canvas measurement
     FRAME_COUNT: 9,           // This is the factor that determine how wide the actual game is
     // Type 0: has left,middle,right piece can be adjusted to be longer
@@ -17,16 +17,16 @@ var LEVEL = {
                               {X: 6500, Y: 525, TYPE: 0}, {X: 6700, Y: 425, TYPE: 0}, {X: 7000, Y: 300, TYPE: 0}, {X: 7100, Y: 600, TYPE: 0}, {X: 7400, Y: 400, TYPE: 0}, {X: 7900, Y: 700, TYPE: 0}, // scene 4
                               {X: 8340, Y: 525, TYPE: 1}, {X: 8480, Y: 390, TYPE: 1}, {X: 8620, Y: 525, TYPE: 1}, {X: 8760, Y: 390, TYPE: 1}, {X: 8900, Y: 525, TYPE: 1}, {X: 9040, Y: 390, TYPE: 1},  // Scene 5
                               {X: 9180, Y: 525, TYPE: 1}, {X: 9320, Y: 390, TYPE: 1}, {X: 9460, Y: 525, TYPE: 1}, {X: 9600, Y: 390, TYPE: 1}, {X: 9740, Y: 525, TYPE: 0},
-                             ],           
-                             
+                             ],
+
     CLOUD_PLATFORM_LOCATION: [{X: 2800, Y: 250, SIZE:3}, {X: 3200, Y: 300, SIZE:3}, {X: 3400, Y: 150, SIZE:3}, {X: 3750, Y: 250, SIZE:3}, {X: 4000, Y: 200, SIZE:3}, 
                               {X: 4354, Y: 120, SIZE:1}, {X: 4780, Y: 270, SIZE:0}, {X: 5255, Y: 100, SIZE:3}, {X: 5315, Y: 300, SIZE:3}, {X: 5225, Y: 500, SIZE:4}, {X: 5632, Y: 280, SIZE:1}, {X: 5775, Y: 120, SIZE:2}, {X: 6166, Y: 270, SIZE:3},
                               {X: 6650, Y: 200, SIZE:3}, {X: 6950, Y: 100, SIZE:3}, {X: 7250, Y: 200, SIZE:3}, {X: 7750, Y: 250, SIZE:3} ],                                                                 // Scene 4                     
-    
+
     STONE_LAMP_LOCATION: [{X: 1000, Y: 700}, {X: 1800, Y: 700}, {X: 2902, Y: 700}, {X: 3702, Y: 700}, {X: 5255, Y: 700},
                           {X: 6706, Y: 700}, {X: 7506, Y: 700}, // Scene 4 - 800 px between each stone lamp, 500 px between first lamp and stone lamp
                           {X: 9059, Y: 700}],                   // Scene 5
-                            
+
 
     /* Start of Frame:     1                   2                 3                 4                 5                   6                   7*/
     LAMP_LOCATION: [{X:500, Y: 650},   {X:2402,  Y: 650}, {X:4304, Y: 650}, {X:6206, Y: 650}, {X:8108, Y: 650}, {X:10010, Y: 650}, {X:11912, Y: 650}, 
@@ -42,12 +42,11 @@ var LEVEL = {
                 {W: 500, H: 15}, {W: 100, H: 15},  // scene 4
                 {W: 500, H: 15}, {W: 500, H: 15}], // Scene 5
 
-    SOOT_NUM:  [10, 20, 10, 20, 15, 15, 10, 10, 
+    SOOT_NUM:  [10, 20, 10, 20, 15, 15, 10, 10,
                 30, 10,  // scene 4
-                20, 30], // Scene 5 
-    
-    COIN_LOCATION: [{X: -100, Y: 895},{X: -50,  Y: 895}, {X: 0,    Y: 895}, {X: 50,   Y: 895}, {X: 100,  Y: 895}, {X: 150,  Y: 895},
-                    {X: 200,  Y: 895},{X: 250,  Y: 895}, {X: 250,  Y: 895}, {X: 300,  Y: 895},                                         // scene 0
+                20, 30], // Scene 5
+    COIN_LOCATION: [{X: 100, Y: 895},{X: 125,  Y: 895}, {X: 150, Y: 895}, {X: 175, Y: 895}, {X: 200,  Y: 895}, {X: 225,  Y: 895},
+                    {X: 250,  Y: 895},{X: 275,  Y: 895}, {X: 300,  Y: 895}, {X: 325,  Y: 895},                                         // scene 0
                     {X: 900,  Y: 500},{X: 1200, Y: 295}, {X: 1500, Y: 450}, {X: 2000, Y: 340}, {X: 2300, Y: 540}, {X: 1100, Y: 650},
                     {X: 1900, Y: 650},{X: 1400, Y: 900}, {X: 1550, Y: 900}, {X: 1700, Y: 900}, {X: 2100, Y: 900},                      // scene 1
                     {X: 2675, Y: 525},{X: 2800, Y: 390}, {X: 3400, Y: 520}, {X: 3600, Y: 330}, {X: 4050, Y: 540}, {X: 3800, Y: 650},
@@ -56,7 +55,7 @@ var LEVEL = {
                     {X: 4621, Y: 895},{X: 4938, Y: 895}, {X: 4719, Y: 37}, {X: 5059, Y: 138},                                         // scene 3
                     {X: 6550, Y: 475},{X: 6750, Y: 150}, {X: 7075, Y: 240}, {X: 7175, Y: 550}, {X: 7475, Y: 350}, {X: 7975, Y: 640},
                     {X: 6500, Y: 895},{X: 7000, Y: 895}, {X: 7100, Y: 895}, {X: 7200, Y: 895},                                         // scene 4
-                    {X: 8340, Y: 420},{X: 8480, Y: 285}, {X: 8620, Y: 420}, {X: 8760, Y: 285}, {X: 8900, Y: 420}, {X: 9040, Y: 285},   // Scene 5                                             
+                    {X: 8340, Y: 420},{X: 8480, Y: 285}, {X: 8620, Y: 420}, {X: 8760, Y: 285}, {X: 8900, Y: 420}, {X: 9040, Y: 285},   // Scene 5
                     {X: 9180, Y: 420},{X: 9320, Y: 285}, {X: 9460, Y: 420}, {X: 9600, Y: 285}],
 
     NOFACE_SCALE: 0.5,
@@ -67,9 +66,9 @@ var LEVEL = {
                         {X: 2900, Y: 785, MIN: 2402, MAX: 4304,  DIR:0}, {X: 3800, Y: 785, MIN: 2402, MAX: 4304,  DIR:0},               // scene 2
                         {X: 4780, Y: 785, MIN: 4304, MAX: 5255,  DIR:1}, {X: 5730, Y: 785, MIN: 5305, MAX: 6206,  DIR:0},               // scene 3
                         {X: 6750, Y: 785, MIN: 6750, MAX: 7900,  DIR:1}, {X: 7500, Y: 785, MIN: 6750, MAX: 7900,  DIR:0},               // Scene 4
-                        {X: 6250, Y: 785, MIN: 6250, MAX: 8100,  DIR:1}, {X: 8000, Y: 785, MIN: 6250, MAX: 8100,  DIR:0},               
+                        {X: 6250, Y: 785, MIN: 6250, MAX: 8100,  DIR:1}, {X: 8000, Y: 785, MIN: 6250, MAX: 8100,  DIR:0},
                         {X: 8900, Y: 785, MIN: 0,    MAX: 0,     DIR:1}, {X: 9912, Y: 785, MIN: 8400, MAX: 10000, DIR:1},               // Scene 5
-                        {X: 9400, Y: 785, MIN: 9100, MAX: 10000, DIR:0}], 
+                        {X: 9400, Y: 785, MIN: 9100, MAX: 10000, DIR:0}],
 
     /*    enter: frame 3,   crow drop: frame 4,       heat seeking crows:  frame 5*/
     YUBABA_INC: [4304, 6206, 8108], // x vals that trigger: entrance, crow drop, heat seeking crows
@@ -116,7 +115,7 @@ class SceneManager {
         let hakuPlace = {x: -750, y: 425};
 
         // Title Chihiro
-        this.titlePlaque = new TitlePlaque();
+        this.titlePlaque = new TitlePlaque(this.game);
         this.chihiro = new Player(this.game, CHIHIRO.TITLE_POSITION.X, CHIHIRO.TITLE_POSITION.Y);
         this.ground = new Ground(this.game, LEVEL.START_CANVAS.X, PARAMS.CANVAS_HEIGHT - BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE,
                                             PARAMS.CANVAS_WIDTH * LEVEL.FRAME_COUNT, BACKGROUND.GROUND.SCALE * BACKGROUND.GROUND.SIZE);
@@ -130,7 +129,7 @@ class SceneManager {
 
         this.title = title;
         this.level = level;
-    
+
         this.clearEntities();
 
         this.titleScreen();
@@ -171,7 +170,7 @@ class SceneManager {
         } else {
             this.bathhouse = new Bathhouse(this.game, LEVEL.BATHHOUSE.X,  LEVEL.BATHHOUSE.Y);
             this.game.addEntity(this.background);
-        
+
             this.game.addEntity(this.railing);
             this.game.addEntity(this.bathhouse);
             
