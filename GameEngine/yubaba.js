@@ -8,14 +8,12 @@ class Yubaba {
         this.frameCount = 14;
         this.frameDuration = 0.15; 
         this.elapsedTime = 0;
-        this.fireRate = 0;
+        this.fireRate = 5;
         this.scale = 0.7; 
+        this.new = true;
+        this.show = false;
 
         this.loadAnimations();
-
-        //bounding box
-        // magic numbers for bounding box may be adjusted, just to have the bounding box around the body of yubaba (not the wings and tail)
-        this.BB = new BoundingBox(this.x+this.width*3/8 *this.scale, this.y+this.height*1/8*this.scale, this.width*3/8*this.scale, this.height*3/4*this.scale);
 
         // speed stuff
         this.speed = 50;
@@ -24,7 +22,7 @@ class Yubaba {
 
     loadAnimations(){
          /* right = 0, left = 1*/
-        this.dir = 0;
+        this.dir = 1;
         this.animations = [];
         this.animations[0] = new Animator(this.path, this.x, this.y, this.width, 
                 this.height, this.frameCount, this.frameDuration, 0, false, true);
@@ -34,50 +32,63 @@ class Yubaba {
     }
 
     update(){
-        // update movement (even if invisible)
-        if(this.x + this.width *this.scale >= PARAMS.CANVAS_WIDTH){ 
-            this.speed = -Math.abs(this.speed);
-            this.animator = this.animations[1];
-            this.dir = 1;
-       }else if(this.x <= 0){
-            this.speed = Math.abs(this.speed);   
-            this.animator = this.animations[0];  
-            this.dir = 0;     
-       }
-
-        this.x += this.speed * this.game.clockTick;
-        this.x += (this.target.velocity.x * this.game.clockTick)*-1;
-
-
+        if(this.target.x > this.inc[0]){
+            this.show = true;
+        }
         /* 
         this.inc[0]: enter
         this.inc[1]: drop crows
         this.inc[2]: heat seeking crows
         */
-        if(this.target.x > this.inc[0]){ // show Yubaba
+        if(this.show){ // show Yubaba
+            if(this.new){ //entrance
+                this.new = false;
+                this.x = PARAMS.CANVAS_WIDTH;
+            }
+
+        // update movement 
+        var inFrame = true;
+        if(this.x + this.width *this.scale >= PARAMS.CANVAS_WIDTH){  // too far right
+                if(this.x > PARAMS.CANVAS_WIDTH + 5){ //outside of frame
+                    this.x = PARAMS.CANVAS_WIDTH;
+                }
+
+                this.speed = -Math.abs(this.speed); // *3 because need to speed up to catch up if out of frame
+                this.animator = this.animations[1];
+                this.dir = 1;
+                inFrame = false;
+        }else if(this.x <= 0){ //too far left
+                if(this.x < -this.width * this.scale - 5){ //outside of frame
+                    this.x = - this.width *this.scale;
+                }
+
+                this.speed = Math.abs(this.speed);  
+                this.animator = this.animations[0];  
+                this.dir = 0;   
+                inFrame = false; 
+        }
+
+        this.x += this.speed * this.game.clockTick;
+        this.x += (this.target.velocity.x * this.game.clockTick)*-2;
+
             /* add start boolean for fluid enterance scene */
 
-            if(this.dir == 1){
-            // adjust bounding box for reverse direction? 
-            this.BB = new BoundingBox(this.x+this.width*3/8*this.scale, this.y+this.height*1/8*this.scale, this.width*3/8*this.scale, this.height*3/4*this.scale);
-            }else{
-            this.BB = new BoundingBox(this.x+this.width*3/8 *this.scale, this.y+this.height*1/8*this.scale, this.width*3/8*this.scale, this.height*3/4*this.scale);
-            }
+            this.updateBB();
 
             // throw crows
             if(this.target.x > this.inc[1]){ 
-                if(this.x < this.inc[2]){ // drop regular crows
+                if(this.target.x < this.inc[2]){ // drop regular crows
                     this.elapsedTime += this.game.clockTick;
                     if (this.elapsedTime > this.fireRate) { 
-                    this.elapsedTime = 0;
-                    this.game.addEntity(new Crow(this.game, this.x, this.y, this.target, false));
+                        this.elapsedTime = 0;
+                        this.game.addEntity(new Crow(this.game, this.BB.x, this.BB.y, this.target, false));
                     }
 
                 }else{ //drop heat seeking crows
                     this.elapsedTime += this.game.clockTick;
                     if (this.elapsedTime > this.fireRate) { 
-                    this.elapsedTime = 0;
-                    this.game.addEntity(new Crow(this.game, this.x, this.y, this.target, true));
+                        this.elapsedTime = 0;
+                        this.game.addEntity(new Crow(this.game, this.BB.x, this.BB.y, this.target, true));
                     }
 
                 }
@@ -86,23 +97,37 @@ class Yubaba {
         }
     };
 
+    updateBB(){
+        if(this.dir == 1){
+            // adjust bounding box for reverse direction?        /* need to account for camera so Yubaba's BB x value lines up with Chihiros*/
+            this.BB = new BoundingBox(this.x+this.width*3/8*this.scale +this.game.camera.x, this.y+this.height*1/8*this.scale, this.width*3/8*this.scale, this.height*3/4*this.scale);
+        }else{
+            this.BB = new BoundingBox(this.x+this.width*3/8 *this.scale +this.game.camera.x, this.y+this.height*1/8*this.scale, this.width*3/8*this.scale, this.height*3/4*this.scale);
+        } 
+    };
+
     /*
     *  param: context that we want to draw to 
     */
-    draw(ctx){ 
-        if(this.target.x > this.inc[0]){ // show Yubaba
-            var blurValues = 50;
-            ctx.shadowColor = 'yellow';
-             ctx.shadowBlur = blurValues;
-        
+    draw(ctx){
+        if(this.show){ // show Yubaba
             this.animator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
             ctx.shadowColor = "transparent"; // remove shadow !
 
-            if (PARAMS.DEBUG) {
-                ctx.strokeStyle = 'Red';
-                ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
+            if(this.BB != null){
+                if (PARAMS.DEBUG) {
+                    ctx.strokeStyle = 'Red';
+                     /* need to remove account for camera so drawn with Chihiro*/
+                    ctx.strokeRect(this.BB.x - this.game.camera.x,  this.BB.y, this.BB.width, this.BB.height);
+                }
+            }else{
+                this.updateBB();
             }
         }
+    };
+
+    toString(){
+        return "Yubaba: x-" + this.x + " y-" + this.y;
     };
 }
 
@@ -115,9 +140,7 @@ class Crow{
         this.height = 230;
         this.frameCount = 14;
         this.frameDuration = 0.15; 
-        this.scale = 0.1; 
-
-        this.dead = false;
+        this.scale = 0.2; 
 
         this.loadAnimations();
 
@@ -131,7 +154,6 @@ class Crow{
         this.speedY = this.speed;
 
         this.removeFromWorld = false;
-        this.new = true;
 
     };
 
@@ -144,10 +166,12 @@ class Crow{
        this.animations[1] = new Animator(this.path, 0, 0+this.height, this.width, 
                this.height, this.frameCount, this.frameDuration, 0, false, true);
        this.animator = this.animations[0];
+
    }
 
     update(){
         if(this.heatseeking){
+            
             if(this.y  >= this.target.y ){ // once at same y-level as Chihiro 
                 this.speedY = 0;
             }else{
@@ -177,7 +201,7 @@ class Crow{
         this.BB = new BoundingBox(this.x+this.width*3/8*this.scale, this.y+this.height*1/8*this.scale, this.width*3/8*this.scale, this.height*3/4*this.scale);
         
         //moved off screen? Delete entity 
-        if(this.y > PARAMS.CANVAS_HEIGHT){
+        if(this.y > PARAMS.CANVAS_HEIGHT * 1.5){
             this.removeFromWorld = true;
         }
         if(this.x < this.target.x - PARAMS.CANVAS_WIDTH|| this.x > this.target.x + PARAMS.CANVAS_WIDTH){ 
@@ -189,12 +213,7 @@ class Crow{
     *  param: context that we want to draw to 
     */
     draw(ctx){ 
-        if(this.new){
-            this.new = false;
-            this.animator.drawFrame(this.game.clockTick, ctx, this.x , this.y, this.scale);
-        }else{
-            this.animator.drawFrame(this.game.clockTick, ctx, this.x- this.game.camera.x , this.y, this.scale);
-        }
+        this.animator.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, this.scale);
 
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';

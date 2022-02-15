@@ -30,14 +30,9 @@ class Haku {
 
     updateBB() {
         this.lastBB = this.BB;
-        /*
-        this.BB = new BoundingBox(this.x + HAKU.BB_PADDING.W, this.y + HAKU.BB_PADDING.H, HAKU.BB_SIZE.BIG.W, HAKU.BB_SIZE.BIG.H);
-        this.leftBB = new BoundingBox(this.x + HAKU.BB_PADDING.W, this.y + HAKU.BB_PADDING.H, HAKU.BB_SIZE.SMALL.W, HAKU.BB_SIZE.SMALL.H);
-        this.rightBB = new BoundingBox(this.BB.right - HAKU.BB_SIZE.SMALL.W, this.y + HAKU.BB_PADDING.H, HAKU.BB_SIZE.SMALL.W, HAKU.BB_SIZE.SMALL.H);
-        */
-        this.BB = new BoundingBox(this.x + HAKU.BB_PADDING.W*HAKU.SCALE, this.y + HAKU.BB_PADDING.H*HAKU.SCALE, HAKU.BB_SIZE.BIG.W*HAKU.SCALE, HAKU.BB_SIZE.BIG.H*HAKU.SCALE);
-        this.leftBB = this.BB;
-        this.rightBB = this.BB;
+        this.BB = new BoundingBox(this.x + HAKU.BB_PADDING.W*HAKU.SCALE, this.y + HAKU.BB_PADDING.H * HAKU.SCALE, HAKU.BB_SIZE.BIG.W*HAKU.SCALE, HAKU.BB_SIZE.BIG.H * HAKU.SCALE);
+        this.leftBB = new BoundingBox(this.x + HAKU.BB_PADDING.W*HAKU.SCALE, this.y + HAKU.BB_PADDING.H *HAKU.SCALE, HAKU.BB_SIZE.SMALL.W, HAKU.BB_SIZE.SMALL.H *HAKU.SCALE);
+        this.rightBB = new BoundingBox(this.BB.right - HAKU.BB_SIZE.SMALL.W, this.y + HAKU.BB_PADDING.H *HAKU.SCALE, HAKU.BB_SIZE.SMALL.W, HAKU.BB_SIZE.SMALL.H *HAKU.SCALE);
     };
 
     update() {

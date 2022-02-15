@@ -14,6 +14,43 @@ var BACKGROUND = {
     // PLATFORM_LONG: {LEFT: {X: 0, Y: 0}, MID: {X: 16, Y: 32}, RIGHT: {X: 32, Y: 32}, SIZE: 16, SCALE: 2, COUNT: 5, BB_SIZE: {W: 5, H: 16}}
 };
 
+class TitlePlaque { //bridge
+    constructor() {
+        this.spritesheet = ASSET_MANAGER.getAsset("./sprites/title.png");
+    };
+    update() {
+
+    };
+
+    draw(ctx) {
+        var width = 800;
+        var height = 200;
+        ctx.drawImage(this.spritesheet, 
+                      PARAMS.CANVAS_WIDTH / 2 - width * PARAMS.SCALE / 2 , PARAMS.CANVAS_HEIGHT / 2 - height * PARAMS.SCALE, 
+                      width * PARAMS.SCALE, height * PARAMS.SCALE);
+        ctx.imageSmoothingEnabled = false;
+    };
+
+};
+
+class Bathhouse {
+    constructor(game, x, y) {
+        Object.assign(this, { game, x, y});
+        this.spritesheet = ASSET_MANAGER.getAsset("./sprites/Bathhouse.png");
+    }
+
+    update() {
+
+    };
+
+    draw(ctx) {
+        ctx.drawImage(this.spritesheet, 
+            BACKGROUND.BATHHOUSE.X, BACKGROUND.BATHHOUSE.Y,  BACKGROUND.BATHHOUSE.W,  BACKGROUND.BATHHOUSE.H,
+            this.x - this.game.camera.x, this.y, 
+            BACKGROUND.BATHHOUSE.W *  PARAMS.SCALE, BACKGROUND.BATHHOUSE.H *  PARAMS.SCALE);
+        ctx.imageSmoothingEnabled = false;
+    }
+};
 class Ground { //bridge
     constructor(game, x, y, w) {
         Object.assign(this, { game, x, y, w});
@@ -27,6 +64,7 @@ class Ground { //bridge
 
     draw(ctx) {
         let COUNT = PARAMS.CANVAS_WIDTH * LEVEL.FRAME_COUNT / BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE;
+        // console.log(COUNT);
         for (var i = 0; i < COUNT; i ++) {
             ctx.drawImage(this.spritesheet, BACKGROUND.GROUND.X, BACKGROUND.GROUND.Y,
                 BACKGROUND.GROUND.SIZE, BACKGROUND.GROUND.SIZE,
@@ -38,8 +76,8 @@ class Ground { //bridge
             ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
         }
         ctx.imageSmoothingEnabled = false;
-    };
 
+    };
 };
 
 class BackGround {
@@ -66,8 +104,8 @@ class BackGround {
 }
 
 class Platform {  // tree
-    constructor(game, x, y, w) {
-        Object.assign(this, { game, x, y, w});
+    constructor(game, x, y, w, type) { 
+        Object.assign(this, { game, x, y, w, type});
         this.spritesheet = this.spritesheet = ASSET_MANAGER.getAsset("./sprites/platform_sheet.png");
     }
 
@@ -76,47 +114,52 @@ class Platform {  // tree
     };
 
     draw(ctx) {
-
-        // left platform
-        ctx.drawImage(this.spritesheet, BACKGROUND.PLATFORM.LEFT.X, BACKGROUND.PLATFORM.LEFT.Y,
-            BACKGROUND.PLATFORM.SIZE, BACKGROUND.PLATFORM.SIZE,
-            this.x - this.game.camera.x, this.y,
-            BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE);
-
-        // default values to draw platform
         let LOCATION = 1;
-
-        // middle platform
-        for (var i = 1; i < BACKGROUND.PLATFORM.COUNT; i++) {
-            ctx.drawImage(this.spritesheet, BACKGROUND.PLATFORM.MID.X, BACKGROUND.PLATFORM.MID.Y,
+        if (this.type == 0) { // long platforms - 2 count.
+            // left platform
+            ctx.drawImage(this.spritesheet, BACKGROUND.PLATFORM.LEFT.X, BACKGROUND.PLATFORM.LEFT.Y,
                 BACKGROUND.PLATFORM.SIZE, BACKGROUND.PLATFORM.SIZE,
-                this.x + BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE - this.game.camera.x, this.y,
-                BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE * i, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE);
-                LOCATION++;
+                this.x - this.game.camera.x, this.y,
+                BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE);
+
+            // middle platform
+            for (var i = 1; i < BACKGROUND.PLATFORM.COUNT; i++) {
+                ctx.drawImage(this.spritesheet, BACKGROUND.PLATFORM.MID.X, BACKGROUND.PLATFORM.MID.Y,
+                    BACKGROUND.PLATFORM.SIZE, BACKGROUND.PLATFORM.SIZE,
+                    this.x + BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE - this.game.camera.x, this.y,
+                    BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE * i, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE);
+                    LOCATION++;
+            }
+            // right platform
+            ctx.drawImage(this.spritesheet, BACKGROUND.PLATFORM.RIGHT.X, BACKGROUND.PLATFORM.RIGHT.Y,
+                BACKGROUND.PLATFORM.SIZE, BACKGROUND.PLATFORM.SIZE,
+                this.x + BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE * LOCATION++ - this.game.camera.x, this.y,
+                BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE);
+
+            this.BB = new BoundingBox(this.x, this.y,
+                BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE * LOCATION, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE);
+
+            this.leftBB = new BoundingBox(this.x, this.y + 20,
+                BACKGROUND.PLATFORM.BB_SIZE.W, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE - 40);
+
+            this.rightBB = new BoundingBox(this.BB.right - BACKGROUND.PLATFORM.BB_SIZE.W, this.y + 20,
+                BACKGROUND.PLATFORM.BB_SIZE.W, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE - 40);
         }
 
-        // right platform
-        ctx.drawImage(this.spritesheet, BACKGROUND.PLATFORM.RIGHT.X, BACKGROUND.PLATFORM.RIGHT.Y,
-            BACKGROUND.PLATFORM.SIZE, BACKGROUND.PLATFORM.SIZE,
-            this.x + BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE * LOCATION++ - this.game.camera.x, this.y,
-            BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE);
+        if (this.type == 1) { // small platforms (just middle piece)
+            ctx.drawImage(this.spritesheet, BACKGROUND.PLATFORM.MID.X, BACKGROUND.PLATFORM.MID.Y,
+                BACKGROUND.PLATFORM.SIZE, BACKGROUND.PLATFORM.SIZE,
+                this.x - this.game.camera.x, this.y,
+                BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE);
+            this.BB = new BoundingBox(this.x, this.y,
+                BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE * LOCATION, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE);
 
+            this.leftBB = new BoundingBox(this.x, this.y + 20,
+                BACKGROUND.PLATFORM.BB_SIZE.W, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE - 40);
 
-        this.BB = new BoundingBox(this.x , this.y,
-            BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE * LOCATION, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE);
-
-        // this.topBB = new BoundingBox(this.x, this.y,
-        //     BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE * LOCATION, BACKGROUND.PLATFORM.BB_SIZE.H);
-
-        // this.bottomBB = new BoundingBox(this.x, this.y,
-        //     BACKGROUND.PLATFORM.SIZE * LOCATION, BACKGROUND.PLATFORM.BB_SIZE.H);
-
-
-        this.leftBB = new BoundingBox(this.x, this.y + 20,
-            BACKGROUND.PLATFORM.BB_SIZE.W, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE - 40);
-
-        this.rightBB = new BoundingBox(this.BB.right - BACKGROUND.PLATFORM.BB_SIZE.W, this.y + 20,
-            BACKGROUND.PLATFORM.BB_SIZE.W, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE - 40);
+            this.rightBB = new BoundingBox(this.BB.right - BACKGROUND.PLATFORM.BB_SIZE.W, this.y + 20,
+                BACKGROUND.PLATFORM.BB_SIZE.W, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE - 40);
+        }
 
 
         if (PARAMS.DEBUG) {
@@ -135,9 +178,13 @@ class Platform {  // tree
  *  Allow player to jump through from the bottom but not from any other direction.
  */
 class CloudPlatform {
-    constructor(game, x, y, w) {
-        Object.assign(this, { game, x, y, w});
-        this.spritesheet = this.spritesheet = ASSET_MANAGER.getAsset("./sprites/cloud.png");
+    constructor(game, x, y, size) {
+        Object.assign(this, { game, x, y, size});
+        this.spritesheet = this.spritesheet = ASSET_MANAGER.getAsset("./sprites/cloud-Sheet.png");
+
+        this.BB = new BoundingBox(this.x + 5 , this.y + 10, 
+            BACKGROUND.CLOUD_BB[this.size].W * BACKGROUND.CLOUD.SCALE - 10, 
+            BACKGROUND.CLOUD_BB[this.size].H * BACKGROUND.CLOUD.SCALE); 
     }
 
     update() {
@@ -145,59 +192,74 @@ class CloudPlatform {
     };
 
     draw(ctx) {
-        // left platform
-        ctx.drawImage(this.spritesheet, BACKGROUND.CLOUD_PLATFORM.LEFT.X, BACKGROUND.CLOUD_PLATFORM.LEFT.Y,
-            BACKGROUND.CLOUD_PLATFORM.SIZE, BACKGROUND.CLOUD_PLATFORM.SIZE,
-            this.x - this.game.camera.x, this.y,
-            BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE, BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE);
-
-        // default values to draw platform
-        let LOCATION = 1;
-
-        // middle platform
-        for (var i = 1; i < BACKGROUND.CLOUD_PLATFORM.COUNT; i++) {
-            ctx.drawImage(this.spritesheet, BACKGROUND.CLOUD_PLATFORM.MID.X, BACKGROUND.CLOUD_PLATFORM.MID.Y,
-                BACKGROUND.CLOUD_PLATFORM.SIZE, BACKGROUND.CLOUD_PLATFORM.SIZE,
-                this.x + BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE - this.game.camera.x, this.y,
-                BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE * i, 
-                BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE);
-                LOCATION++;
-        }
-
-        // right platform
-        ctx.drawImage(this.spritesheet, BACKGROUND.CLOUD_PLATFORM.RIGHT.X, BACKGROUND.CLOUD_PLATFORM.RIGHT.Y,
-            BACKGROUND.CLOUD_PLATFORM.SIZE, BACKGROUND.CLOUD_PLATFORM.SIZE,
-            this.x + BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE * LOCATION++ - this.game.camera.x, this.y,
-            BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE, BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE);
-
-        this.BB = new BoundingBox(this.x, this.y,
-            BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE * LOCATION, BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE);
-
-        // this.topBB = new BoundingBox(this.x, this.y,
-        //     BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE * LOCATION, BACKGROUND.CLOUD_PLATFORM.BB_SIZE.H);
-
-        // this.bottomBB = new BoundingBox(this.x, this.y,
-        //     BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE * LOCATION, BACKGROUND.CLOUD_PLATFORM.BB_SIZE.H);
-
-        this.leftBB = new BoundingBox(this.x, this.y,
-            BACKGROUND.CLOUD_PLATFORM.BB_SIZE.W, BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE);
-
-        this.rightBB = new BoundingBox(this.BB.right - BACKGROUND.CLOUD_PLATFORM.BB_SIZE.W, this.y,
-            BACKGROUND.CLOUD_PLATFORM.BB_SIZE.W, BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE);
+        ctx.drawImage(this.spritesheet, 
+                BACKGROUND.CLOUD.X, BACKGROUND.CLOUD.Y + BACKGROUND.CLOUD.HEIGHT * this.size,
+                BACKGROUND.CLOUD.WIDTH, BACKGROUND.CLOUD.HEIGHT,
+                this.x  - this.game.camera.x, this.y,
+                BACKGROUND.CLOUD.WIDTH * BACKGROUND.CLOUD.SCALE, 
+                BACKGROUND.CLOUD.HEIGHT * BACKGROUND.CLOUD.SCALE);
+/*
+                ctx.drawImage(this.spritesheet,
+                    this.xStart + frame * (this.width + this.framePadding), this.yStart,
+                    this.width, this.height,
+                    x, y,
+                    this.width * scale,
+                    this.height * scale); */
 
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
-            ctx.strokeRect(this.BB.x -this.game.camera.x, this.BB.y,
-                 BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE * LOCATION,
-                 BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE);
-            ctx.strokeStyle = 'Orange';
-            // ctx.strokeRect(this.topBB.x - this.game.camera.x, this.topBB.y, this.topBB.width, this.topBB.height);
-            // ctx.strokeRect(this.bottomBB.x - this.game.camera.x, this.bottomBB.y, this.bottomBB.width, this.bottomBB.height);
-            ctx.strokeRect(this.leftBB.x - this.game.camera.x, this.leftBB.y, this.leftBB.width, this.leftBB.height);
-            ctx.strokeRect(this.rightBB.x - this.game.camera.x, this.rightBB.y, this.rightBB.width, this.rightBB.height);
+            ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
         }
         ctx.imageSmoothingEnabled = false;
-    }
+    };
+
+
+    // draw(ctx) {
+    //     // left platform
+    //     ctx.drawImage(this.spritesheet, BACKGROUND.CLOUD_PLATFORM.LEFT.X, BACKGROUND.CLOUD_PLATFORM.LEFT.Y,
+    //         BACKGROUND.CLOUD_PLATFORM.SIZE, BACKGROUND.CLOUD_PLATFORM.SIZE,
+    //         this.x - this.game.camera.x, this.y,
+    //         BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE, BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE);
+
+    //     // default values to draw platform
+    //     let LOCATION = 1;
+
+    //     // middle platform
+    //     for (var i = 1; i < BACKGROUND.CLOUD_PLATFORM.COUNT; i++) {
+    //         ctx.drawImage(this.spritesheet, BACKGROUND.CLOUD_PLATFORM.MID.X, BACKGROUND.CLOUD_PLATFORM.MID.Y,
+    //             BACKGROUND.CLOUD_PLATFORM.SIZE, BACKGROUND.CLOUD_PLATFORM.SIZE,
+    //             this.x + BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE - this.game.camera.x, this.y,
+    //             BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE * i, 
+    //             BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE);
+    //             LOCATION++;
+    //     }
+
+    //     // right platform
+    //     ctx.drawImage(this.spritesheet, BACKGROUND.CLOUD_PLATFORM.RIGHT.X, BACKGROUND.CLOUD_PLATFORM.RIGHT.Y,
+    //         BACKGROUND.CLOUD_PLATFORM.SIZE, BACKGROUND.CLOUD_PLATFORM.SIZE,
+    //         this.x + BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE * LOCATION++ - this.game.camera.x, this.y,
+    //         BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE, BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE);
+
+    //     this.BB = new BoundingBox(this.x, this.y,
+    //         BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE * LOCATION, BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE);
+
+    //     this.leftBB = new BoundingBox(this.x, this.y,
+    //         BACKGROUND.CLOUD_PLATFORM.BB_SIZE.W, BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE);
+
+    //     this.rightBB = new BoundingBox(this.BB.right - BACKGROUND.CLOUD_PLATFORM.BB_SIZE.W, this.y,
+    //         BACKGROUND.CLOUD_PLATFORM.BB_SIZE.W, BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE);
+
+    //     if (PARAMS.DEBUG) {
+    //         ctx.strokeStyle = 'Red';
+    //         ctx.strokeRect(this.BB.x -this.game.camera.x, this.BB.y,
+    //              BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE * LOCATION,
+    //              BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE);
+    //         ctx.strokeStyle = 'Orange';
+    //         ctx.strokeRect(this.leftBB.x - this.game.camera.x, this.leftBB.y, this.leftBB.width, this.leftBB.height);
+    //         ctx.strokeRect(this.rightBB.x - this.game.camera.x, this.rightBB.y, this.rightBB.width, this.rightBB.height);
+    //     }
+    //     ctx.imageSmoothingEnabled = false;
+    // }
 }
 
 
@@ -225,14 +287,8 @@ class StoneLamp {
         this.BB = new BoundingBox(this.x , this.y ,
             (BACKGROUND.STONE_LAMP.SIZE.X) * BACKGROUND.STONE_LAMP.SCALE.X,( BACKGROUND.STONE_LAMP.SIZE.Y )* BACKGROUND.STONE_LAMP.SCALE.Y);
 
-        // this.topBB = new BoundingBox(this.x, this.y,
-        //     BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE, BACKGROUND.STONE_LAMP.BB_SIZE.H);
-
-        // this.bottomBB = new BoundingBox(this.x, this.y ,
-        //     BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE, BACKGROUND.STONE_LAMP.BB_SIZE.H);
-
-        this.leftBB = new BoundingBox(this.x, this.y ,
-            BACKGROUND.STONE_LAMP.BB_SIZE.W, BACKGROUND.STONE_LAMP.SIZE.Y * BACKGROUND.STONE_LAMP.SCALE.Y );
+        this.leftBB = new BoundingBox(this.x, this.y + 20,
+            BACKGROUND.STONE_LAMP.BB_SIZE.W, BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE - 40);
 
         this.rightBB = new BoundingBox(this.BB.right - BACKGROUND.STONE_LAMP.BB_SIZE.W, this.y ,
             BACKGROUND.STONE_LAMP.BB_SIZE.W, BACKGROUND.STONE_LAMP.SIZE.Y * BACKGROUND.STONE_LAMP.SCALE.Y );
@@ -245,8 +301,6 @@ class StoneLamp {
                 BACKGROUND.STONE_LAMP.SIZE.Y * BACKGROUND.STONE_LAMP.SCALE.Y);
             // ctx.lineWidth = 10;
             ctx.strokeStyle = 'Red';
-            // ctx.strokeRect(this.topBB.x - this.game.camera.x, this.topBB.y, this.topBB.width, this.topBB.height);
-            // ctx.strokeRect(this.bottomBB.x - this.game.camera.x, this.bottomBB.y, this.bottomBB.width, this.bottomBB.height);
             ctx.strokeRect(this.leftBB.x - this.game.camera.x, this.leftBB.y, this.leftBB.width, this.leftBB.height);
             ctx.strokeRect(this.rightBB.x - this.game.camera.x, this.rightBB.y, this.rightBB.width, this.rightBB.height);
         }
@@ -264,9 +318,6 @@ class Lamp {
         this.spritesheet = this.spritesheet = ASSET_MANAGER.getAsset("./sprites/lamp.png");
         this.BB = new BoundingBox(this.x+BACKGROUND.LAMP.PADDING.W, this.y,
             BACKGROUND.LAMP.SIZE * BACKGROUND.LAMP.SCALE.W-BACKGROUND.LAMP.PADDING.W + 20, BACKGROUND.LAMP.SIZE * BACKGROUND.LAMP.SCALE.H);
-
-        // this.topBB = new BoundingBox(this.x+BACKGROUND.LAMP.PADDING.W, this.y+BACKGROUND.LAMP.PADDING.H,
-        //     BACKGROUND.LAMP.SIZE * BACKGROUND.LAMP.SCALE.W-BACKGROUND.LAMP.PADDING.W, BACKGROUND.LAMP.BB_SIZE.H);
 
     }
 
@@ -286,8 +337,6 @@ class Lamp {
             ctx.strokeRect(this.BB.x -this.game.camera.x, this.BB.y,
                 this.BB.width,
                 this.BB.height);
-            // ctx.strokeStyle = 'Orange';
-            // ctx.strokeRect(this.topBB.x - this.game.camera.x, this.topBB.y, this.topBB.width, this.topBB.height);
         }
         ctx.imageSmoothingEnabled = false;
     }
@@ -297,7 +346,6 @@ class Lamp {
  * Railing
  *  Allows player to walk on top and through
  */
-
 class Railing {
     constructor(game, x, y, w) {
         Object.assign(this, { game, x, y, w});
@@ -324,7 +372,7 @@ class Railing {
        if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
             ctx.strokeRect(this.BB.x -this.game.camera.x, this.BB.y,
-              this.BB.width,//  BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE,
+                this.BB.width,  //BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE,
                 this.BB.height);//BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE);
             ctx.strokeStyle = 'Orange';
             ctx.strokeRect(this.topBB.x - this.game.camera.x, this.topBB.y, this.topBB.width, this.topBB.height);
