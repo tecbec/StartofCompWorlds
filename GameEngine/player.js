@@ -178,6 +178,10 @@ class Player {
 
         // can only move while on the ground AND jump after has been grounded for x ticks
         if (this.isGrounded && !this.dead) {
+            // Stop Chihiro from moving. 
+            if(this.x < -800) {
+                this.x = -800;
+            }
             if(this.jumping) {         // just landed
                 this.jumpTimer = 1000; // set off short timer, to prevent accidental double jumping
             }
