@@ -31,6 +31,8 @@ class GameEngine {
             },
             debugging: false,
         };
+
+        //this.chir
     };
 
     init(ctx) {
@@ -144,6 +146,8 @@ class GameEngine {
 
         // Need this to update when the camera is deleted from the work when a new level is entered.
         this.camera.draw(this.ctx);
+
+        //can draw chihiro twice 
     };
 
     update() {

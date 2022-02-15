@@ -73,8 +73,6 @@ class Chick {
         //    // }
         // });
         if(this.hitpoints <= 0 ) {this.removeFromWorld = true;}
-
-
     };
 
     updateBB() {

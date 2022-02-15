@@ -174,6 +174,7 @@ class SceneManager {
         
             this.game.addEntity(this.railing);
             this.game.addEntity(this.bathhouse);
+            
             this.game.addEntity(this.chihiro);
             this.game.addEntity(this.ground);
 

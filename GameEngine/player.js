@@ -263,7 +263,7 @@ class Player {
         var that = this; //need this because we are creating
         this.game.entities.forEach(function (entity) {          // this will look at all entities in relation to chihiro
 
-            if (entity.BB && that.BB.collide(entity.BB)) {      // is there an entity bb & check to see if they collide
+            if ( entity.BB && that.BB.collide(entity.BB) ) {      // is there an entity bb & check to see if they collide
 
                 if (that.velocity.y > 0) {                      // chihiro is falling
                     if((entity instanceof Ground || entity instanceof Platform || entity instanceof CloudPlatform ||
@@ -424,8 +424,8 @@ class Player {
 
         this.elapsedTime += TICK; 
         if(this.game.shoot && this.elapsedTime > 1){
-            this.game.addEntity(new BubblesController(this.game, this.getX() + this.getWidth() - this.game.camera.x ,
-                 this.getY()+ this.getHeight()/2,  this.facing));
+            this.game.addEntity(new BubblesController(this.game, this.getX()+ this.getWidth(),
+                 this.getY(),  this.facing));
                   this.elapsedTime = 0;
          }
 
