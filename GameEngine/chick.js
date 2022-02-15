@@ -22,7 +22,7 @@ class Chick {
             this.speed = 0;
         }
 
-
+        this.hitpoints = 90; 
     };
 
     loadAnimations(){
@@ -55,28 +55,51 @@ class Chick {
         }else{
             this.animator = this.animations[2];   
         }
+ 
+       // var that = this; 
+        // this.game.entities.forEach(function (entity) {   
+        //     //if (entity.BB && that.BB.collide(entity.BB)) {      // is there an entity bb & check to see if they collide
+        //         if(( entity instanceof BubblesController ) && that.BB.collide(entity.BB)){
+        //             if (that.leftBB.collide(entity.BB) || that.rightBB.collide(entity.BB) || that.topBB.collide(entity.BB)) { // left collision
+        //                 that.hitpoints -= 30; 
+        //                 console.log("chick");
+        //             //  } else if (that.BB.collide(entity.rightBB)) { // right
+
+        //             //  }else if (that.BB.collide(entity.topBB)) { // right
+
+        //             //  }
+        //             }
+        //         }
+        //    // }
+        // });
+        if(this.hitpoints <= 0 ) {this.removeFromWorld = true;}
+
+
     };
 
     updateBB() {
         this.BB = new BoundingBox(this.x, this.y, this.width*this.scale, this.height*this.scale);
-        this.leftBB = new BoundingBox(this.x + this.width*this.scale - this.BBThickness, this.y, this.BBThickness, this.height*this.scale);
-        this.rightBB = new BoundingBox(this.x, this.y, this.BBThickness, this.height*this.scale);
-        this.topBB = new BoundingBox(this.x, this.y, this.width*this.scale, this.BBThickness);
+      //  this.leftBB = new BoundingBox(this.x + this.width*this.scale - this.BBThickness, this.y, this.BBThickness, this.height*this.scale);
+        //this.rightBB = new BoundingBox(this.x, this.y, this.BBThickness, this.height*this.scale);
+        //this.topBB = new BoundingBox(this.x, this.y, this.width*this.scale, this.BBThickness);
     };
 
     /*
     *  param: context that we want to draw to 
     */
     draw(ctx){ 
+        ctx.shadowColor = 'red';
+         ctx.shadowBlur = 64;
         this.animator.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, this.scale);
+        ctx.shadowColor = "transparent"; // remove shadow !
 
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
             ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
-            ctx.strokeStyle = 'Yellow';
-            ctx.strokeRect(this.leftBB.x - this.game.camera.x, this.leftBB.y, this.leftBB.width, this.leftBB.height);
-            ctx.strokeRect(this.rightBB.x - this.game.camera.x, this.rightBB.y, this.rightBB.width, this.rightBB.height);
-            ctx.strokeRect(this.topBB.x - this.game.camera.x, this.topBB.y, this.topBB.width, this.topBB.height);
+           // ctx.strokeStyle = 'Yellow';
+            // ctx.strokeRect(this.leftBB.x - this.game.camera.x, this.leftBB.y, this.leftBB.width, this.leftBB.height);
+            // ctx.strokeRect(this.rightBB.x - this.game.camera.x, this.rightBB.y, this.rightBB.width, this.rightBB.height);
+            // ctx.strokeRect(this.topBB.x - this.game.camera.x, this.topBB.y, this.topBB.width, this.topBB.height);
         }
     };
 }

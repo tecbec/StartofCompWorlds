@@ -124,7 +124,11 @@ class Soot {
     };
 
     draw(ctx) {
+        var blurValues = 16;
+        ctx.shadowColor = 'yellow';
+         ctx.shadowBlur = blurValues;
         this.animations.drawFrame(this.game.clockTick, ctx, this.x  - this.game.camera.x, this.y, this.scale);
+        ctx.shadowColor = "transparent"; // remove shadow !
 
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';

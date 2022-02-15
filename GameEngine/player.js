@@ -260,7 +260,7 @@ class Player {
         this.updateBB();
 
         // collision handling
-        var that = this; 
+        var that = this; //need this because we are creating
         this.game.entities.forEach(function (entity) {          // this will look at all entities in relation to chihiro
             
             if (entity.BB && that.BB.collide(entity.BB)) {      // is there an entity bb & check to see if they collide
@@ -441,8 +441,6 @@ class Player {
         if (this.velocity.x > 0) this.facing = 0;
 
         this.elapsedTime += TICK; 
-
-            
         if(this.game.shoot && this.elapsedTime > 1){
             this.game.addEntity(new BubblesController(this.game, this.getX() + this.getWidth() - this.game.camera.x ,
                  this.getY()+ this.getHeight()/2,  this.facing));

@@ -50,7 +50,12 @@ class Haku {
     };
 
     draw(ctx) {
+        var blurValues = 50;
+        ctx.shadowColor = '#AAFF00';
+         ctx.shadowBlur = blurValues;
         this.animations.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, HAKU.SCALE);
+        ctx.shadowColor = "transparent"; // remove shadow !
+
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
             ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);

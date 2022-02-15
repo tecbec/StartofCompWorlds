@@ -91,7 +91,12 @@ class Yubaba {
     */
     draw(ctx){ 
         if(this.target.x > this.inc[0]){ // show Yubaba
+            var blurValues = 50;
+            ctx.shadowColor = 'yellow';
+             ctx.shadowBlur = blurValues;
+        
             this.animator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
+            ctx.shadowColor = "transparent"; // remove shadow !
 
             if (PARAMS.DEBUG) {
                 ctx.strokeStyle = 'Red';

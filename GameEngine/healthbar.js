@@ -26,7 +26,8 @@ class BreathBar {
     draw(ctx) {
         var ratio = this.width / this.maxHealth;
         ctx.strokeStyle = "Black";
-        ctx.fillStyle = ratio < 0.2 ? "Red" : ratio < 0.5 ? "Pink" : "Blue";
+        if(ratio <= 1){
+        ctx.fillStyle = ratio < 0.2 ? "Red" : ratio < 0.5 ? "Pink" : "Blue";}
         ctx.fillRect(this.x, this.y, this.width * PARAMS.SCALE, this.height);
         ctx.strokeRect(this.x, this.y, this.maxHealth * PARAMS.SCALE, this.height);
     };

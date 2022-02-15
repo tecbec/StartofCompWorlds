@@ -5,7 +5,7 @@ var BACKGROUND = {
     SIZE: {W: 1000, H: 500},
     SCALE: 2,
     GROUND: {X: 32, Y: 0, SIZE: 32, SCALE: 4},
-    STONE_LAMP: {X: 0, Y: 0, SIZE: 64, SCALE: 4, BB_SIZE: {W: 10, H: 10}},
+    STONE_LAMP: {X: 0, Y: 0, SIZE: {X:71, Y:142 }, SCALE:{ X:3, Y: 2}, BB_SIZE: {W: 10, H: 10}},
     LAMP: {X: 0, Y: 0, SIZE: 64, SCALE:  {W: 3, H: 5}, BB_SIZE: {W: 5, H: 10}, PADDING: {W: 50, H: 13}},
     RAILING: {X: 0, Y: 10, SIZE: 64, SCALE: 2.5, BB_SIZE: {W: 5, H: 10}, PADDING: 20},
     PLATFORM: {LEFT: {X: 0, Y: 32}, MID: {X: 16, Y: 32}, RIGHT: {X: 32, Y: 32}, SIZE: 16, SCALE: 4, COUNT: 2, BB_SIZE: {W: 10, H: 10}},
@@ -102,7 +102,7 @@ class Platform {  // tree
             BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE);
 
 
-        this.BB = new BoundingBox(this.x, this.y,
+        this.BB = new BoundingBox(this.x , this.y,
             BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE * LOCATION, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE);
 
         // this.topBB = new BoundingBox(this.x, this.y,
@@ -218,12 +218,12 @@ class StoneLamp {
     draw(ctx) {
 
         ctx.drawImage(this.spritesheet, BACKGROUND.STONE_LAMP.X, BACKGROUND.STONE_LAMP.Y,
-            BACKGROUND.STONE_LAMP.SIZE, BACKGROUND.STONE_LAMP.SIZE,
+            BACKGROUND.STONE_LAMP.SIZE.X, BACKGROUND.STONE_LAMP.SIZE.Y,
             this.x - this.game.camera.x, this.y,
-            BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE, BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE);
+            BACKGROUND.STONE_LAMP.SIZE.X * BACKGROUND.STONE_LAMP.SCALE.X, BACKGROUND.STONE_LAMP.SIZE.Y * BACKGROUND.STONE_LAMP.SCALE.Y);
 
-        this.BB = new BoundingBox(this.x, this.y,
-            BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE, BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE);
+        this.BB = new BoundingBox(this.x , this.y ,
+            (BACKGROUND.STONE_LAMP.SIZE.X) * BACKGROUND.STONE_LAMP.SCALE.X,( BACKGROUND.STONE_LAMP.SIZE.Y )* BACKGROUND.STONE_LAMP.SCALE.Y);
 
         // this.topBB = new BoundingBox(this.x, this.y,
         //     BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE, BACKGROUND.STONE_LAMP.BB_SIZE.H);
@@ -231,18 +231,18 @@ class StoneLamp {
         // this.bottomBB = new BoundingBox(this.x, this.y ,
         //     BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE, BACKGROUND.STONE_LAMP.BB_SIZE.H);
 
-        this.leftBB = new BoundingBox(this.x, this.y + 20,
-            BACKGROUND.STONE_LAMP.BB_SIZE.W, BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE - 40);
+        this.leftBB = new BoundingBox(this.x, this.y ,
+            BACKGROUND.STONE_LAMP.BB_SIZE.W, BACKGROUND.STONE_LAMP.SIZE.Y * BACKGROUND.STONE_LAMP.SCALE.Y );
 
-        this.rightBB = new BoundingBox(this.BB.right - BACKGROUND.STONE_LAMP.BB_SIZE.W, this.y + 20,
-            BACKGROUND.STONE_LAMP.BB_SIZE.W, BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE - 40);
+        this.rightBB = new BoundingBox(this.BB.right - BACKGROUND.STONE_LAMP.BB_SIZE.W, this.y ,
+            BACKGROUND.STONE_LAMP.BB_SIZE.W, BACKGROUND.STONE_LAMP.SIZE.Y * BACKGROUND.STONE_LAMP.SCALE.Y );
 
         if (PARAMS.DEBUG) {
             // ctx.lineWidth = 2;
             ctx.strokeStyle = 'Green';
             ctx.strokeRect(this.BB.x -this.game.camera.x, this.BB.y,
-                BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE,
-                BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE);
+                BACKGROUND.STONE_LAMP.SIZE.X * BACKGROUND.STONE_LAMP.SCALE.X,
+                BACKGROUND.STONE_LAMP.SIZE.Y * BACKGROUND.STONE_LAMP.SCALE.Y);
             // ctx.lineWidth = 10;
             ctx.strokeStyle = 'Red';
             // ctx.strokeRect(this.topBB.x - this.game.camera.x, this.topBB.y, this.topBB.width, this.topBB.height);
