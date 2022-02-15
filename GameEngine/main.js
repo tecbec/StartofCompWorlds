@@ -3,7 +3,6 @@ const gameEngine = new GameEngine();
 const ASSET_MANAGER = new AssetManager();
 
 // Queue spritesheets here
-ASSET_MANAGER.queueDownload("./sprites/soot-jump-long_aura.png");
 ASSET_MANAGER.queueDownload("./sprites/soot-jump-long_aura2_bidir.png");
 ASSET_MANAGER.queueDownload("./sprites/spritesheet.png");
 ASSET_MANAGER.queueDownload("./sprites/chihiro_spritesheet.png");
