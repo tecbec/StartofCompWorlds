@@ -6,9 +6,9 @@ class Chick {
         this.width = 75;
         this.height = 100;
         this.frameCount = 6;
-        this.frameDuration = 0.30; 
-        this.scale = 2.0; 
-        this.BBThickness = 5;     
+        this.frameDuration = 0.30;
+        this.scale = 2.0;
+        this.BBThickness = 5;
 
         this.loadAnimations();
 
@@ -21,39 +21,37 @@ class Chick {
         }else{
             this.speed = 0;
         }
-
-
     };
 
     loadAnimations(){
          /* right = 0, left = 1, stationary = 2*/
         this.animations = [];
-        this.animations[0] = new Animator(this.path, 0, 0, this.width, 
+        this.animations[0] = new Animator(this.path, 0, 0, this.width,
                 this.height, this.frameCount, this.frameDuration, 0, false, true);
-        this.animations[1] = new Animator(this.path, 0, this.height, this.width, 
+        this.animations[1] = new Animator(this.path, 0, this.height, this.width,
                 this.height, this.frameCount, this.frameDuration, 0, false, true);
         this.animator = this.animations[0];
-        this.animations[2] = new Animator(this.path, 0, this.height, this.width, 
+        this.animations[2] = new Animator(this.path, 0, this.height, this.width,
             this.height, 1, this.frameDuration, 0, false, true);
         this.animator = this.animations[0];
     }
 
     update(){
         if((this.maxX - this.minX) > 0){
-            if(this.x + this.width *this.scale >= this.maxX){ 
+            if(this.x + this.width *this.scale >= this.maxX){
                 this.speed = -Math.abs(this.speed);
                 this.animator = this.animations[1];
                 this.dir = 1;
            }else if(this.x <= this.minX){
-                this.speed = Math.abs(this.speed);   
-                this.animator = this.animations[0];  
-                this.dir = 0;     
+                this.speed = Math.abs(this.speed);
+                this.animator = this.animations[0];
+                this.dir = 0;
            }
-    
+
             this.x += this.speed * this.game.clockTick;
             this.updateBB();
         }else{
-            this.animator = this.animations[2];   
+            this.animator = this.animations[2];
         }
     };
 
@@ -65,9 +63,9 @@ class Chick {
     };
 
     /*
-    *  param: context that we want to draw to 
+    *  param: context that we want to draw to
     */
-    draw(ctx){ 
+    draw(ctx){
         this.animator.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, this.scale);
 
         if (PARAMS.DEBUG) {
