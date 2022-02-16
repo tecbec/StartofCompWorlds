@@ -17,7 +17,7 @@ class BubblesController{
          this.widthofBubble*PARAMS.SCALE *this.scaleBubble, this.heightofBubble*PARAMS.SCALE *this.scaleBubble);
     };
     update() {
-        if(this.direction === 1) { 
+        if(this.direction == 1) { 
             this.x -= ( this.velocity.x )* this.game.clockTick;
         } else  {
             this.x += this.velocity.x * this.game.clockTick;
@@ -36,7 +36,7 @@ class BubblesController{
         this.BB = new BoundingBox(this.x , this.y
             , this.widthofBubble*PARAMS.SCALE *this.scaleBubble, this.heightofBubble*PARAMS.SCALE *this.scaleBubble);    
 
-        if(this.animation.currentFrame() === 4){
+        if(this.animation.currentFrame() == 4){
             this.removeFromWorld = true;
         }
     };

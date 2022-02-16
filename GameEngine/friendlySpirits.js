@@ -16,6 +16,8 @@ class NoFace {
         this.height = 150;
         this.width = 400;
 
+        this.hasCoins = true;
+
         // bounding box
         this.updateBB();
 

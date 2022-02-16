@@ -362,9 +362,13 @@ class Player {
                 // collision with no face
                 if (entity instanceof NoFace && that.BB.collide(entity.BB)) {
                     // Set a maximum amount of coins upon interact
-                    if (that.game.camera.coinCounter.coinCount <= 10) {
-                        that.game.camera.coinCounter.coinCount += 10;
+                    if (entity.hasCoins) {
+                        that.game.camera.coinCounter.coinCount += 15;
+                        entity.hasCoins = false;
                     }
+
+                   
+
                     entity.dead = true;
 
                 }
