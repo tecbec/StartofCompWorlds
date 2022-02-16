@@ -1,7 +1,7 @@
 /* Chihiro's Params */
 var CHIHIRO = {
     TITLE_POSITION:   {X: 0,  Y: 800},
-    INITIAL_POSITION: {X: 14739,  Y: 0},  
+    INITIAL_POSITION: {X: -200,  Y: 0},  
     SIZE: 70,
     SCALE: 2,
     PADDING:{X: 28, Y: 20}, // same padding for BB and imaginary x,y,w,h calculations
@@ -322,9 +322,13 @@ class Player {
                 // collision with no face
                 if (entity instanceof NoFace && that.BB.collide(entity.BB)) {
                     // Set a maximum amount of coins upon interact
-                    if (that.game.camera.coinCounter.coinCount <= 10) {
-                        that.game.camera.coinCounter.coinCount += 10;
+                    if (entity.hasCoins) {
+                        that.game.camera.coinCounter.coinCount += 15;
+                        entity.hasCoins = false;
                     }
+
+                   
+
                     entity.dead = true;
 
                 }
@@ -423,8 +427,8 @@ class Player {
         if (this.velocity.x > 0) this.facing = 0;
 
         this.elapsedTime += TICK; 
-        if(this.game.shoot && this.elapsedTime > 1){
-            this.game.addEntity(new BubblesController(this.game, this.getX() + this.getWidth() - this.game.camera.x ,
+        if(this.game.shoot && this.elapsedTime > 1){                                          //remove - game.camera.x
+            this.game.addEntity(new BubblesController(this.game, this.getX() + this.getWidth(),
                  this.getY()+ this.getHeight()/2,  this.facing));
                   this.elapsedTime = 0;
          }

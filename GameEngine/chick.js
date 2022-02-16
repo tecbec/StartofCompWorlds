@@ -79,9 +79,10 @@ class Chick {
 
     updateBB() {
         this.BB = new BoundingBox(this.x, this.y, this.width*this.scale, this.height*this.scale);
-      //  this.leftBB = new BoundingBox(this.x + this.width*this.scale - this.BBThickness, this.y, this.BBThickness, this.height*this.scale);
-        //this.rightBB = new BoundingBox(this.x, this.y, this.BBThickness, this.height*this.scale);
-        //this.topBB = new BoundingBox(this.x, this.y, this.width*this.scale, this.BBThickness);
+        //this.BB = new BoundingBox(this.x + this.width*this.scale *1/16, this.y + this.height*this.scale * 1/8, this.width*this.scale *13/16, this.height*this.scale * 3/4);
+        this.leftBB = new BoundingBox(this.x + this.width*this.scale - this.BBThickness, this.y, this.BBThickness, this.height*this.scale);
+        this.rightBB = new BoundingBox(this.x, this.y, this.BBThickness, this.height*this.scale);
+        this.topBB = new BoundingBox(this.x, this.y, this.width*this.scale, this.BBThickness);
     };
 
     /*
@@ -96,10 +97,10 @@ class Chick {
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
             ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
-           // ctx.strokeStyle = 'Yellow';
-            // ctx.strokeRect(this.leftBB.x - this.game.camera.x, this.leftBB.y, this.leftBB.width, this.leftBB.height);
-            // ctx.strokeRect(this.rightBB.x - this.game.camera.x, this.rightBB.y, this.rightBB.width, this.rightBB.height);
-            // ctx.strokeRect(this.topBB.x - this.game.camera.x, this.topBB.y, this.topBB.width, this.topBB.height);
+            ctx.strokeStyle = 'Yellow';
+            ctx.strokeRect(this.leftBB.x - this.game.camera.x, this.leftBB.y, this.leftBB.width, this.leftBB.height);
+            ctx.strokeRect(this.rightBB.x - this.game.camera.x, this.rightBB.y, this.rightBB.width, this.rightBB.height);
+            ctx.strokeRect(this.topBB.x - this.game.camera.x, this.topBB.y, this.topBB.width, this.topBB.height);
         }
     };
 }

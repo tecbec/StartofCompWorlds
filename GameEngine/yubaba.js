@@ -12,6 +12,7 @@ class Yubaba {
         this.scale = 0.7; 
         this.new = true;
         this.show = false;
+        this.removeFromWorld = false;
 
         this.loadAnimations();
 
@@ -34,6 +35,14 @@ class Yubaba {
     update(){
         if(this.target.x > this.inc[0]){
             this.show = true;
+        }
+
+        if(this.target.x > this.inc[3]){
+            this.y -= Math.abs(this.speed * this.game.clockTick);
+        }
+
+        if(this.y < -this.height*this.scale){
+            this.removeFromWorld = true;
         }
         /* 
         this.inc[0]: enter

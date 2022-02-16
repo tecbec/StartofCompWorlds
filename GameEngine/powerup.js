@@ -19,7 +19,7 @@ class BubblesController{
 //        console.log("that",this.BB.x, this.BB.y, this.BB.width, this.BB.height)
     };
     update() {
-        if(this.direction === 1) { 
+        if(this.direction == 1) { 
             this.x -= ( this.velocity.x )* this.game.clockTick;
         } else  {
             this.x += this.velocity.x * this.game.clockTick;
@@ -34,6 +34,8 @@ class BubblesController{
                      // is there an entity bb & check to see if they collide
                 // if(entity instanceof Chick )   {
                         console.log("bubble"); 
+                        console.log(that.BB); 
+
                         //update firerate
                         //remove from world = true 
                 //}
@@ -43,16 +45,16 @@ class BubblesController{
         this.BB = new BoundingBox(this.x, this.y
             , this.widthofBubble*PARAMS.SCALE *this.scaleBubble, this.heightofBubble*PARAMS.SCALE *this.scaleBubble);    
 
-        if(this.animation.currentFrame() === 4){
+        if(this.animation.currentFrame() == 4){
             this.removeFromWorld = true;
         }
     };
-    draw(ctx){
-        this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y, PARAMS.SCALE * this.scaleBubble );
+    draw(ctx){                                                   // insert -this.game.camera.x
+        this.animation.drawFrame(this.game.clockTick, ctx, this.x  - this.game.camera.x, this.y, PARAMS.SCALE * this.scaleBubble );
 
         if (PARAMS.DEBUG) {
-            ctx.strokeStyle = 'Red';
-            ctx.strokeRect(this.BB.x , this.BB.y, this.BB.width, this.BB.height);
+            ctx.strokeStyle = 'Red';   // insert -this.game.camera.x
+            ctx.strokeRect(this.BB.x  - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
         }
         // if(this.x <= PARAMS.CANVAS_WIDTH ) {
         //     //console.log(this.x);
