@@ -79,7 +79,7 @@ class Chick {
 
     updateBB() {
         this.BB = new BoundingBox(this.x, this.y, this.width*this.scale, this.height*this.scale);
-       this.leftBB = new BoundingBox(this.x + this.width*this.scale - this.BBThickness, this.y, this.BBThickness, this.height*this.scale);
+        this.leftBB = new BoundingBox(this.x + this.width*this.scale - this.BBThickness, this.y, this.BBThickness, this.height*this.scale);
         this.rightBB = new BoundingBox(this.x, this.y, this.BBThickness, this.height*this.scale);
         this.topBB = new BoundingBox(this.x, this.y, this.width*this.scale, this.BBThickness);
     };
@@ -88,8 +88,8 @@ class Chick {
     *  param: context that we want to draw to 
     */
     draw(ctx){ 
-        ctx.shadowColor = 'red';
-         ctx.shadowBlur = 64;
+        ctx.shadowColor = '#ff2121';
+        ctx.shadowBlur = 64;
         this.animator.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, this.scale);
         ctx.shadowColor = "transparent"; // remove shadow !
 

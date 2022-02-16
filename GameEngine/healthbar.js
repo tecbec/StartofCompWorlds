@@ -13,7 +13,7 @@ class BreathBar {
 
     update() {
         this.elapsed += this.game.clockTick;
-        if (this.width > 0) {
+        if (this.width > 0 && this.game.camera.chihiro.x > 440) {
             this.width -= 0.05; // original
             // this.width -= 0.5; // changes for testing
             this.width = (this.width / this.maxHealth) * this.maxHealth;

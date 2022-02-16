@@ -90,7 +90,7 @@ class Coins {
     
     draw(ctx){
         var blurValues = [12,16,14,15,13];
-        ctx.shadowColor = 'yellow';
+        ctx.shadowColor = '#fdd834';
         ctx.shadowBlur = blurValues[getRandomInt(5)] ;   
 
         this.animation.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, PARAMS.SCALE *this.scaleCoins);

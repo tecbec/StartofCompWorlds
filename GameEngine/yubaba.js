@@ -111,6 +111,8 @@ class Yubaba {
     */
     draw(ctx){
         if(this.show){ // show Yubaba
+            ctx.shadowColor = '#ff2121';
+            ctx.shadowBlur = 10; // change this to make the aura more spread out
             this.animator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
             ctx.shadowColor = "transparent"; // remove shadow !
 
@@ -166,7 +168,6 @@ class Crow{
        this.animations[1] = new Animator(this.path, 0, 0+this.height, this.width, 
                this.height, this.frameCount, this.frameDuration, 0, false, true);
        this.animator = this.animations[0];
-
    }
 
     update(){
@@ -214,6 +215,11 @@ class Crow{
     */
     draw(ctx){ 
         this.animator.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, this.scale);
+
+        ctx.shadowColor = '#ff2121';
+        ctx.shadowBlur = 10; // change this to make the aura more spread out
+        this.animator.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, this.scale);
+        ctx.shadowColor = "transparent"; // remove shadow !
 
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
