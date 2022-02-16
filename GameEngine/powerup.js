@@ -26,7 +26,7 @@ class BubblesController{
 
          var that = this; 
          this.game.entities.forEach(function (entity) { 
-            if ( entity instanceof Chick && entity.BB && that.BB.collide(entity.BB) ) {
+            if (( entity instanceof Chick  || entity instanceof Yubaba || entity instanceof Crow) && entity.BB && that.BB.collide(entity.BB) ) {
 
                         entity.hitpoints -= 30; 
                         that.removeFromWorld = true;

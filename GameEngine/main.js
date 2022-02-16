@@ -9,6 +9,7 @@ ASSET_MANAGER.queueDownload("./sprites/chihiro_spritesheet.png");
 ASSET_MANAGER.queueDownload("./sprites/cloud-Sheet.png");
 ASSET_MANAGER.queueDownload("./sprites/stonelamp.png");
 ASSET_MANAGER.queueDownload("./sprites/lamp.png");
+ASSET_MANAGER.queueDownload("./sprites/flame.png");
 ASSET_MANAGER.queueDownload("./sprites/railing.png");
 ASSET_MANAGER.queueDownload("./sprites/platform_sheet.png");
 ASSET_MANAGER.queueDownload("./sprites/Bathhouse.png");

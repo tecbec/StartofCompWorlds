@@ -295,7 +295,7 @@ class Player {
                 }
 
                 // SIDE COLLISIONS --> left & right bounding boxes for platform
-                if ((entity instanceof Platform || entity instanceof StoneLamp) && that.BB.collide(entity.BB)) {
+                if ((entity instanceof Platform ) && that.BB.collide(entity.BB)) {
                         //that.game.deactivate = true;   // don't let player access key press once collision happens
                         if (that.BB.collide(entity.leftBB) && that.BB.right >= entity.leftBB.left ) { // left collision
                             that.setX(entity.BB.left - that.getWidth()); // so that the player won't stick to the bb of the entity
@@ -309,6 +309,48 @@ class Player {
 
                         }
                         //that.updateBB(); 
+                }
+
+                if(entity instanceof StoneLamp && that.BB.collide(entity.BB)) {
+                  //  console.log("stonelamp",  that.BB.right >= entity.BB.left );
+
+                    if (that.BB.collide(entity.BBmiddleleft) && that.BB.right >= entity.BBmiddleleft.left ) { // left collision
+                        that.setX(entity.BB.left - that.getWidth()); // so that the player won't stick to the bb of the entity
+                        //that.velocity.y = 0;
+                        if (that.velocity.x > 0) that.velocity.x = 0;
+                        
+
+                    } else if (that.BB.collide(entity.BBmiddleright) && that.BB.left <= entity.BBmiddleright.right ) { // right collision
+                        that.setX(entity.BB.right);// so that the player won't stick to the bb of the entity
+                        //that.velocity.y = 0;
+                        if (that.velocity.x < 0) that.velocity.x = 0;
+                    } 
+                    
+                    // } else {
+                        // console.log("stonelamp right",that.BB.collide(entity.BBmiddle) && that.BB.left <= entity.BBmiddle.right );
+
+                        // if (that.BB.collide(entity.BBmiddleleft) && that.BB.right >= entity.BBmiddleleft.left ) { // left collision
+                        //     that.setX(entity.BBmiddle.left - that.getWidth()); // so that the player won't stick to the bb of the entity
+                        //  //   that.velocity.y = 0;
+                        //     if (that.velocity.x > 0) that.velocity.x = 0;
+                        // } else if (that.BB.collide(entity.BBmiddleright) && that.BB.left <= entity.BBmiddleright.right ) { // right collision
+                        //     that.setX(entity.BBmiddle.right);// so that the player won't stick to the bb of the entity
+                        //    // that.velocity.y = 0;
+                        //     if (that.velocity.x < 0) that.velocity.x = 0;
+                        // } 
+
+                                            // if (that.BB.collide(entity.BBtopleft) && that.BB.right >= entity.BBtopleft.left ) { // left collision
+                    //     that.setX(entity.BB.left - that.getWidth()); // so that the player won't stick to the bb of the entity
+                    //     //that.velocity.y = 0;
+                    //     if (that.velocity.x > 0) that.velocity.x = 0;
+                        
+
+                    // } else if (that.BB.collide(entity.BBtopright) && that.BB.left <= entity.BBtopright.right ) { // right collision
+                    //     that.setX(entity.BB.right);// so that the player won't stick to the bb of the entity
+                    //     //that.velocity.y = 0;
+                    //     if (that.velocity.x < 0) that.velocity.x = 0;
+                    // } 
+                    //}
                 }
 
                 if(entity instanceof Railing) {// if she's crouching she'll fall to ground
@@ -364,9 +406,9 @@ class Player {
                         that.velocity.y = -100;
                     }
                     //that.updateBB();
-
+ 
                 }
-
+                
                 // collision with HAKU
                 if (entity instanceof Haku && that.BB.collide(entity.BB)) {
                     // instantly heal stamina bar

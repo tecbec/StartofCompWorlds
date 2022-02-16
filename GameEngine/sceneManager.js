@@ -23,9 +23,9 @@ var LEVEL = {
                               {X: 4354, Y: 120, SIZE:1}, {X: 4780, Y: 270, SIZE:0}, {X: 5255, Y: 100, SIZE:3}, {X: 5315, Y: 300, SIZE:3}, {X: 5225, Y: 500, SIZE:4}, {X: 5632, Y: 280, SIZE:1}, {X: 5775, Y: 120, SIZE:2}, {X: 6166, Y: 270, SIZE:3},
                               {X: 6650, Y: 200, SIZE:3}, {X: 6950, Y: 100, SIZE:3}, {X: 7250, Y: 200, SIZE:3}, {X: 7750, Y: 250, SIZE:3} ],                                                                 // Scene 4                     
 
-    STONE_LAMP_LOCATION: [{X: 1000, Y: 700}, {X: 1800, Y: 700}, {X: 2902, Y: 700}, {X: 3702, Y: 700}, {X: 5255, Y: 700},
-                          {X: 6706, Y: 700}, {X: 7506, Y: 700}, // Scene 4 - 800 px between each stone lamp, 500 px between first lamp and stone lamp
-                          {X: 9059, Y: 700}],                   // Scene 5
+    STONE_LAMP_LOCATION: [{X: 1000, Y: 600}, {X: 1800, Y: 600}, {X: 2902, Y: 600}, {X: 3702, Y: 600}, {X: 5255, Y: 600},
+                          {X: 6706, Y: 600}, {X: 7506, Y: 600}, // Scene 4 - 800 px between each stone lamp, 500 px between first lamp and stone lamp
+                          {X: 9059, Y: 600}],                   // Scene 5
 
 
     /* Start of Frame:     1                   2                 3                 4                 5                   6                   7*/
@@ -174,7 +174,7 @@ class SceneManager {
             this.game.addEntity(this.railing);
             this.game.addEntity(this.bathhouse);
             
-            this.game.addEntity(this.chihiro);
+//            this.game.addEntity(this.chihiro);
             this.game.addEntity(this.ground);
 
             for (var i = 0; i < LEVEL.PLATFORM_LOCATION.length; i++) {
@@ -228,6 +228,7 @@ class SceneManager {
                 this.game.addEntity(new Chick(this.game, chick.X, chick.Y, chick.MIN, chick.MAX, chick.DIR));
             }
 
+            this.game.addEntity(this.chihiro);
 
             this.game.addEntity(this.breathbar);
             this.game.addEntity(this.coinCounter);

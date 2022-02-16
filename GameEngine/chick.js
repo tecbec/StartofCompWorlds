@@ -55,23 +55,6 @@ class Chick {
         }else{
             this.animator = this.animations[2];   
         }
- 
-       // var that = this; 
-        // this.game.entities.forEach(function (entity) {   
-        //     //if (entity.BB && that.BB.collide(entity.BB)) {      // is there an entity bb & check to see if they collide
-        //         if(( entity instanceof BubblesController ) && that.BB.collide(entity.BB)){
-        //             if (that.leftBB.collide(entity.BB) || that.rightBB.collide(entity.BB) || that.topBB.collide(entity.BB)) { // left collision
-        //                 that.hitpoints -= 30; 
-        //                 console.log("chick");
-        //             //  } else if (that.BB.collide(entity.rightBB)) { // right
-
-        //             //  }else if (that.BB.collide(entity.topBB)) { // right
-
-        //             //  }
-        //             }
-        //         }
-        //    // }
-        // });
         if(this.hitpoints <= 0 ) {this.removeFromWorld = true;}
     };
 
