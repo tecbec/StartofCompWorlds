@@ -174,7 +174,7 @@ class Player {
         const TICK = this.game.clockTick;
         const TICK_SCALE = 2;
         const MAX_FALL = 240 * PARAMS.SCALE;
-        const MAX_RUN = 250 * PARAMS.SCALE;
+        const MAX_RUN = 150 * PARAMS.SCALE;
         const MIN_WALK = 100 * PARAMS.SCALE;
         const CROUCH_SPEED = 25 * PARAMS.SCALE;
         const RUN_ACC = 400 * PARAMS.SCALE;
@@ -397,8 +397,9 @@ class Player {
 
         // update state
         if (this.state !== 5 && this.state !== 3) {  // NOT dead, or crouch
-            if (this.game.crouch && this.velocity.x == 0) this.state = 3;  // crouching state
-            else if (this.game.crouch && Math.abs(this.velocity.x) > 0) this.state = 6;
+            if (this.game.crouch && this.velocity.x == 0) this.state = 3;  // crouch idle state
+            else if (!this.isGrounded && Math.abs(this.velocity.x) > 0) this.state = 2; // jump walk state
+            else if (this.game.crouch && Math.abs(this.velocity.x) > 0) this.state = 6; // crouch walk state
             else if (Math.abs(this.velocity.x) > 0) this.state = 1;        // walking state
             else if (Math.abs(this.velocity.x) > MIN_WALK) this.state = 4; // running state
         }
