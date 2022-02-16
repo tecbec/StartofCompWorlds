@@ -261,11 +261,9 @@ class Player {
 
         // collision handling
         var that = this; //need this because we are creating
-        this.game.entities.forEach(function (entity) {          // this will look at all entities in relation to chihiro
-
-            if ( entity.BB && that.BB.collide(entity.BB) ) {      // is there an entity bb & check to see if they collide
-
-                if (that.velocity.y > 0) {                      // chihiro is falling
+        this.game.entities.forEach(function (entity) {         // this will look at all entities in relation to chihiro
+            if (entity.BB && that.BB.collide(entity.BB) ) {    // is there an entity bb & check to see if they collide
+                if (that.velocity.y > 0) {                     // chihiro is falling
                     if((entity instanceof Ground || entity instanceof Platform || entity instanceof CloudPlatform ||
                         entity instanceof StoneLamp ||
                         entity instanceof Railing || entity instanceof Lamp) && (that.lastBB.bottom  <= entity.BB.top)) // minus one?? idk how this works

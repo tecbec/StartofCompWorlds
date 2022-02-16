@@ -208,9 +208,9 @@ class SceneManager {
 
             this.game.addEntity(new Yubaba(this.game, 0, 0, LEVEL.YUBABA_INC));
 
-            for (var i = 0; i < LEVEL.HAKU_LOCATION.length; i++) {
-                let platform = LEVEL.HAKU_LOCATION[i];
-                this.game.addEntity(new Haku(this.game, LEVEL.HAKU_LOCATION[i].X, LEVEL.HAKU_LOCATION[i].Y));
+            for (var i = 1; i < LEVEL.HAKU_LOCATION.length; i++) {
+                let haku = LEVEL.HAKU_LOCATION[i];
+                this.game.addEntity(new Haku(this.game, haku.X, haku.Y));
             }
 
             for(var i=0; i < LEVEL.NOFACE_LOCATION.length; i++){
@@ -229,7 +229,7 @@ class SceneManager {
             }
 
             this.game.addEntity(this.chihiro);
-
+            this.game.addEntity(new Haku(this.game, LEVEL.HAKU_LOCATION[0].X, LEVEL.HAKU_LOCATION[0].Y));
             this.game.addEntity(this.breathbar);
             this.game.addEntity(this.coinCounter);
         }
