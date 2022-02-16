@@ -1,7 +1,7 @@
 /* Chihiro's Params */
 var CHIHIRO = {
     TITLE_POSITION:   {X: 0,  Y: 800},
-    INITIAL_POSITION: {X: -200,  Y: 0},  // 14739
+    INITIAL_POSITION: {X: 0,  Y: 0},  // 14739
     SIZE: 70,
     SCALE: 2,
     PADDING:{X: 28, Y: 20}, // same padding for BB and imaginary x,y,w,h calculations
@@ -174,7 +174,7 @@ class Player {
         const TICK = this.game.clockTick;
         const TICK_SCALE = 2;
         const MAX_FALL = 240 * PARAMS.SCALE;
-        const MAX_RUN = 250 * PARAMS.SCALE;
+        const MAX_RUN = 150 * PARAMS.SCALE;
         const MIN_WALK = 100 * PARAMS.SCALE;
         const CROUCH_SPEED = 25 * PARAMS.SCALE;
         const RUN_ACC = 400 * PARAMS.SCALE;
@@ -182,10 +182,6 @@ class Player {
 
         // can only move while on the ground AND jump after has been grounded for x ticks
         if (this.isGrounded && !this.dead) {
-            // Stop Chihiro from moving. 
-            if(this.x < -800) {
-                this.x = -800;
-            }
             if(this.jumping) {         // just landed
                 this.jumpTimer = 1000; // set off short timer, to prevent accidental double jumping
             }
@@ -433,18 +429,22 @@ class Player {
             }
         });
         this.updateBB();
-
-        if (this.game.camera.breathwidth <= 0) {
-            this.dead = true;
-            this.state = 5;
-        } else {
-            this.dead = false;
+         // Implemented god mode only for debug purposes
+        if (!PARAMS.DEBUG) {
+            if (this.game.camera.breathwidth <= 0) {
+                this.dead = true;
+                this.state = 5;
+            } else {
+                this.dead = false;
+            }
+    
         }
-
+       
         // update state
         if (this.state !== 5 && this.state !== 3) {  // NOT dead, or crouch
-            if (this.game.crouch && this.velocity.x == 0) this.state = 3;  // crouching state
-            else if (this.game.crouch && Math.abs(this.velocity.x) > 0) this.state = 6;
+            if (this.isGrounded && this.game.crouch && this.velocity.x == 0) this.state = 3;  // crouch idle state
+            else if (!this.isGrounded && Math.abs(this.velocity.x) > 0) this.state = 2; // jump walk state
+            else if (this.isGrounded && this.game.crouch && Math.abs(this.velocity.x) > 0) this.state = 6; // crouch walk state
             else if (Math.abs(this.velocity.x) > 0) this.state = 1;        // walking state
             else if (Math.abs(this.velocity.x) > MIN_WALK) this.state = 4; // running state
         }
@@ -474,12 +474,15 @@ class Player {
                  this.getY(),  this.facing));
                   this.elapsedTime = 0;
          }
-
-        if (this.game.camera.breathwidth <= 0 ) {
-            this.game.camera.chihiro.dead = true;
-        } else {
-            this.game.camera.chihiro.dead = false;
+        // Implemented god mode only for debug purposes
+        if(!PARAMS.DEBUG) {
+            if (this.game.camera.breathwidth <= 0 ) {
+                this.game.camera.chihiro.dead = true;
+            } else {
+                this.game.camera.chihiro.dead = false;
+            }
         }
+       
 
     };
 
