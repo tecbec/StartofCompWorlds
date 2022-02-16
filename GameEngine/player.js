@@ -400,9 +400,9 @@ class Player {
        
         // update state
         if (this.state !== 5 && this.state !== 3) {  // NOT dead, or crouch
-            if (this.game.crouch && this.velocity.x == 0) this.state = 3;  // crouch idle state
+            if (this.isGrounded && this.game.crouch && this.velocity.x == 0) this.state = 3;  // crouch idle state
             else if (!this.isGrounded && Math.abs(this.velocity.x) > 0) this.state = 2; // jump walk state
-            else if (this.game.crouch && Math.abs(this.velocity.x) > 0) this.state = 6; // crouch walk state
+            else if (this.isGrounded && this.game.crouch && Math.abs(this.velocity.x) > 0) this.state = 6; // crouch walk state
             else if (Math.abs(this.velocity.x) > 0) this.state = 1;        // walking state
             else if (Math.abs(this.velocity.x) > MIN_WALK) this.state = 4; // running state
         }
