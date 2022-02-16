@@ -41,13 +41,12 @@ class BubblesController{
         }
     };
     draw(ctx){
-        if(this.x <= PARAMS.CANVAS_WIDTH ) {
-            if(this.direction === 1) {//going left
-                this.animation.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x , this.y, PARAMS.SCALE * this.scaleBubble );
-            } else {
-                this.animation.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x , this.y, PARAMS.SCALE * this.scaleBubble )
-            }
-        } 
+        if(this.direction === 1) {//going left
+            this.animation.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x , this.y, PARAMS.SCALE * this.scaleBubble );
+        } else {
+            this.animation.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x , this.y, PARAMS.SCALE * this.scaleBubble )
+        }
+        
 
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
