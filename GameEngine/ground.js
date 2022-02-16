@@ -116,7 +116,7 @@ class BackGround {
 class Platform {  // tree
     constructor(game, x, y, w, type) { 
         Object.assign(this, { game, x, y, w, type});
-        this.spritesheet = this.spritesheet = ASSET_MANAGER.getAsset("./sprites/platform_sheet.png");
+        this.spritesheet = ASSET_MANAGER.getAsset("./sprites/platform_sheet.png");
     }
 
     update() {
@@ -190,7 +190,7 @@ class Platform {  // tree
 class CloudPlatform {
     constructor(game, x, y, size) {
         Object.assign(this, { game, x, y, size});
-        this.spritesheet = this.spritesheet = ASSET_MANAGER.getAsset("./sprites/cloud-Sheet.png");
+        this.spritesheet = ASSET_MANAGER.getAsset("./sprites/cloud-Sheet.png");
 
         this.BB = new BoundingBox(this.x + 5 , this.y + 10, 
             BACKGROUND.CLOUD_BB[this.size].W * BACKGROUND.CLOUD.SCALE - 10, 
@@ -280,7 +280,7 @@ class CloudPlatform {
 class StoneLamp {
     constructor(game, x, y, w) {
         Object.assign(this, { game, x, y, w});
-        this.spritesheet = this.spritesheet = ASSET_MANAGER.getAsset("./sprites/stonelamp.png");
+        this.spritesheet = ASSET_MANAGER.getAsset("./sprites/stonelamp.png");
     }
 
     update() {

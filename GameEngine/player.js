@@ -1,7 +1,7 @@
 /* Chihiro's Params */
 var CHIHIRO = {
     TITLE_POSITION:   {X: 0,  Y: 800},
-    INITIAL_POSITION: {X: -200,  Y: 0},  // 14739
+    INITIAL_POSITION: {X: 15000,  Y: 0},  // 14739
     SIZE: 70,
     SCALE: 2,
     PADDING:{X: 28, Y: 20}, // same padding for BB and imaginary x,y,w,h calculations
@@ -182,10 +182,6 @@ class Player {
 
         // can only move while on the ground AND jump after has been grounded for x ticks
         if (this.isGrounded && !this.dead) {
-            // Stop Chihiro from moving. 
-            if(this.x < -800) {
-                this.x = -800;
-            }
             if(this.jumping) {         // just landed
                 this.jumpTimer = 1000; // set off short timer, to prevent accidental double jumping
             }

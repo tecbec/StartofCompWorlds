@@ -4,8 +4,8 @@
  */
 var LEVEL = {
     music: "./audio/OneSummersDay.mp3",
-    START_CANVAS: {X: -2000, Y: 0},
-    END_CANVAS:   {X: 940},   // change this later when we figure out the exact ending canvas measurement
+    START_CANVAS: {X: -851, Y: 0},
+    END_CANVAS:   {X: 16000},   // change this later when we figure out the exact ending canvas measurement
     FRAME_COUNT: 9,           // This is the factor that determine how wide the actual game is
     // Type 0: has left,middle,right piece can be adjusted to be longer
     // Type 1: is short (just middle piece)
@@ -259,20 +259,18 @@ class SceneManager {
 
         let midPoint = PARAMS.CANVAS_WIDTH / 2 - CHIHIRO.SIZE * CHIHIRO.SCALE;
 
-        // // stop camera from moving (reach dead end on the left)
-        // if (this.chihiro.x < 0) {
-        //     if (this.chihiro.x < LEVEL.START_CANVAS.X) {
-        //         this.chihiro.x =  LEVEL.START_CANVAS.X;
-        //     }
-        // } else if (this.chihiro.x > LEVEL.END_CANVAS.X - midPoint) {
-        //     if (this.chihiro.x > LEVEL.END_CANVAS.X) {
-        //         this.chihiro.x = LEVEL.END_CANVAS.X;
-        //     }
-        // } else {
-
-        // }
-
-        this.x = this.chihiro.x - midPoint; // force centering
+        // stop camera from moving (reach dead end on the left and right)
+        if (this.chihiro.x < 0) {
+            if (this.chihiro.x < LEVEL.START_CANVAS.X) {
+                this.chihiro.x = LEVEL.START_CANVAS.X;
+            }
+        } else if (this.chihiro.x > LEVEL.END_CANVAS.X - midPoint - CHIHIRO.SIZE * CHIHIRO.SCALE - CHIHIRO.PADDING.X) {
+            if (this.chihiro.x > LEVEL.END_CANVAS.X) {
+                this.chihiro.x = LEVEL.END_CANVAS.X;
+            }
+        } else {
+            this.x = this.chihiro.x - midPoint; // force centering
+        }
 
         if (this.gameOver) {
             this.gameOver = false;
