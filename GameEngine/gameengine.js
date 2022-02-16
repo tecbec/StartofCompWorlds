@@ -140,6 +140,8 @@ class GameEngine {
         for (var i = 0; i < this.entities.length; i++) {
             this.entities[i].draw(this.ctx);
         }
+        
+        // draw chihiro here. 
         this.camera.draw(this.ctx);
 
         // Need this to update when the camera is deleted from the work when a new level is entered.

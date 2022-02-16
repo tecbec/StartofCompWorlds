@@ -1,7 +1,7 @@
 /* Chihiro's Params */
 var CHIHIRO = {
     TITLE_POSITION:   {X: 0,  Y: 800},
-    INITIAL_POSITION: {X: -200,  Y: 0},  
+    INITIAL_POSITION: {X: -200,  Y: 0},  // 14739
     SIZE: 70,
     SCALE: 2,
     PADDING:{X: 28, Y: 20}, // same padding for BB and imaginary x,y,w,h calculations
@@ -182,6 +182,10 @@ class Player {
 
         // can only move while on the ground AND jump after has been grounded for x ticks
         if (this.isGrounded && !this.dead) {
+            // Stop Chihiro from moving. 
+            if(this.x < -800) {
+                this.x = -800;
+            }
             if(this.jumping) {         // just landed
                 this.jumpTimer = 1000; // set off short timer, to prevent accidental double jumping
             }
@@ -330,21 +334,21 @@ class Player {
                 }
 
                 // Collision with CROWS
-                if (entity instanceof Crow && that.BB.collide(entity.BB)) {
+                if (entity instanceof Crow && that.BB.collide(entity.BB) && !that.dead) {
                     that.game.camera.breathwidth -= 5;
                     that.game.camera.changeBreath();
                     entity.removeFromWorld = true;
                 }
 
                 //Collision with Yubaba
-                 if (entity instanceof Yubaba && that.BB.collide(entity.BB)) {
+                 if (entity instanceof Yubaba && that.BB.collide(entity.BB) && !that.dead) {
                     that.game.camera.breathwidth -= CHIHIRO.BREATH_BAR.MAX;
                     that.game.camera.changeBreath();
                     
                 }
 
                 // collision with Chicks
-                if (entity instanceof Chick && that.BB.collide(entity.BB)) {
+                if (entity instanceof Chick && that.BB.collide(entity.BB) && !that.dead) {
                     that.game.camera.breathwidth -= CHIHIRO.BREATH_BAR.MAX/4;
                     that.game.camera.changeBreath();
 
@@ -367,11 +371,11 @@ class Player {
                 if (entity instanceof Haku && that.BB.collide(entity.BB)) {
                     // instantly heal stamina bar
                     that.game.camera.breathwidth = CHIHIRO.BREATH_BAR.MAX;
-                    that.game.camera.changeBreath();    
+                    that.game.camera.changeBreath();
                 }
 
                 // collision with SOOTS
-                if (entity instanceof Soot ) {
+                if (entity instanceof Soot && !that.dead) {
                     that.game.camera.breathwidth -= 1;
                     // for testing make soot breath -=20;
                     entity.dead = true;
