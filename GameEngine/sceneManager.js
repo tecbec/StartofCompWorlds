@@ -145,7 +145,7 @@ class SceneManager {
 
             // Background stuff
             //this.stonelamp = new StoneLamp(this.game, LEVEL.STONE_LAMP_LOCATION.X, LEVEL.STONE_LAMP_LOCATION.Y, BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE);
-            this.railing = new Railing(this.game, LEVEL.RAILING_LOCATION.X, LEVEL.RAILING_LOCATION.Y, PARAMS.CANVAS_WIDTH * LEVEL.FRAME_COUNT,
+            this.railing = new Railing(this.game, LEVEL.RAILING_LOCATION.X, LEVEL.RAILING_LOCATION.Y, PARAMS.CANVAS_WIDTH * (LEVEL.FRAME_COUNT - 2),
                 BACKGROUND.RAILING.SCALE * BACKGROUND.RAILING.SIZE);
 
             // initialization of the breath bar and counter
@@ -212,11 +212,6 @@ class SceneManager {
 
             this.game.addEntity(new Yubaba(this.game, 0, 0, LEVEL.YUBABA_INC));
 
-            for (var i = 1; i < LEVEL.HAKU_LOCATION.length; i++) {
-                let haku = LEVEL.HAKU_LOCATION[i];
-                this.game.addEntity(new Haku(this.game, haku.X, haku.Y));
-            }
-
             for(var i=0; i < LEVEL.NOFACE_LOCATION.length; i++){
                 let noFace = LEVEL.NOFACE_LOCATION[i];
                 this.game.addEntity(new NoFace(this.game, noFace.X, noFace.Y, LEVEL.NOFACE_SCALE) );
@@ -233,7 +228,12 @@ class SceneManager {
             }
 
             this.game.addEntity(this.chihiro);
-            this.game.addEntity(new Haku(this.game, LEVEL.HAKU_LOCATION[0].X, LEVEL.HAKU_LOCATION[0].Y));
+           
+            for (var i = 0; i < LEVEL.HAKU_LOCATION.length; i++) {
+                let haku = LEVEL.HAKU_LOCATION[i];
+                this.game.addEntity(new Haku(this.game, haku.X, haku.Y));
+            }
+
             this.game.addEntity(this.breathbar);
             this.game.addEntity(this.coinCounter);
         }

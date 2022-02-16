@@ -6,7 +6,6 @@ var BACKGROUND = {
     SCALE: 2,
     GROUND: {X: 32, Y: 0, SIZE: 32, SCALE: 4},
     STONE_LAMP: {X: 0, Y: 0, SIZE: {W:45, H:142 }, SCALE:{ X:4, Y: 5}, BB_SIZE: {W: 10, H: 10}},
-
     LAMP: {X: 0, Y: 0, SIZE: {W: 107, H:188}, SCALE:  {W: 2, H: 2}, BB_SIZE: {W: 5, H: 10}, PADDING: {W: 40, H: 10}},
     RAILING: {X: 0, Y: 10, SIZE: 64, SCALE: 2.5, BB_SIZE: {W: 5, H: 10}, PADDING: 20},
     PLATFORM: {LEFT: {X: 0, Y: 32}, MID: {X: 16, Y: 32}, RIGHT: {X: 32, Y: 32}, SIZE: 16, SCALE: 4, COUNT: 2, BB_SIZE: {W: 10, H: 10}},
@@ -359,7 +358,7 @@ class Railing {
         this.spritesheet = this.spritesheet = ASSET_MANAGER.getAsset("./sprites/railing.png");
        this.BB = new BoundingBox(this.x, this.y,
            this.w, BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE);
-       this.topBB = new BoundingBox(this.x, this.y+BACKGROUND.RAILING.PADDING,
+       this.topBB = new BoundingBox(this.x, this.y + BACKGROUND.RAILING.PADDING,
            this.w,  BACKGROUND.RAILING.BB_SIZE.H);
     }
 
@@ -368,8 +367,9 @@ class Railing {
     };
 
     draw(ctx) {
-        let COUNT = PARAMS.CANVAS_WIDTH * LEVEL.FRAME_COUNT / BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE;
-        for (var i = 0; i < COUNT; i ++) {
+        let COUNT = PARAMS.CANVAS_WIDTH * LEVEL.FRAME_COUNT/ BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE;
+        // do some math here later 
+        for (var i = 0; i < COUNT - 591; i ++) {
             ctx.drawImage(this.spritesheet, BACKGROUND.RAILING.X, BACKGROUND.RAILING.Y,
                 BACKGROUND.RAILING.SIZE, BACKGROUND.RAILING.SIZE,
                 this.x + BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE * i  - this.game.camera.x, this.y,
