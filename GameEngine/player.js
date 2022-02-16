@@ -1,7 +1,7 @@
 /* Chihiro's Params */
 var CHIHIRO = {
     TITLE_POSITION:   {X: 0,  Y: 800},
-    INITIAL_POSITION: {X: 15000,  Y: 0},  // 14739
+    INITIAL_POSITION: {X: 0,  Y: 0},  // 14739
     SIZE: 70,
     SCALE: 2,
     PADDING:{X: 28, Y: 20}, // same padding for BB and imaginary x,y,w,h calculations
@@ -387,14 +387,17 @@ class Player {
             }
         });
         this.updateBB();
-
-        if (this.game.camera.breathwidth <= 0) {
-            this.dead = true;
-            this.state = 5;
-        } else {
-            this.dead = false;
+         // Implemented god mode only for debug purposes
+        if (!PARAMS.DEBUG) {
+            if (this.game.camera.breathwidth <= 0) {
+                this.dead = true;
+                this.state = 5;
+            } else {
+                this.dead = false;
+            }
+    
         }
-
+       
         // update state
         if (this.state !== 5 && this.state !== 3) {  // NOT dead, or crouch
             if (this.game.crouch && this.velocity.x == 0) this.state = 3;  // crouch idle state
@@ -429,12 +432,15 @@ class Player {
                  this.getY()+ this.getHeight()/2,  this.facing));
                   this.elapsedTime = 0;
          }
-
-        if (this.game.camera.breathwidth <= 0 ) {
-            this.game.camera.chihiro.dead = true;
-        } else {
-            this.game.camera.chihiro.dead = false;
+        // Implemented god mode only for debug purposes
+        if(!PARAMS.DEBUG) {
+            if (this.game.camera.breathwidth <= 0 ) {
+                this.game.camera.chihiro.dead = true;
+            } else {
+                this.game.camera.chihiro.dead = false;
+            }
         }
+       
 
     };
 

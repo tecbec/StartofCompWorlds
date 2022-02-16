@@ -227,7 +227,6 @@ class SceneManager {
                 this.game.addEntity(new Chick(this.game, chick.X, chick.Y, chick.MIN, chick.MAX, chick.DIR));
             }
 
-
             this.game.addEntity(this.breathbar);
             this.game.addEntity(this.coinCounter);
         }
@@ -275,7 +274,7 @@ class SceneManager {
         if (this.gameOver) {
             this.gameOver = false;
         }
-
+        
         PARAMS.DEBUG = document.getElementById("debug").checked;
     };
 
@@ -343,6 +342,8 @@ class SceneManager {
             ctx.fillStyle = ctx.strokeStyle;
             ctx.strokeRect(7 * PARAMS.SCALE, 47 * PARAMS.SCALE, 20 * PARAMS.SCALE, 20 * PARAMS.SCALE);
             ctx.fillText("S", 13 * PARAMS.SCALE, 60 * PARAMS.SCALE);
+
+            
         }
 
 
