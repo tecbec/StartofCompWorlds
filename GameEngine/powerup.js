@@ -17,7 +17,7 @@ class BubblesController{
          this.widthofBubble*PARAMS.SCALE *this.scaleBubble, this.heightofBubble*PARAMS.SCALE *this.scaleBubble);
     };
     update() {
-        if(this.direction === 1) { 
+        if(this.direction == 1) { 
             this.x -= ( this.velocity.x )* this.game.clockTick;
         } else  {
             this.x += this.velocity.x * this.game.clockTick;
@@ -36,7 +36,7 @@ class BubblesController{
         this.BB = new BoundingBox(this.x , this.y
             , this.widthofBubble*PARAMS.SCALE *this.scaleBubble, this.heightofBubble*PARAMS.SCALE *this.scaleBubble);    
 
-        if(this.animation.currentFrame() === 4){
+        if(this.animation.currentFrame() == 4){
             this.removeFromWorld = true;
         }
     };
@@ -118,7 +118,7 @@ class CoinCounter {
     constructor( game, x, y) {
         Object.assign(this, { game, x, y});
         this.animation = new Animator (
-            ASSET_MANAGER.getAsset("./sprites/coins.png"), 0, 33, 9, 9, 6, 0.1, 0, false, true );
+            ASSET_MANAGER.getAsset("./sprites/coins.png"), 0, 0, 14, 14, 4, 0.1, 0, false, true );
 
         this.coinCount = 0;
     }
@@ -129,8 +129,7 @@ class CoinCounter {
 
     draw(ctx){
         this.animation.drawFrame(this.game.clockTick, ctx,
-            this.x, this.y, PARAMS.SCALE * 2);
-
+            this.x, this.y, PARAMS.SCALE * 1);
         ctx.fillStyle = "Pink";
         ctx.fillText(this.coinCount,  this.x + 22 * PARAMS.SCALE, this.y + 13 * PARAMS.SCALE);
 

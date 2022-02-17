@@ -10,7 +10,7 @@ var LEVEL = {
     // Type 0: has left,middle,right piece can be adjusted to be longer
     // Type 1: is short (just middle piece)
 
-    BATHHOUSE: {X: 14730, Y: - 1200},
+    BATHHOUSE: {X: 12012, Y: - 1200},
     PLATFORM_LOCATION:       [{X: 790,  Y: 550, TYPE: 0}, {X: 1100, Y: 375, TYPE: 0}, {X: 1400, Y: 500, TYPE: 0}, {X: 1900, Y: 390, TYPE: 0}, {X: 2200, Y: 590, TYPE: 0},    // scene 1
                               {X: 2600, Y: 590, TYPE: 0}, {X: 2750, Y: 450, TYPE: 0}, {X: 3300, Y: 575, TYPE: 0}, {X: 3500, Y: 400, TYPE: 0}, {X: 4000, Y: 600, TYPE: 0},    // scene 2
                               {X: 5602, Y: 525, TYPE: 0}, {X: 5919, Y: 525, TYPE: 0},                                                                                        // scene 3
@@ -57,7 +57,10 @@ var LEVEL = {
                     {X: 6550, Y: 475},{X: 6750, Y: 150}, {X: 7075, Y: 240}, {X: 7175, Y: 550}, {X: 7475, Y: 350}, {X: 7975, Y: 640},
                     {X: 6500, Y: 895},{X: 7000, Y: 895}, {X: 7100, Y: 895}, {X: 7200, Y: 895},                                         // scene 4
                     {X: 8340, Y: 420},{X: 8480, Y: 285}, {X: 8620, Y: 420}, {X: 8760, Y: 285}, {X: 8900, Y: 420}, {X: 9040, Y: 285},   // Scene 5
-                    {X: 9180, Y: 420},{X: 9320, Y: 285}, {X: 9460, Y: 420}, {X: 9600, Y: 285}],
+                    {X: 9180, Y: 420},{X: 9320, Y: 285}, {X: 9460, Y: 420}, {X: 9600, Y: 285},
+                    {X: 10610, Y: 895},{X: 10710,  Y: 895}, {X: 10710 + 100,    Y: 895}, {X: 10760 + 150,   Y: 895}, {X: 10810 + 200,  Y: 895}, {X: 10860 + 250,  Y: 895},   // scene 6
+                    {X: 10910 + 300,  Y: 895},{X: 10960 + 350,  Y: 895}, {X: 11010 + 400,  Y: 895}, {X: 11060 + 450,  Y: 895}
+                ],
 
     NOFACE_SCALE: 0.5,
     NOFACE_LOCATION: [{X: 3200, Y: 100},  // scene 2
@@ -72,7 +75,7 @@ var LEVEL = {
                         {X: 9400, Y: 785, MIN: 9100, MAX: 10000, DIR:0}],
 
     /*    enter: frame 3,   crow drop: frame 4,       heat seeking crows:  frame 5*/
-    YUBABA_INC: [4304, 6206, 8108], // x vals that trigger: entrance, crow drop, heat seeking crows
+    YUBABA_INC: [4304, 6206, 8108, 10010], // x vals that trigger: entrance, crow drop, heat seeking crows, yubaba exit
 
     /*    frame:            1             3              */
     HAKU_LOCATION: [{X:500, Y:850},{X:5305, Y:575}]
@@ -112,8 +115,8 @@ class SceneManager {
     // create all entities for the Title Screen
     titleScreen() {
 
-        let chickPlace = {x: 850, y: 75};
-        let hakuPlace = {x: -750, y: 425};
+        let chickPlace = {x: 850, y: 775, xneg: 100, xpos: 800};
+        let hakuPlace = {x: -750, y: 825};
 
         // Title Chihiro
         this.titlePlaque = new TitlePlaque(this.game);
@@ -121,7 +124,7 @@ class SceneManager {
         this.ground = new Ground(this.game, LEVEL.START_CANVAS.X, PARAMS.CANVAS_HEIGHT - BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE,
                                             PARAMS.CANVAS_WIDTH * LEVEL.FRAME_COUNT, BACKGROUND.GROUND.SCALE * BACKGROUND.GROUND.SIZE);
         this.background = new BackGround(this.game, LEVEL.START_CANVAS.X,  LEVEL.START_CANVAS.Y);
-        this.chick = new Chick(this.game, chickPlace.x, chickPlace.y, chickPlace.x, chickPlace.x);
+        this.chick = new Chick(this.game, chickPlace.x, chickPlace.y, chickPlace.xneg, chickPlace.xpos);
         this.haku = new Haku(this.game, hakuPlace.x, hakuPlace.y);
 
     }
@@ -167,7 +170,7 @@ class SceneManager {
             this.game.addEntity(this.ground);
             this.game.addEntity(this.titlePlaque);
             this.game.addEntity(this.chick);
-            this.game.addEntity(this.haku);
+            // this.game.addEntity(this.haku);
         } else {
             this.bathhouse = new Bathhouse(this.game, LEVEL.BATHHOUSE.X,  LEVEL.BATHHOUSE.Y);
             this.game.addEntity(this.background);
@@ -209,9 +212,9 @@ class SceneManager {
 
             this.game.addEntity(new Yubaba(this.game, 0, 0, LEVEL.YUBABA_INC));
 
-            for (var i = 0; i < LEVEL.HAKU_LOCATION.length; i++) {
-                let platform = LEVEL.HAKU_LOCATION[i];
-                this.game.addEntity(new Haku(this.game, LEVEL.HAKU_LOCATION[i].X, LEVEL.HAKU_LOCATION[i].Y));
+            for (var i = 1; i < LEVEL.HAKU_LOCATION.length; i++) {
+                let haku = LEVEL.HAKU_LOCATION[i];
+                this.game.addEntity(new Haku(this.game, haku.X, haku.Y));
             }
 
             for(var i=0; i < LEVEL.NOFACE_LOCATION.length; i++){
@@ -235,7 +238,7 @@ class SceneManager {
             }
 
             this.game.addEntity(this.chihiro);
-
+            this.game.addEntity(new Haku(this.game, LEVEL.HAKU_LOCATION[0].X, LEVEL.HAKU_LOCATION[0].Y));
             this.game.addEntity(this.breathbar);
             this.game.addEntity(this.coinCounter);
             
@@ -294,7 +297,14 @@ class SceneManager {
         if (this.title || this.chihiro.dead && this.chihiro.removeFromWorld) {
             ctx.font = '50px Impact';
             ctx.fillStyle = this.game.mouse && this.game.mouse.y > 650 && this.game.mouse.y < 700? "LightCoral" : "Grey";
+
             ctx.fillText("Start", 875, 700); //280
+
+            // if ()
+            // image1
+            // else
+            // image 2
+
             //ctx.fillStyle = this.game.mouse && this.game.mouse.y > 614 && this.game.mouse.y < 649 ? "LightCoral" : "Black";
             //ctx.fillText("Instructions", PARAMS.CANVAS_WIDTH /  PARAMS.SCALE - 80, PARAMS.CANVAS_HEIGHT/  PARAMS.SCALE + 100); //300
         }

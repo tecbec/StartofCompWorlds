@@ -1,7 +1,7 @@
 /* Chihiro's Params */
 var CHIHIRO = {
     TITLE_POSITION:   {X: 0,  Y: 800},
-    INITIAL_POSITION: {X: -200,  Y: 0},  // 14739
+    INITIAL_POSITION: {X: 0,  Y: 0},  // 10110
     SIZE: 70,
     SCALE: 2,
     PADDING:{X: 28, Y: 20}, // same padding for BB and imaginary x,y,w,h calculations
@@ -41,7 +41,7 @@ class Player {
         this.state = 0;  // 0 = idle, 1 = walking, 2 = jumping/falling, 3 = crouching, 4 = running, 5 = death
         this.animations = [];
 
-        this.elapsedTime = 0; 
+        this.elapsedTime = 0;
         this.fireRate = 1;
 
         this.updateBB();
@@ -172,7 +172,7 @@ class Player {
         // this.coinCounter.draw(ctx);
 
     };
-    
+
     update() {
         const TICK = this.game.clockTick;
         const TICK_SCALE = 2;
@@ -219,12 +219,12 @@ class Player {
                         this.velocity.x = 0;
                     }
                 }
-            } 
-            
+            }
+
             if (this.game.up) {  // jumping
                 this.jumping = true;
                 this.velocity.y = -250 * PARAMS.SCALE;
-                this.state = 2; 
+                this.state = 2;
             } else {
                 // set the default idle if not anything else.
                 this.state = 0;
@@ -264,11 +264,9 @@ class Player {
 
         // collision handling
         var that = this; //need this because we are creating
-        this.game.entities.forEach(function (entity) {          // this will look at all entities in relation to chihiro
-
-            if ( (entity.BB) && (that.BB.collide(entity.BB)  )  ) {      // is there an entity bb & check to see if they collide
-
-                if (that.velocity.y > 0) {                      // chihiro is falling
+        this.game.entities.forEach(function (entity) {         // this will look at all entities in relation to chihiro
+            if (entity.BB && that.BB.collide(entity.BB) ) {    // is there an entity bb & check to see if they collide
+                if (that.velocity.y > 0) {                     // chihiro is falling
                     if((entity instanceof Ground || entity instanceof Platform || entity instanceof CloudPlatform || entity instanceof StoneLamp ||
                         entity instanceof Railing || entity instanceof Lamp) && (that.lastBB.bottom  <= entity.BB.top)) // minus one?? idk how this works
                   { // bottom of chihiro hits the top of the entity
@@ -306,7 +304,7 @@ class Player {
                         } else {
 
                         }
-                        //that.updateBB(); 
+                        //that.updateBB();
                 }
 
                 if(entity instanceof StoneLamp  && (that.BB.collide(entity.BB))){ //|| that.BB.collide(entity.BBmiddle) )) {
@@ -349,11 +347,11 @@ class Player {
                 // collision with no face
                 if (entity instanceof NoFace && that.BB.collide(entity.BB)) {
                     // Set a maximum amount of coins upon interact
-                    if (that.game.camera.coinCounter.coinCount <= 10) {
-                        that.game.camera.coinCounter.coinCount += 10;
+                    if (entity.hasCoins) {
+                        that.game.camera.coinCounter.coinCount += 15;
+                        entity.hasCoins = false;
                     }
                     entity.dead = true;
-
                 }
 
                 // Collision with CROWS
@@ -367,7 +365,6 @@ class Player {
                  if (entity instanceof Yubaba && that.BB.collide(entity.BB) && !that.dead) {
                     that.game.camera.breathwidth -= CHIHIRO.BREATH_BAR.MAX;
                     that.game.camera.changeBreath();
-                    
                 }
 
                 // collision with Chicks
@@ -387,9 +384,8 @@ class Player {
                         that.velocity.y = -100;
                     }
                     //that.updateBB();
- 
                 }
-                
+
                 // collision with HAKU
                 if (entity instanceof Haku && that.BB.collide(entity.BB)) {
                     // instantly heal stamina bar
@@ -428,9 +424,7 @@ class Player {
             } else {
                 this.dead = false;
             }
-    
         }
-       
         // update state
         if (this.state !== 5 && this.state !== 3) {  // NOT dead, or crouch
             if (this.isGrounded && this.game.crouch && this.velocity.x == 0) this.state = 3;  // crouch idle state

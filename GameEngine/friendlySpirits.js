@@ -16,6 +16,8 @@ class NoFace {
         this.height = 150;
         this.width = 400;
 
+        this.hasCoins = true;
+
         // bounding box
         this.updateBB();
 
@@ -41,15 +43,10 @@ class NoFace {
         this.lastBB = this.BB;
         this.BB = new BoundingBox(this.x, this.y, bbwidth*this.scale, bbheight*this.scale);
 
-        // width = 5;
-        // this.leftBB = new BoundingBox(this.x, this.y, width, height);
-        // this.rightBB = new BoundingBox(this.BB.right-subwidth, this.y, width, height);
-
     };
 
-
     update() {
-        const pause = 0.75; 
+        const pause = 0.75;
         if (this.dead) {
             this.deadCounter += this.game.clockTick;
             if (this.deadCounter > pause) this.removeFromWorld = true;
@@ -60,16 +57,13 @@ class NoFace {
         var blurValues = 64;
         ctx.shadowColor = 'green';
          ctx.shadowBlur = blurValues;
-    
+
         this.animations.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, this.scale);
         ctx.shadowColor = "transparent"; // remove shadow !
 
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
             ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
-            // ctx.strokeStyle = 'Yellow';
-            // ctx.strokeRect(this.leftBB.x - this.game.camera.x, this.leftBB.y, this.leftBB.width, this.leftBB.height);
-            // ctx.strokeRect(this.rightBB.x - this.game.camera.x, this.rightBB.y, this.rightBB.width, this.rightBB.height);
         }
 
         ctx.imageSmoothingEnabled = false;
