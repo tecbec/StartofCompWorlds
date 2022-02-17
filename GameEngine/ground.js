@@ -6,7 +6,6 @@ var BACKGROUND = {
     SCALE: 2,
     GROUND: {X: 32, Y: 0, SIZE: 32, SCALE: 4},
     STONE_LAMP: {X: 0, Y: 0, SIZE: {W:45, H:142 }, SCALE:{ X:4, Y: 5}, BB_SIZE: {W: 10, H: 10}},
-
     LAMP: {X: 0, Y: 0, SIZE: {W: 107, H:188}, SCALE:  {W: 2, H: 2}, BB_SIZE: {W: 5, H: 10}, PADDING: {W: 40, H: 10}},
     RAILING: {X: 0, Y: 10, SIZE: 64, SCALE: 2.5, BB_SIZE: {W: 5, H: 10}, PADDING: 20},
     PLATFORM: {LEFT: {X: 0, Y: 32}, MID: {X: 16, Y: 32}, RIGHT: {X: 32, Y: 32}, SIZE: 16, SCALE: 4, COUNT: 2, BB_SIZE: {W: 10, H: 10}},
@@ -62,10 +61,19 @@ class Bathhouse {
     };
 
     draw(ctx) {
-        ctx.drawImage(this.spritesheet, 
-            BACKGROUND.BATHHOUSE.X, BACKGROUND.BATHHOUSE.Y,  BACKGROUND.BATHHOUSE.W,  BACKGROUND.BATHHOUSE.H,
-            this.x - this.game.camera.x, this.y, 
-            BACKGROUND.BATHHOUSE.W *  PARAMS.SCALE, BACKGROUND.BATHHOUSE.H *  PARAMS.SCALE);
+        if (this.game.camera.chihiro.winGame) {
+            ctx.drawImage(this.spritesheet, 
+                BACKGROUND.BATHHOUSE.X, BACKGROUND.BATHHOUSE.Y,  BACKGROUND.BATHHOUSE.W,  BACKGROUND.BATHHOUSE.H,
+                this.x - this.game.camera.x, - 100, 
+                BACKGROUND.BATHHOUSE.W, BACKGROUND.BATHHOUSE.H );
+           
+        } else {
+            ctx.drawImage(this.spritesheet, 
+                BACKGROUND.BATHHOUSE.X, BACKGROUND.BATHHOUSE.Y,  BACKGROUND.BATHHOUSE.W,  BACKGROUND.BATHHOUSE.H,
+                this.x - this.game.camera.x, this.y, 
+                BACKGROUND.BATHHOUSE.W * PARAMS.SCALE, BACKGROUND.BATHHOUSE.H * PARAMS.SCALE);
+            
+        } 
         ctx.imageSmoothingEnabled = false;
     }
 };
@@ -74,9 +82,8 @@ class Bathhouse {
 class Ground { //bridge
     constructor(game, x, y, w) {
         Object.assign(this, { game, x, y, w});
-
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/platform_sheet.png");
-        this.BB = new BoundingBox(this.x , this.y, this.w, BACKGROUND.GROUND.SCALE * BACKGROUND.GROUND.SIZE);
+        
     };
     update() {
 
@@ -84,41 +91,53 @@ class Ground { //bridge
 
     draw(ctx) {
         let COUNT = PARAMS.CANVAS_WIDTH * LEVEL.FRAME_COUNT / BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE;
-
-        if(this.game.camera.title) {
-            for (var i = 0; i < COUNT; i ++) {
+        if (this.game.camera.chihiro.winGame) {
+            let padding = 20;
+            for (var i = 0; i < COUNT; i ++) { 
                 ctx.drawImage(this.spritesheet, BACKGROUND.GROUND.X, BACKGROUND.GROUND.Y,
                     BACKGROUND.GROUND.SIZE, BACKGROUND.GROUND.SIZE,
-                    this.x + BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE * i  - this.game.camera.x, this.y,
-                    BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE, BACKGROUND.GROUND.SIZE * 7);
+                    this.x + BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE * i / PARAMS.SCALE - this.game.camera.x, this.y + padding,
+                    BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE / PARAMS.SCALE, BACKGROUND.GROUND.SIZE * 7 / PARAMS.SCALE);   
             }
+            this.BB = new BoundingBox(this.x , this.y + padding, this.w, BACKGROUND.GROUND.SCALE * BACKGROUND.GROUND.SIZE);
         } else {
 
-            for (var i = 0; i < 9; i ++) {
-
-                ctx.drawImage(this.spritesheet, 0, 80,
-                    BACKGROUND.GROUND.SIZE, BACKGROUND.GROUND.SIZE,
-                    this.x + BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE * i  - this.game.camera.x, this.y,
-                    BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE, BACKGROUND.GROUND.SIZE * 7);
-            }
-
-            for (var i = 9; i < 10; i ++) {
-                ctx.drawImage(this.spritesheet, 0, 48,
-                    BACKGROUND.GROUND.SIZE, BACKGROUND.GROUND.SIZE,
-                    this.x + BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE * i  - this.game.camera.x, this.y,
-                    BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE, BACKGROUND.GROUND.SIZE * 7);
-            }
-
-            for (var i = 10; i < COUNT; i ++) {
+            if(this.game.camera.title) {
+                for (var i = 0; i < COUNT; i ++) {
                     ctx.drawImage(this.spritesheet, BACKGROUND.GROUND.X, BACKGROUND.GROUND.Y,
                         BACKGROUND.GROUND.SIZE, BACKGROUND.GROUND.SIZE,
                         this.x + BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE * i  - this.game.camera.x, this.y,
                         BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE, BACKGROUND.GROUND.SIZE * 7);
+                }
+            } else {
+                for (var i = 0; i < 9; i ++) {
+
+                    ctx.drawImage(this.spritesheet, 0, 80,
+                        BACKGROUND.GROUND.SIZE, BACKGROUND.GROUND.SIZE,
+                        this.x + BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE * i  - this.game.camera.x, this.y,
+                        BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE, BACKGROUND.GROUND.SIZE * 7);
+                }
+
+                for (var i = 9; i < 10; i ++) {
+                    ctx.drawImage(this.spritesheet, 0, 48,
+                        BACKGROUND.GROUND.SIZE, BACKGROUND.GROUND.SIZE,
+                        this.x + BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE * i  - this.game.camera.x, this.y,
+                        BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE, BACKGROUND.GROUND.SIZE * 7);
+                }
+
+                for (var i = 10; i < COUNT; i ++) {
+                        ctx.drawImage(this.spritesheet, BACKGROUND.GROUND.X, BACKGROUND.GROUND.Y,
+                            BACKGROUND.GROUND.SIZE, BACKGROUND.GROUND.SIZE,
+                            this.x + BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE * i  - this.game.camera.x, this.y,
+                            BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE, BACKGROUND.GROUND.SIZE * 7);
+                }
             }
+
+
+
+            this.BB = new BoundingBox(this.x , this.y, this.w, BACKGROUND.GROUND.SCALE * BACKGROUND.GROUND.SIZE);
         }
-
-
-
+       
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
             ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
@@ -363,7 +382,7 @@ class Railing {
         this.spritesheet = this.spritesheet = ASSET_MANAGER.getAsset("./sprites/railing.png");
        this.BB = new BoundingBox(this.x, this.y,
            this.w, BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE);
-       this.topBB = new BoundingBox(this.x, this.y+BACKGROUND.RAILING.PADDING,
+       this.topBB = new BoundingBox(this.x, this.y + BACKGROUND.RAILING.PADDING,
            this.w,  BACKGROUND.RAILING.BB_SIZE.H);
     }
 
@@ -372,8 +391,8 @@ class Railing {
     };
 
     draw(ctx) {
-        let COUNT = PARAMS.CANVAS_WIDTH * LEVEL.FRAME_COUNT / BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE;
-        for (var i = 0; i < COUNT; i ++) {
+        let COUNT = PARAMS.CANVAS_WIDTH * (LEVEL.FRAME_COUNT - 3) / BACKGROUND.RAILING.SIZE / BACKGROUND.RAILING.SCALE;
+        for (var i = 0; i < COUNT; i++) {
             ctx.drawImage(this.spritesheet, BACKGROUND.RAILING.X, BACKGROUND.RAILING.Y,
                 BACKGROUND.RAILING.SIZE, BACKGROUND.RAILING.SIZE,
                 this.x + BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE * i  - this.game.camera.x, this.y,

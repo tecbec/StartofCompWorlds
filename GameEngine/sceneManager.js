@@ -5,12 +5,14 @@
 var LEVEL = {
     music: "./audio/OneSummersDay.mp3",
     START_CANVAS: {X: -851, Y: 0},
-    END_CANVAS:   {X: 16000},   // change this later when we figure out the exact ending canvas measurement
-    FRAME_COUNT: 9,           // This is the factor that determine how wide the actual game is
+    END_CANVAS:   {X: 13000},   // change this later when we figure out the exact ending canvas measurement
+    END_GAME:     {X: 11515, Y: 813},
+    FRAME_COUNT: 8,           // This is the factor that determine how wide the actual game is
     // Type 0: has left,middle,right piece can be adjusted to be longer
     // Type 1: is short (just middle piece)
+    END_SCREEN: {X: 250, Y: 100},
 
-    BATHHOUSE: {X: 12012, Y: - 1200},
+    BATHHOUSE: {X: 11608, Y: - 1200},
     PLATFORM_LOCATION:       [{X: 790,  Y: 550, TYPE: 0}, {X: 1100, Y: 375, TYPE: 0}, {X: 1400, Y: 500, TYPE: 0}, {X: 1900, Y: 390, TYPE: 0}, {X: 2200, Y: 590, TYPE: 0},    // scene 1
                               {X: 2600, Y: 590, TYPE: 0}, {X: 2750, Y: 450, TYPE: 0}, {X: 3300, Y: 575, TYPE: 0}, {X: 3500, Y: 400, TYPE: 0}, {X: 4000, Y: 600, TYPE: 0},    // scene 2
                               {X: 5602, Y: 525, TYPE: 0}, {X: 5919, Y: 525, TYPE: 0},                                                                                        // scene 3
@@ -29,8 +31,8 @@ var LEVEL = {
 
 
     /* Start of Frame:     1                   2                 3                 4                 5                   6                   7*/
-    LAMP_LOCATION: [{X:500, Y: 650},   {X:2402,  Y: 650}, {X:4304, Y: 650}, {X:6206, Y: 650}, {X:8108, Y: 650}, {X:10010, Y: 650}, {X:11912, Y: 650}, 
-                    {X:13814, Y: 650}, {X:15716, Y: 650},],
+    LAMP_LOCATION: [{X:500, Y: 650},   {X:2402,  Y: 650}, {X:4304, Y: 650}, {X:6206, Y: 650}, {X:8108, Y: 650}, {X:10010, Y: 650},],// {X:11912, Y: 650}
+                    //{X:13814, Y: 650}, {X:15716, Y: 650},],
 
     RAILING_LOCATION: {X: 500, Y: 820},
 
@@ -44,41 +46,41 @@ var LEVEL = {
 
     SOOT_NUM:  [10, 20, 10, 20, 15, 15, 10, 10,
                 30, 10,  // scene 4
-                20, 30], // Scene 5
-
-    COIN_LOCATION: [{X: 100, Y: 895},{X: 125,  Y: 895}, {X: 150, Y: 895}, {X: 175, Y: 895}, {X: 200,  Y: 895}, {X: 225,  Y: 895},
-                    {X: 250,  Y: 895},{X: 275,  Y: 895}, {X: 300,  Y: 895}, {X: 325,  Y: 895},                                         // scene 0
+                20, 30], // Scene 5 
+    
+    COIN_LOCATION: [{X: 100,  Y: 895},{X: 125,  Y: 895}, {X: 150,  Y: 895}, {X: 175, Y: 895},  {X: 200,  Y: 895}, {X: 225,  Y: 895},
+                    {X: 250,  Y: 895},{X: 275,  Y: 895}, {X: 300,  Y: 895}, {X: 325,  Y: 895},                                          // scene 0
                     {X: 900,  Y: 500},{X: 1200, Y: 295}, {X: 1500, Y: 450}, {X: 2000, Y: 340}, {X: 2300, Y: 540}, {X: 1100, Y: 650},
                     {X: 1900, Y: 650},{X: 1400, Y: 900}, {X: 1550, Y: 900}, {X: 1700, Y: 900}, {X: 2100, Y: 900},                      // scene 1
                     {X: 2675, Y: 525},{X: 2800, Y: 390}, {X: 3400, Y: 520}, {X: 3600, Y: 330}, {X: 4050, Y: 540}, {X: 3800, Y: 650},
                     {X: 3000, Y: 650},{X: 3350, Y: 900}, {X: 3400, Y: 900}, {X: 3450, Y: 900}, {X: 4100, Y: 900},                      // scene 2
                     {X: 4360, Y: 60}, {X: 4772, Y: 215}, {X: 5305, Y: 50},  {X: 5810, Y: 70},  {X: 5255, Y: 650}, {X: 5440, Y: 650},
-                    {X: 4621, Y: 895},{X: 4938, Y: 895}, {X: 4719, Y: 37}, {X: 5059, Y: 138},                                         // scene 3
+                    {X: 4621, Y: 895},{X: 4938, Y: 895}, {X: 4719, Y: 37},  {X: 5059, Y: 138},                                         // scene 3
                     {X: 6550, Y: 475},{X: 6750, Y: 150}, {X: 7075, Y: 240}, {X: 7175, Y: 550}, {X: 7475, Y: 350}, {X: 7975, Y: 640},
                     {X: 6500, Y: 895},{X: 7000, Y: 895}, {X: 7100, Y: 895}, {X: 7200, Y: 895},                                         // scene 4
                     {X: 8340, Y: 420},{X: 8480, Y: 285}, {X: 8620, Y: 420}, {X: 8760, Y: 285}, {X: 8900, Y: 420}, {X: 9040, Y: 285},   // Scene 5
                     {X: 9180, Y: 420},{X: 9320, Y: 285}, {X: 9460, Y: 420}, {X: 9600, Y: 285},
-                    {X: 10610, Y: 895},{X: 10710,  Y: 895}, {X: 10710 + 100,    Y: 895}, {X: 10760 + 150,   Y: 895}, {X: 10810 + 200,  Y: 895}, {X: 10860 + 250,  Y: 895},   // scene 6
-                    {X: 10910 + 300,  Y: 895},{X: 10960 + 350,  Y: 895}, {X: 11010 + 400,  Y: 895}, {X: 11060 + 450,  Y: 895}
+                    {X: 10610,Y: 895},{X: 10710,Y: 895}, {X: 10810,Y: 895}, {X: 10910,Y: 895}, {X: 11010,Y: 895}, {X: 11110,Y: 895},   // scene 6
+                    {X: 11210,Y: 895},{X: 11310,Y: 895}, {X: 11410,Y: 895}, {X: 11510,Y: 895}
                 ],
 
     NOFACE_SCALE: 0.5,
     NOFACE_LOCATION: [{X: 3200, Y: 100},  // scene 2
                       {X: 7000, Y: 0}, ], // scene 4
 
-    CHICK_LOCATION: [   {X: 840,  Y: 785, MIN: 0,    MAX: 0,     DIR:0}, {X: 2402, Y: 785, MIN: 500,  MAX: 2402,  DIR:0},               // scene 1
-                        {X: 2900, Y: 785, MIN: 2402, MAX: 4304,  DIR:0}, {X: 3800, Y: 785, MIN: 2402, MAX: 4304,  DIR:0},               // scene 2
-                        {X: 4780, Y: 785, MIN: 4304, MAX: 5255,  DIR:1}, {X: 5730, Y: 785, MIN: 5305, MAX: 6206,  DIR:0},               // scene 3
-                        {X: 6750, Y: 785, MIN: 6750, MAX: 7900,  DIR:1}, {X: 7500, Y: 785, MIN: 6750, MAX: 7900,  DIR:0},               // Scene 4
-                        {X: 6250, Y: 785, MIN: 6250, MAX: 8100,  DIR:1}, {X: 8000, Y: 785, MIN: 6250, MAX: 8100,  DIR:0},
-                        {X: 8900, Y: 785, MIN: 0,    MAX: 0,     DIR:1}, {X: 9912, Y: 785, MIN: 8400, MAX: 10000, DIR:1},               // Scene 5
-                        {X: 9400, Y: 785, MIN: 9100, MAX: 10000, DIR:0}],
+    CHICK_LOCATION: [{X: 840,  Y: 785, MIN: 0,    MAX: 0,     DIR:0}, {X: 2402, Y: 785, MIN: 500,  MAX: 2402,  DIR:0},               // scene 1
+                     {X: 2900, Y: 785, MIN: 2402, MAX: 4304,  DIR:0}, {X: 3800, Y: 785, MIN: 2402, MAX: 4304,  DIR:0},               // scene 2
+                     {X: 4780, Y: 785, MIN: 4304, MAX: 5255,  DIR:1}, {X: 5730, Y: 785, MIN: 5305, MAX: 6206,  DIR:0},               // scene 3
+                     {X: 6750, Y: 785, MIN: 6750, MAX: 7900,  DIR:1}, {X: 7500, Y: 785, MIN: 6750, MAX: 7900,  DIR:0},               // Scene 4
+                     {X: 6250, Y: 785, MIN: 6250, MAX: 8100,  DIR:1}, {X: 8000, Y: 785, MIN: 6250, MAX: 8100,  DIR:0},
+                     {X: 8900, Y: 785, MIN: 0,    MAX: 0,     DIR:1}, {X: 9912, Y: 785, MIN: 8400, MAX: 10000, DIR:1},               // Scene 5
+                     {X: 9400, Y: 785, MIN: 9100, MAX: 10000, DIR:0}],
 
     /*    enter: frame 3,   crow drop: frame 4,       heat seeking crows:  frame 5*/
     YUBABA_INC: [4304, 6206, 8108, 10010], // x vals that trigger: entrance, crow drop, heat seeking crows, yubaba exit
 
     /*    frame:            1             3              */
-    HAKU_LOCATION: [{X:500, Y:850},{X:5305, Y:575}]
+    HAKU_LOCATION: [{X:500, Y:850, TEXT: 0},{X:5305, Y:575, TEXT: 0}, {X: 10056, Y:820, TEXT: 1}]
 }
 
 class SceneManager {
@@ -130,12 +132,10 @@ class SceneManager {
     }
 
     loadLevel(level, title){
-
         this.title = title;
         this.level = level;
 
         this.clearEntities();
-
         this.titleScreen();
 
         if(!this.title){
@@ -145,7 +145,7 @@ class SceneManager {
 
             // Background stuff
             //this.stonelamp = new StoneLamp(this.game, LEVEL.STONE_LAMP_LOCATION.X, LEVEL.STONE_LAMP_LOCATION.Y, BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE);
-            this.railing = new Railing(this.game, LEVEL.RAILING_LOCATION.X, LEVEL.RAILING_LOCATION.Y, PARAMS.CANVAS_WIDTH * LEVEL.FRAME_COUNT,
+            this.railing = new Railing(this.game, LEVEL.RAILING_LOCATION.X, LEVEL.RAILING_LOCATION.Y, PARAMS.CANVAS_WIDTH * (LEVEL.FRAME_COUNT - 3),
                 BACKGROUND.RAILING.SCALE * BACKGROUND.RAILING.SIZE);
 
             // initialization of the breath bar and counter
@@ -177,8 +177,6 @@ class SceneManager {
 
             this.game.addEntity(this.railing);
             this.game.addEntity(this.bathhouse);
-            
-//            this.game.addEntity(this.chihiro);
             this.game.addEntity(this.ground);
 
             for (var i = 0; i < LEVEL.PLATFORM_LOCATION.length; i++) {
@@ -212,11 +210,6 @@ class SceneManager {
 
             this.game.addEntity(new Yubaba(this.game, 0, 0, LEVEL.YUBABA_INC));
 
-            for (var i = 1; i < LEVEL.HAKU_LOCATION.length; i++) {
-                let haku = LEVEL.HAKU_LOCATION[i];
-                this.game.addEntity(new Haku(this.game, haku.X, haku.Y));
-            }
-
             for(var i=0; i < LEVEL.NOFACE_LOCATION.length; i++){
                 let noFace = LEVEL.NOFACE_LOCATION[i];
                 this.game.addEntity(new NoFace(this.game, noFace.X, noFace.Y, LEVEL.NOFACE_SCALE) );
@@ -233,9 +226,15 @@ class SceneManager {
             }
 
             this.game.addEntity(this.chihiro);
-            this.game.addEntity(new Haku(this.game, LEVEL.HAKU_LOCATION[0].X, LEVEL.HAKU_LOCATION[0].Y));
+           
+            for (var i = 0; i < LEVEL.HAKU_LOCATION.length; i++) {
+                let haku = LEVEL.HAKU_LOCATION[i];
+                this.game.addEntity(new Haku(this.game, haku.X, haku.Y, haku.TEXT));
+            }
+
             this.game.addEntity(this.breathbar);
             this.game.addEntity(this.coinCounter);
+            this.game.addEntity(new TransitionScreen(this.game, this.level, LEVEL.END_SCREEN.X, LEVEL.END_SCREEN.Y));
         }
     };
 
@@ -274,7 +273,11 @@ class SceneManager {
             if (this.chihiro.x > LEVEL.END_CANVAS.X) {
                 this.chihiro.x = LEVEL.END_CANVAS.X;
             }
-        } else {
+        } else if (this.chihiro.winGame) {
+            if (this.chihiro.x > LEVEL.END_CANVAS.X) {
+                this.chihiro.x = LEVEL.END_CANVAS.X;
+            }
+        }else {
             this.x = this.chihiro.x - midPoint; // force centering
         }
 
@@ -303,7 +306,7 @@ class SceneManager {
             //ctx.fillText("Instructions", PARAMS.CANVAS_WIDTH /  PARAMS.SCALE - 80, PARAMS.CANVAS_HEIGHT/  PARAMS.SCALE + 100); //300
         }
 
-        if (PARAMS.DEBUG && !this.title) {
+        if (PARAMS.DEBUG && !this.title && !this.chihiro.winGame) {
             ctx.strokeStyle = "White";
             ctx.fillStyle = ctx.strokeStyle;
             // the only to access objects throughout the game implementation is by including this.game and adding the chihiro in this class
@@ -322,8 +325,8 @@ class SceneManager {
             // bounding box
             let bX ="xB=" + Math.floor(this.game.chihiro.BB.left);
             let bY ="yB=" + Math.floor(this.game.chihiro.BB.top);
-            ctx.fillText(bX, 160 * PARAMS.SCALE, 15 * PARAMS.SCALE);
-            ctx.fillText(bY, 160 * PARAMS.SCALE, 30 * PARAMS.SCALE);
+            ctx.fillText(bX, 170 * PARAMS.SCALE, 15 * PARAMS.SCALE);
+            ctx.fillText(bY, 170 * PARAMS.SCALE, 30 * PARAMS.SCALE);
 
             // walk left
             ctx.strokeStyle = "Red";

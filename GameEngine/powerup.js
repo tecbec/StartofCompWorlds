@@ -106,10 +106,11 @@ class CoinCounter {
     };
 
     draw(ctx){
-        this.animation.drawFrame(this.game.clockTick, ctx,
-            this.x, this.y, PARAMS.SCALE * 1);
-        ctx.fillStyle = "Pink";
-        ctx.fillText(this.coinCount,  this.x + 22 * PARAMS.SCALE, this.y + 13 * PARAMS.SCALE);
-
+        if (!this.game.camera.chihiro.winGame) {
+            this.animation.drawFrame(this.game.clockTick, ctx,
+                this.x, this.y, PARAMS.SCALE * 1);
+            ctx.fillStyle = "Pink";
+            ctx.fillText(this.coinCount,  this.x + 22 * PARAMS.SCALE, this.y + 13 * PARAMS.SCALE);
+        }
     };
 };
