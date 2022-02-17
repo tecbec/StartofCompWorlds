@@ -44,7 +44,7 @@ var LEVEL = {
 
     SOOT_NUM:  [10, 20, 10, 20, 15, 15, 10, 10,
                 30, 10,  // scene 4
-                20, 30], // Scene 5 
+                20, 30], // Scene 5
 
     COIN_LOCATION: [{X: 100, Y: 895},{X: 125,  Y: 895}, {X: 150, Y: 895}, {X: 175, Y: 895}, {X: 200,  Y: 895}, {X: 225,  Y: 895},
                     {X: 250,  Y: 895},{X: 275,  Y: 895}, {X: 300,  Y: 895}, {X: 325,  Y: 895},                                         // scene 0
@@ -56,7 +56,7 @@ var LEVEL = {
                     {X: 4621, Y: 895},{X: 4938, Y: 895}, {X: 4719, Y: 37}, {X: 5059, Y: 138},                                         // scene 3
                     {X: 6550, Y: 475},{X: 6750, Y: 150}, {X: 7075, Y: 240}, {X: 7175, Y: 550}, {X: 7475, Y: 350}, {X: 7975, Y: 640},
                     {X: 6500, Y: 895},{X: 7000, Y: 895}, {X: 7100, Y: 895}, {X: 7200, Y: 895},                                         // scene 4
-                    {X: 8340, Y: 420},{X: 8480, Y: 285}, {X: 8620, Y: 420}, {X: 8760, Y: 285}, {X: 8900, Y: 420}, {X: 9040, Y: 285},   // Scene 5                                             
+                    {X: 8340, Y: 420},{X: 8480, Y: 285}, {X: 8620, Y: 420}, {X: 8760, Y: 285}, {X: 8900, Y: 420}, {X: 9040, Y: 285},   // Scene 5
                     {X: 9180, Y: 420},{X: 9320, Y: 285}, {X: 9460, Y: 420}, {X: 9600, Y: 285},
                     {X: 10610, Y: 895},{X: 10710,  Y: 895}, {X: 10710 + 100,    Y: 895}, {X: 10760 + 150,   Y: 895}, {X: 10810 + 200,  Y: 895}, {X: 10860 + 250,  Y: 895},   // scene 6
                     {X: 10910 + 300,  Y: 895},{X: 10960 + 350,  Y: 895}, {X: 11010 + 400,  Y: 895}, {X: 11060 + 450,  Y: 895}
@@ -115,8 +115,8 @@ class SceneManager {
     // create all entities for the Title Screen
     titleScreen() {
 
-        let chickPlace = {x: 850, y: 75};
-        let hakuPlace = {x: -750, y: 425};
+        let chickPlace = {x: 850, y: 775, xneg: 100, xpos: 800};
+        let hakuPlace = {x: -750, y: 825};
 
         // Title Chihiro
         this.titlePlaque = new TitlePlaque(this.game);
@@ -124,7 +124,7 @@ class SceneManager {
         this.ground = new Ground(this.game, LEVEL.START_CANVAS.X, PARAMS.CANVAS_HEIGHT - BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE,
                                             PARAMS.CANVAS_WIDTH * LEVEL.FRAME_COUNT, BACKGROUND.GROUND.SCALE * BACKGROUND.GROUND.SIZE);
         this.background = new BackGround(this.game, LEVEL.START_CANVAS.X,  LEVEL.START_CANVAS.Y);
-        this.chick = new Chick(this.game, chickPlace.x, chickPlace.y, chickPlace.x, chickPlace.x);
+        this.chick = new Chick(this.game, chickPlace.x, chickPlace.y, chickPlace.xneg, chickPlace.xpos);
         this.haku = new Haku(this.game, hakuPlace.x, hakuPlace.y);
 
     }
@@ -170,7 +170,7 @@ class SceneManager {
             this.game.addEntity(this.ground);
             this.game.addEntity(this.titlePlaque);
             this.game.addEntity(this.chick);
-            this.game.addEntity(this.haku);
+            // this.game.addEntity(this.haku);
         } else {
             this.bathhouse = new Bathhouse(this.game, LEVEL.BATHHOUSE.X,  LEVEL.BATHHOUSE.Y);
             this.game.addEntity(this.background);

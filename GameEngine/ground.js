@@ -22,19 +22,30 @@ class TitlePlaque { //bridge
     constructor(game) {
         Object.assign(this, {game});
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/title.png");
-    };
-    update() {
 
+        this.x = 200;
+        this.y = 250;
+        this.velocity = {x: 100};
+
+        this.spritedim = {height: 160, width: 784};
+        const spritestart = {x: 0, y: 0};
+        const frames = 13; //13
+        const framedur = 0.3;
+        const pad = 0;
+
+        this.count = 0;
+
+        this.animations = new Animator(this.spritesheet, spritestart.x, spritestart.y, this.spritedim.width, this.spritedim.height, frames, framedur, pad, false, true);
+    };
+
+    update() {
     };
 
     draw(ctx) {
         var width = 800;
         var height = 200;
-        ctx.drawImage(this.spritesheet,
-                      0, 0,                 // xstart, ystart of the sprite sheet
-                      1494, 246,            // width and height of the sprite sheet
-                      (PARAMS.CANVAS_WIDTH /15 - width * PARAMS.SCALE / 2) - this.game.camera.x, PARAMS.CANVAS_HEIGHT / 2 - height * PARAMS.SCALE, // x and y of the canvas
-                      width * PARAMS.SCALE, height * PARAMS.SCALE); // width scale, height scale
+
+        this.animations.drawFrame(this.game.clockTick, ctx, this.x, this.y, 2);
         ctx.imageSmoothingEnabled = false;
     };
 
@@ -131,7 +142,7 @@ class BackGround {
         // console.log(PARAMS.CANVAS_WIDTH, LEVEL.FRAME_COUNT, BACKGROUND.SIZE.W, BACKGROUND.SIZE.H, BACKGROUND.SCALE)
         let COUNT = PARAMS.CANVAS_WIDTH * LEVEL.FRAME_COUNT / BACKGROUND.SIZE.W * BACKGROUND.SIZE.H * BACKGROUND.SCALE;
         for (var i = 0; i < COUNT; i++) {
-             ctx.drawImage(this.spritesheet, 
+             ctx.drawImage(this.spritesheet,
                 BACKGROUND.X, BACKGROUND.Y,             // x and y of the spritesheet
                 BACKGROUND.SIZE.W, BACKGROUND.SIZE.H,   // width and height of the spritesheet
                 this.x - this.game.camera.x + (PARAMS.CANVAS_WIDTH * i), this.y, // x and y of the canvas
@@ -142,7 +153,7 @@ class BackGround {
 }
 
 class Platform {  // tree
-    constructor(game, x, y, w, type) { 
+    constructor(game, x, y, w, type) {
         Object.assign(this, { game, x, y, w, type});
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/platform_sheet.png");
     }
@@ -220,9 +231,9 @@ class CloudPlatform {
         Object.assign(this, { game, x, y, size});
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/cloud-Sheet.png");
 
-        this.BB = new BoundingBox(this.x + 5 , this.y + 10, 
-            BACKGROUND.CLOUD_BB[this.size].W * BACKGROUND.CLOUD.SCALE - 10, 
-            BACKGROUND.CLOUD_BB[this.size].H * BACKGROUND.CLOUD.SCALE); 
+        this.BB = new BoundingBox(this.x + 5 , this.y + 10,
+            BACKGROUND.CLOUD_BB[this.size].W * BACKGROUND.CLOUD.SCALE - 10,
+            BACKGROUND.CLOUD_BB[this.size].H * BACKGROUND.CLOUD.SCALE);
     }
 
     update() {
@@ -230,11 +241,11 @@ class CloudPlatform {
     };
 
     draw(ctx) {
-        ctx.drawImage(this.spritesheet, 
+        ctx.drawImage(this.spritesheet,
                 BACKGROUND.CLOUD.X, BACKGROUND.CLOUD.Y + BACKGROUND.CLOUD.HEIGHT * this.size,
                 BACKGROUND.CLOUD.WIDTH, BACKGROUND.CLOUD.HEIGHT,
                 this.x  - this.game.camera.x, this.y,
-                BACKGROUND.CLOUD.WIDTH * BACKGROUND.CLOUD.SCALE, 
+                BACKGROUND.CLOUD.WIDTH * BACKGROUND.CLOUD.SCALE,
                 BACKGROUND.CLOUD.HEIGHT * BACKGROUND.CLOUD.SCALE);
 
         if (PARAMS.DEBUG) {
@@ -265,37 +276,17 @@ class StoneLamp {
         ctx.drawImage(this.spritesheet, BACKGROUND.STONE_LAMP.X, BACKGROUND.STONE_LAMP.Y, BACKGROUND.STONE_LAMP.SIZE.W, BACKGROUND.STONE_LAMP.SIZE.H,
             this.x - this.game.camera.x, this.y,
             BACKGROUND.STONE_LAMP.SIZE.W * BACKGROUND.STONE_LAMP.SCALE.X, BACKGROUND.STONE_LAMP.SIZE.H * BACKGROUND.STONE_LAMP.SCALE.Y);
-            //I do plan of removing all the magic numebrs 
-        // this.BB = new BoundingBox(this.x , this.y + 55,
-        //     (BACKGROUND.STONE_LAMP.SIZE.W) * BACKGROUND.STONE_LAMP.SCALE.X,75);
-        // this.BBtopleft = new BoundingBox(this.x , this.y + (BACKGROUND.STONE_LAMP.SIZE.W) + 10,
-        //     5 , 75);
-        // this.BBtopright = new BoundingBox(this.x + (BACKGROUND.STONE_LAMP.SIZE.W) *4 - 5, this.y + (BACKGROUND.STONE_LAMP.SIZE.W) +10,
-        //     5 , 75);
-
         this.BB = new BoundingBox(this.x , this.y + 55,
             32, BACKGROUND.STONE_LAMP.SIZE.H * BACKGROUND.STONE_LAMP.SCALE.Y);
         this.BBmiddleleft = new BoundingBox(this.x , this.y + (BACKGROUND.STONE_LAMP.SIZE.W) + 10,
             5 ,  BACKGROUND.STONE_LAMP.SIZE.H * BACKGROUND.STONE_LAMP.SCALE.Y);
         this.BBmiddleright = new BoundingBox(this.x +32, this.y + (BACKGROUND.STONE_LAMP.SIZE.W) +10,
             5 ,  BACKGROUND.STONE_LAMP.SIZE.H * BACKGROUND.STONE_LAMP.SCALE.Y);
-        // this.BBbottom = new BoundingBox(this.x , this.y + 125 ,
-        //     (BACKGROUND.STONE_LAMP.SIZE.W) * BACKGROUND.STONE_LAMP.SCALE.X, 5);
-        // this.BBmiddle = new BoundingBox(this.x +19*4, this.y + 25 * 4,
-        //     7 *4, 275);
-        // this.BBmiddleleft = new BoundingBox(this.x +19*4, this.y + 25 * 4,
-        //     5, BACKGROUND.STONE_LAMP.SIZE.H * BACKGROUND.STONE_LAMP.SCALE.Y);
-        // this.BBmiddleright = new BoundingBox(this.x +19*4 +23, this.y + 25 * 4,
-        //     5, BACKGROUND.STONE_LAMP.SIZE.H * BACKGROUND.STONE_LAMP.SCALE.Y);
 
-    
         if (PARAMS.DEBUG) {
-            // ctx.lineWidth = 2;
+
             ctx.strokeStyle = 'red';
-            // ctx.strokeRect(this.BB.x -this.game.camera.x, this.BB.y,
-            //     this.BB.width,
-            //     this.BB.height);
-            
+
             ctx.strokeRect(this.BB.x -this.game.camera.x, this.BB.y,
                 this.BB.width,
                 this.BB.height);
@@ -306,20 +297,6 @@ class StoneLamp {
             ctx.strokeRect(this.BBmiddleright.x -this.game.camera.x, this.BBmiddleright.y,
                 this.BBmiddleright.width,
                 this.BBmiddleright.height);
-
-            // ctx.strokeRect(this.BBtopleft.x -this.game.camera.x, this.BBtopleft.y,
-            //     this.BBtopleft.width,
-            //     this.BBtopleft.height);
-            // ctx.strokeRect(this.BBtopright.x -this.game.camera.x, this.BBtopright.y,
-            //     this.BBtopright.width,
-            //     this.BBtopright.height);
-            // ctx.strokeRect(this.BBbottom.x -this.game.camera.x, this.BBbottom.y,
-            //     this.BBbottom.width,
-            //     this.BBbottom.height);
-            // // ctx.lineWidth = 10;
-            // ctx.strokeStyle = 'Red';
-            // ctx.strokeRect(this.leftBB.x - this.game.camera.x, this.leftBB.y, this.leftBB.width, this.leftBB.height);
-            // ctx.strokeRect(this.rightBB.x - this.game.camera.x, this.rightBB.y, this.rightBB.width, this.rightBB.height);
         }
         ctx.imageSmoothingEnabled = false;
     }
@@ -356,12 +333,11 @@ class Lamp {
        // ctx.shadowColor = "transparent"; // remove shadow !
        ctx.filter = "none";
        ctx.fillStyle = "Yellow";
-       
        ctx.drawImage(this.spritesheet2, BACKGROUND.LAMP.X, BACKGROUND.LAMP.Y,
             BACKGROUND.LAMP.SIZE.W, BACKGROUND.LAMP.SIZE.H,
             this.x - this.game.camera.x, this.y,
             BACKGROUND.LAMP.SIZE.W * BACKGROUND.LAMP.SCALE.W, BACKGROUND.LAMP.SIZE.H * BACKGROUND.LAMP.SCALE.H);
-    
+
         ctx.drawImage(this.spritesheet, BACKGROUND.LAMP.X, BACKGROUND.LAMP.Y,
             BACKGROUND.LAMP.SIZE.W, BACKGROUND.LAMP.SIZE.H,
             this.x - this.game.camera.x, this.y,
