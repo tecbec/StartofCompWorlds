@@ -45,6 +45,7 @@ var LEVEL = {
     SOOT_NUM:  [10, 20, 10, 20, 15, 15, 10, 10,
                 30, 10,  // scene 4
                 20, 30], // Scene 5
+    PORTAL_LOCATION: [{X: 0, Y: 800}],
     COIN_LOCATION: [{X: 100, Y: 895},{X: 125,  Y: 895}, {X: 150, Y: 895}, {X: 175, Y: 895}, {X: 200,  Y: 895}, {X: 225,  Y: 895},
                     {X: 250,  Y: 895},{X: 275,  Y: 895}, {X: 300,  Y: 895}, {X: 325,  Y: 895},                                         // scene 0
                     {X: 900,  Y: 500},{X: 1200, Y: 295}, {X: 1500, Y: 450}, {X: 2000, Y: 340}, {X: 2300, Y: 540}, {X: 1100, Y: 650},
@@ -170,7 +171,7 @@ class SceneManager {
         } else {
             this.bathhouse = new Bathhouse(this.game, LEVEL.BATHHOUSE.X,  LEVEL.BATHHOUSE.Y);
             this.game.addEntity(this.background);
-
+            
             this.game.addEntity(this.railing);
             this.game.addEntity(this.bathhouse);
             
@@ -228,10 +229,16 @@ class SceneManager {
                 this.game.addEntity(new Chick(this.game, chick.X, chick.Y, chick.MIN, chick.MAX, chick.DIR));
             }
 
+            for (var i = 0; i < LEVEL.PORTAL_LOCATION.length; i++) {
+                let portal = LEVEL.PORTAL_LOCATION[i];
+                this.game.addEntity(new Portal(this.game, portal.X, portal.Y));
+            }
+
             this.game.addEntity(this.chihiro);
 
             this.game.addEntity(this.breathbar);
             this.game.addEntity(this.coinCounter);
+            
         }
     };
 
