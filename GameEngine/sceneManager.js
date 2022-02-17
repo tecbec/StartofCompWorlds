@@ -48,7 +48,7 @@ var LEVEL = {
                 30, 10,  // scene 4
                 20, 30], // Scene 5 
     
-    COIN_LOCATION: [{X: 100,  Y: 895},{X: 125,  Y: 895}, {X: 150,  Y: 895}, {X: 175, Y: 895},  {X: 200,  Y: 895}, {X: 225,  Y: 895},
+    COIN_LOCATION: [{X: 100,  Y: 895},{X: 125,  Y: 895}, {X: 150,  Y: 895}, {X: 175,  Y: 895}, {X: 200,  Y: 895}, {X: 225,  Y: 895},
                     {X: 250,  Y: 895},{X: 275,  Y: 895}, {X: 300,  Y: 895}, {X: 325,  Y: 895},                                          // scene 0
                     {X: 900,  Y: 500},{X: 1200, Y: 295}, {X: 1500, Y: 450}, {X: 2000, Y: 340}, {X: 2300, Y: 540}, {X: 1100, Y: 650},
                     {X: 1900, Y: 650},{X: 1400, Y: 900}, {X: 1550, Y: 900}, {X: 1700, Y: 900}, {X: 2100, Y: 900},                      // scene 1
@@ -79,8 +79,8 @@ var LEVEL = {
     /*    enter: frame 3,   crow drop: frame 4,       heat seeking crows:  frame 5*/
     YUBABA_INC: [4304, 6206, 8108, 10010], // x vals that trigger: entrance, crow drop, heat seeking crows, yubaba exit
 
-    /*    frame:            1             3              */
-    HAKU_LOCATION: [{X:500, Y:850, TEXT: 0},{X:5305, Y:575, TEXT: 0}, {X: 10056, Y:820, TEXT: 1}]
+    /*    frame:              1                    3                               5*/
+    HAKU_LOCATION: [{X:500, Y:850, TEXT: 1},{X:5305, Y:575, TEXT: 2}, {X: 10056, Y:820, TEXT: 3}]
 }
 
 class SceneManager {

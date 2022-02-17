@@ -12,7 +12,7 @@ class TransitionScreen {
     };
 
     update() {
-        if (this.game.click && this.game.click.y < 600 && this.game.click.y > 500) {
+        if (this.game.camera.chihiro.endPosition && this.game.click && this.game.click.y < 600 && this.game.click.y > 500) {
             this.game.camera.loadLevel(1, this.game.camera.title);
             this.game.click = false;
         }
