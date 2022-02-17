@@ -5,12 +5,13 @@
 var LEVEL = {
     music: "./audio/OneSummersDay.mp3",
     START_CANVAS: {X: -851, Y: 0},
-    END_CANVAS:   {X: 16000},   // change this later when we figure out the exact ending canvas measurement
+    END_CANVAS:   {X: 14200},   // change this later when we figure out the exact ending canvas measurement
+    END_GAME:     {X: 11515, Y: 813},
     FRAME_COUNT: 9,           // This is the factor that determine how wide the actual game is
     // Type 0: has left,middle,right piece can be adjusted to be longer
     // Type 1: is short (just middle piece)
 
-    BATHHOUSE: {X: 14730, Y: - 1200},
+    BATHHOUSE: {X: 11608, Y: - 1200},
     PLATFORM_LOCATION:       [{X: 790,  Y: 550, TYPE: 0}, {X: 1100, Y: 375, TYPE: 0}, {X: 1400, Y: 500, TYPE: 0}, {X: 1900, Y: 390, TYPE: 0}, {X: 2200, Y: 590, TYPE: 0},    // scene 1
                               {X: 2600, Y: 590, TYPE: 0}, {X: 2750, Y: 450, TYPE: 0}, {X: 3300, Y: 575, TYPE: 0}, {X: 3500, Y: 400, TYPE: 0}, {X: 4000, Y: 600, TYPE: 0},    // scene 2
                               {X: 5602, Y: 525, TYPE: 0}, {X: 5919, Y: 525, TYPE: 0},                                                                                        // scene 3
@@ -29,8 +30,8 @@ var LEVEL = {
 
 
     /* Start of Frame:     1                   2                 3                 4                 5                   6                   7*/
-    LAMP_LOCATION: [{X:500, Y: 650},   {X:2402,  Y: 650}, {X:4304, Y: 650}, {X:6206, Y: 650}, {X:8108, Y: 650}, {X:10010, Y: 650}, {X:11912, Y: 650}, 
-                    {X:13814, Y: 650}, {X:15716, Y: 650},],
+    LAMP_LOCATION: [{X:500, Y: 650},   {X:2402,  Y: 650}, {X:4304, Y: 650}, {X:6206, Y: 650}, {X:8108, Y: 650}, {X:10010, Y: 650},],// {X:11912, Y: 650}
+                    //{X:13814, Y: 650}, {X:15716, Y: 650},],
 
     RAILING_LOCATION: {X: 500, Y: 820},
 
@@ -78,7 +79,7 @@ var LEVEL = {
     YUBABA_INC: [4304, 6206, 8108, 10010], // x vals that trigger: entrance, crow drop, heat seeking crows, yubaba exit
 
     /*    frame:            1             3              */
-    HAKU_LOCATION: [{X:500, Y:850},{X:5305, Y:575}]
+    HAKU_LOCATION: [{X:500, Y:850, TEXT: 0},{X:5305, Y:575, TEXT: 0}, {X: 10056, Y:820, TEXT: 1}]
 }
 
 class SceneManager {
@@ -226,7 +227,7 @@ class SceneManager {
            
             for (var i = 0; i < LEVEL.HAKU_LOCATION.length; i++) {
                 let haku = LEVEL.HAKU_LOCATION[i];
-                this.game.addEntity(new Haku(this.game, haku.X, haku.Y));
+                this.game.addEntity(new Haku(this.game, haku.X, haku.Y, haku.TEXT));
             }
 
             this.game.addEntity(this.breathbar);
@@ -291,7 +292,7 @@ class SceneManager {
             //ctx.fillText("Instructions", PARAMS.CANVAS_WIDTH /  PARAMS.SCALE - 80, PARAMS.CANVAS_HEIGHT/  PARAMS.SCALE + 100); //300
         }
 
-        if (PARAMS.DEBUG && !this.title) {
+        if (PARAMS.DEBUG && !this.title && !this.chihiro.winGame) {
             ctx.strokeStyle = "White";
             ctx.fillStyle = ctx.strokeStyle;
             // the only to access objects throughout the game implementation is by including this.game and adding the chihiro in this class
@@ -310,8 +311,8 @@ class SceneManager {
             // bounding box
             let bX ="xB=" + Math.floor(this.game.chihiro.BB.left);
             let bY ="yB=" + Math.floor(this.game.chihiro.BB.top);
-            ctx.fillText(bX, 160 * PARAMS.SCALE, 15 * PARAMS.SCALE);
-            ctx.fillText(bY, 160 * PARAMS.SCALE, 30 * PARAMS.SCALE);
+            ctx.fillText(bX, 170 * PARAMS.SCALE, 15 * PARAMS.SCALE);
+            ctx.fillText(bY, 170 * PARAMS.SCALE, 30 * PARAMS.SCALE);
 
             // walk left
             ctx.strokeStyle = "Red";

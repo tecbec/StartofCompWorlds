@@ -1,7 +1,7 @@
 /* Chihiro's Params */
 var CHIHIRO = {
     TITLE_POSITION:   {X: 0,  Y: 800},
-    INITIAL_POSITION: {X: -200,  Y: 0},  // 14739
+    INITIAL_POSITION: {X: 10260,  Y: 0},  // 14739
     SIZE: 70,
     SCALE: 2,
     PADDING:{X: 28, Y: 20}, // same padding for BB and imaginary x,y,w,h calculations
@@ -28,7 +28,7 @@ class Player {
         this.isGrounded = false;
         this.deadCounter = 0;
         this.dead = false;
-
+        this.winGame = false;
         // testing
         this.sootCount = 0;
         this.nofaceCount = 0;
@@ -181,7 +181,7 @@ class Player {
         const FALL_ACC = 562.5 * PARAMS.SCALE;
 
         // can only move while on the ground AND jump after has been grounded for x ticks
-        if (this.isGrounded && !this.dead) {
+        if (this.isGrounded && !this.dead && !this.winGame) {
             if(this.jumping) {         // just landed
                 this.jumpTimer = 1000; // set off short timer, to prevent accidental double jumping
             }
@@ -243,7 +243,11 @@ class Player {
             if (this.game.crouch && this.velocity.y > 0) { // if shes pressing crouch and falls, set the game crouch to false so she can only press it once.
                 this.game.crouch = false;
             }
+            if (this.game.crouch && this.velocity.y < 0) { // if shes pressing crouch and jump, set the game crouch to false so she can only press it once.
+                this.game.crouch = false;
+            }
         }
+
         //this makes chihiro always fall
         this.velocity.y += FALL_ACC * TICK;
 
@@ -254,8 +258,25 @@ class Player {
         if (this.game.crouch && this.velocity.x <= -MIN_WALK) this.velocity.x = -CROUCH_SPEED;
         if (this.game.crouch && this.velocity.x >= MIN_WALK) this.velocity.x = CROUCH_SPEED;
 
-        this.x += this.velocity.x * TICK * TICK_SCALE;
-        this.y += this.velocity.y * TICK * TICK_SCALE;
+
+        // winning condition. 
+        if (this.x > LEVEL.END_GAME.X) { // Freeze chihiro.
+            this.winGame = true;
+            this.velocity.x = 0;
+            this.y += this.velocity.y * TICK * TICK_SCALE;
+            this.game.crouch = false;
+            if (this.x < LEVEL.END_CANVAS.X)
+                this.velocity.x = 40;
+                this.x += this.velocity.x * TICK * TICK_SCALE;
+                //this.camera.bread
+        } else {
+            this.winGame = false;
+            this.x += this.velocity.x * TICK * TICK_SCALE;
+            this.y += this.velocity.y * TICK * TICK_SCALE;
+        }
+
+       
+        
 
         this.updateBB();
 
@@ -444,9 +465,9 @@ class Player {
        
         // update state
         if (this.state !== 5 && this.state !== 3) {  // NOT dead, or crouch
-            if (this.isGrounded && this.game.crouch && this.velocity.x == 0) this.state = 3;  // crouch idle state
+            if (this.game.crouch && this.velocity.x == 0) this.state = 3;  // crouch idle state
             else if (!this.isGrounded && Math.abs(this.velocity.x) > 0) this.state = 2; // jump walk state
-            else if (this.isGrounded && this.game.crouch && Math.abs(this.velocity.x) > 0) this.state = 6; // crouch walk state
+            else if (this.game.crouch && Math.abs(this.velocity.x) > 0) this.state = 6; // crouch walk state
             else if (Math.abs(this.velocity.x) > 0) this.state = 1;        // walking state
             else if (Math.abs(this.velocity.x) > MIN_WALK) this.state = 4; // running state
         }
@@ -484,7 +505,6 @@ class Player {
                 this.game.camera.chihiro.dead = false;
             }
         }
-       
 
     };
 
