@@ -1,7 +1,7 @@
 /* Chihiro's Params */
 var CHIHIRO = {
     TITLE_POSITION:   {X: 0,  Y: 800},
-    INITIAL_POSITION: {X: 10260,  Y: 0},  // 14739
+    INITIAL_POSITION: {X: 10200,  Y: 0},  // change to 10200 to test winning condition. 
     SIZE: 70,
     SCALE: 2,
     PADDING:{X: 28, Y: 20}, // same padding for BB and imaginary x,y,w,h calculations
@@ -29,6 +29,9 @@ class Player {
         this.deadCounter = 0;
         this.dead = false;
         this.winGame = false;
+        this.collideWithHaku = false;
+        this.chihiroScale = 2;
+        this.endPosition = false;
         // testing
         this.sootCount = 0;
         this.nofaceCount = 0;
@@ -150,7 +153,12 @@ class Player {
                                         (this.y + CHIHIRO.PADDING.Y*CHIHIRO.SCALE) + crouchHeight,
                                         (CHIHIRO.SIZE - (CHIHIRO.PADDING.X * 2))* CHIHIRO.SCALE, // padding on left and right
                                         crouchHeight - 1); // padding on top
-        }else{
+        } if (this.winGame) {
+            this.BB = new BoundingBox(this.x + CHIHIRO.PADDING.X, this.y + CHIHIRO.PADDING.Y ,
+                (CHIHIRO.SIZE - (CHIHIRO.PADDING.X * 2)), // padding on left and right
+                (CHIHIRO.SIZE- CHIHIRO.PADDING.Y) - 1); // padding on top
+        } 
+        else {
             this.BB = new BoundingBox(this.x + CHIHIRO.PADDING.X*CHIHIRO.SCALE, this.y + CHIHIRO.PADDING.Y*CHIHIRO.SCALE,
                 (CHIHIRO.SIZE - (CHIHIRO.PADDING.X * 2))* CHIHIRO.SCALE, // padding on left and right
                 (CHIHIRO.SIZE- CHIHIRO.PADDING.Y) * CHIHIRO.SCALE - 1); // padding on top
@@ -159,7 +167,7 @@ class Player {
 
     /* Draw the images onto the screen */
     draw(ctx) {
-        this.animations[this.state][this.facing].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, CHIHIRO.SCALE);
+        this.animations[this.state][this.facing].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, this.chihiroScale);
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
             ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
@@ -262,13 +270,19 @@ class Player {
         // winning condition. 
         if (this.x > LEVEL.END_GAME.X) { // Freeze chihiro.
             this.winGame = true;
-            this.velocity.x = 0;
-            this.y += this.velocity.y * TICK * TICK_SCALE;
+            this.velocity.x = 0; 
+            this.chihiroScale = 1; 
             this.game.crouch = false;
-            if (this.x < LEVEL.END_CANVAS.X)
-                this.velocity.x = 40;
-                this.x += this.velocity.x * TICK * TICK_SCALE;
-                //this.camera.bread
+            if (this.x > LEVEL.END_GAME.X) { 
+                this.velocity.x = 40;  // walk   
+                if (this.x > LEVEL.END_GAME.X + 350) { // reach door stops
+                    this.velocity.x = 0;   
+                    this.state = 0;
+                    this.endPosition = true;
+                }
+                this.x += this.velocity.x * TICK * TICK_SCALE;  
+            } 
+            this.y += this.velocity.y * TICK * TICK_SCALE;    
         } else {
             this.winGame = false;
             this.x += this.velocity.x * TICK * TICK_SCALE;
@@ -433,6 +447,9 @@ class Player {
                     // instantly heal stamina bar
                     that.game.camera.breathwidth = CHIHIRO.BREATH_BAR.MAX;
                     that.game.camera.changeBreath();
+                    that.collideWithHaku = true;
+                } else {
+                    
                 }
 
                 // collision with SOOTS
@@ -517,32 +534,32 @@ class Player {
 
     //sets an x value while removing the padding
     setX(newX){
-        this.x = newX - (CHIHIRO.PADDING.X * CHIHIRO.SCALE);
+        this.x = newX - (CHIHIRO.PADDING.X *this.chihiroScale);
     };
 
     setY(newY){
-        this.y = newY - (CHIHIRO.PADDING.Y*CHIHIRO.SCALE - 1);
+        this.y = newY - (CHIHIRO.PADDING.Y*this.chihiroScale - 1);
     };
 
     //gets the fake x value
     getX(){
-        return this.x + (CHIHIRO.PADDING.X) *CHIHIRO.SCALE;
+        return this.x + (CHIHIRO.PADDING.X) *this.chihiroScale;
     };
 
     //gets the fake y value
     getY(){
-        return this.y + (CHIHIRO.PADDING.Y) *CHIHIRO.SCALE;
+        return this.y + (CHIHIRO.PADDING.Y)*this.chihiroScale;
                        // padding only on the top
     };
 
     //gets width while removing the padding
     getWidth(){
-        return (CHIHIRO.SIZE - (CHIHIRO.PADDING.X * 2))*CHIHIRO.SCALE;
+        return (CHIHIRO.SIZE - (CHIHIRO.PADDING.X * 2))*this.chihiroScale;
     };
 
     //gets height while removing the padding
     getHeight(){
-        return (CHIHIRO.SIZE - CHIHIRO.PADDING.Y)*CHIHIRO.SCALE;
+        return (CHIHIRO.SIZE - CHIHIRO.PADDING.Y)*this.chihiroScale;
     };
 
     toString(){

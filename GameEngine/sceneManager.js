@@ -5,11 +5,12 @@
 var LEVEL = {
     music: "./audio/OneSummersDay.mp3",
     START_CANVAS: {X: -851, Y: 0},
-    END_CANVAS:   {X: 14200},   // change this later when we figure out the exact ending canvas measurement
+    END_CANVAS:   {X: 13000},   // change this later when we figure out the exact ending canvas measurement
     END_GAME:     {X: 11515, Y: 813},
-    FRAME_COUNT: 9,           // This is the factor that determine how wide the actual game is
+    FRAME_COUNT: 8,           // This is the factor that determine how wide the actual game is
     // Type 0: has left,middle,right piece can be adjusted to be longer
     // Type 1: is short (just middle piece)
+    END_SCREEN: {X: 250, Y: 100},
 
     BATHHOUSE: {X: 11608, Y: - 1200},
     PLATFORM_LOCATION:       [{X: 790,  Y: 550, TYPE: 0}, {X: 1100, Y: 375, TYPE: 0}, {X: 1400, Y: 500, TYPE: 0}, {X: 1900, Y: 390, TYPE: 0}, {X: 2200, Y: 590, TYPE: 0},    // scene 1
@@ -143,7 +144,7 @@ class SceneManager {
 
             // Background stuff
             //this.stonelamp = new StoneLamp(this.game, LEVEL.STONE_LAMP_LOCATION.X, LEVEL.STONE_LAMP_LOCATION.Y, BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE);
-            this.railing = new Railing(this.game, LEVEL.RAILING_LOCATION.X, LEVEL.RAILING_LOCATION.Y, PARAMS.CANVAS_WIDTH * (LEVEL.FRAME_COUNT - 2),
+            this.railing = new Railing(this.game, LEVEL.RAILING_LOCATION.X, LEVEL.RAILING_LOCATION.Y, PARAMS.CANVAS_WIDTH * (LEVEL.FRAME_COUNT - 3),
                 BACKGROUND.RAILING.SCALE * BACKGROUND.RAILING.SIZE);
 
             // initialization of the breath bar and counter
@@ -232,6 +233,7 @@ class SceneManager {
 
             this.game.addEntity(this.breathbar);
             this.game.addEntity(this.coinCounter);
+            this.game.addEntity(new TransitionScreen(this.game, this.level, LEVEL.END_SCREEN.X, LEVEL.END_SCREEN.Y));
         }
     };
 
@@ -270,7 +272,11 @@ class SceneManager {
             if (this.chihiro.x > LEVEL.END_CANVAS.X) {
                 this.chihiro.x = LEVEL.END_CANVAS.X;
             }
-        } else {
+        } else if (this.chihiro.winGame) {
+            if (this.chihiro.x > LEVEL.END_CANVAS.X) {
+                this.chihiro.x = LEVEL.END_CANVAS.X;
+            }
+        }else {
             this.x = this.chihiro.x - midPoint; // force centering
         }
 

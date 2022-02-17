@@ -23,6 +23,7 @@ ASSET_MANAGER.queueDownload("./sprites/title.png");
 ASSET_MANAGER.queueDownload("./sprites/chick.png");
 ASSET_MANAGER.queueDownload("./sprites/bubble.png");
 ASSET_MANAGER.queueDownload("./sprites/haku_text.png");
+ASSET_MANAGER.queueDownload("./sprites/youwin_text.png");
 
 // music
 ASSET_MANAGER.queueDownload("./audio/OneSummersDay.mp3");

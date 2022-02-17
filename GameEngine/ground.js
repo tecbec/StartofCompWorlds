@@ -50,10 +50,19 @@ class Bathhouse {
     };
 
     draw(ctx) {
-        ctx.drawImage(this.spritesheet, 
-            BACKGROUND.BATHHOUSE.X, BACKGROUND.BATHHOUSE.Y,  BACKGROUND.BATHHOUSE.W,  BACKGROUND.BATHHOUSE.H,
-            this.x - this.game.camera.x, this.y, 
-            BACKGROUND.BATHHOUSE.W *  PARAMS.SCALE, BACKGROUND.BATHHOUSE.H *  PARAMS.SCALE);
+        if (this.game.camera.chihiro.winGame) {
+            ctx.drawImage(this.spritesheet, 
+                BACKGROUND.BATHHOUSE.X, BACKGROUND.BATHHOUSE.Y,  BACKGROUND.BATHHOUSE.W,  BACKGROUND.BATHHOUSE.H,
+                this.x - this.game.camera.x, - 100, 
+                BACKGROUND.BATHHOUSE.W, BACKGROUND.BATHHOUSE.H );
+           
+        } else {
+            ctx.drawImage(this.spritesheet, 
+                BACKGROUND.BATHHOUSE.X, BACKGROUND.BATHHOUSE.Y,  BACKGROUND.BATHHOUSE.W,  BACKGROUND.BATHHOUSE.H,
+                this.x - this.game.camera.x, this.y, 
+                BACKGROUND.BATHHOUSE.W * PARAMS.SCALE, BACKGROUND.BATHHOUSE.H * PARAMS.SCALE);
+            
+        } 
         ctx.imageSmoothingEnabled = false;
     }
 };
@@ -62,9 +71,8 @@ class Bathhouse {
 class Ground { //bridge
     constructor(game, x, y, w) {
         Object.assign(this, { game, x, y, w});
-
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/platform_sheet.png");
-        this.BB = new BoundingBox(this.x , this.y, this.w, BACKGROUND.GROUND.SCALE * BACKGROUND.GROUND.SIZE);
+        
     };
     update() {
 
@@ -72,14 +80,25 @@ class Ground { //bridge
 
     draw(ctx) {
         let COUNT = PARAMS.CANVAS_WIDTH * LEVEL.FRAME_COUNT / BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE;
-        console.log(COUNT);
-        for (var i = 0; i < COUNT; i ++) {
-            
-            ctx.drawImage(this.spritesheet, BACKGROUND.GROUND.X, BACKGROUND.GROUND.Y,
-                BACKGROUND.GROUND.SIZE, BACKGROUND.GROUND.SIZE,
-                this.x + BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE * i  - this.game.camera.x, this.y,
-                BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE, BACKGROUND.GROUND.SIZE * 7);
+        if (this.game.camera.chihiro.winGame) {
+            let padding = 20;
+            for (var i = 0; i < COUNT; i ++) { 
+                ctx.drawImage(this.spritesheet, BACKGROUND.GROUND.X, BACKGROUND.GROUND.Y,
+                    BACKGROUND.GROUND.SIZE, BACKGROUND.GROUND.SIZE,
+                    this.x + BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE * i / PARAMS.SCALE - this.game.camera.x, this.y + padding,
+                    BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE / PARAMS.SCALE, BACKGROUND.GROUND.SIZE * 7 / PARAMS.SCALE);   
+            }
+            this.BB = new BoundingBox(this.x , this.y + padding, this.w, BACKGROUND.GROUND.SCALE * BACKGROUND.GROUND.SIZE);
+        } else {
+            for (var i = 0; i < COUNT; i ++) { 
+                ctx.drawImage(this.spritesheet, BACKGROUND.GROUND.X, BACKGROUND.GROUND.Y,
+                    BACKGROUND.GROUND.SIZE, BACKGROUND.GROUND.SIZE,
+                    this.x + BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE * i  - this.game.camera.x, this.y,
+                    BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE, BACKGROUND.GROUND.SIZE * 7);
+            }
+            this.BB = new BoundingBox(this.x , this.y, this.w, BACKGROUND.GROUND.SCALE * BACKGROUND.GROUND.SIZE);
         }
+       
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
             ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
@@ -367,9 +386,8 @@ class Railing {
     };
 
     draw(ctx) {
-        let COUNT = PARAMS.CANVAS_WIDTH * LEVEL.FRAME_COUNT/ BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE;
-        // do some math here later 
-        for (var i = 0; i < COUNT - 591; i ++) {
+        let COUNT = PARAMS.CANVAS_WIDTH * (LEVEL.FRAME_COUNT - 3) / BACKGROUND.RAILING.SIZE / BACKGROUND.RAILING.SCALE;
+        for (var i = 0; i < COUNT; i++) {
             ctx.drawImage(this.spritesheet, BACKGROUND.RAILING.X, BACKGROUND.RAILING.Y,
                 BACKGROUND.RAILING.SIZE, BACKGROUND.RAILING.SIZE,
                 this.x + BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE * i  - this.game.camera.x, this.y,

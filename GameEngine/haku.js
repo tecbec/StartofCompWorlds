@@ -56,7 +56,7 @@ class Haku {
         this.animations.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, HAKU.SCALE);
         ctx.shadowColor = "transparent"; // remove shadow !
         
-        if (this.text == 1) {
+        if (this.text == 1 && this.game.camera.chihiro.collideWithHaku) {
             this.textAnim.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x + 20, this.y - 40, 1);  
         }
         if (PARAMS.DEBUG) {
