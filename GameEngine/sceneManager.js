@@ -46,33 +46,33 @@ var LEVEL = {
                 30, 10,  // scene 4
                 20, 30], // Scene 5 
     
-    COIN_LOCATION: [{X: -100, Y: 895},{X: -50,  Y: 895}, {X: 0,    Y: 895}, {X: 50,   Y: 895}, {X: 100,  Y: 895}, {X: 150,  Y: 895},
-                    {X: 200,  Y: 895},{X: 250,  Y: 895}, {X: 300,  Y: 895}, {X: 350,  Y: 895},                                         // scene 0
+    COIN_LOCATION: [{X: 100,  Y: 895},{X: 125,  Y: 895}, {X: 150,  Y: 895}, {X: 175, Y: 895},  {X: 200,  Y: 895}, {X: 225,  Y: 895},
+                    {X: 250,  Y: 895},{X: 275,  Y: 895}, {X: 300,  Y: 895}, {X: 325,  Y: 895},                                          // scene 0
                     {X: 900,  Y: 500},{X: 1200, Y: 295}, {X: 1500, Y: 450}, {X: 2000, Y: 340}, {X: 2300, Y: 540}, {X: 1100, Y: 650},
                     {X: 1900, Y: 650},{X: 1400, Y: 900}, {X: 1550, Y: 900}, {X: 1700, Y: 900}, {X: 2100, Y: 900},                      // scene 1
                     {X: 2675, Y: 525},{X: 2800, Y: 390}, {X: 3400, Y: 520}, {X: 3600, Y: 330}, {X: 4050, Y: 540}, {X: 3800, Y: 650},
                     {X: 3000, Y: 650},{X: 3350, Y: 900}, {X: 3400, Y: 900}, {X: 3450, Y: 900}, {X: 4100, Y: 900},                      // scene 2
                     {X: 4360, Y: 60}, {X: 4772, Y: 215}, {X: 5305, Y: 50},  {X: 5810, Y: 70},  {X: 5255, Y: 650}, {X: 5440, Y: 650},
-                    {X: 4621, Y: 895},{X: 4938, Y: 895}, {X: 4719, Y: 37}, {X: 5059, Y: 138},                                         // scene 3
+                    {X: 4621, Y: 895},{X: 4938, Y: 895}, {X: 4719, Y: 37},  {X: 5059, Y: 138},                                         // scene 3
                     {X: 6550, Y: 475},{X: 6750, Y: 150}, {X: 7075, Y: 240}, {X: 7175, Y: 550}, {X: 7475, Y: 350}, {X: 7975, Y: 640},
                     {X: 6500, Y: 895},{X: 7000, Y: 895}, {X: 7100, Y: 895}, {X: 7200, Y: 895},                                         // scene 4
                     {X: 8340, Y: 420},{X: 8480, Y: 285}, {X: 8620, Y: 420}, {X: 8760, Y: 285}, {X: 8900, Y: 420}, {X: 9040, Y: 285},   // Scene 5                                             
                     {X: 9180, Y: 420},{X: 9320, Y: 285}, {X: 9460, Y: 420}, {X: 9600, Y: 285},
-                    {X: 10610, Y: 895},{X: 10710,  Y: 895}, {X: 10710 + 100,    Y: 895}, {X: 10760 + 150,   Y: 895}, {X: 10810 + 200,  Y: 895}, {X: 10860 + 250,  Y: 895},   // scene 6
-                    {X: 10910 + 300,  Y: 895},{X: 10960 + 350,  Y: 895}, {X: 11010 + 400,  Y: 895}, {X: 11060 + 450,  Y: 895}
+                    {X: 10610,Y: 895},{X: 10710,Y: 895}, {X: 10810,Y: 895}, {X: 10910,Y: 895}, {X: 11010,Y: 895}, {X: 11110,Y: 895},   // scene 6
+                    {X: 11210,Y: 895},{X: 11310,Y: 895}, {X: 11410,Y: 895}, {X: 11510,Y: 895}
                 ],
 
     NOFACE_SCALE: 0.5,
     NOFACE_LOCATION: [{X: 3200, Y: 100},  // scene 2
                       {X: 7000, Y: 0}, ], // scene 4
 
-    CHICK_LOCATION: [   {X: 840,  Y: 785, MIN: 0,    MAX: 0,     DIR:0}, {X: 2402, Y: 785, MIN: 500,  MAX: 2402,  DIR:0},               // scene 1
-                        {X: 2900, Y: 785, MIN: 2402, MAX: 4304,  DIR:0}, {X: 3800, Y: 785, MIN: 2402, MAX: 4304,  DIR:0},               // scene 2
-                        {X: 4780, Y: 785, MIN: 4304, MAX: 5255,  DIR:1}, {X: 5730, Y: 785, MIN: 5305, MAX: 6206,  DIR:0},               // scene 3
-                        {X: 6750, Y: 785, MIN: 6750, MAX: 7900,  DIR:1}, {X: 7500, Y: 785, MIN: 6750, MAX: 7900,  DIR:0},               // Scene 4
-                        {X: 6250, Y: 785, MIN: 6250, MAX: 8100,  DIR:1}, {X: 8000, Y: 785, MIN: 6250, MAX: 8100,  DIR:0},
-                        {X: 8900, Y: 785, MIN: 0,    MAX: 0,     DIR:1}, {X: 9912, Y: 785, MIN: 8400, MAX: 10000, DIR:1},               // Scene 5
-                        {X: 9400, Y: 785, MIN: 9100, MAX: 10000, DIR:0}],
+    CHICK_LOCATION: [{X: 840,  Y: 785, MIN: 0,    MAX: 0,     DIR:0}, {X: 2402, Y: 785, MIN: 500,  MAX: 2402,  DIR:0},               // scene 1
+                     {X: 2900, Y: 785, MIN: 2402, MAX: 4304,  DIR:0}, {X: 3800, Y: 785, MIN: 2402, MAX: 4304,  DIR:0},               // scene 2
+                     {X: 4780, Y: 785, MIN: 4304, MAX: 5255,  DIR:1}, {X: 5730, Y: 785, MIN: 5305, MAX: 6206,  DIR:0},               // scene 3
+                     {X: 6750, Y: 785, MIN: 6750, MAX: 7900,  DIR:1}, {X: 7500, Y: 785, MIN: 6750, MAX: 7900,  DIR:0},               // Scene 4
+                     {X: 6250, Y: 785, MIN: 6250, MAX: 8100,  DIR:1}, {X: 8000, Y: 785, MIN: 6250, MAX: 8100,  DIR:0},
+                     {X: 8900, Y: 785, MIN: 0,    MAX: 0,     DIR:1}, {X: 9912, Y: 785, MIN: 8400, MAX: 10000, DIR:1},               // Scene 5
+                     {X: 9400, Y: 785, MIN: 9100, MAX: 10000, DIR:0}],
 
     /*    enter: frame 3,   crow drop: frame 4,       heat seeking crows:  frame 5*/
     YUBABA_INC: [4304, 6206, 8108, 10010], // x vals that trigger: entrance, crow drop, heat seeking crows, yubaba exit
@@ -114,7 +114,6 @@ class SceneManager {
 
     // create all entities for the Title Screen
     titleScreen() {
-
         let chickPlace = {x: 850, y: 75};
         let hakuPlace = {x: -750, y: 425};
 
@@ -130,12 +129,10 @@ class SceneManager {
     }
 
     loadLevel(level, title){
-
         this.title = title;
         this.level = level;
 
         this.clearEntities();
-
         this.titleScreen();
 
         if(!this.title){
@@ -177,8 +174,6 @@ class SceneManager {
 
             this.game.addEntity(this.railing);
             this.game.addEntity(this.bathhouse);
-            
-//            this.game.addEntity(this.chihiro);
             this.game.addEntity(this.ground);
 
             for (var i = 0; i < LEVEL.PLATFORM_LOCATION.length; i++) {
