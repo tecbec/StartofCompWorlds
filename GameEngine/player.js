@@ -1,7 +1,7 @@
 /* Chihiro's Params */
 var CHIHIRO = {
     TITLE_POSITION:   {X: 0,  Y: 800},
-    INITIAL_POSITION: {X: -200,  Y: 0},  // 14739
+    INITIAL_POSITION: {X: 0,  Y: 0},  // 10110
     SIZE: 70,
     SCALE: 2,
     PADDING:{X: 28, Y: 20}, // same padding for BB and imaginary x,y,w,h calculations
@@ -38,7 +38,7 @@ class Player {
         this.state = 0;  // 0 = idle, 1 = walking, 2 = jumping/falling, 3 = crouching, 4 = running, 5 = death
         this.animations = [];
 
-        this.elapsedTime = 0; 
+        this.elapsedTime = 0;
         this.fireRate = 1;
 
         this.updateBB();
@@ -182,10 +182,6 @@ class Player {
 
         // can only move while on the ground AND jump after has been grounded for x ticks
         if (this.isGrounded && !this.dead) {
-            // Stop Chihiro from moving. 
-            if(this.x < -800) {
-                this.x = -800;
-            }
             if(this.jumping) {         // just landed
                 this.jumpTimer = 1000; // set off short timer, to prevent accidental double jumping
             }
@@ -265,12 +261,11 @@ class Player {
 
         // collision handling
         var that = this; //need this because we are creating
-        this.game.entities.forEach(function (entity) {          // this will look at all entities in relation to chihiro
-
-            if (entity.BB && that.BB.collide(entity.BB)) {      // is there an entity bb & check to see if they collide
-
-                if (that.velocity.y > 0) {                      // chihiro is falling
-                    if((entity instanceof Ground || entity instanceof Platform || entity instanceof CloudPlatform || entity instanceof StoneLamp ||
+        this.game.entities.forEach(function (entity) {         // this will look at all entities in relation to chihiro
+            if (entity.BB && that.BB.collide(entity.BB) ) {    // is there an entity bb & check to see if they collide
+                if (that.velocity.y > 0) {                     // chihiro is falling
+                    if((entity instanceof Ground || entity instanceof Platform || entity instanceof CloudPlatform ||
+                        entity instanceof StoneLamp ||
                         entity instanceof Railing || entity instanceof Lamp) && (that.lastBB.bottom  <= entity.BB.top)) // minus one?? idk how this works
                   { // bottom of chihiro hits the top of the entity
                         that.isGrounded = true;
@@ -294,7 +289,7 @@ class Player {
                 }
 
                 // SIDE COLLISIONS --> left & right bounding boxes for platform
-                if ((entity instanceof Platform || entity instanceof StoneLamp) && that.BB.collide(entity.BB)) {
+                if ((entity instanceof Platform ) && that.BB.collide(entity.BB)) {
                         //that.game.deactivate = true;   // don't let player access key press once collision happens
                         if (that.BB.collide(entity.leftBB) && that.BB.right >= entity.leftBB.left ) { // left collision
                             that.setX(entity.BB.left - that.getWidth()); // so that the player won't stick to the bb of the entity
@@ -308,6 +303,48 @@ class Player {
 
                         }
                         //that.updateBB(); 
+                }
+
+                if(entity instanceof StoneLamp && that.BB.collide(entity.BB)) {
+                  //  console.log("stonelamp",  that.BB.right >= entity.BB.left );
+
+                    if (that.BB.collide(entity.BBmiddleleft) && that.BB.right >= entity.BBmiddleleft.left ) { // left collision
+                        that.setX(entity.BB.left - that.getWidth()); // so that the player won't stick to the bb of the entity
+                        //that.velocity.y = 0;
+                        if (that.velocity.x > 0) that.velocity.x = 0;
+                        
+
+                    } else if (that.BB.collide(entity.BBmiddleright) && that.BB.left <= entity.BBmiddleright.right ) { // right collision
+                        that.setX(entity.BB.right);// so that the player won't stick to the bb of the entity
+                        //that.velocity.y = 0;
+                        if (that.velocity.x < 0) that.velocity.x = 0;
+                    } 
+                    
+                    // } else {
+                        // console.log("stonelamp right",that.BB.collide(entity.BBmiddle) && that.BB.left <= entity.BBmiddle.right );
+
+                        // if (that.BB.collide(entity.BBmiddleleft) && that.BB.right >= entity.BBmiddleleft.left ) { // left collision
+                        //     that.setX(entity.BBmiddle.left - that.getWidth()); // so that the player won't stick to the bb of the entity
+                        //  //   that.velocity.y = 0;
+                        //     if (that.velocity.x > 0) that.velocity.x = 0;
+                        // } else if (that.BB.collide(entity.BBmiddleright) && that.BB.left <= entity.BBmiddleright.right ) { // right collision
+                        //     that.setX(entity.BBmiddle.right);// so that the player won't stick to the bb of the entity
+                        //    // that.velocity.y = 0;
+                        //     if (that.velocity.x < 0) that.velocity.x = 0;
+                        // } 
+
+                                            // if (that.BB.collide(entity.BBtopleft) && that.BB.right >= entity.BBtopleft.left ) { // left collision
+                    //     that.setX(entity.BB.left - that.getWidth()); // so that the player won't stick to the bb of the entity
+                    //     //that.velocity.y = 0;
+                    //     if (that.velocity.x > 0) that.velocity.x = 0;
+                        
+
+                    // } else if (that.BB.collide(entity.BBtopright) && that.BB.left <= entity.BBtopright.right ) { // right collision
+                    //     that.setX(entity.BB.right);// so that the player won't stick to the bb of the entity
+                    //     //that.velocity.y = 0;
+                    //     if (that.velocity.x < 0) that.velocity.x = 0;
+                    // } 
+                    //}
                 }
 
                 if(entity instanceof Railing) {// if she's crouching she'll fall to ground
@@ -327,9 +364,13 @@ class Player {
                 // collision with no face
                 if (entity instanceof NoFace && that.BB.collide(entity.BB)) {
                     // Set a maximum amount of coins upon interact
-                    if (that.game.camera.coinCounter.coinCount <= 10) {
-                        that.game.camera.coinCounter.coinCount += 10;
+                    if (entity.hasCoins) {
+                        that.game.camera.coinCounter.coinCount += 15;
+                        entity.hasCoins = false;
                     }
+
+                   
+
                     entity.dead = true;
 
                 }
@@ -365,9 +406,9 @@ class Player {
                         that.velocity.y = -100;
                     }
                     //that.updateBB();
-
+ 
                 }
-
+                
                 // collision with HAKU
                 if (entity instanceof Haku && that.BB.collide(entity.BB)) {
                     // instantly heal stamina bar
@@ -392,19 +433,22 @@ class Player {
             }
         });
         this.updateBB();
-
-        if (this.game.camera.breathwidth <= 0) {
-            this.dead = true;
-            this.state = 5;
-        } else {
-            this.dead = false;
+         // Implemented god mode only for debug purposes
+        if (!PARAMS.DEBUG) {
+            if (this.game.camera.breathwidth <= 0) {
+                this.dead = true;
+                this.state = 5;
+            } else {
+                this.dead = false;
+            }
+    
         }
-
+       
         // update state
         if (this.state !== 5 && this.state !== 3) {  // NOT dead, or crouch
-            if (this.game.crouch && this.velocity.x == 0) this.state = 3;  // crouch idle state
+            if (this.isGrounded && this.game.crouch && this.velocity.x == 0) this.state = 3;  // crouch idle state
             else if (!this.isGrounded && Math.abs(this.velocity.x) > 0) this.state = 2; // jump walk state
-            else if (this.game.crouch && Math.abs(this.velocity.x) > 0) this.state = 6; // crouch walk state
+            else if (this.isGrounded && this.game.crouch && Math.abs(this.velocity.x) > 0) this.state = 6; // crouch walk state
             else if (Math.abs(this.velocity.x) > 0) this.state = 1;        // walking state
             else if (Math.abs(this.velocity.x) > MIN_WALK) this.state = 4; // running state
         }
@@ -430,16 +474,19 @@ class Player {
 
         this.elapsedTime += TICK; 
         if(this.game.shoot && this.elapsedTime > 1){
-            this.game.addEntity(new BubblesController(this.game, this.getX() + this.getWidth() - this.game.camera.x ,
-                 this.getY()+ this.getHeight()/2,  this.facing));
+            this.game.addEntity(new BubblesController(this.game, this.getX()+ this.getWidth(),
+                 this.getY(),  this.facing));
                   this.elapsedTime = 0;
          }
-
-        if (this.game.camera.breathwidth <= 0 ) {
-            this.game.camera.chihiro.dead = true;
-        } else {
-            this.game.camera.chihiro.dead = false;
+        // Implemented god mode only for debug purposes
+        if(!PARAMS.DEBUG) {
+            if (this.game.camera.breathwidth <= 0 ) {
+                this.game.camera.chihiro.dead = true;
+            } else {
+                this.game.camera.chihiro.dead = false;
+            }
         }
+       
 
     };
 

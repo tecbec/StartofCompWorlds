@@ -3,12 +3,14 @@ const gameEngine = new GameEngine();
 const ASSET_MANAGER = new AssetManager();
 
 // Queue spritesheets here
+//ASSET_MANAGER.queueDownload("./sprites/soot-jump-long_aura.png");
 ASSET_MANAGER.queueDownload("./sprites/soot-jump-long_aura2_bidir.png");
 ASSET_MANAGER.queueDownload("./sprites/spritesheet.png");
 ASSET_MANAGER.queueDownload("./sprites/chihiro_spritesheet.png");
 ASSET_MANAGER.queueDownload("./sprites/cloud-Sheet.png");
 ASSET_MANAGER.queueDownload("./sprites/stonelamp.png");
 ASSET_MANAGER.queueDownload("./sprites/lamp.png");
+ASSET_MANAGER.queueDownload("./sprites/flame.png");
 ASSET_MANAGER.queueDownload("./sprites/railing.png");
 ASSET_MANAGER.queueDownload("./sprites/platform_sheet.png");
 ASSET_MANAGER.queueDownload("./sprites/Bathhouse.png");

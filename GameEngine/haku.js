@@ -46,8 +46,8 @@ class Haku {
 
     draw(ctx) {
         var blurValues = 50;
-        ctx.shadowColor = '#AAFF00';
-         ctx.shadowBlur = blurValues;
+        ctx.shadowColor = '#b9c87e';
+        ctx.shadowBlur = blurValues;
         this.animations.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, HAKU.SCALE);
         ctx.shadowColor = "transparent"; // remove shadow !
 

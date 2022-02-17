@@ -5,8 +5,9 @@ var BACKGROUND = {
     SIZE: {W: 1000, H: 500},
     SCALE: 2,
     GROUND: {X: 32, Y: 0, SIZE: 32, SCALE: 4},
-    STONE_LAMP: {X: 0, Y: 0, SIZE: {X:71, Y:142 }, SCALE:{ X:3, Y: 2}, BB_SIZE: {W: 10, H: 10}},
-    LAMP: {X: 0, Y: 0, SIZE: 64, SCALE:  {W: 3, H: 5}, BB_SIZE: {W: 5, H: 10}, PADDING: {W: 50, H: 13}},
+    STONE_LAMP: {X: 0, Y: 0, SIZE: {W:45, H:142 }, SCALE:{ X:4, Y: 5}, BB_SIZE: {W: 10, H: 10}},
+
+    LAMP: {X: 0, Y: 0, SIZE: {W: 107, H:188}, SCALE:  {W: 2, H: 2}, BB_SIZE: {W: 5, H: 10}, PADDING: {W: 40, H: 10}},
     RAILING: {X: 0, Y: 10, SIZE: 64, SCALE: 2.5, BB_SIZE: {W: 5, H: 10}, PADDING: 20},
     PLATFORM: {LEFT: {X: 0, Y: 32}, MID: {X: 16, Y: 32}, RIGHT: {X: 32, Y: 32}, SIZE: 16, SCALE: 4, COUNT: 2, BB_SIZE: {W: 10, H: 10}},
     CLOUD_PLATFORM: {LEFT: {X: 0, Y: 0}, MID: {X: 0, Y: 0}, RIGHT: {X: 0, Y: 0}, SIZE: 16, SCALE: 4, COUNT: 2, BB_SIZE: {W: 5, H: 16}},
@@ -72,14 +73,41 @@ class Ground { //bridge
 
     draw(ctx) {
         let COUNT = PARAMS.CANVAS_WIDTH * LEVEL.FRAME_COUNT / BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE;
-        console.log(COUNT);
-        for (var i = 0; i < COUNT; i ++) {
-            
-            ctx.drawImage(this.spritesheet, BACKGROUND.GROUND.X, BACKGROUND.GROUND.Y,
-                BACKGROUND.GROUND.SIZE, BACKGROUND.GROUND.SIZE,
-                this.x + BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE * i  - this.game.camera.x, this.y,
-                BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE, BACKGROUND.GROUND.SIZE * 7);
+
+        if(this.game.camera.title) {
+            for (var i = 0; i < COUNT; i ++) {
+                ctx.drawImage(this.spritesheet, BACKGROUND.GROUND.X, BACKGROUND.GROUND.Y,
+                    BACKGROUND.GROUND.SIZE, BACKGROUND.GROUND.SIZE,
+                    this.x + BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE * i  - this.game.camera.x, this.y,
+                    BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE, BACKGROUND.GROUND.SIZE * 7);
+            }
+        } else {
+
+            for (var i = 0; i < 9; i ++) {
+
+                ctx.drawImage(this.spritesheet, 0, 80,
+                    BACKGROUND.GROUND.SIZE, BACKGROUND.GROUND.SIZE,
+                    this.x + BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE * i  - this.game.camera.x, this.y,
+                    BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE, BACKGROUND.GROUND.SIZE * 7);
+            }
+
+            for (var i = 9; i < 10; i ++) {
+                ctx.drawImage(this.spritesheet, 0, 48,
+                    BACKGROUND.GROUND.SIZE, BACKGROUND.GROUND.SIZE,
+                    this.x + BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE * i  - this.game.camera.x, this.y,
+                    BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE, BACKGROUND.GROUND.SIZE * 7);
+            }
+
+            for (var i = 10; i < COUNT; i ++) {
+                    ctx.drawImage(this.spritesheet, BACKGROUND.GROUND.X, BACKGROUND.GROUND.Y,
+                        BACKGROUND.GROUND.SIZE, BACKGROUND.GROUND.SIZE,
+                        this.x + BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE * i  - this.game.camera.x, this.y,
+                        BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE, BACKGROUND.GROUND.SIZE * 7);
+            }
         }
+
+
+
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
             ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
@@ -116,7 +144,7 @@ class BackGround {
 class Platform {  // tree
     constructor(game, x, y, w, type) { 
         Object.assign(this, { game, x, y, w, type});
-        this.spritesheet = this.spritesheet = ASSET_MANAGER.getAsset("./sprites/platform_sheet.png");
+        this.spritesheet = ASSET_MANAGER.getAsset("./sprites/platform_sheet.png");
     }
 
     update() {
@@ -190,7 +218,7 @@ class Platform {  // tree
 class CloudPlatform {
     constructor(game, x, y, size) {
         Object.assign(this, { game, x, y, size});
-        this.spritesheet = this.spritesheet = ASSET_MANAGER.getAsset("./sprites/cloud-Sheet.png");
+        this.spritesheet = ASSET_MANAGER.getAsset("./sprites/cloud-Sheet.png");
 
         this.BB = new BoundingBox(this.x + 5 , this.y + 10, 
             BACKGROUND.CLOUD_BB[this.size].W * BACKGROUND.CLOUD.SCALE - 10, 
@@ -208,13 +236,6 @@ class CloudPlatform {
                 this.x  - this.game.camera.x, this.y,
                 BACKGROUND.CLOUD.WIDTH * BACKGROUND.CLOUD.SCALE, 
                 BACKGROUND.CLOUD.HEIGHT * BACKGROUND.CLOUD.SCALE);
-/*
-                ctx.drawImage(this.spritesheet,
-                    this.xStart + frame * (this.width + this.framePadding), this.yStart,
-                    this.width, this.height,
-                    x, y,
-                    this.width * scale,
-                    this.height * scale); */
 
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
@@ -223,53 +244,6 @@ class CloudPlatform {
         ctx.imageSmoothingEnabled = false;
     };
 
-
-    // draw(ctx) {
-    //     // left platform
-    //     ctx.drawImage(this.spritesheet, BACKGROUND.CLOUD_PLATFORM.LEFT.X, BACKGROUND.CLOUD_PLATFORM.LEFT.Y,
-    //         BACKGROUND.CLOUD_PLATFORM.SIZE, BACKGROUND.CLOUD_PLATFORM.SIZE,
-    //         this.x - this.game.camera.x, this.y,
-    //         BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE, BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE);
-
-    //     // default values to draw platform
-    //     let LOCATION = 1;
-
-    //     // middle platform
-    //     for (var i = 1; i < BACKGROUND.CLOUD_PLATFORM.COUNT; i++) {
-    //         ctx.drawImage(this.spritesheet, BACKGROUND.CLOUD_PLATFORM.MID.X, BACKGROUND.CLOUD_PLATFORM.MID.Y,
-    //             BACKGROUND.CLOUD_PLATFORM.SIZE, BACKGROUND.CLOUD_PLATFORM.SIZE,
-    //             this.x + BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE - this.game.camera.x, this.y,
-    //             BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE * i, 
-    //             BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE);
-    //             LOCATION++;
-    //     }
-
-    //     // right platform
-    //     ctx.drawImage(this.spritesheet, BACKGROUND.CLOUD_PLATFORM.RIGHT.X, BACKGROUND.CLOUD_PLATFORM.RIGHT.Y,
-    //         BACKGROUND.CLOUD_PLATFORM.SIZE, BACKGROUND.CLOUD_PLATFORM.SIZE,
-    //         this.x + BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE * LOCATION++ - this.game.camera.x, this.y,
-    //         BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE, BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE);
-
-    //     this.BB = new BoundingBox(this.x, this.y,
-    //         BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE * LOCATION, BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE);
-
-    //     this.leftBB = new BoundingBox(this.x, this.y,
-    //         BACKGROUND.CLOUD_PLATFORM.BB_SIZE.W, BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE);
-
-    //     this.rightBB = new BoundingBox(this.BB.right - BACKGROUND.CLOUD_PLATFORM.BB_SIZE.W, this.y,
-    //         BACKGROUND.CLOUD_PLATFORM.BB_SIZE.W, BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE);
-
-    //     if (PARAMS.DEBUG) {
-    //         ctx.strokeStyle = 'Red';
-    //         ctx.strokeRect(this.BB.x -this.game.camera.x, this.BB.y,
-    //              BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE * LOCATION,
-    //              BACKGROUND.CLOUD_PLATFORM.SIZE * BACKGROUND.CLOUD_PLATFORM.SCALE);
-    //         ctx.strokeStyle = 'Orange';
-    //         ctx.strokeRect(this.leftBB.x - this.game.camera.x, this.leftBB.y, this.leftBB.width, this.leftBB.height);
-    //         ctx.strokeRect(this.rightBB.x - this.game.camera.x, this.rightBB.y, this.rightBB.width, this.rightBB.height);
-    //     }
-    //     ctx.imageSmoothingEnabled = false;
-    // }
 }
 
 
@@ -280,7 +254,7 @@ class CloudPlatform {
 class StoneLamp {
     constructor(game, x, y, w) {
         Object.assign(this, { game, x, y, w});
-        this.spritesheet = this.spritesheet = ASSET_MANAGER.getAsset("./sprites/stonelamp.png");
+        this.spritesheet = ASSET_MANAGER.getAsset("./sprites/stonelamp.png");
     }
 
     update() {
@@ -288,31 +262,64 @@ class StoneLamp {
     };
 
     draw(ctx) {
-
-        ctx.drawImage(this.spritesheet, BACKGROUND.STONE_LAMP.X, BACKGROUND.STONE_LAMP.Y,
-            BACKGROUND.STONE_LAMP.SIZE.X, BACKGROUND.STONE_LAMP.SIZE.Y,
+        ctx.drawImage(this.spritesheet, BACKGROUND.STONE_LAMP.X, BACKGROUND.STONE_LAMP.Y, BACKGROUND.STONE_LAMP.SIZE.W, BACKGROUND.STONE_LAMP.SIZE.H,
             this.x - this.game.camera.x, this.y,
-            BACKGROUND.STONE_LAMP.SIZE.X * BACKGROUND.STONE_LAMP.SCALE.X, BACKGROUND.STONE_LAMP.SIZE.Y * BACKGROUND.STONE_LAMP.SCALE.Y);
+            BACKGROUND.STONE_LAMP.SIZE.W * BACKGROUND.STONE_LAMP.SCALE.X, BACKGROUND.STONE_LAMP.SIZE.H * BACKGROUND.STONE_LAMP.SCALE.Y);
+            //I do plan of removing all the magic numebrs 
+        // this.BB = new BoundingBox(this.x , this.y + 55,
+        //     (BACKGROUND.STONE_LAMP.SIZE.W) * BACKGROUND.STONE_LAMP.SCALE.X,75);
+        // this.BBtopleft = new BoundingBox(this.x , this.y + (BACKGROUND.STONE_LAMP.SIZE.W) + 10,
+        //     5 , 75);
+        // this.BBtopright = new BoundingBox(this.x + (BACKGROUND.STONE_LAMP.SIZE.W) *4 - 5, this.y + (BACKGROUND.STONE_LAMP.SIZE.W) +10,
+        //     5 , 75);
 
-        this.BB = new BoundingBox(this.x , this.y ,
-            (BACKGROUND.STONE_LAMP.SIZE.X) * BACKGROUND.STONE_LAMP.SCALE.X,( BACKGROUND.STONE_LAMP.SIZE.Y )* BACKGROUND.STONE_LAMP.SCALE.Y);
+        this.BB = new BoundingBox(this.x , this.y + 55,
+            32, BACKGROUND.STONE_LAMP.SIZE.H * BACKGROUND.STONE_LAMP.SCALE.Y);
+        this.BBmiddleleft = new BoundingBox(this.x , this.y + (BACKGROUND.STONE_LAMP.SIZE.W) + 10,
+            5 ,  BACKGROUND.STONE_LAMP.SIZE.H * BACKGROUND.STONE_LAMP.SCALE.Y);
+        this.BBmiddleright = new BoundingBox(this.x +32, this.y + (BACKGROUND.STONE_LAMP.SIZE.W) +10,
+            5 ,  BACKGROUND.STONE_LAMP.SIZE.H * BACKGROUND.STONE_LAMP.SCALE.Y);
+        // this.BBbottom = new BoundingBox(this.x , this.y + 125 ,
+        //     (BACKGROUND.STONE_LAMP.SIZE.W) * BACKGROUND.STONE_LAMP.SCALE.X, 5);
+        // this.BBmiddle = new BoundingBox(this.x +19*4, this.y + 25 * 4,
+        //     7 *4, 275);
+        // this.BBmiddleleft = new BoundingBox(this.x +19*4, this.y + 25 * 4,
+        //     5, BACKGROUND.STONE_LAMP.SIZE.H * BACKGROUND.STONE_LAMP.SCALE.Y);
+        // this.BBmiddleright = new BoundingBox(this.x +19*4 +23, this.y + 25 * 4,
+        //     5, BACKGROUND.STONE_LAMP.SIZE.H * BACKGROUND.STONE_LAMP.SCALE.Y);
 
-        this.leftBB = new BoundingBox(this.x, this.y + 20,
-            BACKGROUND.STONE_LAMP.BB_SIZE.W, BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE - 40);
-
-        this.rightBB = new BoundingBox(this.BB.right - BACKGROUND.STONE_LAMP.BB_SIZE.W, this.y ,
-            BACKGROUND.STONE_LAMP.BB_SIZE.W, BACKGROUND.STONE_LAMP.SIZE.Y * BACKGROUND.STONE_LAMP.SCALE.Y );
-
+    
         if (PARAMS.DEBUG) {
             // ctx.lineWidth = 2;
-            ctx.strokeStyle = 'Green';
+            ctx.strokeStyle = 'red';
+            // ctx.strokeRect(this.BB.x -this.game.camera.x, this.BB.y,
+            //     this.BB.width,
+            //     this.BB.height);
+            
             ctx.strokeRect(this.BB.x -this.game.camera.x, this.BB.y,
-                BACKGROUND.STONE_LAMP.SIZE.X * BACKGROUND.STONE_LAMP.SCALE.X,
-                BACKGROUND.STONE_LAMP.SIZE.Y * BACKGROUND.STONE_LAMP.SCALE.Y);
-            // ctx.lineWidth = 10;
-            ctx.strokeStyle = 'Red';
-            ctx.strokeRect(this.leftBB.x - this.game.camera.x, this.leftBB.y, this.leftBB.width, this.leftBB.height);
-            ctx.strokeRect(this.rightBB.x - this.game.camera.x, this.rightBB.y, this.rightBB.width, this.rightBB.height);
+                this.BB.width,
+                this.BB.height);
+                ctx.strokeStyle = 'Yellow';
+            ctx.strokeRect(this.BBmiddleleft.x -this.game.camera.x, this.BBmiddleleft.y,
+                this.BBmiddleleft.width,
+                this.BBmiddleleft.height);
+            ctx.strokeRect(this.BBmiddleright.x -this.game.camera.x, this.BBmiddleright.y,
+                this.BBmiddleright.width,
+                this.BBmiddleright.height);
+
+            // ctx.strokeRect(this.BBtopleft.x -this.game.camera.x, this.BBtopleft.y,
+            //     this.BBtopleft.width,
+            //     this.BBtopleft.height);
+            // ctx.strokeRect(this.BBtopright.x -this.game.camera.x, this.BBtopright.y,
+            //     this.BBtopright.width,
+            //     this.BBtopright.height);
+            // ctx.strokeRect(this.BBbottom.x -this.game.camera.x, this.BBbottom.y,
+            //     this.BBbottom.width,
+            //     this.BBbottom.height);
+            // // ctx.lineWidth = 10;
+            // ctx.strokeStyle = 'Red';
+            // ctx.strokeRect(this.leftBB.x - this.game.camera.x, this.leftBB.y, this.leftBB.width, this.leftBB.height);
+            // ctx.strokeRect(this.rightBB.x - this.game.camera.x, this.rightBB.y, this.rightBB.width, this.rightBB.height);
         }
         ctx.imageSmoothingEnabled = false;
     }
@@ -326,8 +333,9 @@ class Lamp {
     constructor(game, x, y, w) {
         Object.assign(this, { game, x, y, w});
         this.spritesheet = this.spritesheet = ASSET_MANAGER.getAsset("./sprites/lamp.png");
-        this.BB = new BoundingBox(this.x+BACKGROUND.LAMP.PADDING.W, this.y,
-            BACKGROUND.LAMP.SIZE * BACKGROUND.LAMP.SCALE.W-BACKGROUND.LAMP.PADDING.W + 20, BACKGROUND.LAMP.SIZE * BACKGROUND.LAMP.SCALE.H);
+        this.spritesheet2 =  ASSET_MANAGER.getAsset("./sprites/flame.png");
+        this.BB = new BoundingBox(this.x+BACKGROUND.LAMP.PADDING.W, this.y +5,
+            BACKGROUND.LAMP.SIZE.W * BACKGROUND.LAMP.SCALE.W-BACKGROUND.LAMP.PADDING.W -20, BACKGROUND.LAMP.SIZE.H * BACKGROUND.LAMP.SCALE.H);
 
     }
 
@@ -336,11 +344,28 @@ class Lamp {
     };
 
     draw(ctx) {
-
-        ctx.drawImage(this.spritesheet, BACKGROUND.LAMP.X, BACKGROUND.LAMP.Y,
-            BACKGROUND.LAMP.SIZE, BACKGROUND.LAMP.SIZE,
+        var iterations = 16, radius = 50,
+        step = radius / iterations;
+        for(var i = 1; i < iterations; i++) {
+            ctx.filter = "blur(" + (step * i) + "px)";
+            ctx.drawImage(this.spritesheet2, BACKGROUND.LAMP.X, BACKGROUND.LAMP.Y,
+                BACKGROUND.LAMP.SIZE.W, BACKGROUND.LAMP.SIZE.H,
+                this.x - this.game.camera.x, this.y,
+                BACKGROUND.LAMP.SIZE.W * BACKGROUND.LAMP.SCALE.W, BACKGROUND.LAMP.SIZE.H * BACKGROUND.LAMP.SCALE.H);
+        }
+       // ctx.shadowColor = "transparent"; // remove shadow !
+       ctx.filter = "none";
+       ctx.fillStyle = "Yellow";
+       
+       ctx.drawImage(this.spritesheet2, BACKGROUND.LAMP.X, BACKGROUND.LAMP.Y,
+            BACKGROUND.LAMP.SIZE.W, BACKGROUND.LAMP.SIZE.H,
             this.x - this.game.camera.x, this.y,
-            BACKGROUND.LAMP.SIZE * BACKGROUND.LAMP.SCALE.W, BACKGROUND.LAMP.SIZE * BACKGROUND.LAMP.SCALE.H);
+            BACKGROUND.LAMP.SIZE.W * BACKGROUND.LAMP.SCALE.W, BACKGROUND.LAMP.SIZE.H * BACKGROUND.LAMP.SCALE.H);
+    
+        ctx.drawImage(this.spritesheet, BACKGROUND.LAMP.X, BACKGROUND.LAMP.Y,
+            BACKGROUND.LAMP.SIZE.W, BACKGROUND.LAMP.SIZE.H,
+            this.x - this.game.camera.x, this.y,
+            BACKGROUND.LAMP.SIZE.W * BACKGROUND.LAMP.SCALE.W, BACKGROUND.LAMP.SIZE.H * BACKGROUND.LAMP.SCALE.H);
 
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
