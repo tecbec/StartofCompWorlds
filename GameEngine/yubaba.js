@@ -19,6 +19,7 @@ class Yubaba {
         // speed stuff
         this.speed = 50;
         this.target = this.game.camera.chihiro;
+        this.hitpoints = 30;
     };
 
     loadAnimations(){
@@ -104,6 +105,8 @@ class Yubaba {
 
             }
         }
+        if(this.hitpoints <= 0 ) {this.removeFromWorld = true;}
+
     };
 
     updateBB(){

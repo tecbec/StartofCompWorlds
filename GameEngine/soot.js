@@ -29,6 +29,7 @@ class Soot {
 
         // bounding box
         this.updateBB();
+        this.hitpoints = 30; 
 
     };
 
@@ -121,6 +122,8 @@ class Soot {
             }
         }
             this.updateBB();
+            if(this.hitpoints <= 0 ) {this.removeFromWorld = true;}
+
     };
 
     draw(ctx) {
