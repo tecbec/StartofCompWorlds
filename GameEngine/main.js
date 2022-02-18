@@ -16,6 +16,7 @@ ASSET_MANAGER.queueDownload("./sprites/platform_sheet.png");
 ASSET_MANAGER.queueDownload("./sprites/Bathhouse.png");
 ASSET_MANAGER.queueDownload("./sprites/background_nightsky.png");
 ASSET_MANAGER.queueDownload("./sprites/noface-spritesheet-fade-aura.png");
+ASSET_MANAGER.queueDownload("./sprites/Firework-animation.png");
 ASSET_MANAGER.queueDownload("./sprites/coins.png");
 ASSET_MANAGER.queueDownload("./sprites/portal.png");
 ASSET_MANAGER.queueDownload("./sprites/haku_spritesheet.png");
@@ -25,6 +26,7 @@ ASSET_MANAGER.queueDownload("./sprites/chick.png");
 ASSET_MANAGER.queueDownload("./sprites/bubble.png");
 ASSET_MANAGER.queueDownload("./sprites/haku_text.png");
 ASSET_MANAGER.queueDownload("./sprites/youwin_text.png");
+ASSET_MANAGER.queueDownload("./sprites/title-buttons.png");
 
 // music
 ASSET_MANAGER.queueDownload("./audio/OneSummersDay.mp3");
