@@ -12,7 +12,14 @@ var BACKGROUND = {
     CLOUD_PLATFORM: {LEFT: {X: 0, Y: 0}, MID: {X: 0, Y: 0}, RIGHT: {X: 0, Y: 0}, SIZE: 16, SCALE: 4, COUNT: 2, BB_SIZE: {W: 5, H: 16}},
     CLOUD: {X: 0, Y: 0, WIDTH: 192, HEIGHT:64, SCALE: 1},
     CLOUD_BB:[{W: 64, H: 54}, {W: 64, H: 54}, {W: 128, H: 54}, {W: 148, H: 54}, {W: 192, H: 54}],
-    BATHHOUSE: {X:0, Y: 0, W: 987, H: 1104}
+    BATHHOUSE: {X:0, Y: 0, W: 987, H: 1104},
+    FIREWORKS: [{X: -600,    Y: 50,  SPRITEX: 0, SPRITEY: 0,     NUM_FRAMES: 10,     DUR: 0.1,       SCALE: 4}, 
+                {X: 100,    Y: 300, SPRITEX: 0, SPRITEY: 64,    NUM_FRAMES: 14,     DUR: 0.1 ,      SCALE: 4},
+                {X: 750,   Y: 50,  SPRITEX: 0, SPRITEY: 128,   NUM_FRAMES: 12,     DUR: 0.1,       SCALE: 5}],
+    BUTTONS:    [{X: -10,   Y: 700, SPRITEX: 0, SPRITEY: 0,     SWIDTH: 240,        SHEIGHT: 90,    SCALE: 0.75},
+                 {X: -710,  Y: 1040, SPRITEX: 0, SPRITEY: 90,   SWIDTH: 240,        SHEIGHT: 90,    SCALE: 0.4},
+                 {X: -580,  Y: 1040, SPRITEX: 0, SPRITEY: 180,   SWIDTH: 240,       SHEIGHT: 90,    SCALE: 0.4}],
+
     // PLATFORM_SHORT: {LEFT: {X: 0, Y: 32}, MID: {X: 16, Y: 32}, RIGHT: {X: 32, Y: 32}, SIZE: 16, SCALE: 2, COUNT: 2, BB_SIZE: {W: 5, H: 16}}
     // PLATFORM_LONG: {LEFT: {X: 0, Y: 0}, MID: {X: 16, Y: 32}, RIGHT: {X: 32, Y: 32}, SIZE: 16, SCALE: 2, COUNT: 5, BB_SIZE: {W: 5, H: 16}}
 };
@@ -22,19 +29,23 @@ class TitlePlaque { //bridge
         Object.assign(this, {game});
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/title.png");
 
-        this.x = 200;
+        this.x = -650;
         this.y = 250;
         this.velocity = {x: 100};
 
         this.spritedim = {height: 160, width: 784};
-        const spritestart = {x: 0, y: 0};
+        this.spritestart = {x: 0, y: 0};
         const frames = 13; //13
         const framedur = 0.3;
         const pad = 0;
 
         this.count = 0;
 
-        this.animations = new Animator(this.spritesheet, spritestart.x, spritestart.y, this.spritedim.width, this.spritedim.height, frames, framedur, pad, false, true);
+        this.animations = new Animator(this.spritesheet, this.spritestart.x, this.spritestart.y, this.spritedim.width, this.spritedim.height, frames, framedur, pad, false, true);
+        this.animation = new Animator(  this.spritesheet,
+                                        this.spritestart.x + (12 * this.spritedim.width) ,   this.spritestart.y,
+                                        this.spritedim.width,                               this.spritedim.height,
+                                        1, 100000000, pad, false, false);
     };
 
     update() {
@@ -44,11 +55,137 @@ class TitlePlaque { //bridge
         var width = 800;
         var height = 200;
 
-        this.animations.drawFrame(this.game.clockTick, ctx, this.x, this.y, 2);
+        this.count++;
+
+        if(this.count < 85) {
+            this.animations.drawFrame(this.game.clockTick, ctx, this.x-this.game.camera.x, this.y, 2);
+        } else {
+
+            this.animation.drawFrame(this.game.clockTick, ctx, this.x-this.game.camera.x, this.y, 2);
+        }
         ctx.imageSmoothingEnabled = false;
     };
-
 };
+
+class TitleButtons {
+    constructor(game) {
+        Object.assign(this, { game});
+        this.spritesheet = ASSET_MANAGER.getAsset("./sprites/title-buttons.png");
+        this.mute = true;
+        this.debug = true;
+    }
+
+    update() {
+    };
+
+    draw(ctx) {
+        if (this.game.mouse && this.game.mouse.y > 700 && this.game.mouse.y < 750) {   // Start
+            ctx.drawImage(  this.spritesheet,
+                BACKGROUND.BUTTONS[0].SPRITEX+BACKGROUND.BUTTONS[0].SWIDTH,     BACKGROUND.BUTTONS[0].SPRITEY,             // x and y of the spritesheet
+                BACKGROUND.BUTTONS[0].SWIDTH,                                   BACKGROUND.BUTTONS[0].SHEIGHT,             // width and height of the spritesheet
+                BACKGROUND.BUTTONS[0].X-this.game.camera.x,                     BACKGROUND.BUTTONS[0].Y,                   // x and y of the canvas
+                BACKGROUND.BUTTONS[0].SWIDTH * BACKGROUND.BUTTONS[0].SCALE,      BACKGROUND.BUTTONS[0].SHEIGHT * BACKGROUND.BUTTONS[0].SCALE);                      // width and height of the canvas
+        } else {
+            ctx.drawImage(  this.spritesheet,
+                BACKGROUND.BUTTONS[0].SPRITEX,                                  BACKGROUND.BUTTONS[0].SPRITEY,             // x and y of the spritesheet
+                BACKGROUND.BUTTONS[0].SWIDTH,                                   BACKGROUND.BUTTONS[0].SHEIGHT,             // width and height of the spritesheet
+                BACKGROUND.BUTTONS[0].X-this.game.camera.x,                     BACKGROUND.BUTTONS[0].Y,                   // x and y of the canvas
+                BACKGROUND.BUTTONS[0].SWIDTH * BACKGROUND.BUTTONS[0].SCALE,     BACKGROUND.BUTTONS[0].SHEIGHT * BACKGROUND.BUTTONS[0].SCALE);                      // width and height of the canvas
+        }
+
+        // if (this.game.mouse && this.game.mouse.y > 1040 && this.game.mouse.y < 1100 && this.game.mouse.x < 200 && this.game.mouse.x > 100 ) { // Debug
+        if (this.debug === true ) { // Debug
+            // console.log("this.debug", this.debug);
+            ctx.drawImage(  this.spritesheet,
+                BACKGROUND.BUTTONS[1].SPRITEX+BACKGROUND.BUTTONS[1].SWIDTH,     BACKGROUND.BUTTONS[1].SPRITEY,             // x and y of the spritesheet
+                BACKGROUND.BUTTONS[1].SWIDTH,                                   BACKGROUND.BUTTONS[1].SHEIGHT,             // width and height of the spritesheet
+                BACKGROUND.BUTTONS[1].X-this.game.camera.x,                     BACKGROUND.BUTTONS[1].Y,                   // x and y of the canvas
+                BACKGROUND.BUTTONS[1].SWIDTH * BACKGROUND.BUTTONS[1].SCALE,      BACKGROUND.BUTTONS[1].SHEIGHT * BACKGROUND.BUTTONS[1].SCALE);                      // width and height of the canvas
+        } else {
+            // console.log("this.debug", this.debug);
+            ctx.drawImage(  this.spritesheet,
+                BACKGROUND.BUTTONS[1].SPRITEX,                                  BACKGROUND.BUTTONS[1].SPRITEY,             // x and y of the spritesheet
+                BACKGROUND.BUTTONS[1].SWIDTH,                                   BACKGROUND.BUTTONS[1].SHEIGHT,             // width and height of the spritesheet
+                BACKGROUND.BUTTONS[1].X-this.game.camera.x,                     BACKGROUND.BUTTONS[1].Y,                   // x and y of the canvas
+                BACKGROUND.BUTTONS[1].SWIDTH * BACKGROUND.BUTTONS[1].SCALE,     BACKGROUND.BUTTONS[1].SHEIGHT * BACKGROUND.BUTTONS[1].SCALE);                      // width and height of the canvas
+        }
+
+        // if (this.game.mouse && this.game.mouse.y > 1040 && this.game.mouse.y < 1100 && this.game.mouse.x < 350 && this.game.mouse.x > 250) {   // Mute
+        if (this.mute === true) {   // Mute
+            // console.log("this.mute", this.mute);
+            ctx.drawImage(  this.spritesheet,
+                BACKGROUND.BUTTONS[2].SPRITEX+BACKGROUND.BUTTONS[2].SWIDTH,     BACKGROUND.BUTTONS[2].SPRITEY,             // x and y of the spritesheet
+                BACKGROUND.BUTTONS[2].SWIDTH,                                   BACKGROUND.BUTTONS[2].SHEIGHT,             // width and height of the spritesheet
+                BACKGROUND.BUTTONS[2].X-this.game.camera.x,                     BACKGROUND.BUTTONS[2].Y,                   // x and y of the canvas
+                BACKGROUND.BUTTONS[2].SWIDTH * BACKGROUND.BUTTONS[2].SCALE,      BACKGROUND.BUTTONS[2].SHEIGHT * BACKGROUND.BUTTONS[2].SCALE);                      // width and height of the canvas
+        } else {
+            // console.log("this.mute", this.mute);
+            ctx.drawImage(  this.spritesheet,
+                BACKGROUND.BUTTONS[2].SPRITEX,                                  BACKGROUND.BUTTONS[2].SPRITEY,             // x and y of the spritesheet
+                BACKGROUND.BUTTONS[2].SWIDTH,                                   BACKGROUND.BUTTONS[2].SHEIGHT,             // width and height of the spritesheet
+                BACKGROUND.BUTTONS[2].X-this.game.camera.x,                     BACKGROUND.BUTTONS[2].Y,                   // x and y of the canvas
+                BACKGROUND.BUTTONS[2].SWIDTH * BACKGROUND.BUTTONS[2].SCALE,     BACKGROUND.BUTTONS[2].SHEIGHT * BACKGROUND.BUTTONS[2].SCALE);                      // width and height of the canvas
+
+        }
+
+        // {X: -710,  Y: 1040, SPRITEX: 0, SPRITEY: 90,   SWIDTH: 240,        SHEIGHT: 90,    SCALE: 0.4},
+        // {X: -580,  Y: 1040,
+
+        ctx.imageSmoothingEnabled = false;
+    }
+};
+
+
+class Fireworks {                   //Firework animation
+    constructor(game) {
+        Object.assign(this, {game});
+        this.spritesheet = ASSET_MANAGER.getAsset("./sprites/Firework-animation.png");
+        this.velocity = {x: 100};
+
+        this.spritedim = {height: 64, width: 64};
+        const framedurRed = 0.1;
+        const framedurGreen = 0.2;
+        this.pad = 0;
+        this.count = 0;
+        this.loadAnimations();
+    };
+
+    loadAnimations() {
+        this.animations = []
+        for(let i = 0; i < BACKGROUND.FIREWORKS.length; i++) {
+            this.animations[i] = new Animator(  this.spritesheet, 
+                                                BACKGROUND.FIREWORKS[i].SPRITEX,     BACKGROUND.FIREWORKS[i].SPRITEY, 
+                                                this.spritedim.width,             this.spritedim.height, 
+                                                BACKGROUND.FIREWORKS[i].NUM_FRAMES, BACKGROUND.FIREWORKS[i].DUR, this.pad, false, true);
+        }
+    };
+
+    update() {
+    };
+
+    draw(ctx) {
+        this.count++;
+        this.fireCount = [80, 90, 100];
+        this.fireDur = [101, 111, 140];
+
+        if (this.count > this.fireCount[0] && this.count < this.fireDur[0]) {
+            this.animations[2].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[2].X-this.game.camera.x, BACKGROUND.FIREWORKS[2].Y, BACKGROUND.FIREWORKS[2].SCALE);
+        }
+        if (this.count > this.fireCount[1]  && this.count < this.fireDur[1] ) {
+            this.animations[0].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[0].X-this.game.camera.x, BACKGROUND.FIREWORKS[0].Y, BACKGROUND.FIREWORKS[0].SCALE);
+        }
+        if (this.count > this.fireCount[2]  && this.count < this.fireDur[2] ) {
+            this.animations[1].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[1].X-this.game.camera.x, BACKGROUND.FIREWORKS[1].Y, BACKGROUND.FIREWORKS[1].SCALE);
+        }
+        if (this.count > this.fireDur[2]) {
+            for(let i = 0; i < BACKGROUND.FIREWORKS.length; i++) {
+                this.animations[i].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[i].X-this.game.camera.x, BACKGROUND.FIREWORKS[i].Y, BACKGROUND.FIREWORKS[i].SCALE);
+            }
+        }
+        ctx.imageSmoothingEnabled = false;
+    };
+};
+
 
 class Bathhouse {
     constructor(game, x, y) {

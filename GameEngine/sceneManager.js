@@ -87,6 +87,7 @@ class SceneManager {
     constructor(game) {
         this.game = game;
         this.game.camera = this; // focusing camera on chihiro
+
         // this.midPoint = 0;
         this.gameOver = false;
         this.title = true;
@@ -128,6 +129,8 @@ class SceneManager {
         this.background = new BackGround(this.game, LEVEL.START_CANVAS.X,  LEVEL.START_CANVAS.Y);
         this.chick = new Chick(this.game, chickPlace.x, chickPlace.y, chickPlace.xneg, chickPlace.xpos);
         this.haku = new Haku(this.game, hakuPlace.x, hakuPlace.y);
+        this.buttons = new TitleButtons(this.game);
+
 
     }
 
@@ -166,11 +169,16 @@ class SceneManager {
     loadGame() {
         if (this.title) {
             this.game.addEntity(this.background);
+            this.game.addEntity(new Fireworks(this.game))
             this.game.addEntity(this.chihiro);
             this.game.addEntity(this.ground);
             this.game.addEntity(this.titlePlaque);
-            this.game.addEntity(this.chick);
+            this.game.addEntity(this.buttons);
+            // this.game.addEntity(this.chick);
             // this.game.addEntity(this.haku);
+
+           
+
         } else {
             this.bathhouse = new Bathhouse(this.game, LEVEL.BATHHOUSE.X,  LEVEL.BATHHOUSE.Y);
             this.game.addEntity(this.background);
@@ -248,11 +256,31 @@ class SceneManager {
         // blockwidth = 32 * 1 = 32
         // 200 -16 = 164
         if (this.title && this.game.click) {
-            if (this.game.click && this.game.click.y > 650 && this.game.click.y < 700) {
+            if (this.game.click && this.game.click.y > 700 && this.game.click.y < 750) {
                 this.title = false;
                 this.loadLevel(1, this.title);
                 this.game.click = false;
             }
+            if (this.game.click) {
+                // Debug
+                if(this.game.click.y > 1040         && this.game.click.y < 1070     && this.game.mouse.x < 200 && this.game.mouse.x > 100 && this.buttons.debug) {
+
+                    this.buttons.debug = false;
+                } else if (this.game.click.y > 1040 && this.game.click.y < 1070     && this.game.mouse.x < 200 && this.game.mouse.x > 100 && !this.buttons.debug) {
+                    this.buttons.debug = true;
+                }
+
+                // Mute
+                if (this.game.click.y > 1040        && this.game.click.y < 1070     && this.game.mouse.x < 350 && this.game.mouse.x > 250 && this.buttons.mute) {
+                    this.buttons.mute = false;
+                } else if (this.game.click.y > 1040 && this.game.click.y < 1070     && this.game.mouse.x < 200 && this.game.mouse.x > 100 && !this.buttons.mute) {
+                    this.buttons.mute = true;
+                }
+
+            }
+
+
+
         }
 
         // if (!this.title && this.chihiro.dead && this.chihiro.removeFromWorld) {
@@ -292,16 +320,9 @@ class SceneManager {
         ctx.font = PARAMS.BLOCKWIDTH / 2 + 'px "Press Start 2P"';
 
         if (this.title || this.chihiro.dead && this.chihiro.removeFromWorld) {
-            ctx.font = '50px Impact';
-            ctx.fillStyle = this.game.mouse && this.game.mouse.y > 650 && this.game.mouse.y < 700? "LightCoral" : "Grey";
-
-            ctx.fillText("Start", 875, 700); //280
-
-            // if ()
-            // image1
-            // else
-            // image 2
-
+            // ctx.font = '50px Impact';
+            // ctx.fillStyle = this.game.mouse && this.game.mouse.y > 650 && this.game.mouse.y < 700? "LightCoral" : "Grey";
+            // ctx.fillText("Start", 875, 700); //280
             //ctx.fillStyle = this.game.mouse && this.game.mouse.y > 614 && this.game.mouse.y < 649 ? "LightCoral" : "Black";
             //ctx.fillText("Instructions", PARAMS.CANVAS_WIDTH /  PARAMS.SCALE - 80, PARAMS.CANVAS_HEIGHT/  PARAMS.SCALE + 100); //300
         }
