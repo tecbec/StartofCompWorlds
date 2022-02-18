@@ -173,7 +173,7 @@ class SceneManager {
         } else {
             this.bathhouse = new Bathhouse(this.game, LEVEL.BATHHOUSE.X,  LEVEL.BATHHOUSE.Y);
             this.game.addEntity(this.background);
-
+            
             this.game.addEntity(this.railing);
             this.game.addEntity(this.bathhouse);
             this.game.addEntity(this.ground);
@@ -222,6 +222,11 @@ class SceneManager {
             for (var i = 0; i < LEVEL.CHICK_LOCATION.length; i++) {
                 let chick = LEVEL.CHICK_LOCATION[i];
                 this.game.addEntity(new Chick(this.game, chick.X, chick.Y, chick.MIN, chick.MAX, chick.DIR));
+            }
+
+            for (var i = 0; i < LEVEL.PORTAL_LOCATION.length; i++) {
+                let portal = LEVEL.PORTAL_LOCATION[i];
+                this.game.addEntity(new Portal(this.game, portal.X, portal.Y));
             }
 
             this.game.addEntity(this.chihiro);
