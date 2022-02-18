@@ -246,6 +246,18 @@ class StoneLamp {
     constructor(game, x, y, w) {
         Object.assign(this, { game, x, y, w});
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/stonelamp.png");
+        this.BB = new BoundingBox(this.x , this.y + 55,
+            (BACKGROUND.STONE_LAMP.SIZE.W) * BACKGROUND.STONE_LAMP.SCALE.X, 75);
+        this.BBmiddle = new BoundingBox(this.x +19*4, this.y + 25 * 4,
+            7 *4, 275);
+        this.BBtopleft = new BoundingBox(this.x , this.y + (BACKGROUND.STONE_LAMP.SIZE.W) + 20,
+            5 , 55);
+        this.BBtopright = new BoundingBox(this.x + (BACKGROUND.STONE_LAMP.SIZE.W) *4 - 5, this.y + (BACKGROUND.STONE_LAMP.SIZE.W) + 20,
+            5 , 55);
+        this.BBmiddleleft = new BoundingBox(this.x +19*4, this.y + 25 * 4,
+            5, BACKGROUND.STONE_LAMP.SIZE.H * BACKGROUND.STONE_LAMP.SCALE.Y);
+        this.BBmiddleright = new BoundingBox(this.x +19*4 +23, this.y + 25 * 4,
+            5, BACKGROUND.STONE_LAMP.SIZE.H * BACKGROUND.STONE_LAMP.SCALE.Y);
     }
 
     update() {
@@ -256,21 +268,8 @@ class StoneLamp {
         ctx.drawImage(this.spritesheet, BACKGROUND.STONE_LAMP.X, BACKGROUND.STONE_LAMP.Y, BACKGROUND.STONE_LAMP.SIZE.W, BACKGROUND.STONE_LAMP.SIZE.H,
             this.x - this.game.camera.x, this.y,
             BACKGROUND.STONE_LAMP.SIZE.W * BACKGROUND.STONE_LAMP.SCALE.X, BACKGROUND.STONE_LAMP.SIZE.H * BACKGROUND.STONE_LAMP.SCALE.Y);
-            //I do plan of removing all the magic numebrs 
-        this.BB = new BoundingBox(this.x , this.y + 55,
-            (BACKGROUND.STONE_LAMP.SIZE.W) * BACKGROUND.STONE_LAMP.SCALE.X, 75);
-        this.BBtopleft = new BoundingBox(this.x , this.y + (BACKGROUND.STONE_LAMP.SIZE.W) + 10,
-            5 , 75);
-        this.BBtopright = new BoundingBox(this.x + (BACKGROUND.STONE_LAMP.SIZE.W) *4 - 5, this.y + (BACKGROUND.STONE_LAMP.SIZE.W) +10,
-            5 , 75);
-        // needs to implemented in the player class
-        this.BBmiddle = new BoundingBox(this.x +19*4, this.y + 25 * 4,
-            7 *4, 275);
-        this.BBmiddleleft = new BoundingBox(this.x +19*4, this.y + 25 * 4,
-            5, BACKGROUND.STONE_LAMP.SIZE.H * BACKGROUND.STONE_LAMP.SCALE.Y);
-        this.BBmiddleright = new BoundingBox(this.x +19*4 +23, this.y + 25 * 4,
-            5, BACKGROUND.STONE_LAMP.SIZE.H * BACKGROUND.STONE_LAMP.SCALE.Y);
 
+     
     
         if (PARAMS.DEBUG) {
             // ctx.lineWidth = 2;
@@ -281,7 +280,7 @@ class StoneLamp {
             ctx.strokeRect(this.BBmiddle.x -this.game.camera.x, this.BBmiddle.y,
                 this.BBmiddle.width,
                 this.BBmiddle.height);
-                ctx.strokeStyle = 'Yellow';
+                ctx.strokeStyle = 'yellow';
             ctx.strokeRect(this.BBmiddleleft.x -this.game.camera.x, this.BBmiddleleft.y,
                 this.BBmiddleleft.width,
                 this.BBmiddleleft.height);
@@ -289,7 +288,6 @@ class StoneLamp {
                 this.BBmiddleright.width,
                 this.BBmiddleright.height);
 
-            ctx.strokeStyle = 'yellow';
             ctx.strokeRect(this.BBtopleft.x -this.game.camera.x, this.BBtopleft.y,
                 this.BBtopleft.width,
                 this.BBtopleft.height);

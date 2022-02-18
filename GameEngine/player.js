@@ -459,6 +459,16 @@ class Player {
                     entity.removeFromWorld = true;
                 }
             }
+
+            if (entity instanceof StoneLamp && that.BB.collide(entity.BBmiddle)) {
+                if (that.BB.collide(entity.BBmiddleleft) && that.BB.right >= entity.BBmiddleleft.left ) { // left collision
+                    that.setX(entity.BBmiddleleft.left - that.getWidth());
+                    if (that.velocity.x > 0) that.velocity.x = 0;
+                } else if (that.BB.collide(entity.BBmiddleright) && that.BB.left <= entity.BBmiddleright.right ) { // right collision
+                    that.setX(entity.BBmiddleright.right);
+                    if (that.velocity.x < 0) that.velocity.x = 0;
+                } 
+            }
         });
         this.updateBB();
          // Implemented god mode only for debug purposes
