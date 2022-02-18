@@ -342,7 +342,7 @@ class Lamp {
     //     }
     //    // ctx.shadowColor = "transparent"; // remove shadow !
     //    ctx.filter = "none";
-       ctx.fillStyle = "Yellow";
+  //     ctx.fillStyle = "Yellow";
        ctx.drawImage(this.spritesheet2, BACKGROUND.LAMP.X, BACKGROUND.LAMP.Y,
             BACKGROUND.LAMP.SIZE.W, BACKGROUND.LAMP.SIZE.H,
             this.x - this.game.camera.x, this.y,

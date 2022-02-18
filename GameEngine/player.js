@@ -317,7 +317,7 @@ class Player {
                 }
 
                 if (that.velocity.y < 0) {     // chihiro is jumping up and hits the bottom of a platform
-                    if((entity instanceof Platform )    // collision w/ bottom of platform
+                    if((entity instanceof Platform || entity instanceof StoneLamp)    // collision w/ bottom of platform
                         && (that.lastBB.top >= entity.BB.bottom)) { // top of chihiro goes above the bottom of the platform
                         that.velocity.y = 0;
                         //that.updateBB();
@@ -508,7 +508,7 @@ class Player {
                         this.elapsedTime = 0;
                         this.counter++; //once you shoot 7 bubbles then no more bubbles for you
                 }
-            if (this.bubbleTime > 5) {
+            if (this.bubbleTime > 10) { //only have bubble powerup for 10 seconds 
                 this.powerup = false;  
             }
         }
