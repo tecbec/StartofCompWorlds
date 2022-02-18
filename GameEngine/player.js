@@ -1,7 +1,7 @@
 /* Chihiro's Params */
 var CHIHIRO = {
     TITLE_POSITION:   {X: 0,  Y: 800},
-    INITIAL_POSITION: {X: 0,  Y: 0},  // 10110
+    INITIAL_POSITION: {X: -200,  Y: 0},  // change to 10200 to test winning condition. 
     SIZE: 70,
     SCALE: 2,
     PADDING:{X: 28, Y: 20}, // same padding for BB and imaginary x,y,w,h calculations
@@ -31,7 +31,10 @@ class Player {
         this.isGrounded = false;
         this.deadCounter = 0;
         this.dead = false;
-
+        this.winGame = false;
+        this.collideWithHaku = false;
+        this.chihiroScale = 2;
+        this.endPosition = false;
         // testing
         this.sootCount = 0;
         this.nofaceCount = 0;
@@ -153,7 +156,12 @@ class Player {
                                         (this.y + CHIHIRO.PADDING.Y*CHIHIRO.SCALE) + crouchHeight,
                                         (CHIHIRO.SIZE - (CHIHIRO.PADDING.X * 2))* CHIHIRO.SCALE, // padding on left and right
                                         crouchHeight - 1); // padding on top
-        }else{
+        } if (this.winGame) {
+            this.BB = new BoundingBox(this.x + CHIHIRO.PADDING.X, this.y + CHIHIRO.PADDING.Y ,
+                (CHIHIRO.SIZE - (CHIHIRO.PADDING.X * 2)), // padding on left and right
+                (CHIHIRO.SIZE- CHIHIRO.PADDING.Y) - 1); // padding on top
+        } 
+        else {
             this.BB = new BoundingBox(this.x + CHIHIRO.PADDING.X*CHIHIRO.SCALE, this.y + CHIHIRO.PADDING.Y*CHIHIRO.SCALE,
                 (CHIHIRO.SIZE - (CHIHIRO.PADDING.X * 2))* CHIHIRO.SCALE, // padding on left and right
                 (CHIHIRO.SIZE- CHIHIRO.PADDING.Y) * CHIHIRO.SCALE - 1); // padding on top
@@ -162,7 +170,7 @@ class Player {
 
     /* Draw the images onto the screen */
     draw(ctx) {
-        this.animations[this.state][this.facing].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, CHIHIRO.SCALE);
+        this.animations[this.state][this.facing].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, this.chihiroScale);
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
             ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
@@ -184,7 +192,7 @@ class Player {
         const FALL_ACC = 562.5 * PARAMS.SCALE;
 
         // can only move while on the ground AND jump after has been grounded for x ticks
-        if (this.isGrounded && !this.dead) {
+        if (this.isGrounded && !this.dead && !this.winGame) {
             if(this.jumping) {         // just landed
                 this.jumpTimer = 1000; // set off short timer, to prevent accidental double jumping
             }
@@ -246,7 +254,11 @@ class Player {
             if (this.game.crouch && this.velocity.y > 0) { // if shes pressing crouch and falls, set the game crouch to false so she can only press it once.
                 this.game.crouch = false;
             }
+            if (this.game.crouch && this.velocity.y < 0) { // if shes pressing crouch and jump, set the game crouch to false so she can only press it once.
+                this.game.crouch = false;
+            }
         }
+
         //this makes chihiro always fall
         this.velocity.y += FALL_ACC * TICK;
 
@@ -257,8 +269,31 @@ class Player {
         if (this.game.crouch && this.velocity.x <= -MIN_WALK) this.velocity.x = -CROUCH_SPEED;
         if (this.game.crouch && this.velocity.x >= MIN_WALK) this.velocity.x = CROUCH_SPEED;
 
-        this.x += this.velocity.x * TICK * TICK_SCALE;
-        this.y += this.velocity.y * TICK * TICK_SCALE;
+
+        // winning condition. 
+        if (this.x > LEVEL.END_GAME.X) { // Freeze chihiro.
+            this.winGame = true;
+            this.velocity.x = 0; 
+            this.chihiroScale = 1; 
+            this.game.crouch = false;
+            if (this.x > LEVEL.END_GAME.X) { 
+                this.velocity.x = 40;  // walk   
+                if (this.x > LEVEL.END_GAME.X + 350) { // reach door stops
+                    this.velocity.x = 0;   
+                    this.state = 0;
+                    this.endPosition = true;
+                }
+                this.x += this.velocity.x * TICK * TICK_SCALE;  
+            } 
+            this.y += this.velocity.y * TICK * TICK_SCALE;    
+        } else {
+            this.winGame = false;
+            this.x += this.velocity.x * TICK * TICK_SCALE;
+            this.y += this.velocity.y * TICK * TICK_SCALE;
+        }
+
+       
+        
 
         this.updateBB();
 
@@ -267,7 +302,8 @@ class Player {
         this.game.entities.forEach(function (entity) {         // this will look at all entities in relation to chihiro
             if (entity.BB && that.BB.collide(entity.BB) ) {    // is there an entity bb & check to see if they collide
                 if (that.velocity.y > 0) {                     // chihiro is falling
-                    if((entity instanceof Ground || entity instanceof Platform || entity instanceof CloudPlatform || entity instanceof StoneLamp ||
+                    if((entity instanceof Ground || entity instanceof Platform || entity instanceof CloudPlatform ||
+                        entity instanceof StoneLamp ||
                         entity instanceof Railing || entity instanceof Lamp) && (that.lastBB.bottom  <= entity.BB.top)) // minus one?? idk how this works
                   { // bottom of chihiro hits the top of the entity
                         that.isGrounded = true;
@@ -389,6 +425,9 @@ class Player {
                     // instantly heal stamina bar
                     that.game.camera.breathwidth = CHIHIRO.BREATH_BAR.MAX;
                     that.game.camera.changeBreath();
+                    that.collideWithHaku = true;
+                } else {
+                    
                 }
 
                 // collision with SOOTS
@@ -412,6 +451,16 @@ class Player {
                     entity.removeFromWorld = true;
                 }
             }
+
+            if (entity instanceof StoneLamp && that.BB.collide(entity.BBmiddle)) {
+                if (that.BB.collide(entity.BBmiddleleft) && that.BB.right >= entity.BBmiddleleft.left ) { // left collision
+                    that.setX(entity.BBmiddleleft.left - that.getWidth());
+                    if (that.velocity.x > 0) that.velocity.x = 0;
+                } else if (that.BB.collide(entity.BBmiddleright) && that.BB.left <= entity.BBmiddleright.right ) { // right collision
+                    that.setX(entity.BBmiddleright.right);
+                    if (that.velocity.x < 0) that.velocity.x = 0;
+                } 
+            }
         });
         this.updateBB();
          // Implemented god mode only for debug purposes
@@ -425,9 +474,9 @@ class Player {
         }
         // update state
         if (this.state !== 5 && this.state !== 3) {  // NOT dead, or crouch
-            if (this.isGrounded && this.game.crouch && this.velocity.x == 0) this.state = 3;  // crouch idle state
+            if (this.game.crouch && this.velocity.x == 0) this.state = 3;  // crouch idle state
             else if (!this.isGrounded && Math.abs(this.velocity.x) > 0) this.state = 2; // jump walk state
-            else if (this.isGrounded && this.game.crouch && Math.abs(this.velocity.x) > 0) this.state = 6; // crouch walk state
+            else if (this.game.crouch && Math.abs(this.velocity.x) > 0) this.state = 6; // crouch walk state
             else if (Math.abs(this.velocity.x) > 0) this.state = 1;        // walking state
             else if (Math.abs(this.velocity.x) > MIN_WALK) this.state = 4; // running state
         }
@@ -472,7 +521,6 @@ class Player {
                 this.game.camera.chihiro.dead = false;
             }
         }
-       
 
     };
 
@@ -485,32 +533,32 @@ class Player {
 
     //sets an x value while removing the padding
     setX(newX){
-        this.x = newX - (CHIHIRO.PADDING.X * CHIHIRO.SCALE);
+        this.x = newX - (CHIHIRO.PADDING.X *this.chihiroScale);
     };
 
     setY(newY){
-        this.y = newY - (CHIHIRO.PADDING.Y*CHIHIRO.SCALE - 1);
+        this.y = newY - (CHIHIRO.PADDING.Y*this.chihiroScale - 1);
     };
 
     //gets the fake x value
     getX(){
-        return this.x + (CHIHIRO.PADDING.X) *CHIHIRO.SCALE;
+        return this.x + (CHIHIRO.PADDING.X) *this.chihiroScale;
     };
 
     //gets the fake y value
     getY(){
-        return this.y + (CHIHIRO.PADDING.Y) *CHIHIRO.SCALE;
+        return this.y + (CHIHIRO.PADDING.Y)*this.chihiroScale;
                        // padding only on the top
     };
 
     //gets width while removing the padding
     getWidth(){
-        return (CHIHIRO.SIZE - (CHIHIRO.PADDING.X * 2))*CHIHIRO.SCALE;
+        return (CHIHIRO.SIZE - (CHIHIRO.PADDING.X * 2))*this.chihiroScale;
     };
 
     //gets height while removing the padding
     getHeight(){
-        return (CHIHIRO.SIZE - CHIHIRO.PADDING.Y)*CHIHIRO.SCALE;
+        return (CHIHIRO.SIZE - CHIHIRO.PADDING.Y)*this.chihiroScale;
     };
 
     toString(){
