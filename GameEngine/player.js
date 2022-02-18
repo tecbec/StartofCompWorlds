@@ -317,18 +317,16 @@ class Player {
                             that.setX(entity.BB.right);// so that the player won't stick to the bb of the entity
                             //that.velocity.y = 0;
                             if (that.velocity.x < 0) that.velocity.x = 0;
+                        } else if (that.BB.collide(entity.BBmiddleleft) && that.BB.right >= entity.BBmiddleleft.left ) { // left collision
+                            //that.setX(entity.BBmiddle.left - that.getWidth()); // so that the player won't stick to the bb of the entity
+                            //   that.velocity.y = 0;
+                            if (that.velocity.x > 0) that.velocity.x = 0;
+                        } else if (that.BB.collide(entity.BBmiddleright) && that.BB.left <= entity.BBmiddleright.right ) { // right collision
+                           // that.setX(entity.BBmiddle.right);// so that the player won't stick to the bb of the entity
+                            // that.velocity.y = 0;
+                            if (that.velocity.x < 0) that.velocity.x = 0;
                         } 
-                  //  } //else {
-                    // if (that.BB.collide(entity.BBmiddleleft) && that.BB.right >= entity.BBmiddleleft.left ) { // left collision
-                    //         that.setX(entity.BBmiddle.left - that.getWidth()); // so that the player won't stick to the bb of the entity
-                    //         //   that.velocity.y = 0;
-                    //         if (that.velocity.x > 0) that.velocity.x = 0;
-                    //     } else if (that.BB.collide(entity.BBmiddleright) && that.BB.left <= entity.BBmiddleright.right ) { // right collision
-                    //         that.setX(entity.BBmiddle.right);// so that the player won't stick to the bb of the entity
-                    //         // that.velocity.y = 0;
-                    //         if (that.velocity.x < 0) that.velocity.x = 0;
-                    //     } 
-                    // }
+                    
                     
                 }
 
