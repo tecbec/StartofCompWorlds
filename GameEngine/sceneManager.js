@@ -94,6 +94,10 @@ class SceneManager {
         this.level = 1;
         this.gameOverCounter  = 0;
 
+        // sound
+        this.mute = true;
+        this.volume = 0.1;
+
         //Breath
         this.breathwidth = 100;
         this.loadLevel(this.level, this.title);
@@ -107,18 +111,14 @@ class SceneManager {
     };
 
     updateAudio() {
-        var mute = document.getElementById("mute").checked;
-        var volume = document.getElementById("volume").value;
-
-        ASSET_MANAGER.muteAudio(mute);
-        ASSET_MANAGER.adjustVolume(volume);
-
+        ASSET_MANAGER.muteAudio(this.mute);
+        ASSET_MANAGER.adjustVolume(this.volume);
     };
 
     // create all entities for the Title Screen
     titleScreen() {
 
-        let chickPlace = {x: 850, y: 775, xneg: 100, xpos: 800};
+        let chickPlace = {x: 1200, y: 775, xneg: 500, xpos: 1200};
         let hakuPlace = {x: -750, y: 825};
 
         // Title Chihiro
@@ -127,11 +127,16 @@ class SceneManager {
         this.ground = new Ground(this.game, LEVEL.START_CANVAS.X, PARAMS.CANVAS_HEIGHT - BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE,
                                             PARAMS.CANVAS_WIDTH * LEVEL.FRAME_COUNT, BACKGROUND.GROUND.SCALE * BACKGROUND.GROUND.SIZE);
         this.background = new BackGround(this.game, LEVEL.START_CANVAS.X,  LEVEL.START_CANVAS.Y);
+        this.railing = new Railing(this.game, LEVEL.RAILING_LOCATION.X, LEVEL.RAILING_LOCATION.Y, PARAMS.CANVAS_WIDTH * (LEVEL.FRAME_COUNT - 3),
+                                    BACKGROUND.RAILING.SCALE * BACKGROUND.RAILING.SIZE);
         this.chick = new Chick(this.game, chickPlace.x, chickPlace.y, chickPlace.xneg, chickPlace.xpos);
-        this.haku = new Haku(this.game, hakuPlace.x, hakuPlace.y);
+        this.lamp = new Lamp(this.game, -950, 620, BACKGROUND.LAMP.SIZE * BACKGROUND.LAMP.SCALE.W);
+        // this.haku = new Haku(this.game, hakuPlace.x, hakuPlace.y);
         this.buttons = new TitleButtons(this.game);
 
-
+        this.buttons.mute = true;
+        this.mute = true;
+        this.updateAudio();
     }
 
     loadLevel(level, title){
@@ -169,23 +174,22 @@ class SceneManager {
     loadGame() {
         if (this.title) {
             this.game.addEntity(this.background);
-            this.game.addEntity(new Fireworks(this.game))
-            this.game.addEntity(this.chihiro);
             this.game.addEntity(this.ground);
+            this.game.addEntity(this.chihiro);
             this.game.addEntity(this.titlePlaque);
             this.game.addEntity(this.buttons);
-            // this.game.addEntity(this.chick);
+            this.game.addEntity(new Fireworks(this.game));
+            this.game.addEntity(this.railing);
+            this.game.addEntity(this.chick);
+            this.game.addEntity(this.lamp);
+
             // this.game.addEntity(this.haku);
-
-           
-
         } else {
             this.bathhouse = new Bathhouse(this.game, LEVEL.BATHHOUSE.X,  LEVEL.BATHHOUSE.Y);
             this.game.addEntity(this.background);
-
+            this.game.addEntity(this.ground);
             this.game.addEntity(this.railing);
             this.game.addEntity(this.bathhouse);
-            this.game.addEntity(this.ground);
 
             for (var i = 0; i < LEVEL.PLATFORM_LOCATION.length; i++) {
                 let platform = LEVEL.PLATFORM_LOCATION[i];
@@ -234,7 +238,7 @@ class SceneManager {
             }
 
             this.game.addEntity(this.chihiro);
-           
+
             for (var i = 0; i < LEVEL.HAKU_LOCATION.length; i++) {
                 let haku = LEVEL.HAKU_LOCATION[i];
                 this.game.addEntity(new Haku(this.game, haku.X, haku.Y, haku.TEXT));
@@ -243,6 +247,8 @@ class SceneManager {
             this.game.addEntity(this.breathbar);
             this.game.addEntity(this.coinCounter);
             this.game.addEntity(new TransitionScreen(this.game, this.level, LEVEL.END_SCREEN.X, LEVEL.END_SCREEN.Y));
+
+            this.game.addEntity(this.buttons);
         }
     };
 
@@ -255,33 +261,61 @@ class SceneManager {
         // canvas width = 400
         // blockwidth = 32 * 1 = 32
         // 200 -16 = 164
-        if (this.title && this.game.click) {
-            if (this.game.click && this.game.click.y > 700 && this.game.click.y < 750) {
+        if (this.title && this.game.click) {  // start button
+            if (this.game.click && this.game.click.y > 700 && this.game.click.y < 750 && this.game.click.x > 815  && this.game.click.x < 1003) {
                 this.title = false;
                 this.loadLevel(1, this.title);
                 this.game.click = false;
             }
-            if (this.game.click) {
-                // Debug
-                if(this.game.click.y > 1040         && this.game.click.y < 1070     && this.game.mouse.x < 200 && this.game.mouse.x > 100 && this.buttons.debug) {
+        }
 
-                    this.buttons.debug = false;
-                } else if (this.game.click.y > 1040 && this.game.click.y < 1070     && this.game.mouse.x < 200 && this.game.mouse.x > 100 && !this.buttons.debug) {
-                    this.buttons.debug = true;
-                }
-
-                // Mute
-                if (this.game.click.y > 1040        && this.game.click.y < 1070     && this.game.mouse.x < 350 && this.game.mouse.x > 250 && this.buttons.mute) {
-                    this.buttons.mute = false;
-                } else if (this.game.click.y > 1040 && this.game.click.y < 1070     && this.game.mouse.x < 200 && this.game.mouse.x > 100 && !this.buttons.mute) {
-                    this.buttons.mute = true;
-                }
-
+        if (this.game.click) {
+            // Debug
+            if(this.game.click.y > 1040         && this.game.click.y < 1070     && this.game.mouse.x < 200 && this.game.mouse.x > 100 && PARAMS.DEBUG) {
+                PARAMS.DEBUG = false;
+                this.game.click = false;
+            } else if (this.game.click.y > 1040 && this.game.click.y < 1070     && this.game.mouse.x < 200 && this.game.mouse.x > 100 && !PARAMS.DEBUG) {
+                PARAMS.DEBUG = true;
+                this.game.click = false;
+            }
+            // Mute
+            if (this.game.click.y > 1040        && this.game.click.y < 1070     && this.game.mouse.x < 350 && this.game.mouse.x > 250 && this.buttons.mute) {
+                this.buttons.mute = false;
+                this.mute = false;
+                this.updateAudio();
+                this.game.click = false;
+            } else if (this.game.click.y > 1040 && this.game.click.y < 1070     && this.game.mouse.x < 350 && this.game.mouse.x > 250 && !this.buttons.mute) {
+                this.buttons.mute = true;
+                this.mute=true;
+                this.updateAudio();
+                this.game.click = false;
             }
 
+            // if (this.game.mouse && this.game.mouse.y > 1000 && this.game.mouse.y < 1032 && this.game.mouse.x > 400  && this.game.mouse.x < 432) {   // volume up
+            // if (this.game.mouse && this.game.mouse.y > 1040 && this.game.mouse.y < 1072 && this.game.mouse.x > 400  && this.game.mouse.x < 432)  {   // volume up
+
+            // Volume
 
 
+            if (this.game.click.y > 1000 && this.game.click.y < 1032 && this.game.mouse.x > 475  && this.game.mouse.x < 510) {
+                if (this.volume <= 0.95){
+                    this.volume += 0.05;
+                }
+                this.updateAudio();
+                this.buttons.up = false;
+                this.game.click = false;
+                console.log(this.volume);
+            } else if (this.game.click.y > 1040 && this.game.click.y < 1072 && this.game.mouse.x > 475  && this.game.mouse.x < 510) {
+                if (this.volume >= 0.05){
+                    this.volume -= 0.05;
+                }
+                this.updateAudio();
+                this.buttons.down = false;
+                this.game.click = false;
+                console.log(this.volume);
+            }
         }
+
 
         // if (!this.title && this.chihiro.dead && this.chihiro.removeFromWorld) {
         if (!this.title && this.chihiro.dead) {
@@ -313,19 +347,11 @@ class SceneManager {
             this.gameOver = false;
         }
         
-        PARAMS.DEBUG = document.getElementById("debug").checked;
+        // PARAMS.DEBUG = document.getElementById("debug").checked;
     };
 
     draw(ctx) {
         ctx.font = PARAMS.BLOCKWIDTH / 2 + 'px "Press Start 2P"';
-
-        if (this.title || this.chihiro.dead && this.chihiro.removeFromWorld) {
-            // ctx.font = '50px Impact';
-            // ctx.fillStyle = this.game.mouse && this.game.mouse.y > 650 && this.game.mouse.y < 700? "LightCoral" : "Grey";
-            // ctx.fillText("Start", 875, 700); //280
-            //ctx.fillStyle = this.game.mouse && this.game.mouse.y > 614 && this.game.mouse.y < 649 ? "LightCoral" : "Black";
-            //ctx.fillText("Instructions", PARAMS.CANVAS_WIDTH /  PARAMS.SCALE - 80, PARAMS.CANVAS_HEIGHT/  PARAMS.SCALE + 100); //300
-        }
 
         if (PARAMS.DEBUG && !this.title && !this.chihiro.winGame) {
             ctx.strokeStyle = "White";
