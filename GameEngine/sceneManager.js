@@ -175,14 +175,13 @@ class SceneManager {
         if (this.title) {
             this.game.addEntity(this.background);
             this.game.addEntity(this.ground);
-            this.game.addEntity(this.chihiro);
             this.game.addEntity(this.titlePlaque);
             this.game.addEntity(this.buttons);
             this.game.addEntity(new Fireworks(this.game));
             this.game.addEntity(this.railing);
             this.game.addEntity(this.chick);
             this.game.addEntity(this.lamp);
-
+            this.game.addEntity(this.chihiro);
             // this.game.addEntity(this.haku);
         } else {
             this.bathhouse = new Bathhouse(this.game, LEVEL.BATHHOUSE.X,  LEVEL.BATHHOUSE.Y);
