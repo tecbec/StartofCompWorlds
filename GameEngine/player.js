@@ -1,7 +1,7 @@
 /* Chihiro's Params */
 var CHIHIRO = {
     TITLE_POSITION:   {X: 0,  Y: 800},
-    INITIAL_POSITION: {X: 10200,  Y: 0},  // change to 10200 to test winning condition. 
+    INITIAL_POSITION: {X: -200,  Y: 0},  // change to 10200 to test winning condition. 
     SIZE: 70,
     SCALE: 2,
     PADDING:{X: 28, Y: 20}, // same padding for BB and imaginary x,y,w,h calculations
@@ -19,6 +19,9 @@ var CHIHIRO = {
 class Player {
     constructor(game, x, y) {
         Object.assign(this, {game, x, y});
+        this.powerup = false; 
+        this.counter =0; 
+        this.bubbleTime = 0;
         this.game.chihiro = this;  // chihiro adds a reference to herself into the game engine
         this.game.x = this;
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/chihiro_spritesheet.png");
@@ -340,46 +343,29 @@ class Player {
                         //that.updateBB(); 
                 }
 
-                if(entity instanceof StoneLamp && that.BB.collide(entity.BB)) {
-                  //  console.log("stonelamp",  that.BB.right >= entity.BB.left );
-
-                    if (that.BB.collide(entity.BBmiddleleft) && that.BB.right >= entity.BBmiddleleft.left ) { // left collision
-                        that.setX(entity.BB.left - that.getWidth()); // so that the player won't stick to the bb of the entity
-                        //that.velocity.y = 0;
-                        if (that.velocity.x > 0) that.velocity.x = 0;
-                        
-
-                    } else if (that.BB.collide(entity.BBmiddleright) && that.BB.left <= entity.BBmiddleright.right ) { // right collision
-                        that.setX(entity.BB.right);// so that the player won't stick to the bb of the entity
-                        //that.velocity.y = 0;
-                        if (that.velocity.x < 0) that.velocity.x = 0;
-                    } 
+                if(entity instanceof StoneLamp  && (that.BB.collide(entity.BB))){ //|| that.BB.collide(entity.BBmiddle) )) {
+                   // if( that.BB.collide(entity.BB)){
+                        if (that.BB.collide(entity.BBtopleft) && that.BB.right >= entity.BBtopleft.left ) { // left collision
+                            that.setX(entity.BB.left - that.getWidth()); // so that the player won't stick to the bb of the entity
+                            //that.velocity.y = 0;
+                            if (that.velocity.x > 0) that.velocity.x = 0;
+                        } else if (that.BB.collide(entity.BBtopright) && that.BB.left <= entity.BBtopright.right ) { // right collision
+                            that.setX(entity.BB.right);// so that the player won't stick to the bb of the entity
+                            //that.velocity.y = 0;
+                            if (that.velocity.x < 0) that.velocity.x = 0;
+                        } 
+                  //  } //else {
+                    // if (that.BB.collide(entity.BBmiddleleft) && that.BB.right >= entity.BBmiddleleft.left ) { // left collision
+                    //         that.setX(entity.BBmiddle.left - that.getWidth()); // so that the player won't stick to the bb of the entity
+                    //         //   that.velocity.y = 0;
+                    //         if (that.velocity.x > 0) that.velocity.x = 0;
+                    //     } else if (that.BB.collide(entity.BBmiddleright) && that.BB.left <= entity.BBmiddleright.right ) { // right collision
+                    //         that.setX(entity.BBmiddle.right);// so that the player won't stick to the bb of the entity
+                    //         // that.velocity.y = 0;
+                    //         if (that.velocity.x < 0) that.velocity.x = 0;
+                    //     } 
+                    // }
                     
-                    // } else {
-                        // console.log("stonelamp right",that.BB.collide(entity.BBmiddle) && that.BB.left <= entity.BBmiddle.right );
-
-                        // if (that.BB.collide(entity.BBmiddleleft) && that.BB.right >= entity.BBmiddleleft.left ) { // left collision
-                        //     that.setX(entity.BBmiddle.left - that.getWidth()); // so that the player won't stick to the bb of the entity
-                        //  //   that.velocity.y = 0;
-                        //     if (that.velocity.x > 0) that.velocity.x = 0;
-                        // } else if (that.BB.collide(entity.BBmiddleright) && that.BB.left <= entity.BBmiddleright.right ) { // right collision
-                        //     that.setX(entity.BBmiddle.right);// so that the player won't stick to the bb of the entity
-                        //    // that.velocity.y = 0;
-                        //     if (that.velocity.x < 0) that.velocity.x = 0;
-                        // } 
-
-                                            // if (that.BB.collide(entity.BBtopleft) && that.BB.right >= entity.BBtopleft.left ) { // left collision
-                    //     that.setX(entity.BB.left - that.getWidth()); // so that the player won't stick to the bb of the entity
-                    //     //that.velocity.y = 0;
-                    //     if (that.velocity.x > 0) that.velocity.x = 0;
-                        
-
-                    // } else if (that.BB.collide(entity.BBtopright) && that.BB.left <= entity.BBtopright.right ) { // right collision
-                    //     that.setX(entity.BB.right);// so that the player won't stick to the bb of the entity
-                    //     //that.velocity.y = 0;
-                    //     if (that.velocity.x < 0) that.velocity.x = 0;
-                    // } 
-                    //}
                 }
 
                 if(entity instanceof Railing) {// if she's crouching she'll fall to ground
@@ -466,6 +452,22 @@ class Player {
                     entity.removeFromWorld = true;
                     that.game.camera.coinCounter.coinCount ++;
                 }
+
+                if (entity instanceof Portal) {
+                    console.log("instanceof");
+                    that.powerup = true; 
+                    entity.removeFromWorld = true;
+                }
+            }
+
+            if (entity instanceof StoneLamp && that.BB.collide(entity.BBmiddle)) {
+                if (that.BB.collide(entity.BBmiddleleft) && that.BB.right >= entity.BBmiddleleft.left ) { // left collision
+                    that.setX(entity.BBmiddleleft.left - that.getWidth());
+                    if (that.velocity.x > 0) that.velocity.x = 0;
+                } else if (that.BB.collide(entity.BBmiddleright) && that.BB.left <= entity.BBmiddleright.right ) { // right collision
+                    that.setX(entity.BBmiddleright.right);
+                    if (that.velocity.x < 0) that.velocity.x = 0;
+                } 
             }
         });
         this.updateBB();
@@ -508,12 +510,19 @@ class Player {
         if (this.velocity.x < 0) this.facing = 1;
         if (this.velocity.x > 0) this.facing = 0;
 
-        this.elapsedTime += TICK; 
-        if(this.game.shoot && this.elapsedTime > 1){
-            this.game.addEntity(new BubblesController(this.game, this.getX()+ this.getWidth(),
-                 this.getY(),  this.facing));
-                  this.elapsedTime = 0;
-         }
+        if (this.powerup == true) {
+            this.elapsedTime += TICK; 
+            this.bubbleTime += TICK; 
+            if (this.game.shoot && this.elapsedTime > 1 ){
+                this.game.addEntity(new BubblesController(this.game, this.getX()+ this.getWidth(), this.getY(),  this.facing));
+                        this.elapsedTime = 0;
+                        this.counter++; //once you shoot 7 bubbles then no more bubbles for you
+                }
+            if (this.bubbleTime > 5) {
+                this.powerup = false;  
+            }
+        }
+
         // Implemented god mode only for debug purposes
         if(!PARAMS.DEBUG) {
             if (this.game.camera.breathwidth <= 0 ) {

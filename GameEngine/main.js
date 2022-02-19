@@ -17,6 +17,7 @@ ASSET_MANAGER.queueDownload("./sprites/Bathhouse.png");
 ASSET_MANAGER.queueDownload("./sprites/background_nightsky.png");
 ASSET_MANAGER.queueDownload("./sprites/noface-spritesheet-fade-aura.png");
 ASSET_MANAGER.queueDownload("./sprites/coins.png");
+ASSET_MANAGER.queueDownload("./sprites/portal.png");
 ASSET_MANAGER.queueDownload("./sprites/haku_spritesheet.png");
 ASSET_MANAGER.queueDownload("./sprites/yubaba.png");
 ASSET_MANAGER.queueDownload("./sprites/title.png");

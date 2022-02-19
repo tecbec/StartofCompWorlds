@@ -55,6 +55,31 @@ class BubblesController{
     };
 };
 
+class Portal {
+    constructor( game, x, y) {
+        Object.assign(this, { game, x, y});
+        this.height = 30; 
+        this.width = 29; 
+        this.animation = new Animator (ASSET_MANAGER.getAsset("./sprites/portal.png"), 0, 0, this.width, this.height, 4, .1, 1, false, true);
+        this.BB = new BoundingBox(this.x + this.width , this.y + this.height, this.height *2, this.width*2 );
+
+    }
+
+    update(){
+
+    };
+    
+    draw(ctx){
+        const scale = 2;
+        this.animation.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, PARAMS.SCALE *scale);
+        if (PARAMS.DEBUG) {
+            ctx.strokeStyle = 'Red';
+            ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
+        }
+        ctx.imageSmoothingEnabled = false;
+    }
+
+}
 class Coins {
     constructor( game, x, y) {
         Object.assign(this, { game, x, y});
@@ -67,12 +92,9 @@ class Coins {
         this.animation = new Animator (ASSET_MANAGER.getAsset("./sprites/coins.png"),
                                         0, 0, heightofCoins, widthofCoins, frameCount, .1, 0, false, true );
         this.BB = new BoundingBox(this.x, this.y, heightofCoins* PARAMS.SCALE *this.scaleCoins,widthofCoins*PARAMS.SCALE *this.scaleCoins);
-        this.elapsedTime =0;
     }
 
-    update(){
-
-    };
+    update(){};
     
     draw(ctx){
         var blurValues = [12,16,14,15,13];
