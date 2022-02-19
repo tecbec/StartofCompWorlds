@@ -80,7 +80,7 @@
     YUBABA_INC: [4304, 6206, 8108, 10010], // x vals that trigger: entrance, crow drop, heat seeking crows, yubaba exit
 
     /*    frame:            1             3              */
-    HAKU_LOCATION: [{X:500, Y:850, TEXT: 0},{X:5305, Y:575, TEXT: 0}, {X: 10056, Y:820, TEXT: 1}]
+    HAKU_LOCATION: [{X:500, Y:850, TEXT: 1},{X:5305, Y:575, TEXT: 2}, {X: 10056, Y:820, TEXT: 3}]
 }
 
 class SceneManager {
