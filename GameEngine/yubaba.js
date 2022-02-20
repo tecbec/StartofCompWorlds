@@ -149,7 +149,7 @@ class Crow{
     constructor(game, x, y, target, heatseeking){
         // sprite stuff
         Object.assign(this, { game, x, y, target, heatseeking});
-        this.path = ASSET_MANAGER.getAsset("./sprites/yubaba.png");
+        this.path = ASSET_MANAGER.getAsset("./GameEngine/sprites/yubaba.png");
         this.width = 278;
         this.height = 230;
         this.frameCount = 14;
