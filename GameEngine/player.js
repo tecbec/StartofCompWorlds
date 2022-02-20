@@ -1,7 +1,7 @@
 /* Chihiro's Params */
 var CHIHIRO = {
     TITLE_POSITION:   {X: 0,  Y: 800},
-    INITIAL_POSITION: {X: -200,  Y: 0},  // change to 10200 to test winning condition. 
+    INITIAL_POSITION: {X: 0,  Y: 0},  // change to 10200 to test winning condition. 
     SIZE: 70,
     SCALE: 2,
     PADDING:{X: 28, Y: 20}, // same padding for BB and imaginary x,y,w,h calculations
@@ -410,9 +410,10 @@ class Player {
 
                 // collision with Chicks
                 if (entity instanceof Chick && that.BB.collide(entity.BB) && !that.dead) {
-                    that.game.camera.breathwidth -= CHIHIRO.BREATH_BAR.MAX/4;
-                    that.game.camera.changeBreath();
-
+                    if (!that.game.camera.title) {
+                        that.game.camera.breathwidth -= CHIHIRO.BREATH_BAR.MAX/4;
+                        that.game.camera.changeBreath();
+                    }
                     if (that.BB.collide(entity.leftBB)) { // left collision
                        // maybe replace with a push animation?
                        that.setX(that.getX() + 20);
