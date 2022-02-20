@@ -342,19 +342,29 @@ class Player {
                         //that.updateBB();
                 }
 
-                if(entity instanceof StoneLamp && that.BB.collide(entity.BB)) {
-                  //  console.log("stonelamp",  that.BB.right >= entity.BB.left );
-
-                    if (that.BB.collide(entity.BBmiddleleft) && that.BB.right >= entity.BBmiddleleft.left ) { // left collision
-                        that.setX(entity.BB.left - that.getWidth()); // so that the player won't stick to the bb of the entity
-                        //that.velocity.y = 0;
-                        if (that.velocity.x > 0) that.velocity.x = 0;
-
-                    } else if (that.BB.collide(entity.BBmiddleright) && that.BB.left <= entity.BBmiddleright.right ) { // right collision
-                        that.setX(entity.BB.right);// so that the player won't stick to the bb of the entity
-                        //that.velocity.y = 0;
-                        if (that.velocity.x < 0) that.velocity.x = 0;
-                    }
+                if(entity instanceof StoneLamp  && (that.BB.collide(entity.BB))){ //|| that.BB.collide(entity.BBmiddle) )) {
+                   // if( that.BB.collide(entity.BB)){
+                        if (that.BB.collide(entity.BBtopleft) && that.BB.right >= entity.BBtopleft.left ) { // left collision
+                            that.setX(entity.BB.left - that.getWidth()); // so that the player won't stick to the bb of the entity
+                            //that.velocity.y = 0;
+                            if (that.velocity.x > 0) that.velocity.x = 0;
+                        } else if (that.BB.collide(entity.BBtopright) && that.BB.left <= entity.BBtopright.right ) { // right collision
+                            that.setX(entity.BB.right);// so that the player won't stick to the bb of the entity
+                            //that.velocity.y = 0;
+                            if (that.velocity.x < 0) that.velocity.x = 0;
+                        } 
+                  //  } //else {
+                    // if (that.BB.collide(entity.BBmiddleleft) && that.BB.right >= entity.BBmiddleleft.left ) { // left collision
+                    //         that.setX(entity.BBmiddle.left - that.getWidth()); // so that the player won't stick to the bb of the entity
+                    //         //   that.velocity.y = 0;
+                    //         if (that.velocity.x > 0) that.velocity.x = 0;
+                    //     } else if (that.BB.collide(entity.BBmiddleright) && that.BB.left <= entity.BBmiddleright.right ) { // right collision
+                    //         that.setX(entity.BBmiddle.right);// so that the player won't stick to the bb of the entity
+                    //         // that.velocity.y = 0;
+                    //         if (that.velocity.x < 0) that.velocity.x = 0;
+                    //     } 
+                    // }
+                    
                 }
 
                 if(entity instanceof Railing) {// if she's crouching she'll fall to ground
@@ -394,9 +404,10 @@ class Player {
 
                 // collision with Chicks
                 if (entity instanceof Chick && that.BB.collide(entity.BB) && !that.dead) {
-                    that.game.camera.breathwidth -= CHIHIRO.BREATH_BAR.MAX/4;
-                    that.game.camera.changeBreath();
-
+                    if (!that.game.camera.title) {
+                        that.game.camera.breathwidth -= CHIHIRO.BREATH_BAR.MAX/4;
+                        that.game.camera.changeBreath();
+                    }
                     if (that.BB.collide(entity.leftBB)) { // left collision
                        // maybe replace with a push animation?
                        that.setX(that.getX() + 20);
