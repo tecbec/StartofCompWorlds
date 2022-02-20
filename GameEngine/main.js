@@ -6,9 +6,9 @@ const ASSET_MANAGER = new AssetManager();
 //ASSET_MANAGER.queueDownload("./sprites/soot-jump-long_aura.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/soot-jump-long_aura2_bidir.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/spritesheet.png");
-ASSET_MANAGER.queueDownload("./GameEngine/sprites/tree-sheet.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/Chihiro_spritesheet.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/cloud-Sheet.png");
+ASSET_MANAGER.queueDownload("./GameEngine/sprites/tree-sheet.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/stonelamp.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/stonelampTop.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/stonelampTop.png");
@@ -37,9 +37,9 @@ ASSET_MANAGER.queueDownload("./GameEngine/audio/OneSummersDay.mp3");
 
 ASSET_MANAGER.downloadAll(() => {
 
-	let canvas = document.getElementById("gameCanvas");
-	let ctx = canvas.getContext("2d");
-	ASSET_MANAGER.autoRepeat("./audio/OneSummersDay.mp3");
+	var canvas = document.getElementById("gameCanvas");
+	var ctx = canvas.getContext("2d");
+	ASSET_MANAGER.autoRepeat("./GameEngine/audio/OneSummersDay.mp3");
 
 	PARAMS.CANVAS_WIDTH = canvas.width;
 	PARAMS.CANVAS_HEIGHT = canvas.height;
