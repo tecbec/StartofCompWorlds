@@ -10,8 +10,8 @@ var LEVEL = {
     FRAME_COUNT: 8,           // This is the factor that determine how wide the actual game is
     // Type 0: has left,middle,right piece can be adjusted to be longer
     // Type 1: is short (just middle piece)
+    TREE:[{X: 567, Y: 276, TYPE:3}, {X: 2538, Y: 0, TYPE:1}, {X: 3231, Y: 276, TYPE:2}, {X: 5543, Y: 0, TYPE:1}, {X: 6527, Y: 276, TYPE:2}, {X: 7816, Y: 276, TYPE:0}, {X: 8274, Y: 276, TYPE:3}],
     END_SCREEN: {X: 250, Y: 100},
-
     BATHHOUSE: {X: 11608, Y: - 1200},
     PLATFORM_LOCATION:       [{X: 790,  Y: 550, TYPE: 0}, {X: 1100, Y: 375, TYPE: 0}, {X: 1400, Y: 500, TYPE: 0}, {X: 1900, Y: 390, TYPE: 0}, {X: 2200, Y: 590, TYPE: 0},    // scene 1
                               {X: 2600, Y: 590, TYPE: 0}, {X: 2750, Y: 450, TYPE: 0}, {X: 3300, Y: 575, TYPE: 0}, {X: 3500, Y: 400, TYPE: 0}, {X: 4000, Y: 600, TYPE: 0},    // scene 2
@@ -22,7 +22,7 @@ var LEVEL = {
                              ],
 
     CLOUD_PLATFORM_LOCATION: [{X: 2800, Y: 250, SIZE:3}, {X: 3200, Y: 300, SIZE:3}, {X: 3400, Y: 150, SIZE:3}, {X: 3750, Y: 250, SIZE:3}, {X: 4000, Y: 200, SIZE:3}, 
-                              {X: 4354, Y: 120, SIZE:1}, {X: 4780, Y: 270, SIZE:0}, {X: 5255, Y: 100, SIZE:3}, {X: 5315, Y: 300, SIZE:3}, {X: 5225, Y: 500, SIZE:4}, {X: 5632, Y: 280, SIZE:1}, {X: 5775, Y: 120, SIZE:2}, {X: 6166, Y: 270, SIZE:3},
+                              {X: 4354, Y: 120, SIZE:1}, {X: 4780, Y: 270, SIZE:0}, {X: 5255, Y: 100 + 5, SIZE:3}, {X: 5315, Y: 300, SIZE:3}, {X: 5225, Y: 500 - 20, SIZE:4}, {X: 5632, Y: 280, SIZE:1}, {X: 5775, Y: 120, SIZE:2}, {X: 6166, Y: 270, SIZE:3},
                               {X: 6650, Y: 200, SIZE:3}, {X: 6950, Y: 100, SIZE:3}, {X: 7250, Y: 200, SIZE:3}, {X: 7750, Y: 250, SIZE:3} ],                                                                 // Scene 4                     
 
     STONE_LAMP_LOCATION: [{X: 1000, Y: 600}, {X: 1800, Y: 600}, {X: 2902, Y: 600}, {X: 3702, Y: 600}, {X: 5255, Y: 600},
@@ -182,6 +182,11 @@ class SceneManager {
         } else {
             this.bathhouse = new Bathhouse(this.game, LEVEL.BATHHOUSE.X,  LEVEL.BATHHOUSE.Y);
             this.game.addEntity(this.background);
+
+            for (var i = 0; i < LEVEL.TREE.length; i++) {
+                let tree = LEVEL.TREE[i];
+                this.game.addEntity(new Tree(this.game, tree.X, tree.Y, tree.TYPE));
+            }
             
             this.game.addEntity(this.railing);
             this.game.addEntity(this.bathhouse);

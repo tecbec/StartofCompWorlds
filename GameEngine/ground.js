@@ -13,6 +13,8 @@ var BACKGROUND = {
     CLOUD: {X: 0, Y: 0, WIDTH: 192, HEIGHT:64, SCALE: 1},
     CLOUD_BB:[{W: 64, H: 54}, {W: 64, H: 54}, {W: 128, H: 54}, {W: 148, H: 54}, {W: 192, H: 54}],
     BATHHOUSE: {X:0, Y: 0, W: 987, H: 1104},
+    TREE:{X:0, Y:0, W:512, H:248, SCALE:4},
+    //TREE_BB:[{W:128, H:128},{W:128, H:248},{W:248, H:128}, {W:512, H:128}],
     FIREWORKS: [{X: -600,    Y: 50,  SPRITEX: 0, SPRITEY: 0,     NUM_FRAMES: 10,     DUR: 0.1,       SCALE: 4}, 
                 {X: 100,    Y: 300, SPRITEX: 0, SPRITEY: 64,    NUM_FRAMES: 14,     DUR: 0.1 ,      SCALE: 4},
                 {X: 750,   Y: 50,  SPRITEX: 0, SPRITEY: 128,   NUM_FRAMES: 12,     DUR: 0.1,       SCALE: 5}],
@@ -308,7 +310,27 @@ class BackGround {
     }
 }
 
-class Platform {  // tree
+class Tree {  // tree
+    constructor(game, x, y, type) {
+        Object.assign(this, { game, x, y, type});
+        this.spritesheet = ASSET_MANAGER.getAsset("./sprites/tree-sheet.png");
+    }
+
+    update() {
+
+    };
+
+    draw(ctx) {
+        ctx.drawImage(this.spritesheet,
+            BACKGROUND.TREE.X + (BACKGROUND.TREE.W * this.type), BACKGROUND.TREE.Y,
+            BACKGROUND.TREE.W, BACKGROUND.TREE.H,
+            this.x  - this.game.camera.x, this.y,
+            BACKGROUND.TREE.W * BACKGROUND.TREE.SCALE,
+            BACKGROUND.TREE.H * BACKGROUND.TREE.SCALE);
+    }
+}
+
+class Platform {  // leaf platforms
     constructor(game, x, y, w, type) {
         Object.assign(this, { game, x, y, w, type});
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/platform_sheet.png");
@@ -418,7 +440,7 @@ class CloudPlatform {
  * StoneLamp
  * Allows walking on top of it but not through.
  */
-class StoneLamp {
+ class StoneLamp {
     constructor(game, x, y, w) {
         Object.assign(this, { game, x, y, w});
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/stonelamp.png");
@@ -444,14 +466,11 @@ class StoneLamp {
         ctx.drawImage(this.spritesheet, BACKGROUND.STONE_LAMP.X, BACKGROUND.STONE_LAMP.Y, BACKGROUND.STONE_LAMP.SIZE.W, BACKGROUND.STONE_LAMP.SIZE.H,
             this.x - this.game.camera.x, this.y,
             BACKGROUND.STONE_LAMP.SIZE.W * BACKGROUND.STONE_LAMP.SCALE.X, BACKGROUND.STONE_LAMP.SIZE.H * BACKGROUND.STONE_LAMP.SCALE.Y);
-        this.BB = new BoundingBox(this.x , this.y + 55,
-            32, BACKGROUND.STONE_LAMP.SIZE.H * BACKGROUND.STONE_LAMP.SCALE.Y);
-        this.BBmiddleleft = new BoundingBox(this.x , this.y + (BACKGROUND.STONE_LAMP.SIZE.W) + 10,
-            5 ,  BACKGROUND.STONE_LAMP.SIZE.H * BACKGROUND.STONE_LAMP.SCALE.Y);
-        this.BBmiddleright = new BoundingBox(this.x +32, this.y + (BACKGROUND.STONE_LAMP.SIZE.W) +10,
-            5 ,  BACKGROUND.STONE_LAMP.SIZE.H * BACKGROUND.STONE_LAMP.SCALE.Y);
-        if (PARAMS.DEBUG) {
 
+     
+    
+        if (PARAMS.DEBUG) {
+            // ctx.lineWidth = 2;
             ctx.strokeStyle = 'red';
             ctx.strokeRect(this.BB.x -this.game.camera.x, this.BB.y,
                 this.BB.width,
@@ -466,6 +485,13 @@ class StoneLamp {
             ctx.strokeRect(this.BBmiddleright.x -this.game.camera.x, this.BBmiddleright.y,
                 this.BBmiddleright.width,
                 this.BBmiddleright.height);
+
+            ctx.strokeRect(this.BBtopleft.x -this.game.camera.x, this.BBtopleft.y,
+                this.BBtopleft.width,
+                this.BBtopleft.height);
+            ctx.strokeRect(this.BBtopright.x -this.game.camera.x, this.BBtopright.y,
+                this.BBtopright.width,
+                this.BBtopright.height);
         }
         ctx.imageSmoothingEnabled = false;
     }
