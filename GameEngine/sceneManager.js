@@ -2,7 +2,7 @@
 /**
  * THIS IS WHERE WE PUT THE ENTITIES IN THE CANVAS
  */
-var LEVEL = {
+ var LEVEL = {
     music: "./audio/OneSummersDay.mp3",
     START_CANVAS: {X: -851, Y: 0},
     END_CANVAS:   {X: 13000},   // change this later when we figure out the exact ending canvas measurement
@@ -47,8 +47,8 @@ var LEVEL = {
     SOOT_NUM:  [10, 20, 10, 20, 15, 15, 10, 10,
                 30, 10,  // scene 4
                 20, 30], // Scene 5 
-    PORTAL_LOCATION: [{X: 0, Y: 800}],
-    COIN_LOCATION: [{X: 100,  Y: 895},{X: 125,  Y: 895}, {X: 150,  Y: 895}, {X: 175,  Y: 895}, {X: 200,  Y: 895}, {X: 225,  Y: 895},
+    
+    COIN_LOCATION: [{X: 100,  Y: 895},{X: 125,  Y: 895}, {X: 150,  Y: 895}, {X: 175, Y: 895},  {X: 200,  Y: 895}, {X: 225,  Y: 895},
                     {X: 250,  Y: 895},{X: 275,  Y: 895}, {X: 300,  Y: 895}, {X: 325,  Y: 895},                                          // scene 0
                     {X: 900,  Y: 500},{X: 1200, Y: 295}, {X: 1500, Y: 450}, {X: 2000, Y: 340}, {X: 2300, Y: 540}, {X: 1100, Y: 650},
                     {X: 1900, Y: 650},{X: 1400, Y: 900}, {X: 1550, Y: 900}, {X: 1700, Y: 900}, {X: 2100, Y: 900},                      // scene 1
@@ -79,7 +79,7 @@ var LEVEL = {
     /*    enter: frame 3,   crow drop: frame 4,       heat seeking crows:  frame 5*/
     YUBABA_INC: [4304, 6206, 8108, 10010], // x vals that trigger: entrance, crow drop, heat seeking crows, yubaba exit
 
-    /*    frame:              1                    3                               5*/
+    /*    frame:            1             3              */
     HAKU_LOCATION: [{X:500, Y:850, TEXT: 1},{X:5305, Y:575, TEXT: 2}, {X: 10056, Y:820, TEXT: 3}]
 }
 
@@ -87,11 +87,16 @@ class SceneManager {
     constructor(game) {
         this.game = game;
         this.game.camera = this; // focusing camera on chihiro
+
         // this.midPoint = 0;
         this.gameOver = false;
         this.title = true;
         this.level = 1;
         this.gameOverCounter  = 0;
+
+        // sound
+        this.mute = true;
+        this.volume = 0.1;
 
         //Breath
         this.breathwidth = 100;
@@ -106,18 +111,15 @@ class SceneManager {
     };
 
     updateAudio() {
-        var mute = document.getElementById("mute").checked;
-        var volume = document.getElementById("volume").value;
-
-        ASSET_MANAGER.muteAudio(mute);
-        ASSET_MANAGER.adjustVolume(volume);
-
+        ASSET_MANAGER.muteAudio(this.mute);
+        ASSET_MANAGER.adjustVolume(this.volume);
     };
 
     // create all entities for the Title Screen
     titleScreen() {
-        let chickPlace = {x: 850, y: 75};
-        let hakuPlace = {x: -750, y: 425};
+
+        let chickPlace = {x: 1200, y: 775, xneg: 500, xpos: 1200};
+        let hakuPlace = {x: -750, y: 825};
 
         // Title Chihiro
         this.titlePlaque = new TitlePlaque(this.game);
@@ -125,9 +127,16 @@ class SceneManager {
         this.ground = new Ground(this.game, LEVEL.START_CANVAS.X, PARAMS.CANVAS_HEIGHT - BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE,
                                             PARAMS.CANVAS_WIDTH * LEVEL.FRAME_COUNT, BACKGROUND.GROUND.SCALE * BACKGROUND.GROUND.SIZE);
         this.background = new BackGround(this.game, LEVEL.START_CANVAS.X,  LEVEL.START_CANVAS.Y);
+        this.railing = new Railing(this.game, LEVEL.RAILING_LOCATION.X, LEVEL.RAILING_LOCATION.Y, PARAMS.CANVAS_WIDTH * (LEVEL.FRAME_COUNT - 3),
+                                    BACKGROUND.RAILING.SCALE * BACKGROUND.RAILING.SIZE);
         this.chick = new Chick(this.game, chickPlace.x, chickPlace.y, chickPlace.xneg, chickPlace.xpos);
-        this.haku = new Haku(this.game, hakuPlace.x, hakuPlace.y);
+        this.lamp = new Lamp(this.game, -950, 620, BACKGROUND.LAMP.SIZE * BACKGROUND.LAMP.SCALE.W);
+        // this.haku = new Haku(this.game, hakuPlace.x, hakuPlace.y);
+        this.buttons = new TitleButtons(this.game);
 
+        this.buttons.mute = true;
+        this.mute = true;
+        this.updateAudio();
     }
 
     loadLevel(level, title){
@@ -165,18 +174,21 @@ class SceneManager {
     loadGame() {
         if (this.title) {
             this.game.addEntity(this.background);
-            this.game.addEntity(this.chihiro);
             this.game.addEntity(this.ground);
             this.game.addEntity(this.titlePlaque);
+            this.game.addEntity(this.buttons);
+            this.game.addEntity(new Fireworks(this.game));
+            this.game.addEntity(this.railing);
             this.game.addEntity(this.chick);
+            this.game.addEntity(this.lamp);
+            this.game.addEntity(this.chihiro);
             // this.game.addEntity(this.haku);
         } else {
             this.bathhouse = new Bathhouse(this.game, LEVEL.BATHHOUSE.X,  LEVEL.BATHHOUSE.Y);
             this.game.addEntity(this.background);
-            
+            this.game.addEntity(this.ground);
             this.game.addEntity(this.railing);
             this.game.addEntity(this.bathhouse);
-            this.game.addEntity(this.ground);
 
             for (var i = 0; i < LEVEL.PLATFORM_LOCATION.length; i++) {
                 let platform = LEVEL.PLATFORM_LOCATION[i];
@@ -224,13 +236,8 @@ class SceneManager {
                 this.game.addEntity(new Chick(this.game, chick.X, chick.Y, chick.MIN, chick.MAX, chick.DIR));
             }
 
-            for (var i = 0; i < LEVEL.PORTAL_LOCATION.length; i++) {
-                let portal = LEVEL.PORTAL_LOCATION[i];
-                this.game.addEntity(new Portal(this.game, portal.X, portal.Y));
-            }
-
             this.game.addEntity(this.chihiro);
-           
+
             for (var i = 0; i < LEVEL.HAKU_LOCATION.length; i++) {
                 let haku = LEVEL.HAKU_LOCATION[i];
                 this.game.addEntity(new Haku(this.game, haku.X, haku.Y, haku.TEXT));
@@ -239,6 +246,8 @@ class SceneManager {
             this.game.addEntity(this.breathbar);
             this.game.addEntity(this.coinCounter);
             this.game.addEntity(new TransitionScreen(this.game, this.level, LEVEL.END_SCREEN.X, LEVEL.END_SCREEN.Y));
+
+            this.game.addEntity(this.buttons);
         }
     };
 
@@ -251,13 +260,61 @@ class SceneManager {
         // canvas width = 400
         // blockwidth = 32 * 1 = 32
         // 200 -16 = 164
-        if (this.title && this.game.click) {
-            if (this.game.click && this.game.click.y > 650 && this.game.click.y < 700) {
+        if (this.title && this.game.click) {  // start button
+            if (this.game.click && this.game.click.y > 700 && this.game.click.y < 750 && this.game.click.x > 815  && this.game.click.x < 1003) {
                 this.title = false;
                 this.loadLevel(1, this.title);
                 this.game.click = false;
             }
         }
+
+        if (this.game.click) {
+            // Debug
+            if(this.game.click.y > 1040         && this.game.click.y < 1070     && this.game.mouse.x < 200 && this.game.mouse.x > 100 && PARAMS.DEBUG) {
+                PARAMS.DEBUG = false;
+                this.game.click = false;
+            } else if (this.game.click.y > 1040 && this.game.click.y < 1070     && this.game.mouse.x < 200 && this.game.mouse.x > 100 && !PARAMS.DEBUG) {
+                PARAMS.DEBUG = true;
+                this.game.click = false;
+            }
+            // Mute
+            if (this.game.click.y > 1040        && this.game.click.y < 1070     && this.game.mouse.x < 350 && this.game.mouse.x > 250 && this.buttons.mute) {
+                this.buttons.mute = false;
+                this.mute = false;
+                this.updateAudio();
+                this.game.click = false;
+            } else if (this.game.click.y > 1040 && this.game.click.y < 1070     && this.game.mouse.x < 350 && this.game.mouse.x > 250 && !this.buttons.mute) {
+                this.buttons.mute = true;
+                this.mute=true;
+                this.updateAudio();
+                this.game.click = false;
+            }
+
+            // if (this.game.mouse && this.game.mouse.y > 1000 && this.game.mouse.y < 1032 && this.game.mouse.x > 400  && this.game.mouse.x < 432) {   // volume up
+            // if (this.game.mouse && this.game.mouse.y > 1040 && this.game.mouse.y < 1072 && this.game.mouse.x > 400  && this.game.mouse.x < 432)  {   // volume up
+
+            // Volume
+
+
+            if (this.game.click.y > 1000 && this.game.click.y < 1032 && this.game.mouse.x > 475  && this.game.mouse.x < 510) {
+                if (this.volume <= 0.95){
+                    this.volume += 0.05;
+                }
+                this.updateAudio();
+                this.buttons.up = false;
+                this.game.click = false;
+                console.log(this.volume);
+            } else if (this.game.click.y > 1040 && this.game.click.y < 1072 && this.game.mouse.x > 475  && this.game.mouse.x < 510) {
+                if (this.volume >= 0.05){
+                    this.volume -= 0.05;
+                }
+                this.updateAudio();
+                this.buttons.down = false;
+                this.game.click = false;
+                console.log(this.volume);
+            }
+        }
+
 
         // if (!this.title && this.chihiro.dead && this.chihiro.removeFromWorld) {
         if (!this.title && this.chihiro.dead) {
@@ -289,26 +346,11 @@ class SceneManager {
             this.gameOver = false;
         }
         
-        PARAMS.DEBUG = document.getElementById("debug").checked;
+        // PARAMS.DEBUG = document.getElementById("debug").checked;
     };
 
     draw(ctx) {
         ctx.font = PARAMS.BLOCKWIDTH / 2 + 'px "Press Start 2P"';
-
-        if (this.title || this.chihiro.dead && this.chihiro.removeFromWorld) {
-            ctx.font = '50px Impact';
-            ctx.fillStyle = this.game.mouse && this.game.mouse.y > 650 && this.game.mouse.y < 700? "LightCoral" : "Grey";
-
-            ctx.fillText("Start", 875, 700); //280
-
-            // if ()
-            // image1
-            // else
-            // image 2
-
-            //ctx.fillStyle = this.game.mouse && this.game.mouse.y > 614 && this.game.mouse.y < 649 ? "LightCoral" : "Black";
-            //ctx.fillText("Instructions", PARAMS.CANVAS_WIDTH /  PARAMS.SCALE - 80, PARAMS.CANVAS_HEIGHT/  PARAMS.SCALE + 100); //300
-        }
 
         if (PARAMS.DEBUG && !this.title && !this.chihiro.winGame) {
             ctx.strokeStyle = "White";

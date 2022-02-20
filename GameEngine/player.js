@@ -1,7 +1,7 @@
 /* Chihiro's Params */
 var CHIHIRO = {
     TITLE_POSITION:   {X: 0,  Y: 800},
-    INITIAL_POSITION: {X: -200,  Y: 0},  // change to 10200 to test winning condition. 
+    INITIAL_POSITION: {X: 0,  Y: 0},  // 10110
     SIZE: 70,
     SCALE: 2,
     PADDING:{X: 28, Y: 20}, // same padding for BB and imaginary x,y,w,h calculations
@@ -302,8 +302,7 @@ class Player {
         this.game.entities.forEach(function (entity) {         // this will look at all entities in relation to chihiro
             if (entity.BB && that.BB.collide(entity.BB) ) {    // is there an entity bb & check to see if they collide
                 if (that.velocity.y > 0) {                     // chihiro is falling
-                    if((entity instanceof Ground || entity instanceof Platform || entity instanceof CloudPlatform ||
-                        entity instanceof StoneLamp ||
+                    if((entity instanceof Ground || entity instanceof Platform || entity instanceof CloudPlatform || entity instanceof StoneLamp ||
                         entity instanceof Railing || entity instanceof Lamp) && (that.lastBB.bottom  <= entity.BB.top)) // minus one?? idk how this works
                   { // bottom of chihiro hits the top of the entity
                         that.isGrounded = true;
@@ -363,7 +362,6 @@ class Player {
                             if (that.velocity.x < 0) that.velocity.x = 0;
                         } 
                     
-                    
                 }
 
                 if(entity instanceof Railing) {// if she's crouching she'll fall to ground
@@ -403,9 +401,10 @@ class Player {
 
                 // collision with Chicks
                 if (entity instanceof Chick && that.BB.collide(entity.BB) && !that.dead) {
-                    that.game.camera.breathwidth -= CHIHIRO.BREATH_BAR.MAX/4;
-                    that.game.camera.changeBreath();
-
+                    if (!that.game.camera.title) {
+                        that.game.camera.breathwidth -= CHIHIRO.BREATH_BAR.MAX/4;
+                        that.game.camera.changeBreath();
+                    }
                     if (that.BB.collide(entity.leftBB)) { // left collision
                        // maybe replace with a push animation?
                        that.setX(that.getX() + 20);
