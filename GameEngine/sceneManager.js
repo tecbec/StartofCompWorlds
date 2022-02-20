@@ -147,7 +147,8 @@ class SceneManager {
         this.titleScreen();
 
         if(!this.title){
-
+            this.mute = false;
+            
             // Falling chihiro for game play
             this.chihiro = new Player(this.game, CHIHIRO.INITIAL_POSITION.X, CHIHIRO.INITIAL_POSITION.Y);
 
@@ -286,12 +287,12 @@ class SceneManager {
             // Mute
             if (this.game.click.y > 1040        && this.game.click.y < 1070     && this.game.mouse.x < 350 && this.game.mouse.x > 250 && this.buttons.mute) {
                 this.buttons.mute = false;
-                this.mute = false;
+                this.mute = true;
                 this.updateAudio();
                 this.game.click = false;
             } else if (this.game.click.y > 1040 && this.game.click.y < 1070     && this.game.mouse.x < 350 && this.game.mouse.x > 250 && !this.buttons.mute) {
                 this.buttons.mute = true;
-                this.mute=true;
+                this.mute=false;
                 this.updateAudio();
                 this.game.click = false;
             }
