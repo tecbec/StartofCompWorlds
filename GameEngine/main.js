@@ -37,7 +37,7 @@ ASSET_MANAGER.queueDownload("./GameEngine/audio/OneSummersDay.mp3");
 
 ASSET_MANAGER.downloadAll(() => {
 
-	var canvas = document.getElementById("gameCanvas");
+	var canvas = document.getElementById("gameWorld");
 	var ctx = canvas.getContext("2d");
 	ASSET_MANAGER.autoRepeat("./GameEngine/audio/OneSummersDay.mp3");
 
