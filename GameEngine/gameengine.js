@@ -18,6 +18,10 @@ class GameEngine {
         this.left = false;
         this.right = false;
         this.up = false;
+        this.mouse = false;
+        this.click = false;
+
+        this.deactivate = false;    // use for pausing the key press
 
         // Options and the Details
         this.options = options || {
@@ -27,6 +31,8 @@ class GameEngine {
             },
             debugging: false,
         };
+
+        //this.chir
     };
 
     init(ctx) {
@@ -50,9 +56,28 @@ class GameEngine {
 
     startInput() {
         var that = this; 
-        // add the listeners and detect key inputs
-        // pass in the event to the function
+ 
+        // From Mario Bros
+        var getXandY = function (e) {
+            var x = e.clientX - that.ctx.canvas.getBoundingClientRect().left;
+            var y = e.clientY - that.ctx.canvas.getBoundingClientRect().top;
+            return { x: x, y: y, radius: 0 };
+        }
+
+        // From Mario Bros
+        this.ctx.canvas.addEventListener("mousemove", function (e) {
+            that.mouse = getXandY(e);
+        }, false);
+
+        // From Mario Bros
+        this.ctx.canvas.addEventListener("click", function (e) {
+            that.click = getXandY(e);
+            console.log(that.click);       // USED FOR TROUBLESHOOTING THE PLACEMENT OF THE PLATFORMS
+        }, false);
+
+        // Key pressed 
         this.ctx.canvas.addEventListener("keydown", function (e) {
+
             switch(e.code) {
                 case "ArrowLeft":
                     that.left = true;
@@ -69,31 +94,44 @@ class GameEngine {
                 case "ArrowDown": //crouching 
                     that.crouch = true; 
                     break;
+                case "Space": //shoot would be cool to have the player change the arrow direction with the mouse
+                    that.shoot = true; 
+                    break;
             }
         }, false);
-
+        // Key released
         this.ctx.canvas.addEventListener("keyup", function (e) {
+            that.deactivate = false;
             switch(e.code) {
                 case "ArrowLeft":
                     that.left = false;
+
                     break;
                 case "ArrowRight":
                     that.right = false;
+
                     break;
                 case "ArrowUp":
                     that.up = false;
+
                     break;
                 case "ShiftLeft":
                     that.run = false;
+
                     break;
                 case "ArrowDown":
                     that.crouch = false; 
+
+                    break;
+                case "Space": //shoot 
+                    that.shoot = false; 
                     break;
             }
         }, false);
 
     };
 
+    
     addEntity(entity) {
         this.entitiesToAdd.push(entity);
     };
@@ -101,23 +139,29 @@ class GameEngine {
     draw() {
         // Clear the whole canvas with transparent color (rgba(0, 0, 0, 0))
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
-
-        //this.ctx.fillStyle = 'red';
-        //this.ctx.fillRect(0,0,20,20);
-        // Draw latest things first
-        this.ctx.save();
         for (var i = 0; i < this.entities.length; i++) {
             this.entities[i].draw(this.ctx);
         }
+        
+        // draw chihiro here. 
+        this.camera.draw(this.ctx);
 
+        // Need this to update when the camera is deleted from the work when a new level is entered.
+        this.camera.draw(this.ctx);
+
+        //can draw chihiro twice 
     };
 
     update() {
+        
         // Update Entities
         this.entities.forEach(entity => entity.update(this));
 
         // Remove dead things
         this.entities = this.entities.filter(entity => !entity.removeFromWorld);
+
+        // Need this so camera will move with change in levels.
+        this.camera.update();
 
         // Add new things
         this.entities = this.entities.concat(this.entitiesToAdd);
@@ -128,11 +172,8 @@ class GameEngine {
         this.clockTick = this.timer.tick();
         this.update();
         this.draw();
-        // if want one input to only trigger once 
-        // this.up = false;
+
     };
 
     get["deltaTime"]() { return this.clockTick; }
 };
-
-// KV Le was here :)
