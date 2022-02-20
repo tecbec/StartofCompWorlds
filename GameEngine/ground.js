@@ -13,6 +13,7 @@ var BACKGROUND = {
     CLOUD: {X: 0, Y: 0, WIDTH: 192, HEIGHT:64, SCALE: 1},
     CLOUD_BB:[{W: 64, H: 54}, {W: 64, H: 54}, {W: 128, H: 54}, {W: 148, H: 54}, {W: 192, H: 54}],
     BATHHOUSE: {X:0, Y: 0, W: 987, H: 1104},
+    TREE:{X:0, Y:0, W:512, H:248, SCALE:4},
     FIREWORKS:      [{X: -600, Y: 50,       SPRITEX: 0, SPRITEY: 0,     NUM_FRAMES: 21,     DUR: 0.1,       SCALE: 5},      // index = 0 
                     {X: 100,   Y: 250,      SPRITEX: 0, SPRITEY: 64,    NUM_FRAMES: 21,     DUR: 0.15 ,      SCALE: 5},      // index = 1 
                     {X: 750,   Y: 100,       SPRITEX: 0, SPRITEY: 128,   NUM_FRAMES: 21,     DUR: 0.1,       SCALE: 4},      // index = 2 
@@ -376,7 +377,27 @@ class BackGround {
     }
 }
 
-class Platform {  // tree
+class Tree {  // tree
+    constructor(game, x, y, type) {
+        Object.assign(this, { game, x, y, type});
+        this.spritesheet = ASSET_MANAGER.getAsset("./sprites/tree-sheet.png");
+    }
+
+    update() {
+
+    };
+
+    draw(ctx) {
+        ctx.drawImage(this.spritesheet,
+            BACKGROUND.TREE.X + (BACKGROUND.TREE.W * this.type), BACKGROUND.TREE.Y,
+            BACKGROUND.TREE.W, BACKGROUND.TREE.H,
+            this.x  - this.game.camera.x, this.y,
+            BACKGROUND.TREE.W * BACKGROUND.TREE.SCALE,
+            BACKGROUND.TREE.H * BACKGROUND.TREE.SCALE);
+    }
+}
+
+class Platform {  // leaf platforms
     constructor(game, x, y, w, type) {
         Object.assign(this, { game, x, y, w, type});
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/platform_sheet.png");
@@ -486,7 +507,7 @@ class CloudPlatform {
  * StoneLamp
  * Allows walking on top of it but not through.
  */
-class StoneLamp {
+ class StoneLamp {
     constructor(game, x, y, w) {
         Object.assign(this, { game, x, y, w});
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/stonelamp.png");
@@ -516,7 +537,7 @@ class StoneLamp {
      
     
         if (PARAMS.DEBUG) {
-
+            // ctx.lineWidth = 2;
             ctx.strokeStyle = 'red';
             ctx.strokeRect(this.BB.x -this.game.camera.x, this.BB.y,
                 this.BB.width,
