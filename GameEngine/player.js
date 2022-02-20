@@ -24,7 +24,7 @@ class Player {
         this.bubbleTime = 0;
         this.game.chihiro = this;  // chihiro adds a reference to herself into the game engine
         this.game.x = this;
-        this.spritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/chihiro_spritesheet.png");
+        this.spritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/Chihiro_spritesheet.png");
 
         // default values
         this.velocity = { x: 0, y: 0};
