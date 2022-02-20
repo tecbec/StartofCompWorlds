@@ -3,7 +3,7 @@
  * THIS IS WHERE WE PUT THE ENTITIES IN THE CANVAS
  */
  var LEVEL = {
-    music: "./audio/OneSummersDay.mp3",
+    music: "./GameEngine/audio/OneSummersDay.mp3",
     START_CANVAS: {X: -851, Y: 0},
     END_CANVAS:   {X: 13000},   // change this later when we figure out the exact ending canvas measurement
     END_GAME:     {X: 11515, Y: 813},

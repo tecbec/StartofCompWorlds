@@ -2,7 +2,7 @@ class Chick {
     constructor(game, x, y, minX, maxX, dir){
         // sprite stuff
         Object.assign(this, { game, x, y, minX, maxX, dir});
-        this.path = ASSET_MANAGER.getAsset("./sprites/chick.png");
+        this.path = ASSET_MANAGER.getAsset("./GameEngine/sprites/chick.png");
         this.width = 75;
         this.height = 100;
         this.frameCount = 6;

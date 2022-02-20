@@ -6,7 +6,7 @@ class TransitionScreen {
     constructor(game, level, x, y) {
         Object.assign(this, { game, level, x, y});
         this.elapsed = 0;
-        this.spritesheet = ASSET_MANAGER.getAsset("./sprites/youwin_text.png");
+        this.spritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/youwin_text.png");
         this.animator = new Animator(this.spritesheet, END_SCREEN.LOCATION.X, END_SCREEN.LOCATION.Y, END_SCREEN.LOCATION.SIZE, END_SCREEN.LOCATION.SIZE,
                                     END_SCREEN.LOCATION.FRAME, END_SCREEN.LOCATION.SPEED, END_SCREEN.LOCATION.PADDING, END_SCREEN.LOCATION.REVERSE, END_SCREEN.LOCATION.LOOP);
     };

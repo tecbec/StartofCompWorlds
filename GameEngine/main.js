@@ -24,7 +24,7 @@ ASSET_MANAGER.queueDownload("./GameEngine/sprites/coins.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/portal.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/haku_spritesheet.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/yubaba.png");
-ASSET_MANAGER.queueDownload("./GameEngine/GameEngine/sprites/title.png");
+ASSET_MANAGER.queueDownload("./GameEngine/sprites/title.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/chick.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/bubble.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/haku_text.png");
@@ -33,7 +33,7 @@ ASSET_MANAGER.queueDownload("./GameEngine/sprites/title-buttons.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/volume.png");
 
 // music
-ASSET_MANAGER.queueDownload("./audio/OneSummersDay.mp3");
+ASSET_MANAGER.queueDownload("./GameEngine/audio/OneSummersDay.mp3");
 
 ASSET_MANAGER.downloadAll(() => {
 	let canvas = document.getElementById("gameCanvas");

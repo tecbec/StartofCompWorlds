@@ -380,7 +380,7 @@ class BackGround {
 class Tree {  // tree
     constructor(game, x, y, type) {
         Object.assign(this, { game, x, y, type});
-        this.spritesheet = ASSET_MANAGER.getAsset("./sprites/tree-sheet.png");
+        this.spritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/tree-sheet.png");
     }
 
     update() {
@@ -400,7 +400,7 @@ class Tree {  // tree
 class Platform {  // leaf platforms
     constructor(game, x, y, w, type) {
         Object.assign(this, { game, x, y, w, type});
-        this.spritesheet = ASSET_MANAGER.getAsset("./sprites/platform_sheet.png");
+        this.spritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/platform_sheet.png");
     }
 
     update() {
@@ -474,7 +474,7 @@ class Platform {  // leaf platforms
 class CloudPlatform {
     constructor(game, x, y, size) {
         Object.assign(this, { game, x, y, size});
-        this.spritesheet = ASSET_MANAGER.getAsset("./sprites/cloud-Sheet.png");
+        this.spritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/cloud-Sheet.png");
 
         this.BB = new BoundingBox(this.x + 5 , this.y + 10,
             BACKGROUND.CLOUD_BB[this.size].W * BACKGROUND.CLOUD.SCALE - 10,
@@ -510,7 +510,7 @@ class CloudPlatform {
  class StoneLamp {
     constructor(game, x, y, w) {
         Object.assign(this, { game, x, y, w});
-        this.spritesheet = ASSET_MANAGER.getAsset("./sprites/stonelamp.png");
+        this.spritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/stonelamp.png");
         this.BB = new BoundingBox(this.x , this.y + 55,
             (BACKGROUND.STONE_LAMP.SIZE.W) * BACKGROUND.STONE_LAMP.SCALE.X, 75);
         this.BBmiddle = new BoundingBox(this.x +19*4, this.y + 25 * 4,
@@ -572,7 +572,7 @@ class Lamp {
     constructor(game, x, y, w) {
         Object.assign(this, { game, x, y, w});
         this.spritesheet = this.spritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/lamp.png");
-        this.spritesheet2 =  ASSET_MANAGER.getAsset("./sprites/flame.png");
+        this.spritesheet2 =  ASSET_MANAGER.getAsset("./GameEngine/sprites/flame.png");
         this.BB = new BoundingBox(this.x+BACKGROUND.LAMP.PADDING.W +20 , this.y +5,
             BACKGROUND.LAMP.SIZE.W * BACKGROUND.LAMP.SCALE.W-BACKGROUND.LAMP.PADDING.W - 30, BACKGROUND.LAMP.SIZE.H * BACKGROUND.LAMP.SCALE.H);
 
@@ -624,7 +624,7 @@ class Lamp {
 class Railing {
     constructor(game, x, y, w) {
         Object.assign(this, { game, x, y, w});
-        this.spritesheet = this.spritesheet = ASSET_MANAGER.getAsset("./sprites/railing.png");
+        this.spritesheet = this.spritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/railing.png");
        this.BB = new BoundingBox(this.x, this.y,
            this.w, BACKGROUND.RAILING.SIZE * BACKGROUND.RAILING.SCALE);
        this.topBB = new BoundingBox(this.x, this.y + BACKGROUND.RAILING.PADDING,
