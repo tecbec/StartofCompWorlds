@@ -1,7 +1,7 @@
 /* Chihiro's Params */
 var CHIHIRO = {
     TITLE_POSITION:   {X: 0,  Y: 800},
-    INITIAL_POSITION: {X: -200,  Y: 0},  // change to 10200 to test winning condition. 
+    INITIAL_POSITION: {X: 0,  Y: 0},  // change to 10200 to test winning condition. 
     SIZE: 70,
     SCALE: 2,
     PADDING:{X: 28, Y: 20}, // same padding for BB and imaginary x,y,w,h calculations
@@ -365,15 +365,15 @@ class Player {
                     //         if (that.velocity.x < 0) that.velocity.x = 0;
                     //     } 
                     // }
-                    
+
                 }
 
                 if(entity instanceof Railing) {// if she's crouching she'll fall to ground
-                    if (that.BB.bottom >= entity.BB.top && that.game.crouch) {
+                    if (that.BB.bottom <= entity.BB.top && that.game.crouch) {
                         that.isGrounded = false;
                         that.setY(entity.BB.top - that.getHeight() + 1); // the 1 is just to get her past the bb of the railing
                         //that.velocity.y += FALL_ACC * TICK;
-                        //that.updateBB();;
+                        //that.updateBB();
                     }
                 }
 
