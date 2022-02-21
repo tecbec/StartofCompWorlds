@@ -192,11 +192,10 @@ class SceneManager {
                 let tree = LEVEL.TREE[i];
                 this.game.addEntity(new Tree(this.game, tree.X, tree.Y, tree.TYPE));
             }
-            
-            this.game.addEntity(this.ground);
             this.game.addEntity(this.railing);
             this.game.addEntity(this.bathhouse);
-
+            this.game.addEntity(this.ground);
+    
             for (var i = 0; i < LEVEL.PLATFORM_LOCATION.length; i++) {
                 let platform = LEVEL.PLATFORM_LOCATION[i];
                 this.game.addEntity(new Platform(this.game, platform.X, platform.Y, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE, platform.TYPE));

@@ -410,9 +410,10 @@ class Player {
 
                 // collision with Chicks
                 if (entity instanceof Chick && that.BB.collide(entity.BB) && !that.dead) {
-                    that.game.camera.breathwidth -= CHIHIRO.BREATH_BAR.MAX/4;
-                    that.game.camera.changeBreath();
-
+                    if (!that.game.camera.title) {
+                        that.game.camera.breathwidth -= CHIHIRO.BREATH_BAR.MAX/4;
+                        that.game.camera.changeBreath();
+                    }
                     if (that.BB.collide(entity.leftBB)) { // left collision
                        // maybe replace with a push animation?
                        that.setX(that.getX() + 20);
