@@ -4,16 +4,16 @@ var BACKGROUND = {
     Y: 0,
     SIZE: {W: 1000, H: 500},
     SCALE: 2,
-    GROUND: {X: 32, Y: 0, SIZE: 32, SCALE: 4},
-    STONE_LAMP: {X: 0, Y: 0, SIZE: {W:45, H:142 }, SCALE:{ X:4, Y: 5}, BB_SIZE: {W: 10, H: 10}},
-    LAMP: {X: 0, Y: 0, SIZE: {W: 107, H:188}, SCALE:  {W: 2, H: 2}, BB_SIZE: {W: 5, H: 10}, PADDING: {W: 40, H: 10}},
-    RAILING: {X: 0, Y: 10, SIZE: 64, SCALE: 2.5, BB_SIZE: {W: 5, H: 10}, PADDING: 20},
-    PLATFORM: {LEFT: {X: 0, Y: 32}, MID: {X: 16, Y: 32}, RIGHT: {X: 32, Y: 32}, SIZE: 16, SCALE: 4, COUNT: 2, BB_SIZE: {W: 10, H: 10}},
-    CLOUD_PLATFORM: {LEFT: {X: 0, Y: 0}, MID: {X: 0, Y: 0}, RIGHT: {X: 0, Y: 0}, SIZE: 16, SCALE: 4, COUNT: 2, BB_SIZE: {W: 5, H: 16}},
-    CLOUD: {X: 0, Y: 0, WIDTH: 192, HEIGHT:64, SCALE: 1},
-    CLOUD_BB:[{W: 64, H: 54}, {W: 64, H: 54}, {W: 128, H: 54}, {W: 148, H: 54}, {W: 192, H: 54}],
-    BATHHOUSE: {X:0, Y: 0, W: 987, H: 1104},
-    TREE:{X:0, Y:0, W:512, H:248, SCALE:4},
+    GROUND:         {X: 32, Y: 0, SIZE: 32, SCALE: 4},
+    STONE_LAMP:     {X: 0, Y: 0,  SIZE: {W:45, H:142 },  SCALE:{ X:4, Y: 5},   BB_SIZE: {W: 10, H: 10}},
+    LAMP:           {X: 0, Y: 0,  SIZE: {W: 107, H:188}, SCALE:  {W: 2, H: 2}, BB_SIZE: {W: 5,  H: 10}, PADDING: {W: 40, H: 10}},
+    RAILING:        {X: 0, Y: 10, SIZE: 64, SCALE: 2.5, BB_SIZE: {W: 5, H: 10}, PADDING: 20},
+    PLATFORM:       {LEFT: {X: 0, Y: 32}, MID: {X: 16, Y: 32}, RIGHT: {X: 32, Y: 32}, SIZE: 16, SCALE: 4, COUNT: 2, BB_SIZE: {W: 10, H: 10}},
+    CLOUD_PLATFORM: {LEFT: {X: 0, Y: 0},  MID: {X: 0, Y: 0},   RIGHT: {X: 0, Y: 0},   SIZE: 16, SCALE: 4, COUNT: 2, BB_SIZE: {W: 5, H: 16}},
+    CLOUD:          {X: 0, Y: 0, WIDTH: 192, HEIGHT:64, SCALE: 1},
+    CLOUD_BB:       [{W: 64, H: 54}, {W: 64, H: 54}, {W: 128, H: 54}, {W: 148, H: 54}, {W: 192, H: 54}],
+    BATHHOUSE:      {X:0, Y: 0, W: 987, H: 1104},
+    TREE:           {X:0, Y:0, W:512, H:248, SCALE:4},
     FIREWORKS:      [{X: -600, Y: 50,       SPRITEX: 0, SPRITEY: 0,     NUM_FRAMES: 21,     DUR: 0.1,       SCALE: 5},      // index = 0 
                     {X: 100,   Y: 250,      SPRITEX: 0, SPRITEY: 64,    NUM_FRAMES: 21,     DUR: 0.15 ,      SCALE: 5},      // index = 1 
                     {X: 750,   Y: 100,       SPRITEX: 0, SPRITEY: 128,   NUM_FRAMES: 21,     DUR: 0.1,       SCALE: 4},      // index = 2 
@@ -262,18 +262,43 @@ class Bathhouse {
     constructor(game, x, y) {
         Object.assign(this, { game, x, y});
         this.spritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/Bathhouse.png");
+        this.treespritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/tree-sheet.png");
     }
 
     update() {
-
     };
 
     draw(ctx) {
+        // draw the bath house && trees
+
         if (this.game.camera.chihiro.winGame) {
+
+            ctx.drawImage(this.treespritesheet,
+                512, 0, 158,  268,
+                this.x - 70 - this.game.camera.x, 490,
+                158 * 2, 268 * 2);
+
+            ctx.drawImage(this.treespritesheet,
+                1024, 0,  272,  158,
+                this.x + 700 - this.game.camera.x, 670,
+                272 * 2, 158 * 2);
+
             ctx.drawImage(this.spritesheet,
                 BACKGROUND.BATHHOUSE.X, BACKGROUND.BATHHOUSE.Y,  BACKGROUND.BATHHOUSE.W,  BACKGROUND.BATHHOUSE.H,
                 this.x - this.game.camera.x, - 100,
                 BACKGROUND.BATHHOUSE.W, BACKGROUND.BATHHOUSE.H );
+
+            ctx.drawImage(this.treespritesheet,
+                BACKGROUND.TREE.X, BACKGROUND.TREE.Y,  BACKGROUND.TREE.W,  BACKGROUND.TREE.H,
+                this.x + 400 - this.game.camera.x, 650,
+                BACKGROUND.TREE.W * 2, BACKGROUND.TREE.H * 2);
+
+            ctx.drawImage(this.treespritesheet,
+                1552, 0,  496,  160,
+                this.x + 800 - this.game.camera.x, 680,
+                496 * 2, 160 * 2);
+           
+        // draw the trees
 
         } else {
             ctx.drawImage(this.spritesheet,

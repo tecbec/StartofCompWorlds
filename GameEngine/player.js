@@ -1,7 +1,7 @@
 /* Chihiro's Params */
 var CHIHIRO = {
     TITLE_POSITION:   {X: 0,  Y: 800},
-    INITIAL_POSITION: {X: 0,  Y: 0},  // change to 10200 to test winning condition. 
+    INITIAL_POSITION: {X: 11000,  Y: 0},  // change to 10200 to test winning condition. 
     SIZE: 70,
     SCALE: 2,
     PADDING:{X: 28, Y: 20}, // same padding for BB and imaginary x,y,w,h calculations
@@ -383,47 +383,48 @@ class Player {
                 // collision with no face
                 if (entity instanceof NoFace && that.BB.collide(entity.BB)) {
                     // Set a maximum amount of coins upon interact
-                    if (entity.hasCoins) {
-                        that.game.camera.coinCounter.coinCount += 15;
-                        entity.hasCoins = false;
+                    if (!that.game.camera.title && !that.game.camera.chihiro.winGame) { 
+                        if (entity.hasCoins) {
+                            that.game.camera.coinCounter.coinCount += 15;
+                            entity.hasCoins = false;
+                        }
+                        entity.dead = true;
                     }
-
-                   
-
-                    entity.dead = true;
-
                 }
 
                 // Collision with CROWS
                 if (entity instanceof Crow && that.BB.collide(entity.BB) && !that.dead) {
-                    that.game.camera.breathwidth -= 5;
-                    that.game.camera.changeBreath();
-                    entity.removeFromWorld = true;
+                    if (!that.game.camera.title && !that.game.camera.chihiro.winGame) {
+                        that.game.camera.breathwidth -= 5;
+                        that.game.camera.changeBreath();
+                        entity.removeFromWorld = true;
+                    }
                 }
 
                 //Collision with Yubaba
                  if (entity instanceof Yubaba && that.BB.collide(entity.BB) && !that.dead) {
-                    that.game.camera.breathwidth -= CHIHIRO.BREATH_BAR.MAX;
-                    that.game.camera.changeBreath();
-                    
+                    if (!that.game.camera.title && !that.game.camera.chihiro.winGame) {
+                        that.game.camera.breathwidth -= CHIHIRO.BREATH_BAR.MAX;
+                        that.game.camera.changeBreath();
+                    }        
                 }
 
                 // collision with Chicks
                 if (entity instanceof Chick && that.BB.collide(entity.BB) && !that.dead) {
-                    if (!that.game.camera.title) {
+                    if (!that.game.camera.title && !that.game.camera.chihiro.winGame) {
                         that.game.camera.breathwidth -= CHIHIRO.BREATH_BAR.MAX/4;
                         that.game.camera.changeBreath();
-                    }
-                    if (that.BB.collide(entity.leftBB)) { // left collision
-                       // maybe replace with a push animation?
-                       that.setX(that.getX() + 20);
-                       that.velocity.x = 100;
-                    } else if (that.BB.collide(entity.rightBB)) { // right
-                        that.setX(that.getX() - 20);
-                        that.velocity.x = -100;
-                    }else if (that.BB.collide(entity.topBB)) { // right
-                        that.setY(that.getY() - 20);
-                        that.velocity.y = -100;
+                        if (that.BB.collide(entity.leftBB)) { // left collision
+                            // maybe replace with a push animation?
+                            that.setX(that.getX() + 20);
+                            that.velocity.x = 100;
+                         } else if (that.BB.collide(entity.rightBB)) { // right
+                             that.setX(that.getX() - 20);
+                             that.velocity.x = -100;
+                         }else if (that.BB.collide(entity.topBB)) { // right
+                             that.setY(that.getY() - 20);
+                             that.velocity.y = -100;
+                         }
                     }
                     //that.updateBB();
  
@@ -441,11 +442,13 @@ class Player {
 
                 // collision with SOOTS
                 if (entity instanceof Soot && !that.dead) {
-                    that.game.camera.breathwidth -= 1;
-                    // for testing make soot breath -=20;
-                    entity.dead = true;
-                    that.game.camera.changeBreath();
-                    //that.updateBB()
+                    if (!that.game.camera.title && !that.game.camera.chihiro.winGame) { 
+                        that.game.camera.breathwidth -= 1;
+                        // for testing make soot breath -=20;
+                        entity.dead = true;
+                        that.game.camera.changeBreath();
+                        //that.updateBB()
+                    } 
                 }
 
                 // collision with COINS
