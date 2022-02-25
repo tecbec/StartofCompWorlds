@@ -94,6 +94,8 @@ class SceneManager {
         this.level = 1;
         this.gameOverCounter  = 0;
 
+
+        this.loadLevelCount = -1;
         // sound
         this.mute = true;
         this.volume = 0.1;
@@ -251,7 +253,7 @@ class SceneManager {
 
             this.game.addEntity(this.breathbar);
             this.game.addEntity(this.coinCounter);
-            this.game.addEntity(new TransitionScreen(this.game, this.level, LEVEL.END_SCREEN.X, LEVEL.END_SCREEN.Y));
+            this.game.addEntity(new EndScreen(this.game, this.level, LEVEL.END_SCREEN.X, LEVEL.END_SCREEN.Y));
 
             this.game.addEntity(this.buttons);
         }
@@ -270,6 +272,7 @@ class SceneManager {
             if (this.game.click && this.game.click.y > 700 && this.game.click.y < 750 && this.game.click.x > 815  && this.game.click.x < 1003) {
                 this.title = false;
                 this.loadLevel(1, this.title);
+                this.loadLevelCount = this.loadLevelCount + 1;
                 this.game.click = false;
             }
         }
