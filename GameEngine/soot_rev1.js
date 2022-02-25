@@ -6,7 +6,7 @@
 class Soot {
     constructor( game, x, y, sootDir, widthSootArea, heightSootArea) {
         Object.assign(this, { game, x, y, sootDir, widthSootArea, heightSootArea});
-        // this.spritesheet_aura = ASSET_MANAGER.getAsset("./sprites/soot-jump-long_aura.png");
+
         this.spritesheet_aura2 = ASSET_MANAGER.getAsset("./GameEngine/sprites/soot-jump-long_aura2_bidir.png");
 
         this.loadAnimations();
@@ -33,12 +33,12 @@ class Soot {
     };
 
     loadAnimations() {
-        let start = {x: 0, y: 0};
-        const height = 100;
-        const width = 100;
-        const frames = 6;
-        const framedur = 0.2;
-        const pad = 15;
+        let start = {x: 0, y: 0};   // location on the spritesheet to start
+        const height = 100;         // height of the sprite
+        const width = 100;          // width of the sprite
+        const frames = 6;           // number of frames
+        const framedur = 0.2;       // the duration of the frame to be up
+        const pad = 15;             // padding between the soot frames 
 
         if(this.sootDir === 1) { // soots move left to right
             this.animations = new Animator(this.spritesheet_aura2, start.x, start.y, height, width, frames, framedur, pad, false, true);

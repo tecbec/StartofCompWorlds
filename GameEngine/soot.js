@@ -1,13 +1,14 @@
 /*
  * Soot Object
  * Created and animated by Kumiko
+ * Rev. 3
  */
 
 class Soot {
-    constructor( game, x, y, sootDir, widthSootArea, heightSootArea) {
-        Object.assign(this, { game, x, y, sootDir, widthSootArea, heightSootArea});
-
-        this.spritesheet_aura2 = ASSET_MANAGER.getAsset("./GameEngine/sprites/soot-jump-long_aura2_bidir.png");
+    constructor( game, x, y, sootDir, widthSootArea, heightSootArea, numSoots) {
+        Object.assign(this, { game, x, y, sootDir, widthSootArea, heightSootArea, numSoots});
+        // this.spritesheet_aura = ASSET_MANAGER.getAsset("./sprites/soot-jump-long_aura.png");
+        this.spritesheet= ASSET_MANAGER.getAsset("./GameEngine/sprites/soot-jump-long_aura2_bidir.png");
 
         this.loadAnimations();
 
@@ -28,37 +29,28 @@ class Soot {
 
         // bounding box
         this.updateBB();
-        this.hitpoints = 30; 
-
+        this.hitpoints = 30;
     };
 
     loadAnimations() {
-        let start = {x: 0, y: 0};
-        const height = 100;
-        const width = 100;
-        const frames = 6;
-        const framedur = 0.2;
-        const pad = 15;
+        let start = {x: 0, y: 0};   // location on the spritesheet to start
+        const height = 100;         // height of the sprite
+        const width = 100;          // width of the sprite
+        const frames = 6;           // number of frames
+        const framedur = 0.2;       // the duration of the frame to be up
+        const pad = 15;             // padding between the soot frames
 
         if(this.sootDir === 1) { // soots move left to right
-            this.animations = new Animator(this.spritesheet_aura2, start.x, start.y, height, width, frames, framedur, pad, false, true);
+            this.animations = new Animator(this.spritesheet, start.x, start.y, height, width, frames, framedur, pad, false, true);
         } else {            // soots move right to left
             start.y = 125;
-            this.animations = new Animator(this.spritesheet_aura2, start.x, start.y, height, width, frames, framedur, pad, false, true);
+            this.animations = new Animator(this.spritesheet, start.x, start.y, height, width, frames, framedur, pad, false, true);
         }
     }
 
     updateBB() {
-        const subwidth = 2;
-        const subheight = 5;
-        let width = 10;
-        const height = 10;
-
         this.lastBB = this.BB;
-        this.BB = new BoundingBox(this.x+subwidth, this.y+subheight, width, height);
-        width = 2;
-        this.leftBB = new BoundingBox(this.x+subwidth, this.y+subheight, width, height);
-        this.rightBB = new BoundingBox(this.BB.right-subwidth, this.y, width, height);
+        this.BB = new BoundingBox(this.x, this.y, this.widthSootArea, this.heightSootArea);
     };
 
     // this is set to move the piece across the screen
@@ -136,9 +128,6 @@ class Soot {
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
             ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
-            ctx.strokeStyle = 'Yellow';
-            ctx.strokeRect(this.leftBB.x - this.game.camera.x, this.leftBB.y, this.leftBB.width, this.leftBB.height);
-            ctx.strokeRect(this.rightBB.x - this.game.camera.x, this.rightBB.y, this.rightBB.width, this.rightBB.height);
         }
 
         ctx.imageSmoothingEnabled = false;
