@@ -151,13 +151,14 @@ class Player {
         this.lastBB = this.BB;
         this.lastBBbottom = this.BBbottom;
 
-        if(this.game.crouch && this.velocity.y == 0){ // if crouching
+        console.log(this.game.crouch);
+        if( this.game.crouch || this.state === 3 ){             // if crouching
             var crouchHeight = ((CHIHIRO.SIZE- CHIHIRO.PADDING.Y) * CHIHIRO.SCALE)/2;
             this.BB = new BoundingBox(this.x + CHIHIRO.PADDING.X * CHIHIRO.SCALE,
                                         (this.y + CHIHIRO.PADDING.Y*CHIHIRO.SCALE) + crouchHeight,
                                         (CHIHIRO.SIZE - (CHIHIRO.PADDING.X * 2))* CHIHIRO.SCALE, // padding on left and right
-                                        crouchHeight - 100); // padding on top
-        } if (this.winGame) {
+                                        crouchHeight - 1); // padding on top
+        } else if (this.winGame) {
             this.BB = new BoundingBox(this.x + CHIHIRO.PADDING.X, this.y + CHIHIRO.PADDING.Y ,
                 (CHIHIRO.SIZE - (CHIHIRO.PADDING.X * 2)), // padding on left and right
                 (CHIHIRO.SIZE- CHIHIRO.PADDING.Y) - 1); // padding on top
