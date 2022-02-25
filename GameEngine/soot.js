@@ -4,9 +4,9 @@
  */
 
 class Soot {
-    constructor( game, x, y, sootDir,widthSootArea,heightSootArea) {
+    constructor( game, x, y, sootDir, widthSootArea, heightSootArea) {
         Object.assign(this, { game, x, y, sootDir, widthSootArea, heightSootArea});
-        // this.spritesheet_aura = ASSET_MANAGER.getAsset("./sprites/soot-jump-long_aura.png");
+
         this.spritesheet_aura2 = ASSET_MANAGER.getAsset("./GameEngine/sprites/soot-jump-long_aura2_bidir.png");
 
         this.loadAnimations();
