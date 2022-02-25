@@ -150,17 +150,18 @@ class Player {
     updateBB() {
         this.lastBB = this.BB;
         this.lastBBbottom = this.BBbottom;
+
         if(this.game.crouch && this.velocity.y == 0){ // if crouching
             var crouchHeight = ((CHIHIRO.SIZE- CHIHIRO.PADDING.Y) * CHIHIRO.SCALE)/2;
-            this.BB = new BoundingBox(this.x + CHIHIRO.PADDING.X*CHIHIRO.SCALE, 
+            this.BB = new BoundingBox(this.x + CHIHIRO.PADDING.X * CHIHIRO.SCALE,
                                         (this.y + CHIHIRO.PADDING.Y*CHIHIRO.SCALE) + crouchHeight,
                                         (CHIHIRO.SIZE - (CHIHIRO.PADDING.X * 2))* CHIHIRO.SCALE, // padding on left and right
-                                        crouchHeight - 1); // padding on top
+                                        crouchHeight - 100); // padding on top
         } if (this.winGame) {
             this.BB = new BoundingBox(this.x + CHIHIRO.PADDING.X, this.y + CHIHIRO.PADDING.Y ,
                 (CHIHIRO.SIZE - (CHIHIRO.PADDING.X * 2)), // padding on left and right
                 (CHIHIRO.SIZE- CHIHIRO.PADDING.Y) - 1); // padding on top
-        } 
+        }
         else {
             this.BB = new BoundingBox(this.x + CHIHIRO.PADDING.X*CHIHIRO.SCALE, this.y + CHIHIRO.PADDING.Y*CHIHIRO.SCALE,
                 (CHIHIRO.SIZE - (CHIHIRO.PADDING.X * 2))* CHIHIRO.SCALE, // padding on left and right
@@ -292,9 +293,6 @@ class Player {
             this.y += this.velocity.y * TICK * TICK_SCALE;
         }
 
-       
-        
-
         this.updateBB();
 
         // collision handling
@@ -340,7 +338,7 @@ class Player {
                         } else {
 
                         }
-                        //that.updateBB(); 
+                        //that.updateBB();
                 }
 
                 if(entity instanceof StoneLamp  && (that.BB.collide(entity.BB))){ //|| that.BB.collide(entity.BBmiddle) )) {
@@ -353,7 +351,7 @@ class Player {
                             that.setX(entity.BB.right);// so that the player won't stick to the bb of the entity
                             //that.velocity.y = 0;
                             if (that.velocity.x < 0) that.velocity.x = 0;
-                        } 
+                        }
                   //  } //else {
                     // if (that.BB.collide(entity.BBmiddleleft) && that.BB.right >= entity.BBmiddleleft.left ) { // left collision
                     //         that.setX(entity.BBmiddle.left - that.getWidth()); // so that the player won't stick to the bb of the entity
@@ -363,9 +361,8 @@ class Player {
                     //         that.setX(entity.BBmiddle.right);// so that the player won't stick to the bb of the entity
                     //         // that.velocity.y = 0;
                     //         if (that.velocity.x < 0) that.velocity.x = 0;
-                    //     } 
+                    //     }
                     // }
-                    
                 }
 
                 if(entity instanceof Railing) {// if she's crouching she'll fall to ground
@@ -387,11 +384,7 @@ class Player {
                         that.game.camera.coinCounter.coinCount += 15;
                         entity.hasCoins = false;
                     }
-
-                   
-
                     entity.dead = true;
-
                 }
 
                 // Collision with CROWS
@@ -405,7 +398,6 @@ class Player {
                  if (entity instanceof Yubaba && that.BB.collide(entity.BB) && !that.dead) {
                     that.game.camera.breathwidth -= CHIHIRO.BREATH_BAR.MAX;
                     that.game.camera.changeBreath();
-                    
                 }
 
                 // collision with Chicks
@@ -426,9 +418,8 @@ class Player {
                         that.velocity.y = -100;
                     }
                     //that.updateBB();
- 
                 }
-                
+
                 // collision with HAKU
                 if (entity instanceof Haku && that.BB.collide(entity.BB)) {
                     // instantly heal stamina bar
@@ -436,7 +427,7 @@ class Player {
                     that.game.camera.changeBreath();
                     that.collideWithHaku = true;
                 } else {
-                    
+
                 }
 
                 // collision with SOOTS
@@ -456,7 +447,7 @@ class Player {
 
                 if (entity instanceof Portal) {
                     console.log("instanceof");
-                    that.powerup = true; 
+                    that.powerup = true;
                     entity.removeFromWorld = true;
                 }
             }
@@ -468,7 +459,7 @@ class Player {
                 } else if (that.BB.collide(entity.BBmiddleright) && that.BB.left <= entity.BBmiddleright.right ) { // right collision
                     that.setX(entity.BBmiddleright.right);
                     if (that.velocity.x < 0) that.velocity.x = 0;
-                } 
+                }
             }
         });
         this.updateBB();
@@ -480,9 +471,8 @@ class Player {
             } else {
                 this.dead = false;
             }
-    
         }
-       
+
         // update state
         if (this.state !== 5 && this.state !== 3) {  // NOT dead, or crouch
             if (this.game.crouch && this.velocity.x == 0) this.state = 3;  // crouch idle state
@@ -512,15 +502,15 @@ class Player {
         if (this.velocity.x > 0) this.facing = 0;
 
         if (this.powerup == true) {
-            this.elapsedTime += TICK; 
-            this.bubbleTime += TICK; 
+            this.elapsedTime += TICK;
+            this.bubbleTime += TICK;
             if (this.game.shoot && this.elapsedTime > 1 ){
                 this.game.addEntity(new BubblesController(this.game, this.getX()+ this.getWidth(), this.getY(),  this.facing));
                         this.elapsedTime = 0;
                         this.counter++; //once you shoot 7 bubbles then no more bubbles for you
                 }
             if (this.bubbleTime > 5) {
-                this.powerup = false;  
+                this.powerup = false;
             }
         }
 
