@@ -68,7 +68,9 @@
     NOFACE_LOCATION: [{X: 3200, Y: 100},  // scene 2
                       {X: 7000, Y: 0}, ], // scene 4
 
-    CHICK_LOCATION: [{X: 840,  Y: 785, MIN: 0,    MAX: 0,     DIR:0}, {X: 2402, Y: 785, MIN: 500,  MAX: 2402,  DIR:0},               // scene 1
+    RADISH_LOCATION: [{X: 840,  Y: 690}], //scene
+
+    CHICK_LOCATION: [{X: 2402, Y: 785, MIN: 500,  MAX: 2402,  DIR:0},               // scene 1
                      {X: 2900, Y: 785, MIN: 2402, MAX: 4304,  DIR:0}, {X: 3800, Y: 785, MIN: 2402, MAX: 4304,  DIR:0},               // scene 2
                      {X: 4780, Y: 785, MIN: 4304, MAX: 5255,  DIR:1}, {X: 5730, Y: 785, MIN: 5305, MAX: 6206,  DIR:0},               // scene 3
                      {X: 6750, Y: 785, MIN: 6750, MAX: 7900,  DIR:1}, {X: 7500, Y: 785, MIN: 6750, MAX: 7900,  DIR:0},               // Scene 4
@@ -131,7 +133,7 @@ class SceneManager {
         this.background = new BackGround(this.game, LEVEL.START_CANVAS.X,  LEVEL.START_CANVAS.Y);
         this.railing = new Railing(this.game, LEVEL.RAILING_LOCATION.X, LEVEL.RAILING_LOCATION.Y, PARAMS.CANVAS_WIDTH * (LEVEL.FRAME_COUNT - 3),
                                     BACKGROUND.RAILING.SCALE * BACKGROUND.RAILING.SIZE);
-        this.chick = new Chick(this.game, chickPlace.x, chickPlace.y, chickPlace.xneg, chickPlace.xpos);
+       // this.chick = new Chick(this.game, chickPlace.x, chickPlace.y, chickPlace.xneg, chickPlace.xpos);
         this.lamp = new Lamp(this.game, -950, 620, BACKGROUND.LAMP.SIZE * BACKGROUND.LAMP.SCALE.W);
         // this.haku = new Haku(this.game, hakuPlace.x, hakuPlace.y);
         this.buttons = new TitleButtons(this.game);
@@ -184,7 +186,7 @@ class SceneManager {
             this.game.addEntity(new Fireworks(this.game));
             this.game.addEntity(this.lamp);
             this.game.addEntity(this.chihiro);
-            this.game.addEntity(this.chick);
+            //this.game.addEntity(this.chick);
             // this.game.addEntity(this.haku);
         } else {
             this.bathhouse = new Bathhouse(this.game, LEVEL.BATHHOUSE.X,  LEVEL.BATHHOUSE.Y);
@@ -242,6 +244,11 @@ class SceneManager {
             for (var i = 0; i < LEVEL.CHICK_LOCATION.length; i++) {
                 let chick = LEVEL.CHICK_LOCATION[i];
                 this.game.addEntity(new Chick(this.game, chick.X, chick.Y, chick.MIN, chick.MAX, chick.DIR));
+            }
+
+            for (var i = 0; i < LEVEL.RADISH_LOCATION.length; i++) {
+                let radish = LEVEL.RADISH_LOCATION[i];
+                this.game.addEntity(new Radish(this.game, radish.X, radish.Y));
             }
 
             this.game.addEntity(this.chihiro);
