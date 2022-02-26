@@ -95,6 +95,8 @@ class SceneManager {
         this.level = 1;
         this.gameOverCounter  = 0;
 
+
+        this.loadLevelCount = -1;
         // sound
         this.mute = true;
         this.volume = 0.1;
@@ -181,9 +183,9 @@ class SceneManager {
             this.game.addEntity(this.titlePlaque);
             this.game.addEntity(this.buttons);
             this.game.addEntity(new Fireworks(this.game));
-            this.game.addEntity(this.chick);
             this.game.addEntity(this.lamp);
             this.game.addEntity(this.chihiro);
+            this.game.addEntity(this.chick);
             // this.game.addEntity(this.haku);
         } else {
             this.bathhouse = new Bathhouse(this.game, LEVEL.BATHHOUSE.X,  LEVEL.BATHHOUSE.Y);
@@ -252,8 +254,9 @@ class SceneManager {
 
             this.game.addEntity(this.breathbar);
             this.game.addEntity(this.coinCounter);
-            this.game.addEntity(new TransitionScreen(this.game, this.level, LEVEL.END_SCREEN.X, LEVEL.END_SCREEN.Y));
-
+            this.game.addEntity(new Fireworks(this.game));
+            this.game.addEntity(new EndScreen(this.game, this.level, LEVEL.END_SCREEN.X, LEVEL.END_SCREEN.Y));
+         
             this.game.addEntity(this.buttons);
         }
     };
@@ -263,6 +266,7 @@ class SceneManager {
     };
 
     update() {
+        this.mute = true;
         this.updateAudio();
         // canvas width = 400
         // blockwidth = 32 * 1 = 32
@@ -279,6 +283,7 @@ class SceneManager {
             if (this.game.click && this.game.click.y > 700 && this.game.click.y < 750 && this.game.click.x > 815  && this.game.click.x < 1003) {
                 this.title = false;
                 this.loadLevel(1, this.title);
+                this.loadLevelCount = this.loadLevelCount + 1;
                 this.game.click = false;
             }
         }

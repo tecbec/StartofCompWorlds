@@ -4,21 +4,26 @@ var BACKGROUND = {
     Y: 0,
     SIZE: {W: 1000, H: 500},
     SCALE: 2,
-    GROUND: {X: 32, Y: 0, SIZE: 32, SCALE: 4},
-    STONE_LAMP: {X: 0, Y: 0, SIZE: {W:45, H:142 }, SCALE:{ X:4, Y: 5}, BB_SIZE: {W: 10, H: 10}},
-    LAMP: {X: 0, Y: 0, SIZE: {W: 107, H:188}, SCALE:  {W: 2, H: 2}, BB_SIZE: {W: 5, H: 10}, PADDING: {W: 40, H: 10}},
-    RAILING: {X: 0, Y: 10, SIZE: 64, SCALE: 2.5, BB_SIZE: {W: 5, H: 10}, PADDING: 20},
-    PLATFORM: {LEFT: {X: 0, Y: 32}, MID: {X: 16, Y: 32}, RIGHT: {X: 32, Y: 32}, SIZE: 16, SCALE: 4, COUNT: 2, BB_SIZE: {W: 10, H: 10}},
-    CLOUD_PLATFORM: {LEFT: {X: 0, Y: 0}, MID: {X: 0, Y: 0}, RIGHT: {X: 0, Y: 0}, SIZE: 16, SCALE: 4, COUNT: 2, BB_SIZE: {W: 5, H: 16}},
-    CLOUD: {X: 0, Y: 0, WIDTH: 192, HEIGHT:64, SCALE: 1},
-    CLOUD_BB:[{W: 64, H: 54}, {W: 64, H: 54}, {W: 128, H: 54}, {W: 148, H: 54}, {W: 192, H: 54}],
-    BATHHOUSE: {X:0, Y: 0, W: 987, H: 1104},
-    TREE:{X:0, Y:0, W:512, H:248, SCALE:4},
-    FIREWORKS:      [{X: -600, Y: 50,       SPRITEX: 0, SPRITEY: 0,     NUM_FRAMES: 21,     DUR: 0.1,       SCALE: 5},      // index = 0 
-                    {X: 100,   Y: 250,      SPRITEX: 0, SPRITEY: 64,    NUM_FRAMES: 21,     DUR: 0.15 ,      SCALE: 5},      // index = 1 
-                    {X: 750,   Y: 100,       SPRITEX: 0, SPRITEY: 128,   NUM_FRAMES: 21,     DUR: 0.1,       SCALE: 4},      // index = 2 
-                    {X: -300,  Y: 500,      SPRITEX: 0, SPRITEY: 192,   NUM_FRAMES: 21,     DUR: 0.15,       SCALE: 2},     // index = 3 
-                    {X: 500,   Y: 550,      SPRITEX: 0, SPRITEY: 384,   NUM_FRAMES: 21,     DUR: 0.1,       SCALE: 2}],     // index = 4 
+    GROUND:         {X: 32, Y: 0, SIZE: 32, SCALE: 4},
+    STONE_LAMP:     {X: 0, Y: 0,  SIZE: {W:45, H:142 },  SCALE:{ X:4, Y: 5},   BB_SIZE: {W: 10, H: 10}},
+    LAMP:           {X: 0, Y: 0,  SIZE: {W: 107, H:188}, SCALE:  {W: 2, H: 2}, BB_SIZE: {W: 5,  H: 10}, PADDING: {W: 40, H: 10}},
+    RAILING:        {X: 0, Y: 10, SIZE: 64, SCALE: 2.5, BB_SIZE: {W: 5, H: 10}, PADDING: 20},
+    PLATFORM:       {LEFT: {X: 0, Y: 32}, MID: {X: 16, Y: 32}, RIGHT: {X: 32, Y: 32}, SIZE: 16, SCALE: 4, COUNT: 2, BB_SIZE: {W: 10, H: 10}},
+    CLOUD_PLATFORM: {LEFT: {X: 0, Y: 0},  MID: {X: 0, Y: 0},   RIGHT: {X: 0, Y: 0},   SIZE: 16, SCALE: 4, COUNT: 2, BB_SIZE: {W: 5, H: 16}},
+    CLOUD:          {X: 0, Y: 0, WIDTH: 192, HEIGHT:64, SCALE: 1},
+    CLOUD_BB:       [{W: 64, H: 54}, {W: 64, H: 54}, {W: 128, H: 54}, {W: 148, H: 54}, {W: 192, H: 54}],
+    BATHHOUSE:      {X:0, Y: 0, W: 987, H: 1104},
+    TREE:           {X:0, Y:0, W:512, H:248, SCALE:4},
+    FIREWORKS:      [{X: -600,  Y: 50,       SPRITEX: 0, SPRITEY: 0,     NUM_FRAMES: 21,     DUR: 0.1,       SCALE: 5},     // index = 0 
+                     {X: 100,   Y: 250,      SPRITEX: 0, SPRITEY: 64,    NUM_FRAMES: 21,     DUR: 0.15 ,     SCALE: 5},     // index = 1 
+                     {X: 750,   Y: 100,      SPRITEX: 0, SPRITEY: 128,   NUM_FRAMES: 21,     DUR: 0.1,       SCALE: 4},     // index = 2 
+                     {X: -300,  Y: 500,      SPRITEX: 0, SPRITEY: 192,   NUM_FRAMES: 21,     DUR: 0.15,      SCALE: 2},     // index = 3 
+                     {X: 500,   Y: 550,      SPRITEX: 0, SPRITEY: 384,   NUM_FRAMES: 21,     DUR: 0.1,       SCALE: 2},     // index = 4 
+                     {X: 10800, Y: 50,       SPRITEX: 0, SPRITEY: 0,     NUM_FRAMES: 21,     DUR: 0.1,       SCALE: 5},     // index = 5 
+                     {X: 11300, Y: 250,      SPRITEX: 0, SPRITEY: 64,    NUM_FRAMES: 21,     DUR: 0.15 ,     SCALE: 5},     // index = 6 
+                     {X: 11500, Y: 100,      SPRITEX: 0, SPRITEY: 128,   NUM_FRAMES: 21,     DUR: 0.1,       SCALE: 4},     // index = 7 
+                     {X: 10700, Y: 500,      SPRITEX: 0, SPRITEY: 192,   NUM_FRAMES: 21,     DUR: 0.15,      SCALE: 2},     // index = 8 
+                     {X: 10800, Y: 550,      SPRITEX: 0, SPRITEY: 384,   NUM_FRAMES: 21,     DUR: 0.1,       SCALE: 2}],    // index = 9
 
     BUTTONS:       [{X: -10,   Y: 700,      SPRITEX: 0, SPRITEY: 0,     SWIDTH: 48,         SHEIGHT: 16,    SCALE: 4},
                     {X: 125,   Y: 1045,     SPRITEX: 0, SPRITEY: 16,    SWIDTH: 48,         SHEIGHT: 16,    SCALE: 1.5},
@@ -203,6 +208,7 @@ class Fireworks {                   //Firework animation
                                                      BACKGROUND.FIREWORKS[4].SPRITEX,     BACKGROUND.FIREWORKS[4].SPRITEY, 
                                                     this.spritedim.width,             this.spritedim.height*3, 
                                                      BACKGROUND.FIREWORKS[4].NUM_FRAMES, BACKGROUND.FIREWORKS[4].DUR, this.pad, false, true);
+
     };
 
     update() {
@@ -212,46 +218,88 @@ class Fireworks {                   //Firework animation
         this.count++;
         this.fireCount = [85, 105, 125, 155, 190];
         this.fireDur = [110, 121, 160, 200, 245];
+        if (!this.game.camera.chihiro.winGame && !this.game.camera.chihiro.endPosition) {
+            // first display of each
+            if (this.count > this.fireCount[0] && this.count < this.fireDur[0]) {
+                this.animations[2].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[2].X-this.game.camera.x, BACKGROUND.FIREWORKS[2].Y, BACKGROUND.FIREWORKS[2].SCALE);
 
-        // first display of each
-        if (this.count > this.fireCount[0] && this.count < this.fireDur[0]) {
-            this.animations[2].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[2].X-this.game.camera.x, BACKGROUND.FIREWORKS[2].Y, BACKGROUND.FIREWORKS[2].SCALE);
-
-        }
-        if (this.count > this.fireCount[1]  && this.count < this.fireDur[1] ) {
-            this.animations[0].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[0].X-this.game.camera.x, BACKGROUND.FIREWORKS[0].Y, BACKGROUND.FIREWORKS[0].SCALE);
-        }
-        if (this.count > this.fireCount[2]  && this.count < this.fireDur[2] ) {
-            this.animations[1].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[1].X-this.game.camera.x, BACKGROUND.FIREWORKS[1].Y, BACKGROUND.FIREWORKS[1].SCALE);
-        }
-
-        if (this.count > this.fireCount[3] && this.count < this.fireDur[3]) {
-            this.animations[3].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[3].X-this.game.camera.x, 
-                                            BACKGROUND.FIREWORKS[3].Y, BACKGROUND.FIREWORKS[3].SCALE);
-        }
-
-        if (this.count > this.fireCount[4] && this.count < this.fireDur[4]) {
-            this.animations[4].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[4].X-this.game.camera.x, 
-                                            BACKGROUND.FIREWORKS[4].Y, BACKGROUND.FIREWORKS[4].SCALE);
-        }
-
-        // start the periodic presentation of the fireworks
-        if (this.count > 130) {
+            }
+            if (this.count > this.fireCount[1]  && this.count < this.fireDur[1] ) {
                 this.animations[0].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[0].X-this.game.camera.x, BACKGROUND.FIREWORKS[0].Y, BACKGROUND.FIREWORKS[0].SCALE);
-        }
-        if (this.count > 150) {
-            this.animations[2].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[2].X-this.game.camera.x, BACKGROUND.FIREWORKS[2].Y, BACKGROUND.FIREWORKS[2].SCALE);
-        }
-        if (this.count > 180) {
-            this.animations[4].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[4].X-this.game.camera.x, BACKGROUND.FIREWORKS[4].Y, BACKGROUND.FIREWORKS[4].SCALE);
-        }
-        if (this.count > 210) {
-            this.animations[3].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[3].X-this.game.camera.x, BACKGROUND.FIREWORKS[3].Y, BACKGROUND.FIREWORKS[3].SCALE);
-        }
-        if (this.count > 250) {
-            this.animations[1].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[1].X-this.game.camera.x, BACKGROUND.FIREWORKS[1].Y, BACKGROUND.FIREWORKS[1].SCALE);
-        }
+            }
+            if (this.count > this.fireCount[2]  && this.count < this.fireDur[2] ) {
+                this.animations[1].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[1].X-this.game.camera.x, BACKGROUND.FIREWORKS[1].Y, BACKGROUND.FIREWORKS[1].SCALE);
+            }
 
+            if (this.count > this.fireCount[3] && this.count < this.fireDur[3]) {
+                this.animations[3].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[3].X-this.game.camera.x, 
+                                                BACKGROUND.FIREWORKS[3].Y, BACKGROUND.FIREWORKS[3].SCALE);
+            }
+
+            if (this.count > this.fireCount[4] && this.count < this.fireDur[4]) {
+                this.animations[4].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[4].X-this.game.camera.x, 
+                                                BACKGROUND.FIREWORKS[4].Y, BACKGROUND.FIREWORKS[4].SCALE);
+            }
+
+            // start the periodic presentation of the fireworks
+            if (this.count > 130) {
+                    this.animations[0].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[0].X-this.game.camera.x, BACKGROUND.FIREWORKS[0].Y, BACKGROUND.FIREWORKS[0].SCALE);
+            }
+            if (this.count > 150) {
+                this.animations[2].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[2].X-this.game.camera.x, BACKGROUND.FIREWORKS[2].Y, BACKGROUND.FIREWORKS[2].SCALE);
+            }
+            if (this.count > 180) {
+                this.animations[4].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[4].X-this.game.camera.x, BACKGROUND.FIREWORKS[4].Y, BACKGROUND.FIREWORKS[4].SCALE);
+            }
+            if (this.count > 210) {
+                this.animations[3].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[3].X-this.game.camera.x, BACKGROUND.FIREWORKS[3].Y, BACKGROUND.FIREWORKS[3].SCALE);
+            }
+            if (this.count > 250) {
+                this.animations[1].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[1].X-this.game.camera.x, BACKGROUND.FIREWORKS[1].Y, BACKGROUND.FIREWORKS[1].SCALE);
+            }
+
+        }
+        
+
+        else if (this.game.camera.chihiro.endPosition) {
+            if (this.count > this.fireCount[0] && this.count < this.fireDur[0]) {
+                this.animations[2].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[7].X-this.game.camera.x, BACKGROUND.FIREWORKS[7].Y, BACKGROUND.FIREWORKS[7].SCALE);
+    
+            }
+            if (this.count > this.fireCount[1]  && this.count < this.fireDur[1] ) {
+                this.animations[0].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[5].X-this.game.camera.x, BACKGROUND.FIREWORKS[5].Y, BACKGROUND.FIREWORKS[5].SCALE);
+            }
+            if (this.count > this.fireCount[2]  && this.count < this.fireDur[2] ) {
+                this.animations[1].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[6].X-this.game.camera.x, BACKGROUND.FIREWORKS[6].Y, BACKGROUND.FIREWORKS[6].SCALE);
+            }
+    
+            if (this.count > this.fireCount[3] && this.count < this.fireDur[3]) {
+                this.animations[3].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[8].X-this.game.camera.x, 
+                                                BACKGROUND.FIREWORKS[8].Y, BACKGROUND.FIREWORKS[8].SCALE);
+            }
+    
+            if (this.count > this.fireCount[4] && this.count < this.fireDur[4]) {
+                this.animations[4].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[9].X-this.game.camera.x, 
+                                                BACKGROUND.FIREWORKS[9].Y, BACKGROUND.FIREWORKS[9].SCALE);
+            }
+    
+            // start the periodic presentation of the fireworks
+            if (this.count > 130) {
+                    this.animations[0].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[5].X-this.game.camera.x, BACKGROUND.FIREWORKS[5].Y, BACKGROUND.FIREWORKS[5].SCALE);
+            }
+            if (this.count > 150) {
+                this.animations[2].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[7].X-this.game.camera.x, BACKGROUND.FIREWORKS[7].Y, BACKGROUND.FIREWORKS[7].SCALE);
+            }
+            if (this.count > 180) {
+                this.animations[4].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[9].X-this.game.camera.x, BACKGROUND.FIREWORKS[9].Y, BACKGROUND.FIREWORKS[9].SCALE);
+            }
+            if (this.count > 210) {
+                this.animations[3].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[8].X-this.game.camera.x, BACKGROUND.FIREWORKS[8].Y, BACKGROUND.FIREWORKS[8].SCALE);
+            }
+            if (this.count > 250) {
+                this.animations[1].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[6].X-this.game.camera.x, BACKGROUND.FIREWORKS[6].Y, BACKGROUND.FIREWORKS[6].SCALE);
+            }
+        }
 
         ctx.imageSmoothingEnabled = false;
     };
@@ -262,18 +310,43 @@ class Bathhouse {
     constructor(game, x, y) {
         Object.assign(this, { game, x, y});
         this.spritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/Bathhouse.png");
+        this.treespritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/tree-sheet.png");
     }
 
     update() {
-
     };
 
     draw(ctx) {
+        // draw the bath house && trees
+
         if (this.game.camera.chihiro.winGame) {
+
+            ctx.drawImage(this.treespritesheet,
+                512, 0, 158,  268,
+                this.x - 70 - this.game.camera.x, 490,
+                158 * 2, 268 * 2);
+
+            ctx.drawImage(this.treespritesheet,
+                1024, 0,  272,  158,
+                this.x + 700 - this.game.camera.x, 670,
+                272 * 2, 158 * 2);
+
             ctx.drawImage(this.spritesheet,
                 BACKGROUND.BATHHOUSE.X, BACKGROUND.BATHHOUSE.Y,  BACKGROUND.BATHHOUSE.W,  BACKGROUND.BATHHOUSE.H,
                 this.x - this.game.camera.x, - 100,
                 BACKGROUND.BATHHOUSE.W, BACKGROUND.BATHHOUSE.H );
+
+            ctx.drawImage(this.treespritesheet,
+                BACKGROUND.TREE.X, BACKGROUND.TREE.Y,  BACKGROUND.TREE.W,  BACKGROUND.TREE.H,
+                this.x + 400 - this.game.camera.x, 650,
+                BACKGROUND.TREE.W * 2, BACKGROUND.TREE.H * 2);
+
+            ctx.drawImage(this.treespritesheet,
+                1552, 0,  496,  160,
+                this.x + 800 - this.game.camera.x, 680,
+                496 * 2, 160 * 2);
+           
+        // draw the trees
 
         } else {
             ctx.drawImage(this.spritesheet,
