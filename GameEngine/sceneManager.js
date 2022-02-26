@@ -4,11 +4,12 @@
  */
  var LEVEL = {
     music: "./GameEngine/audio/OneSummersDay.mp3",
+    START_MUTE:         true,               // you can must the music in each level
     START_CANVAS:       {X: -851, Y: 0},
-    END_CANVAS:         {X: 13000},   // change this later when we figure out the exact ending canvas measurement
-    END_TITLE_CANVAS:   {X: 500},   // change this later when we figure out the exact ending canvas measurement
+    END_CANVAS:         {X: 13000},         // change this later when we figure out the exact ending canvas measurement
+    END_TITLE_CANVAS:   {X: 500},           // This will end the title canvas so it won't keep going.
     END_GAME:           {X: 11515, Y: 813},
-    FRAME_COUNT: 8,           // This is the factor that determine how wide the actual game is
+    FRAME_COUNT: 8,                         // This is the factor that determine how wide the actual game is
     // Type 0: has left,middle,right piece can be adjusted to be longer
     // Type 1: is short (just middle piece)
     TREE:[{X: 567, Y: 276, TYPE:3}, {X: 2538, Y: 0, TYPE:1}, {X: 3231, Y: 276, TYPE:2}, {X: 5543, Y: 0, TYPE:1}, {X: 6527, Y: 276, TYPE:2}, {X: 7816, Y: 276, TYPE:0}, {X: 8274, Y: 276, TYPE:3}],
@@ -150,7 +151,8 @@ class SceneManager {
         this.titleScreen();
 
         if(!this.title){
-            this.mute = false;
+            this.buttons.mute = LEVEL.START_MUTE;
+            this.mute = LEVEL.START_MUTE;
 
             // Falling chihiro for game play
             this.chihiro = new Player(this.game, CHIHIRO.INITIAL_POSITION.X, CHIHIRO.INITIAL_POSITION.Y);
@@ -266,7 +268,6 @@ class SceneManager {
     };
 
     update() {
-        this.mute = true;
         this.updateAudio();
         // canvas width = 400
         // blockwidth = 32 * 1 = 32
@@ -310,12 +311,7 @@ class SceneManager {
                 this.game.click = false;
             }
 
-            // if (this.game.mouse && this.game.mouse.y > 1000 && this.game.mouse.y < 1032 && this.game.mouse.x > 400  && this.game.mouse.x < 432) {   // volume up
-            // if (this.game.mouse && this.game.mouse.y > 1040 && this.game.mouse.y < 1072 && this.game.mouse.x > 400  && this.game.mouse.x < 432)  {   // volume up
-
             // Volume
-
-
             if (this.game.click.y > 1000 && this.game.click.y < 1032 && this.game.mouse.x > 475  && this.game.mouse.x < 510) {
                 if (this.volume <= 0.95){
                     this.volume += 0.05;
@@ -323,7 +319,6 @@ class SceneManager {
                 this.updateAudio();
                 this.buttons.up = false;
                 this.game.click = false;
-                console.log(this.volume);
             } else if (this.game.click.y > 1040 && this.game.click.y < 1072 && this.game.mouse.x > 475  && this.game.mouse.x < 510) {
                 if (this.volume >= 0.05){
                     this.volume -= 0.05;
@@ -331,7 +326,6 @@ class SceneManager {
                 this.updateAudio();
                 this.buttons.down = false;
                 this.game.click = false;
-                console.log(this.volume);
             }
         }
 
