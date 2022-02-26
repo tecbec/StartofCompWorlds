@@ -23,7 +23,7 @@ var BACKGROUND = {
                      {X: 11300, Y: 250,      SPRITEX: 0, SPRITEY: 64,    NUM_FRAMES: 21,     DUR: 0.15 ,     SCALE: 5},     // index = 6 
                      {X: 11500, Y: 100,      SPRITEX: 0, SPRITEY: 128,   NUM_FRAMES: 21,     DUR: 0.1,       SCALE: 4},     // index = 7 
                      {X: 10700, Y: 500,      SPRITEX: 0, SPRITEY: 192,   NUM_FRAMES: 21,     DUR: 0.15,      SCALE: 2},     // index = 8 
-                     {X: 10800, Y: 550,      SPRITEX: 0, SPRITEY: 384,   NUM_FRAMES: 21,     DUR: 0.1,       SCALE: 2}],    // index = 9
+                     {X: 11000, Y: 350,      SPRITEX: 0, SPRITEY: 384,   NUM_FRAMES: 21,     DUR: 0.1,       SCALE: 2}],    // index = 9
 
     BUTTONS:       [{X: -10,   Y: 700,      SPRITEX: 0, SPRITEY: 0,     SWIDTH: 48,         SHEIGHT: 16,    SCALE: 4},
                     {X: 125,   Y: 1045,     SPRITEX: 0, SPRITEY: 16,    SWIDTH: 48,         SHEIGHT: 16,    SCALE: 1.5},
@@ -218,7 +218,7 @@ class Fireworks {                   //Firework animation
         this.count++;
         this.fireCount = [85, 105, 125, 155, 190];
         this.fireDur = [110, 121, 160, 200, 245];
-        if (!this.game.camera.chihiro.winGame && !this.game.camera.chihiro.endPosition) {
+        if (!this.game.camera.chihiro.winGame && !this.game.camera.chihiro.endPosition && this.game.camera.title) {
             // first display of each
             if (this.count > this.fireCount[0] && this.count < this.fireDur[0]) {
                 this.animations[2].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[2].X-this.game.camera.x, BACKGROUND.FIREWORKS[2].Y, BACKGROUND.FIREWORKS[2].SCALE);

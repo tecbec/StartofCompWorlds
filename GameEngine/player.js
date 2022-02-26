@@ -7,11 +7,12 @@ var CHIHIRO = {
     PADDING:{X: 28, Y: 20}, // same padding for BB and imaginary x,y,w,h calculations
     IDLE:   {RIGHT: {X: 0,  Y: 0},    LEFT: {X: 0,  Y: 70},   FRAME: 4, SPEED: 0.4,  PADDING: 0, REVERSE: false, LOOP: true},
     WALK:   {RIGHT: {X: 0,  Y: 140},  LEFT: {X: 0,  Y: 210},  FRAME: 4, SPEED: 0.2,  PADDING: 0, REVERSE: false, LOOP: true},
-    JUMP:   {RIGHT: {X: 0,  Y: 280},  LEFT: {X: 0,  Y: 350},  FRAME: 4, SPEED: 0.1, PADDING: 0, REVERSE: false, LOOP: true},
+    JUMP:   {RIGHT: {X: 0,  Y: 280},  LEFT: {X: 0,  Y: 350},  FRAME: 4, SPEED: 0.2, PADDING: 0, REVERSE: false, LOOP: true},
     CROUCH: {RIGHT: {X: 0,  Y: 560},  LEFT: {X: 0,  Y: 630},  FRAME: 4, SPEED: 0.33, PADDING: 0, REVERSE: false, LOOP: true},
     RUN:    {RIGHT: {X: 0,  Y: 140},  LEFT: {X: 0,  Y: 210},  FRAME: 4, SPEED: 0.1, PADDING: 0, REVERSE: false, LOOP: true},
     DEAD:   {RIGHT: {X: 0,  Y: 420},  LEFT: {X: 0,  Y: 490},  FRAME: 3, SPEED: 0.12, PADDING: 0, REVERSE: false, LOOP: false},
     CROUCH_WALK: {RIGHT: {X: 0,  Y: 700}, LEFT: {X: 0,  Y: 770}, FRAME: 4, SPEED: 0.33, PADDING: 0, REVERSE: false, LOOP: true},
+    VICTORY_DANCE:  {RIGHT: {X: 0,  Y: 840}, FRAME: 5, SPEED: 0.2, PADDING: 0, REVERSE: false, LOOP: true},
     BREATH_BAR:  {X: 1700, Y: 10, HEIGHT: 10, MAX: 100},
     COIN_COUNTER:{X: 1620, Y: 7.25}
 };
@@ -55,7 +56,7 @@ class Player {
     /* Load the following animations from the sprite sheet for Chihiro's current state and direction */
     loadAnimations() {
         // array with [state] [face] of the same animator
-        for (var i = 0; i < 7; i++) {
+        for (var i = 0; i < 8; i++) {
             this.animations.push([]);
             for (var j = 0; j < 2; j++) {
                 this.animations[i].push([]);
@@ -143,6 +144,13 @@ class Player {
             CHIHIRO.SIZE, CHIHIRO.SIZE,
             CHIHIRO.CROUCH_WALK.FRAME, CHIHIRO.CROUCH_WALK.SPEED,
             CHIHIRO.CROUCH_WALK.PADDING, CHIHIRO.CROUCH_WALK.REVERSE, CHIHIRO.CROUCH_WALK.LOOP);
+
+
+        // victory dance -> right
+        this.animations[7][0] = new Animator (this.spritesheet, CHIHIRO.VICTORY_DANCE.RIGHT.X, CHIHIRO.VICTORY_DANCE.RIGHT.Y,
+            CHIHIRO.SIZE, CHIHIRO.SIZE,
+            CHIHIRO.VICTORY_DANCE.FRAME, CHIHIRO.VICTORY_DANCE.SPEED,
+            CHIHIRO.VICTORY_DANCE.PADDING, CHIHIRO.VICTORY_DANCE.REVERSE, CHIHIRO.VICTORY_DANCE.LOOP);
 
     };
 
@@ -243,9 +251,17 @@ class Player {
 
         } else {
             // fall straight down if did not jump
-            if (this.velocity.y > 0 && !this.jumping) {
-                this.velocity.x = 0;
+            // when fall users can change direction if fast enough
+            if (this.velocity.y > 0 && !this.jumping) { 
+                if (this.game.right && !this.game.left) {
+                    this.velocity.x = Math.abs(this.velocity.x);
+                } else if (this.game.left && !this.game.right) {
+                    this.velocity.x = -Math.abs(this.velocity.x);
+                } else if (!this.game.left && !this.game.right) {
+                    this.velocity.x = 0;
+                }
             }
+
             // can change direction they are falling
             if (this.game.left) {
                 this.velocity.x = -Math.abs(this.velocity.x);
@@ -282,7 +298,7 @@ class Player {
                 this.velocity.x = 40;  // walk   
                 if (this.x > LEVEL.END_GAME.X + 350) { // reach door stops
                     this.velocity.x = 0;   
-                    this.state = 0;
+                    this.state = 7;
                     this.endPosition = true;
                 }
                 this.x += this.velocity.x * TICK * TICK_SCALE;  
