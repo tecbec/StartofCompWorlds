@@ -274,10 +274,10 @@ class SceneManager {
     };
 
     update() {
-// maybe remove this?
+/*maybe remove this?
         PARAMS.DEBUG = true;
         this.mute = true;
-// ??
+*/
         this.updateAudio();
         // canvas width = 400
         // blockwidth = 32 * 1 = 32

@@ -1,45 +1,85 @@
+var SPIRIT = {
+    SPEED = [18, 28, 38], //slow, med, fast
+    CHICK = {WIDTH = 75, HEIGHT = 100, F_COUNT = 6, F_DURATION = 0.3, SCALE = 2, BBTHICKNESS = 5, 
+        PATH = ASSET_MANAGER.getAsset("./GameEngine/sprites/chick.png")},
+    CHICK_BB = {},
+    RADISH = {}
+}
+
+// class unfriendlySpirit {
+//     constructor(game, x, y, type, minX, maxX, dir, speed){ //moving
+//         // sprite stuff
+//         Object.assign(this, { game, x, y, type, minX, maxX, dir, speed});
+//         if(this.type == 0 ){ //new chick 
+//             this = new Chick(this.game, this.x, this.y, this.minX, this.minY, this.dir, this.speed);  
+
+//         }else if(this.type == 1){ //new radish
+//             this = new Radish(this.game, this.x, this.y); 
+
+//         } // ... new blob 
+//           // ... new frog
+//           // ... new robes   
+//     };
+
+//     update(){
+
+//     };
+
+//     /*
+//     *  param: context that we want to draw to 
+//     */
+//     draw(ctx){ 
+
+//     };
+// } 
+
 class Chick {
-    constructor(game, x, y, minX, maxX, dir){
+    constructor(game, x, y, minX = 0, maxX = 0, dir = 0, speed = 0){
         // sprite stuff
-        Object.assign(this, { game, x, y, minX, maxX, dir});
+        Object.assign(this, {game, x, y, minX, maxX, dir, speed});
         this.path = ASSET_MANAGER.getAsset("./GameEngine/sprites/chick.png");
         this.width = 75;
         this.height = 100;
         this.frameCount = 6;
         this.frameDuration = 0.30; 
         this.scale = 2.0; 
-        this.BBThickness = 5;     
+        this.BBThickness = 5;  
+        this.static = ((this.maxX - this.minX) == 0);
 
-        this.loadAnimations();
-
-        //bounding box
-        this.updateBB()
-
-        // speed stuff
-        if((this.maxX - this.minX) > 0){
-            this.speed = 18;
-        }else{
+        if(this.static){
+            this.loadStaticAnimations();
             this.speed = 0;
+        }else{
+            this.loadMovingAnimations();
+            this.speed = SPIRIT.SPEED[this.speed];
         }
+        this.animator = this.animations[this.dir];
+       
+         //bounding box
+         this.updateBB(); 
 
-        this.hitpoints = 90; 
     };
 
-    loadAnimations(){
-         /* right = 0, left = 1, stationary = 2*/
+    loadMovingAnimations(){
+         /* right = 0, left = 1*/
         this.animations = [];
         this.animations[0] = new Animator(this.path, 0, 0, this.width, 
                 this.height, this.frameCount, this.frameDuration, 0, false, true);
         this.animations[1] = new Animator(this.path, 0, this.height, this.width, 
                 this.height, this.frameCount, this.frameDuration, 0, false, true);
-        this.animator = this.animations[0];
-        this.animations[2] = new Animator(this.path, 0, this.height, this.width, 
-            this.height, 1, this.frameDuration, 0, false, true);
-        this.animator = this.animations[0];
     }
 
+    loadStaticAnimations(){
+        /* right = 0, left = 1*/
+       this.animations = [];
+       this.animations[0] = new Animator(this.path, 0, 0, this.width, 
+               this.height, 1, this.frameDuration, 0, false, true);
+       this.animations[1] = new Animator(this.path, 0, this.height, this.width, 
+               this.height, 1, this.frameDuration, 0, false, true);
+   }
+
     update(){
-        if((this.maxX - this.minX) > 0){
+        if(!this.static){
             if(this.x + this.width *this.scale >= this.maxX){ 
                 this.speed = -Math.abs(this.speed);
                 this.animator = this.animations[1];
@@ -52,15 +92,14 @@ class Chick {
     
             this.x += this.speed * this.game.clockTick;
             this.updateBB();
-        }else{
-            this.animator = this.animations[2];   
         }
+
         if(this.hitpoints <= 0 ) {this.removeFromWorld = true;}
     };
 
     updateBB() {
-        this.BB = new BoundingBox(this.x, this.y, this.width*this.scale, this.height*this.scale);
-        //this.BB = new BoundingBox(this.x + this.width*this.scale *1/16, this.y + this.height*this.scale * 1/8, this.width*this.scale *13/16, this.height*this.scale * 3/4);
+        //this.BB = new BoundingBox(this.x, this.y, this.width*this.scale, this.height*this.scale);
+        this.BB = new BoundingBox(this.x + this.width*this.scale *1/16, this.y + this.height*this.scale * 1/8, this.width*this.scale *13/16, this.height*this.scale * 3/4);
         this.leftBB = new BoundingBox(this.x + this.width*this.scale - this.BBThickness, this.y, this.BBThickness, this.height*this.scale);
         this.rightBB = new BoundingBox(this.x, this.y, this.BBThickness, this.height*this.scale);
         this.topBB = new BoundingBox(this.x, this.y, this.width*this.scale, this.BBThickness);
