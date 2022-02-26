@@ -422,7 +422,7 @@ class Player {
                 }
 
                 // collision with Chicks
-                if (entity instanceof Chick && that.BB.collide(entity.BB) && !that.dead) {
+                if ((entity instanceof Chick || entity instanceof Radish )&& that.BB.collide(entity.BB) && !that.dead) {
                     if (!that.game.camera.title && !that.game.camera.chihiro.winGame) {
                         that.game.camera.breathwidth -= CHIHIRO.BREATH_BAR.MAX/4;
                         that.game.camera.changeBreath();

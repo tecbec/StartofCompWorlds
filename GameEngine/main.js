@@ -26,6 +26,7 @@ ASSET_MANAGER.queueDownload("./GameEngine/sprites/haku_spritesheet.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/yubaba.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/title.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/chick.png");
+ASSET_MANAGER.queueDownload("./GameEngine/sprites/radish.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/bubble.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/haku_text.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/youwin_text.png");
