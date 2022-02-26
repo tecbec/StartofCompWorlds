@@ -4,10 +4,12 @@
  */
  var LEVEL = {
     music: "./GameEngine/audio/OneSummersDay.mp3",
-    START_CANVAS: {X: -851, Y: 0},
-    END_CANVAS:   {X: 13000},   // change this later when we figure out the exact ending canvas measurement
-    END_GAME:     {X: 11515, Y: 813},
-    FRAME_COUNT: 8,           // This is the factor that determine how wide the actual game is
+    START_MUTE:         false,               // you can must the music in each level
+    START_CANVAS:       {X: -851, Y: 0},
+    END_CANVAS:         {X: 13000},         // change this later when we figure out the exact ending canvas measurement
+    END_TITLE_CANVAS:   {X: 500},           // This will end the title canvas so it won't keep going.
+    END_GAME:           {X: 11515, Y: 813},
+    FRAME_COUNT: 8,                         // This is the factor that determine how wide the actual game is
     // Type 0: has left,middle,right piece can be adjusted to be longer
     // Type 1: is short (just middle piece)
     TREE:[{X: 567, Y: 276, TYPE:3}, {X: 2538, Y: 0, TYPE:1}, {X: 3231, Y: 276, TYPE:2}, {X: 5543, Y: 0, TYPE:1}, {X: 6527, Y: 276, TYPE:2}, {X: 7816, Y: 276, TYPE:0}, {X: 8274, Y: 276, TYPE:3}],
@@ -40,14 +42,16 @@
                     {X: 7000, Y: 790}, {X: 6750, Y: 395},  // scene 4
                     {X: 8482, Y: 925}, {X: 9500, Y: 925}], // scene 5
 
-    SOOT_AREA: [{W: 100, H: 15}, {W: 200, H: 15}, {W: 100, H: 15}, {W: 200, H: 15}, {W: 110, H: 15}, {W: 110, H: 15}, {W: 500, H: 15}, {W: 500, H: 15},
-                {W: 500, H: 15}, {W: 100, H: 15},  // scene 4
-                {W: 500, H: 15}, {W: 500, H: 15}], // Scene 5
+    SOOT_AREA: [{W: 100, H: 40},   {W: 200, H: 30},  // scene 1
+                {W: 100, H: 30},   {W: 200, H: 30}, {W: 110, H: 30}, {W: 110, H: 30}, {W: 500, H: 30}, {W: 500, H: 30},
+                {W: 500, H: 30},   {W: 100, H: 30},  // scene 4
+                {W: 500, H: 1305}, {W: 500, H: 30}], // Scene 5
 
-    SOOT_NUM:  [10, 20, 10, 20, 15, 15, 10, 10,
-                30, 10,  // scene 4
-                20, 30], // Scene 5 
-    
+    SOOT_NUM:  [2, 3,   // scene 1
+                2, 3, 2, 2, 2, 2,
+                4, 2,   // scene 4
+                3, 4],  // Scene 5
+
     COIN_LOCATION: [{X: 100,  Y: 895},{X: 125,  Y: 895}, {X: 150,  Y: 895}, {X: 175, Y: 895},  {X: 200,  Y: 895}, {X: 225,  Y: 895},
                     {X: 250,  Y: 895},{X: 275,  Y: 895}, {X: 300,  Y: 895}, {X: 325,  Y: 895},                                          // scene 0
                     {X: 900,  Y: 500},{X: 1200, Y: 295}, {X: 1500, Y: 450}, {X: 2000, Y: 340}, {X: 2300, Y: 540}, {X: 1100, Y: 650},
@@ -149,8 +153,9 @@ class SceneManager {
         this.titleScreen();
 
         if(!this.title){
-            this.mute = false;
-            
+            this.buttons.mute = LEVEL.START_MUTE;
+            this.mute = LEVEL.START_MUTE;
+
             // Falling chihiro for game play
             this.chihiro = new Player(this.game, CHIHIRO.INITIAL_POSITION.X, CHIHIRO.INITIAL_POSITION.Y);
 
@@ -197,7 +202,7 @@ class SceneManager {
             this.game.addEntity(this.railing);
             this.game.addEntity(this.bathhouse);
             this.game.addEntity(this.ground);
-    
+
             for (var i = 0; i < LEVEL.PLATFORM_LOCATION.length; i++) {
                 let platform = LEVEL.PLATFORM_LOCATION[i];
                 this.game.addEntity(new Platform(this.game, platform.X, platform.Y, BACKGROUND.PLATFORM.SIZE * BACKGROUND.PLATFORM.SCALE, platform.TYPE));
@@ -219,12 +224,9 @@ class SceneManager {
             }
 
             for(var i=0; i < LEVEL.SOOT_LOCATION.length; i++){
-                this.soot = [];
-                for(let j = 0; j < LEVEL.SOOT_NUM[i]; j++) {
-                    let dir = getRandomInteger(0,1);
-                    this.soot[j] = new Soot(gameEngine, LEVEL.SOOT_LOCATION[i].X, LEVEL.SOOT_LOCATION[i].Y, dir, LEVEL.SOOT_AREA[i].W, LEVEL.SOOT_AREA[i].H);
-                    this.game.addEntity(this.soot[j]);
-                }
+                let start_dir = getRandomInteger(0,1);
+                let sootArea= new Soot(gameEngine, LEVEL.SOOT_LOCATION[i].X, LEVEL.SOOT_LOCATION[i].Y, start_dir, LEVEL.SOOT_AREA[i].W, LEVEL.SOOT_AREA[i].H, LEVEL.SOOT_NUM[i]);
+                this.game.addEntity(sootArea);
             }
 
             this.game.addEntity(new Yubaba(this.game, 0, 0, LEVEL.YUBABA_INC));
@@ -265,12 +267,22 @@ class SceneManager {
     };
 
     update() {
+// maybe remove this?
         PARAMS.DEBUG = true;
         this.mute = true;
+// ??
         this.updateAudio();
         // canvas width = 400
         // blockwidth = 32 * 1 = 32
         // 200 -16 = 164
+        if (this.title){
+            if (this.chihiro.x > LEVEL.END_TITLE_CANVAS.X) {
+                if(this.chihiro.x > LEVEL.END_TITLE_CANVAS.X) {
+                    this.chihiro.x = LEVEL.END_TITLE_CANVAS.X;
+                }
+            }
+        }
+
         if (this.title && this.game.click) {  // start button
             if (this.game.click && this.game.click.y > 700 && this.game.click.y < 750 && this.game.click.x > 815  && this.game.click.x < 1003) {
                 this.title = false;
@@ -302,12 +314,7 @@ class SceneManager {
                 this.game.click = false;
             }
 
-            // if (this.game.mouse && this.game.mouse.y > 1000 && this.game.mouse.y < 1032 && this.game.mouse.x > 400  && this.game.mouse.x < 432) {   // volume up
-            // if (this.game.mouse && this.game.mouse.y > 1040 && this.game.mouse.y < 1072 && this.game.mouse.x > 400  && this.game.mouse.x < 432)  {   // volume up
-
             // Volume
-
-
             if (this.game.click.y > 1000 && this.game.click.y < 1032 && this.game.mouse.x > 475  && this.game.mouse.x < 510) {
                 if (this.volume <= 0.95){
                     this.volume += 0.05;
@@ -315,7 +322,6 @@ class SceneManager {
                 this.updateAudio();
                 this.buttons.up = false;
                 this.game.click = false;
-                console.log(this.volume);
             } else if (this.game.click.y > 1040 && this.game.click.y < 1072 && this.game.mouse.x > 475  && this.game.mouse.x < 510) {
                 if (this.volume >= 0.05){
                     this.volume -= 0.05;
@@ -323,7 +329,6 @@ class SceneManager {
                 this.updateAudio();
                 this.buttons.down = false;
                 this.game.click = false;
-                console.log(this.volume);
             }
         }
 
@@ -336,6 +341,8 @@ class SceneManager {
         }
 
         let midPoint = PARAMS.CANVAS_WIDTH / 2 - CHIHIRO.SIZE * CHIHIRO.SCALE;
+
+
 
         // stop camera from moving (reach dead end on the left and right)
         if (this.chihiro.x < 0) {
