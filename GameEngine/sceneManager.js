@@ -4,7 +4,7 @@
  */
  var LEVEL = {
     music: "./GameEngine/audio/OneSummersDay.mp3",
-    START_MUTE:         true,               // you can must the music in each level
+    START_MUTE:         false,               // you can must the music in each level
     START_CANVAS:       {X: -851, Y: 0},
     END_CANVAS:         {X: 13000},         // change this later when we figure out the exact ending canvas measurement
     END_TITLE_CANVAS:   {X: 500},           // This will end the title canvas so it won't keep going.
@@ -42,13 +42,15 @@
                     {X: 7000, Y: 790}, {X: 6750, Y: 395},  // scene 4
                     {X: 8482, Y: 925}, {X: 9500, Y: 925}], // scene 5
 
-    SOOT_AREA: [{W: 100, H: 15}, {W: 200, H: 15}, {W: 100, H: 15}, {W: 200, H: 15}, {W: 110, H: 15}, {W: 110, H: 15}, {W: 500, H: 15}, {W: 500, H: 15},
-                {W: 500, H: 15}, {W: 100, H: 15},  // scene 4
-                {W: 500, H: 15}, {W: 500, H: 15}], // Scene 5
+    SOOT_AREA: [{W: 100, H: 40},   {W: 200, H: 30},  // scene 1
+                {W: 100, H: 30},   {W: 200, H: 30}, {W: 110, H: 30}, {W: 110, H: 30}, {W: 500, H: 30}, {W: 500, H: 30},
+                {W: 500, H: 30},   {W: 100, H: 30},  // scene 4
+                {W: 500, H: 1305}, {W: 500, H: 30}], // Scene 5
 
-    SOOT_NUM:  [10, 20, 10, 20, 15, 15, 10, 10,
-                30, 10,  // scene 4
-                20, 30], // Scene 5
+    SOOT_NUM:  [2, 3,   // scene 1
+                2, 3, 2, 2, 2, 2,
+                4, 2,   // scene 4
+                3, 4],  // Scene 5
 
     COIN_LOCATION: [{X: 100,  Y: 895},{X: 125,  Y: 895}, {X: 150,  Y: 895}, {X: 175, Y: 895},  {X: 200,  Y: 895}, {X: 225,  Y: 895},
                     {X: 250,  Y: 895},{X: 275,  Y: 895}, {X: 300,  Y: 895}, {X: 325,  Y: 895},                                          // scene 0
@@ -222,12 +224,9 @@ class SceneManager {
             }
 
             for(var i=0; i < LEVEL.SOOT_LOCATION.length; i++){
-                this.soot = [];
-                for(let j = 0; j < LEVEL.SOOT_NUM[i]; j++) {
-                    let dir = getRandomInteger(0,1);
-                    this.soot[j] = new Soot(gameEngine, LEVEL.SOOT_LOCATION[i].X, LEVEL.SOOT_LOCATION[i].Y, dir, LEVEL.SOOT_AREA[i].W, LEVEL.SOOT_AREA[i].H);
-                    this.game.addEntity(this.soot[j]);
-                }
+                let start_dir = getRandomInteger(0,1);
+                let sootArea= new Soot(gameEngine, LEVEL.SOOT_LOCATION[i].X, LEVEL.SOOT_LOCATION[i].Y, start_dir, LEVEL.SOOT_AREA[i].W, LEVEL.SOOT_AREA[i].H, LEVEL.SOOT_NUM[i]);
+                this.game.addEntity(sootArea);
             }
 
             this.game.addEntity(new Yubaba(this.game, 0, 0, LEVEL.YUBABA_INC));

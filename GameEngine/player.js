@@ -36,7 +36,7 @@ class Player {
         this.chihiroScale = 2;
         this.endPosition = false;
         // testing
-        this.sootCount = 0;
+        // this.sootCount = 0;
         this.nofaceCount = 0;
 
         // animation
@@ -151,7 +151,6 @@ class Player {
         this.lastBB = this.BB;
         this.lastBBbottom = this.BBbottom;
 
-        console.log(this.game.crouch);
         if( this.game.crouch || this.state === 3 ){             // if crouching
             var crouchHeight = ((CHIHIRO.SIZE- CHIHIRO.PADDING.Y) * CHIHIRO.SCALE)/2;
             this.BB = new BoundingBox(this.x + CHIHIRO.PADDING.X * CHIHIRO.SCALE,
@@ -180,7 +179,6 @@ class Player {
         ctx.imageSmoothingEnabled = false;
         // this.breathbar.draw(ctx);
         // this.coinCounter.draw(ctx);
-
     };
     
     update() {
@@ -436,16 +434,14 @@ class Player {
                 } else {
 
                 }
-
+                
                 // collision with SOOTS
                 if (entity instanceof Soot && !that.dead) {
-                    if (!that.game.camera.title && !that.game.camera.chihiro.winGame) { 
+                    if (!that.game.camera.title && !that.game.camera.chihiro.winGame) {
                         that.game.camera.breathwidth -= 1;
-                        // for testing make soot breath -=20;
                         entity.dead = true;
                         that.game.camera.changeBreath();
-                        //that.updateBB()
-                    } 
+                    }
                 }
 
                 // collision with COINS
@@ -455,7 +451,7 @@ class Player {
                 }
 
                 if (entity instanceof Portal) {
-                    console.log("instanceof");
+                    // console.log("instanceof");
                     that.powerup = true;
                     entity.removeFromWorld = true;
                 }
