@@ -218,7 +218,7 @@ class Fireworks {                   //Firework animation
         this.count++;
         this.fireCount = [85, 105, 125, 155, 190];
         this.fireDur = [110, 121, 160, 200, 245];
-        if (!this.game.camera.chihiro.winGame && !this.game.camera.chihiro.endPosition) {
+        if (!this.game.camera.chihiro.winGame && !this.game.camera.chihiro.endPosition && this.game.camera.title) {
             // first display of each
             if (this.count > this.fireCount[0] && this.count < this.fireDur[0]) {
                 this.animations[2].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[2].X-this.game.camera.x, BACKGROUND.FIREWORKS[2].Y, BACKGROUND.FIREWORKS[2].SCALE);
