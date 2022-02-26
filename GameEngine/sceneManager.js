@@ -74,13 +74,13 @@
 
     RADISH_LOCATION: [{X: 840,  Y: 690}], //scene
 
-    CHICK_LOCATION: [{X: 2402, Y: 785, MIN: 500,  MAX: 2402,  DIR:0},               // scene 1
-                     {X: 2900, Y: 785, MIN: 2402, MAX: 4304,  DIR:0}, {X: 3800, Y: 785, MIN: 2402, MAX: 4304,  DIR:0},               // scene 2
-                     {X: 4780, Y: 785, MIN: 4304, MAX: 5255,  DIR:1}, {X: 5730, Y: 785, MIN: 5305, MAX: 6206,  DIR:0},               // scene 3
-                     {X: 6750, Y: 785, MIN: 6750, MAX: 7900,  DIR:1}, {X: 7500, Y: 785, MIN: 6750, MAX: 7900,  DIR:0},               // Scene 4
-                     {X: 6250, Y: 785, MIN: 6250, MAX: 8100,  DIR:1}, {X: 8000, Y: 785, MIN: 6250, MAX: 8100,  DIR:0},
-                     {X: 8900, Y: 785, MIN: 0,    MAX: 0,     DIR:1}, {X: 9912, Y: 785, MIN: 8400, MAX: 10000, DIR:1},               // Scene 5
-                     {X: 9400, Y: 785, MIN: 9100, MAX: 10000, DIR:0}],
+    CHICK_LOCATION: [{X: 2402, Y: 785, MIN: 500,  MAX: 2402, SPEED: 2,  DIR:0},               // scene 1
+                     {X: 2900, Y: 785, MIN: 2402, MAX: 4304,  SPEED: 0, DIR:0}, {X: 3800, Y: 785, MIN: 2402, MAX: 4304, SPEED: 0, DIR:0},               // scene 2
+                     {X: 4780, Y: 785, MIN: 4304, MAX: 5255,  SPEED: 0, DIR:1}, {X: 5730, Y: 785, MIN: 5305, MAX: 6206, SPEED: 0, DIR:0},               // scene 3
+                     {X: 6750, Y: 785, MIN: 6750, MAX: 7900,  SPEED: 0, DIR:0}, {X: 7500, Y: 785, MIN: 6750, MAX: 7900,  SPEED: 0, DIR:1},               // Scene 4
+                     {X: 6250, Y: 785, MIN: 6250, MAX: 8100,  SPEED: 2, DIR:0}, {X: 8000, Y: 785, MIN: 6250, MAX: 8100,  SPEED: 2, DIR:1},
+                     {X: 8900, Y: 785, MIN: 0,    MAX: 0,     SPEED: 0, DIR:1}, {X: 9912, Y: 785, MIN: 8400, MAX: 10000, SPEED: 0, DIR:1},               // Scene 5
+                     {X: 9400, Y: 785, MIN: 9100, MAX: 10000, SPEED: 0, DIR:0}],
 
     /*    enter: frame 3,   crow drop: frame 4,       heat seeking crows:  frame 5*/
     YUBABA_INC: [4304, 6206, 8108, 10010], // x vals that trigger: entrance, crow drop, heat seeking crows, yubaba exit
@@ -137,9 +137,9 @@ class SceneManager {
         this.background = new BackGround(this.game, LEVEL.START_CANVAS.X,  LEVEL.START_CANVAS.Y);
         this.railing = new Railing(this.game, LEVEL.RAILING_LOCATION.X, LEVEL.RAILING_LOCATION.Y, PARAMS.CANVAS_WIDTH * (LEVEL.FRAME_COUNT - 3),
                                     BACKGROUND.RAILING.SCALE * BACKGROUND.RAILING.SIZE);
-       // this.chick = new Chick(this.game, chickPlace.x, chickPlace.y, chickPlace.xneg, chickPlace.xpos);
+        this.chick = new Chick(this.game, chickPlace.x, chickPlace.y, chickPlace.xneg, chickPlace.xpos);
         this.lamp = new Lamp(this.game, -950, 620, BACKGROUND.LAMP.SIZE * BACKGROUND.LAMP.SCALE.W);
-        // this.haku = new Haku(this.game, hakuPlace.x, hakuPlace.y);
+        this.haku = new Haku(this.game, hakuPlace.x, hakuPlace.y);
         this.buttons = new TitleButtons(this.game);
 
         this.buttons.mute = true;
@@ -245,7 +245,7 @@ class SceneManager {
 
             for (var i = 0; i < LEVEL.CHICK_LOCATION.length; i++) {
                 let chick = LEVEL.CHICK_LOCATION[i];
-                this.game.addEntity(new Chick(this.game, chick.X, chick.Y, chick.MIN, chick.MAX, chick.DIR));
+                this.game.addEntity(new Chick(this.game, chick.X, chick.Y, chick.MIN, chick.MAX, chick.DIR, chick.SPEED));
             }
 
             for (var i = 0; i < LEVEL.RADISH_LOCATION.length; i++) {

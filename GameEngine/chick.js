@@ -1,9 +1,9 @@
 var SPIRIT = {
-    SPEED = [18, 28, 38], //slow, med, fast
-    CHICK = {WIDTH = 75, HEIGHT = 100, F_COUNT = 6, F_DURATION = 0.3, SCALE = 2, BBTHICKNESS = 5, 
-        PATH = ASSET_MANAGER.getAsset("./GameEngine/sprites/chick.png")},
-    CHICK_BB = {},
-    RADISH = {}
+    SPEED: [18, 28, 38], //slow, med, fast
+    F_DUR: [0.3, 0.2, 0.1],
+    CHICK: {WIDTH: 75, HEIGHT: 100, F_COUNT: 6, F_DURATION: 0.3, SCALE: 2, BBTHICKNESS: 5}
+    //CHICK_BB: {},
+    //RADISH: {}
 }
 
 // class unfriendlySpirit {
@@ -33,6 +33,7 @@ var SPIRIT = {
 //     };
 // } 
 
+
 class Chick {
     constructor(game, x, y, minX = 0, maxX = 0, dir = 0, speed = 0){
         // sprite stuff
@@ -41,7 +42,7 @@ class Chick {
         this.width = 75;
         this.height = 100;
         this.frameCount = 6;
-        this.frameDuration = 0.30; 
+        this.frameDuration = SPIRIT.F_DUR[this.speed]; 
         this.scale = 2.0; 
         this.BBThickness = 5;  
         this.static = ((this.maxX - this.minX) == 0);
@@ -52,8 +53,13 @@ class Chick {
         }else{
             this.loadMovingAnimations();
             this.speed = SPIRIT.SPEED[this.speed];
+            if(this.dir == 1){ //facing left, walk left
+                this.speed = -this.speed;
+            }
+            
         }
         this.animator = this.animations[this.dir];
+
        
          //bounding box
          this.updateBB(); 
@@ -98,11 +104,15 @@ class Chick {
     };
 
     updateBB() {
-        //this.BB = new BoundingBox(this.x, this.y, this.width*this.scale, this.height*this.scale);
-        this.BB = new BoundingBox(this.x + this.width*this.scale *1/16, this.y + this.height*this.scale * 1/8, this.width*this.scale *13/16, this.height*this.scale * 3/4);
-        this.leftBB = new BoundingBox(this.x + this.width*this.scale - this.BBThickness, this.y, this.BBThickness, this.height*this.scale);
-        this.rightBB = new BoundingBox(this.x, this.y, this.BBThickness, this.height*this.scale);
-        this.topBB = new BoundingBox(this.x, this.y, this.width*this.scale, this.BBThickness);
+        this.BB_x = this.x + this.width*this.scale *1/16;
+        this.BB_y =  this.y + this.height*this.scale * 1/8;
+        this.BB_w = this.width*this.scale *13/16;
+        this.BB_h = this.height*this.scale * 3/4;
+        this.BB = new BoundingBox(this.BB_x, this.BB_y, this.BB_w, this.BB_h);
+        this.leftBB = new BoundingBox(this.BB_x - this.BBThickness, this.BB_y, this.BBThickness, this.BB_h);
+        this.rightBB = new BoundingBox(this.BB_x + this.BB_w, this.BB_y, this.BBThickness, this.BB_h);
+        this.topRBB = new BoundingBox(this.BB_x + this.BB_w / 2, this.BB_y, this.BB_w / 2, this.BBThickness);
+        this.topLBB = new BoundingBox(this.BB_x, this.BB_y, this.BB_w / 2, this.BBThickness);
     };
 
     /*
@@ -120,7 +130,9 @@ class Chick {
             ctx.strokeStyle = 'Yellow';
             ctx.strokeRect(this.leftBB.x - this.game.camera.x, this.leftBB.y, this.leftBB.width, this.leftBB.height);
             ctx.strokeRect(this.rightBB.x - this.game.camera.x, this.rightBB.y, this.rightBB.width, this.rightBB.height);
-            ctx.strokeRect(this.topBB.x - this.game.camera.x, this.topBB.y, this.topBB.width, this.topBB.height);
+            ctx.strokeRect(this.topRBB.x - this.game.camera.x, this.topRBB.y, this.topRBB.width, this.topRBB.height);
+            ctx.strokeStyle = 'Blue';
+            ctx.strokeRect(this.topLBB.x - this.game.camera.x, this.topLBB.y, this.topLBB.width, this.topLBB.height);
         }
     };
 }
