@@ -35,9 +35,9 @@ var SPIRIT = {
 
 
 class Chick {
-    constructor(game, x, y, minX = 0, maxX = 0, dir = 0, speed = 0){
+    constructor(game, x, y, dir = 0, minX = 0, maxX = 0, speed = 0){
         // sprite stuff
-        Object.assign(this, {game, x, y, minX, maxX, dir, speed});
+        Object.assign(this, {game, x, y, dir,  minX, maxX, speed});
         this.path = ASSET_MANAGER.getAsset("./GameEngine/sprites/chick.png");
         this.width = 75;
         this.height = 100;

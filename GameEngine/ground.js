@@ -545,17 +545,67 @@ class Platform {  // leaf platforms
  *  Allow player to jump through from the bottom but not from any other direction.
  */
 class CloudPlatform {
-    constructor(game, x, y, size) {
-        Object.assign(this, { game, x, y, size});
+    constructor(game, x, y, size, min = 0, max = 0, vertical = false) {
+        Object.assign(this, { game, x, y, size, min, max, vertical});
         this.spritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/cloud-Sheet.png");
 
         this.BB = new BoundingBox(this.x + 5 , this.y + 10,
             BACKGROUND.CLOUD_BB[this.size].W * BACKGROUND.CLOUD.SCALE - 10,
             BACKGROUND.CLOUD_BB[this.size].H * BACKGROUND.CLOUD.SCALE);
+
+        this.moving = (this.max - this.min > 0);
+
+        if(this.moving){
+            this.speed = 20;
+        }else{
+            this.speed = 0;
+        }
     }
 
     update() {
+        if(this.moving){
+            if(!this.vertical && this.x + this.BB.width >= this.max){ 
+                this.speed = -Math.abs(this.speed);
+           }else if(!this.vertical && this.x <= this.min){
+                this.speed = Math.abs(this.speed);     
+           }
+           
+           else if(this.vertical && this.y <= this.min){
+            this.speed = Math.abs(this.speed);  
+           }else if(this.vertical && this.y + this.BB.height >= this.max){ 
+            this.speed = -Math.abs(this.speed);
+           }
 
+           if(!this.vertical){
+               this.x += this.speed * this.game.clockTick;
+           }else{
+               this.y += this.speed * this.game.clockTick; 
+           }
+
+           this.BB = new BoundingBox(this.x + 5 , this.y + 10,
+            BACKGROUND.CLOUD_BB[this.size].W * BACKGROUND.CLOUD.SCALE - 10,
+            BACKGROUND.CLOUD_BB[this.size].H * BACKGROUND.CLOUD.SCALE);
+
+            /* doesnt work, not sensing player collisions*/
+            // var that = this; 
+            // this.game.entities.forEach(function (entity) {   
+            //     if(entity instanceof Player){
+            //         console.log("Player " + entity.BB.x + " " + entity.BB.y);
+            //         console.log("Cloud " + that.BB.x + " " + that.BB.y);  
+            //      }      
+            //     if (entity.BB && that.BB.collide(entity.BB)) {
+            //         if(entity instanceof Player && entity.lastBB.bottom <= that.BB.top){
+            //             console.log("Collision with Player");
+                       
+            //             if(!that.vertical){
+            //                 entity.x += that.speed * that.game.clockTick;
+            //             }else{
+            //                 entity.y += that.speed * that.game.clockTick; 
+            //             }
+            //         }
+            //     }
+            // });
+        }
     };
 
     draw(ctx) {
@@ -570,7 +620,7 @@ class CloudPlatform {
             ctx.strokeStyle = 'Red';
             ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
         }
-        ctx.imageSmoothingEnabled = false;
+        ctx.imageSmoothingEnabled = true;
     };
 
 }

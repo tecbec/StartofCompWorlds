@@ -17,14 +17,15 @@
     BATHHOUSE: {X: 11608, Y: - 1200},
     PLATFORM_LOCATION:       [{X: 790,  Y: 550, TYPE: 0}, {X: 1100, Y: 375, TYPE: 0}, {X: 1400, Y: 500, TYPE: 0}, {X: 1900, Y: 390, TYPE: 0}, {X: 2200, Y: 590, TYPE: 0},    // scene 1
                               {X: 2600, Y: 590, TYPE: 0}, {X: 2750, Y: 450, TYPE: 0}, {X: 3300, Y: 575, TYPE: 0}, {X: 3500, Y: 400, TYPE: 0}, {X: 4000, Y: 600, TYPE: 0},    // scene 2
-                              {X: 5602, Y: 525, TYPE: 0}, {X: 5919, Y: 525, TYPE: 0},                                                                                        // scene 3
+                              {X: 5775 + 50, Y: 120, TYPE: 1}, {X: 5602, Y: 525, TYPE: 0}, {X: 5919, Y: 525, TYPE: 0},                                                                                        // scene 3
                               {X: 6500, Y: 525, TYPE: 0}, {X: 6700, Y: 425, TYPE: 0}, {X: 7000, Y: 300, TYPE: 0}, {X: 7100, Y: 600, TYPE: 0}, {X: 7400, Y: 400, TYPE: 0}, {X: 7900, Y: 700, TYPE: 0}, // scene 4
                               {X: 8340, Y: 525, TYPE: 1}, {X: 8480, Y: 390, TYPE: 1}, {X: 8620, Y: 525, TYPE: 1}, {X: 8760, Y: 390, TYPE: 1}, {X: 8900, Y: 525, TYPE: 1}, {X: 9040, Y: 390, TYPE: 1},  // Scene 5
                               {X: 9180, Y: 525, TYPE: 1}, {X: 9320, Y: 390, TYPE: 1}, {X: 9460, Y: 525, TYPE: 1}, {X: 9600, Y: 390, TYPE: 1}, {X: 9740, Y: 525, TYPE: 0},
                              ],
 
     CLOUD_PLATFORM_LOCATION: [{X: 2800, Y: 250, SIZE:3}, {X: 3200, Y: 300, SIZE:3}, {X: 3400, Y: 150, SIZE:3}, {X: 3750, Y: 250, SIZE:3}, {X: 4000, Y: 200, SIZE:3}, 
-                              {X: 4354, Y: 120, SIZE:1}, {X: 4780, Y: 270, SIZE:0}, {X: 5255, Y: 100 + 5, SIZE:3}, {X: 5315, Y: 300, SIZE:3}, {X: 5225, Y: 500 - 20, SIZE:4}, {X: 5632, Y: 280, SIZE:1}, {X: 5775, Y: 120, SIZE:2}, {X: 6166, Y: 270, SIZE:3},
+                              {X: 4354, Y: 120, SIZE:1}, {X: 4780, Y: 270, SIZE:0}, /*{X: 5255, Y: 100 + 5, SIZE:3}, {X: 5315, Y: 300, SIZE:3},*/ 
+                              {X: 5225 + 30, Y: 500 - 20, SIZE:4, MIN: 100 + 5 +100, MAX: 500 - 20 +100, V:true}, {X: 5632, Y: 280, SIZE:1}, /*{X: 5775, Y: 120, SIZE:2},*/ {X: 6166, Y: 270, SIZE:3, MIN:5983, MAX:6447, V: false},
                               {X: 6650, Y: 200, SIZE:3}, {X: 6950, Y: 100, SIZE:3}, {X: 7250, Y: 200, SIZE:3}, {X: 7750, Y: 250, SIZE:3} ],                                                                 // Scene 4                     
 
     STONE_LAMP_LOCATION: [{X: 1000, Y: 600}, {X: 1800, Y: 600}, {X: 2902, Y: 600}, {X: 3702, Y: 600}, {X: 5255, Y: 600},
@@ -79,7 +80,7 @@
                      {X: 4780, Y: 785, MIN: 4304, MAX: 5255,  SPEED: 0, DIR:1}, {X: 5730, Y: 785, MIN: 5305, MAX: 6206, SPEED: 0, DIR:0},               // scene 3
                      {X: 6750, Y: 785, MIN: 6750, MAX: 7900,  SPEED: 0, DIR:0}, {X: 7500, Y: 785, MIN: 6750, MAX: 7900,  SPEED: 0, DIR:1},               // Scene 4
                      {X: 6250, Y: 785, MIN: 6250, MAX: 8100,  SPEED: 2, DIR:0}, {X: 8000, Y: 785, MIN: 6250, MAX: 8100,  SPEED: 2, DIR:1},
-                     {X: 8900, Y: 785, MIN: 0,    MAX: 0,     SPEED: 0, DIR:1}, {X: 9912, Y: 785, MIN: 8400, MAX: 10000, SPEED: 0, DIR:1},               // Scene 5
+                     {X: 8900, Y: 785, DIR:1}, {X: 9912, Y: 785, MIN: 8400, MAX: 10000, SPEED: 0, DIR:1},               // Scene 5
                      {X: 9400, Y: 785, MIN: 9100, MAX: 10000, SPEED: 0, DIR:0}],
 
     /*    enter: frame 3,   crow drop: frame 4,       heat seeking crows:  frame 5*/
@@ -211,8 +212,11 @@ class SceneManager {
             }
 
             for (var i = 0; i < LEVEL.CLOUD_PLATFORM_LOCATION.length; i++) {
-                let cloudPlatform = LEVEL.CLOUD_PLATFORM_LOCATION[i];
-                this.game.addEntity(new CloudPlatform(this.game, cloudPlatform.X, cloudPlatform.Y, cloudPlatform.SIZE));
+                let cloud = LEVEL.CLOUD_PLATFORM_LOCATION[i];
+                if(cloud.MIN != null && cloud.MAX != null && cloud.V != null){
+                    this.game.addEntity(new CloudPlatform(this.game, cloud.X, cloud.Y, cloud.SIZE, cloud.MIN, cloud.MAX, cloud.V));
+                }else
+                    this.game.addEntity(new CloudPlatform(this.game, cloud.X, cloud.Y, cloud.SIZE));
             }
 
             for(var i=0; i < LEVEL.LAMP_LOCATION.length; i++){
@@ -245,7 +249,15 @@ class SceneManager {
 
             for (var i = 0; i < LEVEL.CHICK_LOCATION.length; i++) {
                 let chick = LEVEL.CHICK_LOCATION[i];
-                this.game.addEntity(new Chick(this.game, chick.X, chick.Y, chick.MIN, chick.MAX, chick.DIR, chick.SPEED));
+                if(chick.MIN == null || chick.MAX == null || chick.SPEED == null || chick.DIR == null){
+                    if(chick.DIR == null){
+                        this.game.addEntity(new Chick(this.game, chick.X, chick.Y));
+                    }else{
+                        this.game.addEntity(new Chick(this.game, chick.X, chick.Y, chick.DIR));
+                    }
+                }else{
+                    this.game.addEntity(new Chick(this.game, chick.X, chick.Y, chick.DIR, chick.MIN, chick.MAX, chick.SPEED));
+                }
             }
 
             for (var i = 0; i < LEVEL.RADISH_LOCATION.length; i++) {

@@ -1,7 +1,7 @@
 /* Chihiro's Params */
 var CHIHIRO = {
     TITLE_POSITION:   {X: 0,  Y: 800},
-    INITIAL_POSITION: {X: 9019,  Y: 0},  // change to 10200 to test winning condition. 
+    INITIAL_POSITION: {X: 5186,  Y: 0},  // change to 10200 to test winning condition. 
     SIZE: 70,
     SCALE: 2,
     PADDING:{X: 28, Y: 20}, // same padding for BB and imaginary x,y,w,h calculations
@@ -315,7 +315,7 @@ class Player {
         this.game.entities.forEach(function (entity) {         // this will look at all entities in relation to chihiro
             if (entity.BB && that.BB.collide(entity.BB) ) {    // is there an entity bb & check to see if they collide
                 if (that.velocity.y > 0) {                     // chihiro is falling
-                    if((entity instanceof Ground || entity instanceof Platform || entity instanceof CloudPlatform ||
+                    if((entity instanceof Ground || entity instanceof Platform || /*entity instanceof CloudPlatform ||*/
                         entity instanceof StoneLamp ||
                         entity instanceof Railing || entity instanceof Lamp) && (that.lastBB.bottom  <= entity.BB.top)) // minus one?? idk how this works
                   { // bottom of chihiro hits the top of the entity
@@ -323,10 +323,29 @@ class Player {
                         that.setY(entity.BB.top - that.getHeight());
                         that.velocity.y = 0;
                         //that.updateBB();
+                    }else if(entity instanceof CloudPlatform && (that.lastBB.bottom  <= entity.BB.top)){
+                        //prevents Chihiro from falling off clouds that are moving up
+                        that.isGrounded = true;
+                        that.setY(entity.BB.top - that.getHeight() - 1);
+                        that.velocity.y = 0;
                     }
                     else {
                         that.isGrounded = false;
                     }
+                }
+
+                //Chihiro moves with clouds that are moving vertically 
+                if(entity instanceof CloudPlatform && (that.lastBB.bottom  <= entity.BB.top)){
+                    console.log("Collision with Player");
+                    if(entity.moving){  
+                        console.log("Moving collision with Player");
+                        if(!entity.vertical){
+                            that.x += entity.speed * that.game.clockTick;
+                        }
+                        // else{ /* doesnt work */
+                        //     that.y += entity.speed * that.game.clockTick; 
+                        // }
+                    }   
                 }
 
                 if (that.velocity.y < 0) {     // chihiro is jumping up and hits the bottom of a platform
