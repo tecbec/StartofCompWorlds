@@ -478,7 +478,14 @@ class Player {
                     that.powerup = true; 
                     entity.removeFromWorld = true;
                 }
+                
+                if (entity instanceof Frog) {
+                    if (!that.game.camera.title && !that.game.camera.chihiro.winGame) {
+                        that.game.camera.breathwidth -= 5;
+                        that.game.camera.changeBreath();
+                }
             }
+        }
 
             if (entity instanceof StoneLamp && that.BB.collide(entity.BBmiddle)) {
                 if (that.BB.collide(entity.BBmiddleleft) && that.BB.right >= entity.BBmiddleleft.left ) { // left collision

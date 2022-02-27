@@ -13,7 +13,7 @@ class EndScreen {
         this.minute = 0;
         this.stopTimer = false;
 
-        this.font = new FontFace("Minecraft", 'url(./sprites/Minecraft.ttf) format("TrueType")');
+        this.font = new FontFace("Minecraft", 'url(./GameEngine/sprites/Minecraft.ttf) format("TrueType")');
         this.font.load().then(function(loadedFont) {
             document.fonts.add(loadedFont);
         }) 

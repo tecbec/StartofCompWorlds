@@ -29,7 +29,6 @@
                           {X: 6706, Y: 600}, {X: 7506, Y: 600}, // Scene 4 - 800 px between each stone lamp, 500 px between first lamp and stone lamp
                           {X: 9059, Y: 600}],                   // Scene 5
 
-
     /* Start of Frame:     1                   2                 3                 4                 5                   6                   7*/
     LAMP_LOCATION: [{X:500, Y: 650},   {X:2402,  Y: 650}, {X:4304, Y: 650}, {X:6206, Y: 650}, {X:8108, Y: 650}, {X:10010, Y: 650},],// {X:11912, Y: 650}
                     //{X:13814, Y: 650}, {X:15716, Y: 650},],
@@ -80,7 +79,10 @@
     YUBABA_INC: [4304, 6206, 8108, 10010], // x vals that trigger: entrance, crow drop, heat seeking crows, yubaba exit
 
     /*    frame:            1             3              */
-    HAKU_LOCATION: [{X:500, Y:850, TEXT: 1},{X:5305, Y:575, TEXT: 2}, {X: 10056, Y:820, TEXT: 3}]
+    HAKU_LOCATION: [{X:500, Y:850, TEXT: 1},{X:5305, Y:575, TEXT: 2}, {X: 10056, Y:820, TEXT: 3}],
+    // 0 = right, 1 = left
+    FROG_LOCATION: [{X:11000, Y:100, DIR: 0, MIN: 10500, MAX: 11000, HEIGHT: -250, TIME: 2}]
+
 }
 
 class SceneManager {
@@ -244,6 +246,11 @@ class SceneManager {
                 this.game.addEntity(new Chick(this.game, chick.X, chick.Y, chick.MIN, chick.MAX, chick.DIR));
             }
 
+            for (var i = 0; i < LEVEL.FROG_LOCATION.length; i++) {
+                let frog = LEVEL.FROG_LOCATION[i];
+                this.game.addEntity(new Frog(this.game, frog.X, frog.Y, frog.DIR, frog.MIN, frog.MAX, frog.HEIGHT, frog.TIME));
+            }
+
             this.game.addEntity(this.chihiro);
 
             for (var i = 0; i < LEVEL.HAKU_LOCATION.length; i++) {
@@ -251,12 +258,16 @@ class SceneManager {
                 this.game.addEntity(new Haku(this.game, haku.X, haku.Y, haku.TEXT));
             }
 
+          
+
+
+
             this.game.addEntity(this.breathbar);
             this.game.addEntity(this.coinCounter);
             this.game.addEntity(new Fireworks(this.game));
             this.game.addEntity(new EndScreen(this.game, this.level, LEVEL.END_SCREEN.X, LEVEL.END_SCREEN.Y));
-         
             this.game.addEntity(this.buttons);
+        
         }
     };
 
