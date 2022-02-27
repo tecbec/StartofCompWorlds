@@ -38,19 +38,23 @@
 
     RAILING_LOCATION: {X: 500, Y: 820},
 
-    SOOT_LOCATION: [{X: 1100, Y: 335}, {X: 1500, Y: 920}, {X: 3350, Y: 540}, {X: 3350, Y: 920}, {X: 5622, Y: 500}, {X: 5939, Y: 500}, {X: 4500, Y: 920}, {X: 5500, Y: 920},
+    SOOT_LOCATION: [{X: 1100, Y: 335}, {X: 1500, Y: 920}, // scene 1
+                    {X: 3350, Y: 540}, {X: 3350, Y: 920}, // scene 2
+                    {X: 5622, Y: 500}, {X: 5939, Y: 500}, {X: 4500, Y: 920}, {X: 5500, Y: 920}, // scene 3
                     {X: 7000, Y: 790}, {X: 6750, Y: 395},  // scene 4
                     {X: 8482, Y: 925}, {X: 9500, Y: 925}], // scene 5
 
-    SOOT_AREA: [{W: 100, H: 40},   {W: 200, H: 30},  // scene 1
-                {W: 100, H: 30},   {W: 200, H: 30}, {W: 110, H: 30}, {W: 110, H: 30}, {W: 500, H: 30}, {W: 500, H: 30},
-                {W: 500, H: 30},   {W: 100, H: 30},  // scene 4
-                {W: 500, H: 1305}, {W: 500, H: 30}], // Scene 5
+    SOOT_AREA: [{W: 100, H: 30},   {W: 200, H: 30},  // scene 1
+                {W: 100, H: 30},   {W: 200, H: 30},  // scene 2
+                {W: 110, H: 30},   {W: 110, H: 30},  {W: 500, H: 30},   {W: 500, H: 30}, // scene 3
+                {W: 300, H: 30},   {W: 100, H: 30},  // scene 4
+                {W: 300, H: 30},   {W: 300, H: 30}], // Scene 5
 
-    SOOT_NUM:  [2, 3,   // scene 1
-                2, 3, 2, 2, 2, 2,
-                4, 2,   // scene 4
-                3, 4],  // Scene 5
+    SOOT_NUM:  [1, 1,               // scene 1
+                2, 3,               // scene 2
+                2, 2, 8, 8,         // scene 3
+                8, 2,               // scene 4
+                8, 8],              // Scene 5
 
     COIN_LOCATION: [{X: 100,  Y: 895},{X: 125,  Y: 895}, {X: 150,  Y: 895}, {X: 175, Y: 895},  {X: 200,  Y: 895}, {X: 225,  Y: 895},
                     {X: 250,  Y: 895},{X: 275,  Y: 895}, {X: 300,  Y: 895}, {X: 325,  Y: 895},                                          // scene 0
@@ -300,12 +304,12 @@ class SceneManager {
             // Mute
             if (this.game.click.y > 1040        && this.game.click.y < 1070     && this.game.mouse.x < 350 && this.game.mouse.x > 250 && this.buttons.mute) {
                 this.buttons.mute = false;
-                this.mute = true;
+                this.mute = false;
                 this.updateAudio();
                 this.game.click = false;
             } else if (this.game.click.y > 1040 && this.game.click.y < 1070     && this.game.mouse.x < 350 && this.game.mouse.x > 250 && !this.buttons.mute) {
                 this.buttons.mute = true;
-                this.mute=false;
+                this.mute=true;
                 this.updateAudio();
                 this.game.click = false;
             }
