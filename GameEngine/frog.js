@@ -1,3 +1,9 @@
+var FROG = {
+    IDLE: {RIGHT: {X:0 , Y:0},   LEFT: {X:0, Y:100}, SPEED: 0.2, FRAME: 6, PADDING: 0, REVERSE: false, LOOP: true},
+    JUMP: {RIGHT: {X:0,  Y:200}, LEFT: {X:0, Y:300}, SPEED: 0.2, FRAME: 6, PADDING: 0, REVERSE: false, LOOP: true},
+    SIZE: {WIDTH:100, HEIGHT: 100},
+}
+
 class Frog {
     constructor(game, x, y, direction, min, max, jumpHeight, jumpTime) {
         Object.assign(this, {game, x, y, direction, min, max, jumpHeight, jumpTime});
@@ -24,11 +30,11 @@ class Frog {
                 this.animations[i].push([]);
             }
         }
-        this.animations[0][0] = new Animator (this.spritesheet, 0, 0,   100, 100, 6, 0.2, 0, false, true);
-        this.animations[0][1] = new Animator (this.spritesheet, 0, 100, 100, 100, 6, 0.2, 0, false, true);
+        this.animations[0][0] = new Animator (this.spritesheet, FROG.IDLE.RIGHT.X, FROG.IDLE.RIGHT.Y, FROG.SIZE.WIDTH, FROG.SIZE.HEIGHT, FROG.IDLE.FRAME, FROG.IDLE.SPEED, FROG.IDLE.PADDING, FROG.IDLE.REVERSE, FROG.IDLE.LOOP);
+        this.animations[0][1] = new Animator (this.spritesheet, FROG.IDLE.LEFT.X, FROG.IDLE.LEFT.Y, FROG.SIZE.WIDTH, FROG.SIZE.HEIGHT, FROG.IDLE.FRAME, FROG.IDLE.SPEED, FROG.IDLE.PADDING, FROG.IDLE.REVERSE, FROG.IDLE.LOOP);
 
-        this.animations[1][0] = new Animator (this.spritesheet, 0, 200, 100, 100, 6, 0.2, 0, false, true);
-        this.animations[1][1] = new Animator (this.spritesheet, 0, 300, 100, 100, 6, 0.2, 0, false, true);
+        this.animations[1][0] = new Animator (this.spritesheet, FROG.JUMP.RIGHT.X, FROG.JUMP.RIGHT.Y, FROG.SIZE.WIDTH, FROG.SIZE.HEIGHT, FROG.JUMP.FRAME, FROG.JUMP.SPEED, FROG.JUMP.PADDING, FROG.JUMP.REVERSE, FROG.JUMP.LOOP);
+        this.animations[1][1] = new Animator (this.spritesheet, FROG.JUMP.LEFT.X, FROG.JUMP.LEFT.Y, FROG.SIZE.WIDTH, FROG.SIZE.HEIGHT, FROG.JUMP.FRAME, FROG.JUMP.SPEED, FROG.JUMP.PADDING, FROG.JUMP.REVERSE, FROG.JUMP.LOOP);
     };
 
     update() {
