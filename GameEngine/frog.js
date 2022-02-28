@@ -21,6 +21,10 @@ class Frog {
     updateBB() {
         this.lastBB = this.BB;
         this.BB = new BoundingBox(this.x + 70, this.y + 90, 70, 100);
+        this.leftBB = new BoundingBox(this.x + 70, this.y + 90, 10, 100);
+        this.rightBB = new BoundingBox(this.BB.right - 10, this.y + 90, 10, 100);
+        this.topLBB = new BoundingBox(this.x + 70, this.y + 90, 70 / 2 - 10, 10);
+        this.topRBB = new BoundingBox(this.BB.right - (70/2 - 10), this.y + 90, 70 / 2 - 10, 10);
     };
 
     loadAnimations() {
@@ -96,10 +100,28 @@ class Frog {
                 } else {
                     that.isGrounded = false;
                 }
+                // bottom collisions
+                if (that.velocity.y < 0) {    
+                    if((entity instanceof Platform )    
+                        && (that.lastBB.top >= entity.BB.bottom)) { 
+                        that.velocity.y = 0;
+                    } else {
+                        that.isGrounded = false;
+                    }
+                }
+                // side collisions
+                 if ((entity instanceof Platform) && that.BB.collide(entity.BB)) {
+                    if (that.BB.collide(entity.leftBB) && that.BB.right >= entity.leftBB.left ) { // left collision
+                        that.x = entity.BB.left - 140;
+                    } else if (that.BB.collide(entity.rightBB) && that.BB.left <= entity.rightBB.right ) { // right collision
+                        that.x = entity.BB.right - 70;
+                    } else {
+
+                    }
+            }
+
             }
         });
-
-
         this.updateBB();
     };
 
@@ -108,6 +130,11 @@ class Frog {
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
             ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
+            ctx.strokeRect(this.leftBB.x - this.game.camera.x, this.leftBB.y, this.leftBB.width, this.leftBB.height);
+            ctx.strokeRect(this.rightBB.x - this.game.camera.x, this.rightBB.y, this.rightBB.width, this.rightBB.height);
+            ctx.strokeStyle = 'Yellow';
+            ctx.strokeRect(this.topLBB.x - this.game.camera.x, this.topLBB.y, this.topLBB.width, this.topLBB.height);
+            ctx.strokeRect(this.topRBB.x - this.game.camera.x, this.topRBB.y, this.topRBB.width, this.topRBB.height);
         }
     };
 }

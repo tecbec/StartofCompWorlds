@@ -81,7 +81,7 @@
     /*    frame:            1             3              */
     HAKU_LOCATION: [{X:500, Y:850, TEXT: 1},{X:5305, Y:575, TEXT: 2}, {X: 10056, Y:820, TEXT: 3}],
     // 0 = right, 1 = left
-    FROG_LOCATION: [{X:11000, Y:100, DIR: 0, MIN: 10500, MAX: 11000, HEIGHT: -250, TIME: 2}]
+    FROG_LOCATION: [{X:9183, Y:681, DIR: 1, MIN: 9500, MAX: 10500, HEIGHT: -250, TIME: 2}]
 
 }
 
@@ -241,15 +241,17 @@ class SceneManager {
                 this.game.addEntity(new Coins(this.game, coin.X, coin.Y));
             }
 
+            
+            for (var i = 0; i < LEVEL.FROG_LOCATION.length; i++) {
+                let frog = LEVEL.FROG_LOCATION[i];
+                this.game.addEntity(new Frog(this.game, frog.X, frog.Y, frog.DIR, frog.MIN, frog.MAX, frog.HEIGHT, frog.TIME));
+            }
+            
             for (var i = 0; i < LEVEL.CHICK_LOCATION.length; i++) {
                 let chick = LEVEL.CHICK_LOCATION[i];
                 this.game.addEntity(new Chick(this.game, chick.X, chick.Y, chick.MIN, chick.MAX, chick.DIR));
             }
 
-            for (var i = 0; i < LEVEL.FROG_LOCATION.length; i++) {
-                let frog = LEVEL.FROG_LOCATION[i];
-                this.game.addEntity(new Frog(this.game, frog.X, frog.Y, frog.DIR, frog.MIN, frog.MAX, frog.HEIGHT, frog.TIME));
-            }
 
             this.game.addEntity(this.chihiro);
 
@@ -257,8 +259,6 @@ class SceneManager {
                 let haku = LEVEL.HAKU_LOCATION[i];
                 this.game.addEntity(new Haku(this.game, haku.X, haku.Y, haku.TEXT));
             }
-
-          
 
 
 
