@@ -1,7 +1,7 @@
 /* Chihiro's Params */
 var CHIHIRO = {
     TITLE_POSITION:   {X: 0,  Y: 800},
-    INITIAL_POSITION: {X: 11000,  Y: 0},  // change to 10200 to test winning condition. 
+    INITIAL_POSITION: {X: 20653,  Y: 0},  // change to 20653 to test winning condition. 
     SIZE: 70,
     SCALE: 2,
     PADDING:{X: 28, Y: 20}, // same padding for BB and imaginary x,y,w,h calculations
@@ -288,15 +288,16 @@ class Player {
         if (this.game.crouch && this.velocity.x >= MIN_WALK) this.velocity.x = CROUCH_SPEED;
 
 
-        // winning condition. 
-        if (this.x > LEVEL.END_GAME.X) { // Freeze chihiro.
+        // winning condition.
+
+        if (this.x > this.game.camera.endGame) { // Freeze chihiro.
             this.winGame = true;
             this.velocity.x = 0; 
             this.chihiroScale = 1; 
             this.game.crouch = false;
-            if (this.x > LEVEL.END_GAME.X) { 
+            if (this.x > this.game.camera.endGame) { 
                 this.velocity.x = 40;  // walk   
-                if (this.x > LEVEL.END_GAME.X + 350) { // reach door stops
+                if (this.x > this.game.camera.endGame + 350) { // reach door stops
                     this.velocity.x = 0;   
                     this.state = 7;
                     this.endPosition = true;
@@ -443,7 +444,7 @@ class Player {
                 }
 
                 // collision with Chicks
-                if ((entity instanceof Chick || entity instanceof Radish || entity instanceof Frog )&& that.BB.collide(entity.BB) && !that.dead) {
+                if ((entity instanceof Chick || entity instanceof Radish || entity instanceof Frog)&& that.BB.collide(entity.BB) && !that.dead) {
                     if (!that.game.camera.title && !that.game.camera.chihiro.winGame) { 
                         that.game.camera.breathwidth -= CHIHIRO.BREATH_BAR.MAX/4;
                         that.game.camera.changeBreath();
@@ -503,7 +504,7 @@ class Player {
                         that.game.camera.breathwidth -= 5;
                         that.game.camera.changeBreath();
                     }
-                    if (that.BB.collide(entity.BB) && entity.BB.bottom - 10 <= that.BB.top) {
+                    if (that.BB.collide(entity.BB) && entity.BB.bottom - 10 <= that.BB.top) { // dont do bottom/top comparison if we want the frogs to jump off upon contact.
                         that.collideWithFrog = true;
                     }
                 }

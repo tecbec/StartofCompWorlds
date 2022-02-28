@@ -6,15 +6,14 @@
     music: "./GameEngine/audio/OneSummersDay.mp3",
     START_MUTE:         false,               // you can must the music in each level
     START_CANVAS:       {X: -851, Y: 0},
-    END_CANVAS:         {X: 13000},         // change this later when we figure out the exact ending canvas measurement
+    END_CANVAS:         {X: 22000},         // change this later when we figure out the exact ending canvas measurement
     END_TITLE_CANVAS:   {X: 500},           // This will end the title canvas so it won't keep going.
-    END_GAME:           {X: 11515, Y: 813},
-    FRAME_COUNT: 8,                         // This is the factor that determine how wide the actual game is
+    FRAME_COUNT: 13,                        // This is the factor that determine how wide the actual game is
     // Type 0: has left,middle,right piece can be adjusted to be longer
     // Type 1: is short (just middle piece)
     TREE:[{X: 567, Y: 276, TYPE:3}, {X: 2538, Y: 0, TYPE:1}, {X: 3231, Y: 276, TYPE:2}, {X: 5543, Y: 0, TYPE:1}, {X: 6527, Y: 276, TYPE:2}, {X: 7816, Y: 276, TYPE:0}, {X: 8274, Y: 276, TYPE:3}],
     END_SCREEN: {X: 250, Y: 100},
-    BATHHOUSE: {X: 11608, Y: - 1200},
+    BATHHOUSE: {X: 1598, Y: -1200},
     PLATFORM_LOCATION:       [{X: 790,  Y: 550, TYPE: 0}, {X: 1100, Y: 375, TYPE: 0}, {X: 1400, Y: 500, TYPE: 0}, {X: 1900, Y: 390, TYPE: 0}, {X: 2200, Y: 590, TYPE: 0},    // scene 1
                               {X: 2600, Y: 590, TYPE: 0}, {X: 2750, Y: 450, TYPE: 0}, {X: 3300, Y: 575, TYPE: 0}, {X: 3500, Y: 400, TYPE: 0}, {X: 4000, Y: 600, TYPE: 0},    // scene 2
                               {X: 5775 + 50, Y: 120, TYPE: 1}, {X: 5602, Y: 525, TYPE: 0}, {X: 5919, Y: 525, TYPE: 0},                                                                                        // scene 3
@@ -32,9 +31,9 @@
                           {X: 6706, Y: 600}, {X: 7506, Y: 600}, // Scene 4 - 800 px between each stone lamp, 500 px between first lamp and stone lamp
                           {X: 9059, Y: 600}],                   // Scene 5
 
-    /* Start of Frame:     1                   2                 3                 4                 5                   6                   7*/
-    LAMP_LOCATION: [{X:500, Y: 650},   {X:2402,  Y: 650}, {X:4304, Y: 650}, {X:6206, Y: 650}, {X:8108, Y: 650}, {X:10010, Y: 650},],// {X:11912, Y: 650}
-                    //{X:13814, Y: 650}, {X:15716, Y: 650},],
+    /* Start of Frame:     1                   2                 3                 4                 5                   6                   7                8                 9                  10                11*/
+    LAMP_LOCATION: [{X:500, Y: 650},   {X:2402,  Y: 650}, {X:4304, Y: 650}, {X:6206, Y: 650}, {X:8108, Y: 650}, {X:10010, Y: 650}, {X:11912, Y: 650}, {X:13814, Y: 650}, {X:15716, Y: 650}, {X:17618, Y:650}, {X:19520, Y:650}], 
+                    //, ,],
 
     RAILING_LOCATION: {X: 500, Y: 820},
 
@@ -109,6 +108,8 @@ class SceneManager {
         this.mute = true;
         this.volume = 0.1;
 
+        // this set the bathhouse location relative to the last frame based on the lamp location
+        this.endGame = LEVEL.BATHHOUSE.X + LEVEL.LAMP_LOCATION[LEVEL.LAMP_LOCATION.length-1].X - 93;
         //Breath
         this.breathwidth = 100;
         this.loadLevel(this.level, this.title);
@@ -197,7 +198,7 @@ class SceneManager {
             //this.game.addEntity(this.chick);
             // this.game.addEntity(this.haku);
         } else {
-            this.bathhouse = new Bathhouse(this.game, LEVEL.BATHHOUSE.X,  LEVEL.BATHHOUSE.Y);
+            this.bathhouse = new Bathhouse(this.game, LEVEL.BATHHOUSE.X + LEVEL.LAMP_LOCATION[LEVEL.LAMP_LOCATION.length-1].X,  LEVEL.BATHHOUSE.Y);
             this.game.addEntity(this.background);
 
             for (var i = 0; i < LEVEL.TREE.length; i++) {
