@@ -1,7 +1,7 @@
 /* Chihiro's Params */
 var CHIHIRO = {
     TITLE_POSITION:   {X: 0,  Y: 800},
-    INITIAL_POSITION: {X: 9810,  Y: 0},  // change to 10200 to test winning condition. 
+    INITIAL_POSITION: {X: 11000,  Y: 0},  // change to 10200 to test winning condition. 
     SIZE: 70,
     SCALE: 2,
     PADDING:{X: 28, Y: 20}, // same padding for BB and imaginary x,y,w,h calculations
@@ -36,6 +36,8 @@ class Player {
         this.collideWithHaku = false;
         this.chihiroScale = 2;
         this.endPosition = false;
+        this.collideWithFrog = false;
+
         // testing
         // this.sootCount = 0;
         this.nofaceCount = 0;
@@ -441,8 +443,8 @@ class Player {
                 }
 
                 // collision with Chicks
-                if ((entity instanceof Chick || entity instanceof Radish )&& that.BB.collide(entity.BB) && !that.dead) {
-                    if (!that.game.camera.title && !that.game.camera.chihiro.winGame) {
+                if ((entity instanceof Chick || entity instanceof Radish || entity instanceof Frog )&& that.BB.collide(entity.BB) && !that.dead) {
+                    if (!that.game.camera.title && !that.game.camera.chihiro.winGame) { 
                         that.game.camera.breathwidth -= CHIHIRO.BREATH_BAR.MAX/4;
                         that.game.camera.changeBreath();
                         if (that.BB.collide(entity.leftBB)) { // left collision
@@ -452,12 +454,11 @@ class Player {
                          } else if (that.BB.collide(entity.rightBB)) { // right
                              that.setX(that.getX() + 50);
                              that.velocity.x = 100;
-                         }else if (that.BB.collide(entity.topRBB)) { 
+                         } else if (that.BB.collide(entity.topRBB)) { 
                              that.setY(that.getY() - 50);
                              that.velocity.y = -100;
                              that.velocity.x = 100;
-
-                         }else if(that.BB.collide(entity.topLBB)){
+                         } else if (that.BB.collide(entity.topLBB)){
                             that.setY(that.getY() - 50);
                              that.velocity.y = -100;
                              that.velocity.x = -100;
@@ -501,9 +502,12 @@ class Player {
                     if (!that.game.camera.title && !that.game.camera.chihiro.winGame) {
                         that.game.camera.breathwidth -= 5;
                         that.game.camera.changeBreath();
+                    }
+                    if (that.BB.collide(entity.BB) && entity.BB.bottom - 10 <= that.BB.top) {
+                        that.collideWithFrog = true;
+                    }
                 }
             }
-        }
 
             if (entity instanceof StoneLamp && that.BB.collide(entity.BBmiddle)) {
                 if (that.BB.collide(entity.BBmiddleleft) && that.BB.right >= entity.BBmiddleleft.left ) { // left collision

@@ -77,15 +77,28 @@ class Frog {
                 this.velocity.x = 0;
             }     
         }
-      
+        if (this.game.camera.chihiro.collideWithFrog) { 
+            this.velocity.y = this.jumpHeight * PARAMS.SCALE;
+            if (this.direction == 1) {
+                this.velocity.x -= MIN_JUMP; 
+            }
+            if (this.direction == 0) {
+                this.velocity.x += MIN_JUMP; 
+            }
+            this.state = 1; 
+            this.game.camera.chihiro.collideWithFrog = false;
+        }
        
         this.velocity.y += FALL_ACC * TICK;
 
         if (this.velocity.y >= MAX_FALL)  this.velocity.y =  MAX_FALL;
         if (this.velocity.y <= -MAX_FALL) this.velocity.y = -MAX_FALL;
-
+        if (this.velocity.x >= MIN_JUMP)   this.velocity.x =  MIN_JUMP;
+        if (this.velocity.x <= -MIN_JUMP)  this.velocity.x = -MIN_JUMP;
+        
         this.x += this.velocity.x * TICK * TICK_SCALE;
         this.y += this.velocity.y * TICK * TICK_SCALE;
+
         this.updateBB();
         var that = this;
         this.game.entities.forEach(function (entity) {  

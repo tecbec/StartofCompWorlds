@@ -88,7 +88,7 @@
     /*    frame:            1             3              */
     HAKU_LOCATION: [{X:500, Y:850, TEXT: 1},{X:5305, Y:575, TEXT: 2}, {X: 10056, Y:820, TEXT: 3}],
     // 0 = right, 1 = left
-    FROG_LOCATION: [{X:9183, Y:681, DIR: 1, MIN: 9500, MAX: 10500, HEIGHT: -250, TIME: 2}]
+    FROG_LOCATION: [{X:11000, Y:681, DIR: 0, MIN: 10500, MAX: 11000, HEIGHT: -250, TIME: 2}]
 
 }
 
@@ -297,10 +297,8 @@ class SceneManager {
     };
 
     update() {
-/*maybe remove this?
         PARAMS.DEBUG = true;
         this.mute = true;
-*/
         this.updateAudio();
         // canvas width = 400
         // blockwidth = 32 * 1 = 32
