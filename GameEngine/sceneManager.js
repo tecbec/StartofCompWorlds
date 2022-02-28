@@ -2,8 +2,10 @@
 /**
  * THIS IS WHERE WE PUT THE ENTITIES IN THE CANVAS
  */
+ const SOOT_AREA_HEIGHT = 30;
  var LEVEL = {
     music: "./GameEngine/audio/OneSummersDay.mp3",
+    TITLE_START:        true,              // determine if you want the title to be on.
     START_MUTE:         false,               // you can must the music in each level
     START_CANVAS:       {X: -851, Y: 0},
     END_CANVAS:         {X: 13000},         // change this later when we figure out the exact ending canvas measurement
@@ -32,26 +34,34 @@
                           {X: 6706, Y: 600}, {X: 7506, Y: 600}, // Scene 4 - 800 px between each stone lamp, 500 px between first lamp and stone lamp
                           {X: 9059, Y: 600}],                   // Scene 5
 
-
-    /* Start of Frame:     1                   2                 3                 4                 5                   6                   7*/
-    LAMP_LOCATION: [{X:500, Y: 650},   {X:2402,  Y: 650}, {X:4304, Y: 650}, {X:6206, Y: 650}, {X:8108, Y: 650}, {X:10010, Y: 650},],// {X:11912, Y: 650}
+    LAMP_LOCATION: [{X:500, Y: 650},        // Start Scene 1
+                    {X:2402,  Y: 650},      // Start Scene 2
+                    {X:4304, Y: 650},       // Start Scene 3
+                    {X:6206, Y: 650},       // Start Scene 4
+                    {X:8108, Y: 650},       // Start Scene 5
+                    {X:10010, Y: 650},],    // Start Scene 6
+                    // {X:11912, Y: 650}
                     //{X:13814, Y: 650}, {X:15716, Y: 650},],
 
     RAILING_LOCATION: {X: 500, Y: 820},
 
-    SOOT_LOCATION: [{X: 1100, Y: 335}, {X: 1500, Y: 920}, {X: 3350, Y: 540}, {X: 3350, Y: 920}, {X: 5622, Y: 500}, {X: 5939, Y: 500}, {X: 4500, Y: 920}, {X: 5500, Y: 920},
-                    {X: 7000, Y: 790}, {X: 6750, Y: 395},  // scene 4
-                    {X: 8482, Y: 925}, {X: 9500, Y: 925}], // scene 5
+    SOOT_LOCATION:  [{X: 1100, Y: 345}, {X: 1000, Y: 920}, // scene 1
+                     {X: 3320, Y: 540}, {X: 3350, Y: 920}, // scene 2
+                     {X: 5622, Y: 490}, {X: 5939, Y: 490}, {X: 4500, Y: 920}, {X: 5500, Y: 920}, // scene 3
+                     {X: 6900, Y: 790}, {X: 6710, Y: 395},  // scene 4
+                     {X: 8482, Y: 925}, {X: 9000, Y: 925}], // scene 5
+                    
+    SOOT_AREA:      [{W: 170, H: SOOT_AREA_HEIGHT},   {W: 1000, H: SOOT_AREA_HEIGHT},  // scene 1
+                     {W: 170, H: SOOT_AREA_HEIGHT},   {W: 200, H: SOOT_AREA_HEIGHT},  // scene 2
+                     {W: 170, H: SOOT_AREA_HEIGHT},   {W: 170, H: SOOT_AREA_HEIGHT},  {W: 500, H: SOOT_AREA_HEIGHT},   {W: 500, H: SOOT_AREA_HEIGHT}, // scene 3
+                     {W: 1000, H: SOOT_AREA_HEIGHT},   {W: 170, H: SOOT_AREA_HEIGHT},  // scene 4
+                     {W: 1000, H: SOOT_AREA_HEIGHT},   {W: 1000, H: SOOT_AREA_HEIGHT}], // Scene 5
 
-    SOOT_AREA: [{W: 100, H: 40},   {W: 200, H: 30},  // scene 1
-                {W: 100, H: 30},   {W: 200, H: 30}, {W: 110, H: 30}, {W: 110, H: 30}, {W: 500, H: 30}, {W: 500, H: 30},
-                {W: 500, H: 30},   {W: 100, H: 30},  // scene 4
-                {W: 500, H: 1305}, {W: 500, H: 30}], // Scene 5
-
-    SOOT_NUM:  [2, 3,   // scene 1
-                2, 3, 2, 2, 2, 2,
-                4, 2,   // scene 4
-                3, 4],  // Scene 5
+    SOOT_NUM:  [2, 10,              // scene 1
+                2, 3,               // scene 2
+                2, 2, 3, 3,         // scene 3
+                3, 2,               // scene 4
+                3, 5],              // Scene 5
 
     COIN_LOCATION: [{X: 100,  Y: 895},{X: 125,  Y: 895}, {X: 150,  Y: 895}, {X: 175, Y: 895},  {X: 200,  Y: 895}, {X: 225,  Y: 895},
                     {X: 250,  Y: 895},{X: 275,  Y: 895}, {X: 300,  Y: 895}, {X: 325,  Y: 895},                                          // scene 0
@@ -97,7 +107,7 @@ class SceneManager {
 
         // this.midPoint = 0;
         this.gameOver = false;
-        this.title = true;
+        this.title = LEVEL.TITLE_START;
         this.level = 1;
         this.gameOverCounter  = 0;
 
@@ -323,12 +333,12 @@ class SceneManager {
             // Mute
             if (this.game.click.y > 1040        && this.game.click.y < 1070     && this.game.mouse.x < 350 && this.game.mouse.x > 250 && this.buttons.mute) {
                 this.buttons.mute = false;
-                this.mute = true;
+                this.mute = false;
                 this.updateAudio();
                 this.game.click = false;
             } else if (this.game.click.y > 1040 && this.game.click.y < 1070     && this.game.mouse.x < 350 && this.game.mouse.x > 250 && !this.buttons.mute) {
                 this.buttons.mute = true;
-                this.mute=false;
+                this.mute=true;
                 this.updateAudio();
                 this.game.click = false;
             }

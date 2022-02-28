@@ -31,17 +31,16 @@ class Soot {
         this.scale = 0.4;         // scaling of the soot
 
         // starting location of the soot on the screen
-        if(startDir == 1) {  // going left to right
-            this.Sootx = this.x; // position of the soot x
-            this.Sooty = this.y + this.heightSootArea - this.SootHeight * this.scale; // position of the soot y
-        } else {             // going right to left
-            this.Sootx = (this.x + this.widthSootArea) - (this.SootWidth * this.scale * this.numSoots); // position of the soot x
-            this.Sooty = (this.y + this.heightSootArea) - this.SootHeight * this.scale; // position of the soot y
+        if(startDir == 1) {             // going left to right
+            this.Sootx = this.x;        // position of the soot x
+        } else {                        // going right to left
+            this.Sootx = this.maxScreen.x - (this.SootWidth * this.scale * this.numSoots); // position of the soot x
         }
+        this.Sooty = this.maxScreen.y - (this.SootHeight * this.scale) - 1;                   // position of the soot y
 
         // load the animations
         this.loadAnimations();
-    
+
         // bounding box
         this.updateBB();
 
@@ -52,7 +51,7 @@ class Soot {
     loadAnimations() {
         let start = {x: 0, y: 0};   // location on the spritesheet to start
         const frames = 6;           // number of frames
-        const framedur = 0.2;       // the duration of the frame to be up
+        const framedur = 0.16;       // the duration of the frame to be up
         const pad = 15;             // padding between the soot frames
 
         if(this.startDir === 1) { // soots move left to right
@@ -68,7 +67,7 @@ class Soot {
 
         // This will be the bounding box for all the soots.
         let width =(this.numSoots * this.SootWidth * this.scale);
-        this.BB = new BoundingBox(this.Sootx, this.Sooty, width, this.SootHeight * this.scale);
+        this.BB = new BoundingBox(this.Sootx, this.Sooty+((this.SootHeight*this.scale)/2), width, (this.SootHeight * this.scale)/2);
 
         // This will display the area the soots are in
         this.areaBB = new BoundingBox(this.x, this.y, this.widthSootArea, this.heightSootArea);
@@ -106,9 +105,11 @@ class Soot {
         }
 
         // This will cause the back and forth movement of the soots within the specified area
-        if (this.Sootx < this.x) {
+        if (this.BB.left < this.x) {
+            this.velocity.x = this.START_V.x;
             this.sootDir = 1;
-        } else if ((this.Sootx + this.SootWidth * this.numSoots * this.scale) > (this.x+this.widthSootArea)) {
+        } else if (this.BB.right > this.maxScreen.x) {
+            this.velocity.x = this.START_V.x;
             this.sootDir = 0;
         }
 
@@ -125,7 +126,7 @@ class Soot {
 
         // draws multiple soots
         for (let i = 0; i < this.numSoots; i++){
-            this.animations.drawFrame(this.game.clockTick, ctx, ((this.Sootx + (i * this.SootWidth * this.scale)) - this.game.camera.x), this.Sooty, this.scale);
+            this.animations.drawFrame((this.game.clockTick/this.numSoots), ctx, ((this.Sootx + (i * this.SootWidth * this.scale)) - this.game.camera.x), this.Sooty, this.scale);
         }
 
         ctx.shadowColor = "transparent"; // remove shadow !
