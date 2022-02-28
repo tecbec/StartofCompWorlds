@@ -8,15 +8,14 @@
     TITLE_START:        true,              // determine if you want the title to be on.
     START_MUTE:         false,               // you can must the music in each level
     START_CANVAS:       {X: -851, Y: 0},
-    END_CANVAS:         {X: 13000},         // change this later when we figure out the exact ending canvas measurement
+    END_CANVAS:         {X: 22000},         // change this later when we figure out the exact ending canvas measurement
     END_TITLE_CANVAS:   {X: 500},           // This will end the title canvas so it won't keep going.
-    END_GAME:           {X: 11515, Y: 813},
-    FRAME_COUNT: 8,                         // This is the factor that determine how wide the actual game is
+    FRAME_COUNT: 13,                        // This is the factor that determine how wide the actual game is
     // Type 0: has left,middle,right piece can be adjusted to be longer
     // Type 1: is short (just middle piece)
     TREE:[{X: 567, Y: 276, TYPE:3}, {X: 2538, Y: 0, TYPE:1}, {X: 3231, Y: 276, TYPE:2}, {X: 5543, Y: 0, TYPE:1}, {X: 6527, Y: 276, TYPE:2}, {X: 7816, Y: 276, TYPE:0}, {X: 8274, Y: 276, TYPE:3}],
     END_SCREEN: {X: 250, Y: 100},
-    BATHHOUSE: {X: 11608, Y: - 1200},
+    BATHHOUSE: {X: 1598, Y: -1200},
     PLATFORM_LOCATION:       [{X: 790,  Y: 550, TYPE: 0}, {X: 1100, Y: 375, TYPE: 0}, {X: 1400, Y: 500, TYPE: 0}, {X: 1900, Y: 390, TYPE: 0}, {X: 2200, Y: 590, TYPE: 0},    // scene 1
                               {X: 2600, Y: 590, TYPE: 0}, {X: 2750, Y: 450, TYPE: 0}, {X: 3300, Y: 575, TYPE: 0}, {X: 3500, Y: 400, TYPE: 0}, {X: 4000, Y: 600, TYPE: 0},    // scene 2
                               {X: 5775 + 50, Y: 120, TYPE: 1}, {X: 5602, Y: 525, TYPE: 0}, {X: 5919, Y: 525, TYPE: 0},                                                                                        // scene 3
@@ -97,7 +96,10 @@
     YUBABA_INC: [4304, 6206, 8108, 10010], // x vals that trigger: entrance, crow drop, heat seeking crows, yubaba exit
 
     /*    frame:            1             3              */
-    HAKU_LOCATION: [{X:500, Y:850, TEXT: 1},{X:5305, Y:575, TEXT: 2}, {X: 10056, Y:820, TEXT: 3}]
+    HAKU_LOCATION: [{X:500, Y:850, TEXT: 1},{X:5305, Y:575, TEXT: 2}, {X: 10056, Y:820, TEXT: 3}],
+    // 0 = right, 1 = left
+    FROG_LOCATION: [{X:11000, Y:681, DIR: 0, MIN: 10500, MAX: 11000, HEIGHT: -250, TIME: 2}]
+
 }
 
 class SceneManager {
@@ -117,6 +119,8 @@ class SceneManager {
         this.mute = true;
         this.volume = 0.1;
 
+        // this set the bathhouse location relative to the last frame based on the lamp location
+        this.endGame = LEVEL.BATHHOUSE.X + LEVEL.LAMP_LOCATION[LEVEL.LAMP_LOCATION.length-1].X - 93;
         //Breath
         this.breathwidth = 100;
         this.loadLevel(this.level, this.title);
@@ -205,7 +209,7 @@ class SceneManager {
             //this.game.addEntity(this.chick);
             // this.game.addEntity(this.haku);
         } else {
-            this.bathhouse = new Bathhouse(this.game, LEVEL.BATHHOUSE.X,  LEVEL.BATHHOUSE.Y);
+            this.bathhouse = new Bathhouse(this.game, LEVEL.BATHHOUSE.X + LEVEL.LAMP_LOCATION[LEVEL.LAMP_LOCATION.length-1].X,  LEVEL.BATHHOUSE.Y);
             this.game.addEntity(this.background);
 
             for (var i = 0; i < LEVEL.TREE.length; i++) {
@@ -257,6 +261,12 @@ class SceneManager {
                 this.game.addEntity(new Coins(this.game, coin.X, coin.Y));
             }
 
+            
+            for (var i = 0; i < LEVEL.FROG_LOCATION.length; i++) {
+                let frog = LEVEL.FROG_LOCATION[i];
+                this.game.addEntity(new Frog(this.game, frog.X, frog.Y, frog.DIR, frog.MIN, frog.MAX, frog.HEIGHT, frog.TIME));
+            }
+            
             for (var i = 0; i < LEVEL.CHICK_LOCATION.length; i++) {
                 let chick = LEVEL.CHICK_LOCATION[i];
                 if(chick.MIN == null || chick.MAX == null || chick.SPEED == null || chick.DIR == null){
@@ -275,6 +285,7 @@ class SceneManager {
                 this.game.addEntity(new Radish(this.game, radish.X, radish.Y));
             }
 
+
             this.game.addEntity(this.chihiro);
 
             for (var i = 0; i < LEVEL.HAKU_LOCATION.length; i++) {
@@ -282,12 +293,14 @@ class SceneManager {
                 this.game.addEntity(new Haku(this.game, haku.X, haku.Y, haku.TEXT));
             }
 
+
+
             this.game.addEntity(this.breathbar);
             this.game.addEntity(this.coinCounter);
             this.game.addEntity(new Fireworks(this.game));
             this.game.addEntity(new EndScreen(this.game, this.level, LEVEL.END_SCREEN.X, LEVEL.END_SCREEN.Y));
-         
             this.game.addEntity(this.buttons);
+        
         }
     };
 
@@ -296,10 +309,8 @@ class SceneManager {
     };
 
     update() {
-/*maybe remove this?
         PARAMS.DEBUG = true;
         this.mute = true;
-*/
         this.updateAudio();
         // canvas width = 400
         // blockwidth = 32 * 1 = 32

@@ -36,6 +36,8 @@ class Player {
         this.collideWithHaku = false;
         this.chihiroScale = 2;
         this.endPosition = false;
+        this.collideWithFrog = false;
+
         // testing
         // this.sootCount = 0;
         this.nofaceCount = 0;
@@ -286,15 +288,16 @@ class Player {
         if (this.game.crouch && this.velocity.x >= MIN_WALK) this.velocity.x = CROUCH_SPEED;
 
 
-        // winning condition. 
-        if (this.x > LEVEL.END_GAME.X) { // Freeze chihiro.
+        // winning condition.
+
+        if (this.x > this.game.camera.endGame) { // Freeze chihiro.
             this.winGame = true;
             this.velocity.x = 0; 
             this.chihiroScale = 1; 
             this.game.crouch = false;
-            if (this.x > LEVEL.END_GAME.X) { 
+            if (this.x > this.game.camera.endGame) { 
                 this.velocity.x = 40;  // walk   
-                if (this.x > LEVEL.END_GAME.X + 350) { // reach door stops
+                if (this.x > this.game.camera.endGame + 350) { // reach door stops
                     this.velocity.x = 0;   
                     this.state = 7;
                     this.endPosition = true;
@@ -441,8 +444,8 @@ class Player {
                 }
 
                 // collision with Chicks
-                if ((entity instanceof Chick || entity instanceof Radish )&& that.BB.collide(entity.BB) && !that.dead) {
-                    if (!that.game.camera.title && !that.game.camera.chihiro.winGame) {
+                if ((entity instanceof Chick || entity instanceof Radish || entity instanceof Frog)&& that.BB.collide(entity.BB) && !that.dead) {
+                    if (!that.game.camera.title && !that.game.camera.chihiro.winGame) { 
                         that.game.camera.breathwidth -= CHIHIRO.BREATH_BAR.MAX/4;
                         that.game.camera.changeBreath();
                         if (that.BB.collide(entity.leftBB)) { // left collision
@@ -452,12 +455,11 @@ class Player {
                          } else if (that.BB.collide(entity.rightBB)) { // right
                              that.setX(that.getX() + 50);
                              that.velocity.x = 100;
-                         }else if (that.BB.collide(entity.topRBB)) { 
+                         } else if (that.BB.collide(entity.topRBB)) { 
                              that.setY(that.getY() - 50);
                              that.velocity.y = -100;
                              that.velocity.x = 100;
-
-                         }else if(that.BB.collide(entity.topLBB)){
+                         } else if (that.BB.collide(entity.topLBB)){
                             that.setY(that.getY() - 50);
                              that.velocity.y = -100;
                              that.velocity.x = -100;
@@ -495,6 +497,16 @@ class Player {
                     // console.log("instanceof");
                     that.powerup = true;
                     entity.removeFromWorld = true;
+                }
+                
+                if (entity instanceof Frog) {
+                    if (!that.game.camera.title && !that.game.camera.chihiro.winGame) {
+                        that.game.camera.breathwidth -= 5;
+                        that.game.camera.changeBreath();
+                    }
+                    if (that.BB.collide(entity.BB) && entity.BB.bottom - 10 <= that.BB.top) { // dont do bottom/top comparison if we want the frogs to jump off upon contact.
+                        that.collideWithFrog = true;
+                    }
                 }
             }
 
