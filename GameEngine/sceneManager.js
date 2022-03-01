@@ -9,7 +9,7 @@
     START_MUTE:         false,               // you can must the music in each level
     START_CANVAS:       {X: -851, Y: 0},
     END_CANVAS:         {X: 13000},         // change this later when we figure out the exact ending canvas measurement
-    END_TITLE_CANVAS:   {X: 500},           // This will end the title canvas so it won't keep going.
+    END_TITLE_CANVAS:   {X: 13000},  //500},           // This will end the title canvas so it won't keep going.
     END_GAME:           {X: 11515, Y: 813},
     FRAME_COUNT: 8,                         // This is the factor that determine how wide the actual game is
     // Type 0: has left,middle,right piece can be adjusted to be longer
@@ -114,6 +114,9 @@ class SceneManager {
         this.mute = true;
         this.volume = 0.1;
 
+        // instruction spritesheet
+        this.spritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/tutorial_text.png");
+
         //Breath
         this.breathwidth = 100;
         this.loadLevel(this.level, this.title);
@@ -134,8 +137,13 @@ class SceneManager {
     // create all entities for the Title Screen
     titleScreen() {
 
-        let chickPlace = {x: 1200, y: 775, xneg: 500, xpos: 1200};
-        let hakuPlace = {x: -750, y: 825};
+        this.chickPlace = {x: 2000, y: 775, xneg: 1500, xpos: 1500};
+        this.hakuPlace = {x: 1000, y: 825};
+        this.noFacePlace = {x: 2500, y: 700, scale: 0.75};
+        this.sootPlace = {x: 1300, y: 800};
+
+        this.text1 = new Animator(this.spritesheet, 0, 0, 130, 130, 1, 0.5, 11, false, true);
+        this.text2 = new Animator(this.spritesheet, 560, 0, 130, 130, 1, 0.5, 11, false, true);
 
         // Title Chihiro
         this.titlePlaque = new TitlePlaque(this.game);
@@ -145,9 +153,12 @@ class SceneManager {
         this.background = new BackGround(this.game, LEVEL.START_CANVAS.X,  LEVEL.START_CANVAS.Y);
         this.railing = new Railing(this.game, LEVEL.RAILING_LOCATION.X, LEVEL.RAILING_LOCATION.Y, PARAMS.CANVAS_WIDTH * (LEVEL.FRAME_COUNT - 3),
                                     BACKGROUND.RAILING.SCALE * BACKGROUND.RAILING.SIZE);
-        this.chick = new Chick(this.game, chickPlace.x, chickPlace.y, chickPlace.xneg, chickPlace.xpos);
         this.lamp = new Lamp(this.game, -950, 620, BACKGROUND.LAMP.SIZE * BACKGROUND.LAMP.SCALE.W);
-        // this.haku = new Haku(this.game, hakuPlace.x, hakuPlace.y);
+
+        this.chick = new Chick(this.game, this.chickPlace.x, this.chickPlace.y, this.chickPlace.xneg, this.chickPlace.xpos);
+        this.haku = new Haku(this.game, this.hakuPlace.x, this.hakuPlace.y);
+        this.noFace = new NoFace(this.game, this.noFacePlace.x, this.noFacePlace.y, this.noFacePlace.scale);
+
         this.buttons = new TitleButtons(this.game);
 
         this.buttons.mute = true;
@@ -192,7 +203,23 @@ class SceneManager {
     loadGame() {
         if (this.title) {
             this.game.addEntity(this.background);
+
+            for (var i = 0; i < 5; i++) {
+                let tree = LEVEL.TREE[i];
+                this.game.addEntity(new Tree(this.game, tree.X, tree.Y, tree.TYPE));
+            }
+            
             this.game.addEntity(this.railing);
+
+            for(var i=1; i < 2; i++){
+                let start_dir = getRandomInteger(0,1);
+                let sootArea= new Soot(gameEngine, LEVEL.SOOT_LOCATION[i].X, LEVEL.SOOT_LOCATION[i].Y, start_dir, LEVEL.SOOT_AREA[i].W, LEVEL.SOOT_AREA[i].H, LEVEL.SOOT_NUM[i]);
+                this.game.addEntity(sootArea);
+            }
+
+            this.game.addEntity(this.noFace );
+
+
             this.game.addEntity(this.ground);
             this.game.addEntity(this.titlePlaque);
             this.game.addEntity(this.buttons);
@@ -200,7 +227,11 @@ class SceneManager {
             this.game.addEntity(this.lamp);
             this.game.addEntity(this.chihiro);
             this.game.addEntity(this.chick);
-            // this.game.addEntity(this.haku);
+            this.game.addEntity(this.haku);
+            this.bathhouse = new Bathhouse(this.game, LEVEL.BATHHOUSE.X,  LEVEL.BATHHOUSE.Y);
+
+
+
         } else {
             this.bathhouse = new Bathhouse(this.game, LEVEL.BATHHOUSE.X,  LEVEL.BATHHOUSE.Y);
             this.game.addEntity(this.background);
@@ -289,12 +320,19 @@ class SceneManager {
             }
         }
 
-        if (this.title && this.game.click) {  // start button
-            if (this.game.click && this.game.click.y > 700 && this.game.click.y < 750 && this.game.click.x > 815  && this.game.click.x < 1003) {
-                this.title = false;
-                this.loadLevel(1, this.title);
-                this.loadLevelCount = this.loadLevelCount + 1;
-                this.game.click = false;
+        // START button
+        if (this.title && this.game.click) {  
+            // if (this.game.click && this.game.click.y > 700 && this.game.click.y < 750 && this.game.click.x > 815  && this.game.click.x < 1003) {
+            if (this.game.click && 
+                this.game.click.y  > BACKGROUND.BUTTONS[0].Y && 
+                this.game.click.y < BACKGROUND.BUTTONS[0].Y + BACKGROUND.START_BUTTON.H && 
+                this.game.click.x > BACKGROUND.BUTTONS[0].X  + BACKGROUND.START_PADDING && 
+                this.game.click.x < BACKGROUND.BUTTONS[0].X + BACKGROUND.START_BUTTON.W + BACKGROUND.START_PADDING) {
+
+                    this.title = false;
+                    this.loadLevel(1, this.title);
+                    this.loadLevelCount = this.loadLevelCount + 1;
+                    this.game.click = false;
             }
         }
 
@@ -376,6 +414,13 @@ class SceneManager {
 
     draw(ctx) {
         ctx.font = PARAMS.BLOCKWIDTH / 2 + 'px "Press Start 2P"';
+
+        if (this.title) {
+            this.text1.drawFrame(this.game.clockTick, ctx, this.chickPlace.x+50-this.game.camera.x, this.chickPlace.y - 100, 1);  
+            this.text1.drawFrame(this.game.clockTick, ctx, this.sootPlace.x+50-this.game.camera.x, this.sootPlace.y - 50, 1);  
+            this.text2.drawFrame(this.game.clockTick, ctx, this.hakuPlace.x+50-this.game.camera.x, this.hakuPlace.y - 100, 1);  
+            this.text2.drawFrame(this.game.clockTick, ctx, this.noFacePlace.x+50-this.game.camera.x, this.noFacePlace.y - 100, 1);  
+        }
 
         if (PARAMS.DEBUG && !this.title && !this.chihiro.winGame) {
             ctx.strokeStyle = "White";

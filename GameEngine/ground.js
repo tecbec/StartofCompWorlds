@@ -25,11 +25,13 @@ var BACKGROUND = {
                      {X: 10700, Y: 500,      SPRITEX: 0, SPRITEY: 192,   NUM_FRAMES: 21,     DUR: 0.15,      SCALE: 2},     // index = 8 
                      {X: 10800, Y: 550,      SPRITEX: 0, SPRITEY: 384,   NUM_FRAMES: 21,     DUR: 0.1,       SCALE: 2}],    // index = 9
 
-    BUTTONS:       [{X: 800,   Y: 600,      SPRITEX: 0, SPRITEY: 0,     SWIDTH: 48,         SHEIGHT: 16,    SCALE: 4},
-                    {X: 125,   Y: 1045,     SPRITEX: 0, SPRITEY: 16,    SWIDTH: 48,         SHEIGHT: 16,    SCALE: 1.5},
-                    {X: 250,   Y: 1045,     SPRITEX: 0, SPRITEY: 32,    SWIDTH: 48,         SHEIGHT: 16,    SCALE: 1.5}],
+    // BUTTONS:       [{X: 800,   Y: 600,      SPRITEX: 0, SPRITEY: 0,     SWIDTH: 48,         SHEIGHT: 16,    SCALE: 4},    // start
+    BUTTONS:       [{X: -25,   Y: 600,      SPRITEX: 0, SPRITEY: 0,     SWIDTH: 48,         SHEIGHT: 16,    SCALE: 4},    // start
+                    {X: 125,   Y: 1045,     SPRITEX: 0, SPRITEY: 16,    SWIDTH: 48,         SHEIGHT: 16,    SCALE: 1.5},  // debug
+                    {X: 250,   Y: 1045,     SPRITEX: 0, SPRITEY: 32,    SWIDTH: 48,         SHEIGHT: 16,    SCALE: 1.5}], // mute
 
-    START_BUTTON:  {W: 200, H: 100},
+    START_BUTTON:  {W: 200, H: 75},
+    START_PADDING: 800,
 
     VOLUMEUP:      {X: 475,   Y: 1000,      SPRITEX: 0, SPRITEY: 16,     SWIDTH: 16,         SHEIGHT: 16,    SCALE: 2},
     VOLUMEDOWN:    {X: 475,   Y: 1040,      SPRITEX: 0, SPRITEY: 0,      SWIDTH: 16,         SHEIGHT: 16,    SCALE: 2},
@@ -99,18 +101,22 @@ class TitleButtons {
         if(this.game.camera.title) {
             // Start
             if (this.game.mouse && 
-                this.game.mouse.y > BACKGROUND.BUTTONS[0].Y && this.game.mouse.y < BACKGROUND.BUTTONS[0].Y+BACKGROUND.START_BUTTON.H && 
-                this.game.mouse.x > BACKGROUND.BUTTONS[0].X  && this.game.mouse.x < BACKGROUND.BUTTONS[0].X+BACKGROUND.START_BUTTON.W) {   
+                this.game.mouse.y > BACKGROUND.BUTTONS[0].Y && 
+                this.game.mouse.y < BACKGROUND.BUTTONS[0].Y + BACKGROUND.START_BUTTON.H && 
+                this.game.mouse.x > BACKGROUND.BUTTONS[0].X  + BACKGROUND.START_PADDING && 
+                this.game.mouse.x < BACKGROUND.BUTTONS[0].X + BACKGROUND.START_BUTTON.W + BACKGROUND.START_PADDING) {   
                 ctx.drawImage(  this.spritesheet,
                     BACKGROUND.BUTTONS[0].SPRITEX+BACKGROUND.BUTTONS[0].SWIDTH,     BACKGROUND.BUTTONS[0].SPRITEY,             // x and y of the spritesheet
                     BACKGROUND.BUTTONS[0].SWIDTH,                                   BACKGROUND.BUTTONS[0].SHEIGHT,             // width and height of the spritesheet
-                    BACKGROUND.BUTTONS[0].X,                                        BACKGROUND.BUTTONS[0].Y,                   // x and y of the canvas
+                    BACKGROUND.BUTTONS[0].X-this.game.camera.x,                     BACKGROUND.BUTTONS[0].Y,                   // x and y of the canvas
+                    // BACKGROUND.BUTTONS[0].X,                                        BACKGROUND.BUTTONS[0].Y,                   // x and y of the canvas
                     BACKGROUND.BUTTONS[0].SWIDTH * BACKGROUND.BUTTONS[0].SCALE,      BACKGROUND.BUTTONS[0].SHEIGHT * BACKGROUND.BUTTONS[0].SCALE);                      // width and height of the canvas
             } else {
                 ctx.drawImage(  this.spritesheet,
                     BACKGROUND.BUTTONS[0].SPRITEX,                                  BACKGROUND.BUTTONS[0].SPRITEY,             // x and y of the spritesheet
                     BACKGROUND.BUTTONS[0].SWIDTH,                                   BACKGROUND.BUTTONS[0].SHEIGHT,             // width and height of the spritesheet
-                    BACKGROUND.BUTTONS[0].X,                                        BACKGROUND.BUTTONS[0].Y,                   // x and y of the canvas
+                    BACKGROUND.BUTTONS[0].X-this.game.camera.x,                     BACKGROUND.BUTTONS[0].Y,                   // x and y of the canvas
+                    // BACKGROUND.BUTTONS[0].X,                                        BACKGROUND.BUTTONS[0].Y,                   // x and y of the canvas
                     BACKGROUND.BUTTONS[0].SWIDTH * BACKGROUND.BUTTONS[0].SCALE,     BACKGROUND.BUTTONS[0].SHEIGHT * BACKGROUND.BUTTONS[0].SCALE);                      // width and height of the canvas
             }
         }
