@@ -13,8 +13,8 @@ var CHIHIRO = {
     DEAD:   {RIGHT: {X: 0,  Y: 420},  LEFT: {X: 0,  Y: 490},  FRAME: 3, SPEED: 0.12, PADDING: 0, REVERSE: false, LOOP: false},
     CROUCH_WALK: {RIGHT: {X: 0,  Y: 700}, LEFT: {X: 0,  Y: 770}, FRAME: 4, SPEED: 0.33, PADDING: 0, REVERSE: false, LOOP: true},
     BREATH_BAR:  {X: 1700, Y: 10, HEIGHT: 10, MAX: 100},
-    COIN_COUNTER:{X: 1620, Y: 7.25},
-    BUBBLE_COUNTER:{X: 1530, Y: 7.0}
+    COIN_COUNTER:{X: 1600, Y: 7.25},
+    BUBBLE_COUNTER:{X: 1500, Y: 6.7}
 };
 /* Chihiro, the main character of the game */
 class Player {
@@ -461,7 +461,7 @@ class Player {
                 if (entity instanceof Portal) {
                     that.powerup = true; 
                     entity.removeFromWorld = true;
-                    that.game.camera.bubbleCounter.bubbleCount = 6;
+                    that.game.camera.bubbleCounter.bubbleCount += 6;
 
                 }
 
@@ -527,7 +527,7 @@ class Player {
                         that.game.camera.bubbleCounter.bubbleCount --;
 
                 }
-            if (this.counter > 5) {
+            if ( that.game.camera.bubbleCounter.bubbleCount == 0) {
                 this.powerup = false;  
             }
         }
