@@ -13,7 +13,8 @@ var CHIHIRO = {
     DEAD:   {RIGHT: {X: 0,  Y: 420},  LEFT: {X: 0,  Y: 490},  FRAME: 3, SPEED: 0.12, PADDING: 0, REVERSE: false, LOOP: false},
     CROUCH_WALK: {RIGHT: {X: 0,  Y: 700}, LEFT: {X: 0,  Y: 770}, FRAME: 4, SPEED: 0.33, PADDING: 0, REVERSE: false, LOOP: true},
     BREATH_BAR:  {X: 1700, Y: 10, HEIGHT: 10, MAX: 100},
-    COIN_COUNTER:{X: 1620, Y: 7.25}
+    COIN_COUNTER:{X: 1620, Y: 7.25},
+    BUBBLE_COUNTER:{X: 1530, Y: 7.0}
 };
 /* Chihiro, the main character of the game */
 class Player {
@@ -458,10 +459,12 @@ class Player {
                 }
 
                 if (entity instanceof Portal) {
-                    console.log("instanceof");
                     that.powerup = true; 
                     entity.removeFromWorld = true;
+                    that.game.camera.bubbleCounter.bubbleCount = 6;
+
                 }
+
             }
 
             if (entity instanceof StoneLamp && that.BB.collide(entity.BBmiddle)) {
@@ -516,13 +519,15 @@ class Player {
 
         if (this.powerup == true) {
             this.elapsedTime += TICK; 
-            this.bubbleTime += TICK; 
+            //this.bubbleTime += TICK; 
             if (this.game.shoot && this.elapsedTime > 1 ){
                 this.game.addEntity(new BubblesController(this.game, this.getX()+ this.getWidth(), this.getY(),  this.facing));
                         this.elapsedTime = 0;
                         this.counter++; //once you shoot 7 bubbles then no more bubbles for you
+                        that.game.camera.bubbleCounter.bubbleCount --;
+
                 }
-            if (this.bubbleTime > 5) {
+            if (this.counter > 5) {
                 this.powerup = false;  
             }
         }

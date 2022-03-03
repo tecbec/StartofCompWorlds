@@ -10,8 +10,6 @@ ASSET_MANAGER.queueDownload("./GameEngine/sprites/Chihiro_spritesheet.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/cloud-Sheet.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/tree-sheet.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/stonelamp.png");
-ASSET_MANAGER.queueDownload("./GameEngine/sprites/stonelampTop.png");
-ASSET_MANAGER.queueDownload("./GameEngine/sprites/stonelampTop.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/lamp.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/flame.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/railing.png");

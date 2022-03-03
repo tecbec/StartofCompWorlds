@@ -13,6 +13,7 @@
     TREE:[{X: 567, Y: 276, TYPE:3}, {X: 2538, Y: 0, TYPE:1}, {X: 3231, Y: 276, TYPE:2}, {X: 5543, Y: 0, TYPE:1}, {X: 6527, Y: 276, TYPE:2}, {X: 7816, Y: 276, TYPE:0}, {X: 8274, Y: 276, TYPE:3}],
     END_SCREEN: {X: 250, Y: 100},
     BATHHOUSE: {X: 11608, Y: - 1200},
+
     PLATFORM_LOCATION:       [{X: 790,  Y: 550, TYPE: 0}, {X: 1100, Y: 375, TYPE: 0}, {X: 1400, Y: 500, TYPE: 0}, {X: 1900, Y: 390, TYPE: 0}, {X: 2200, Y: 590, TYPE: 0},    // scene 1
                               {X: 2600, Y: 590, TYPE: 0}, {X: 2750, Y: 450, TYPE: 0}, {X: 3300, Y: 575, TYPE: 0}, {X: 3500, Y: 400, TYPE: 0}, {X: 4000, Y: 600, TYPE: 0},    // scene 2
                               {X: 5602, Y: 525, TYPE: 0}, {X: 5919, Y: 525, TYPE: 0},                                                                                        // scene 3
@@ -28,8 +29,8 @@
     STONE_LAMP_LOCATION: [{X: 1000, Y: 600}, {X: 1800, Y: 600}, {X: 2902, Y: 600}, {X: 3702, Y: 600}, {X: 5255, Y: 600},
                           {X: 6706, Y: 600}, {X: 7506, Y: 600}, // Scene 4 - 800 px between each stone lamp, 500 px between first lamp and stone lamp
                           {X: 9059, Y: 600}],                   // Scene 5
-
-
+    //                      1                       2                 3                4
+    PORTAL_LOCATION: [{X: 820,  Y: 390}, {X: 2850, Y: 120}, {X: 3902, Y: 800}, {X: 7000, Y:120}],
     /* Start of Frame:     1                   2                 3                 4                 5                   6                   7*/
     LAMP_LOCATION: [{X:500, Y: 650},   {X:2402,  Y: 650}, {X:4304, Y: 650}, {X:6206, Y: 650}, {X:8108, Y: 650}, {X:10010, Y: 650},],// {X:11912, Y: 650}
                     //{X:13814, Y: 650}, {X:15716, Y: 650},],
@@ -50,11 +51,11 @@
     
     COIN_LOCATION: [{X: 100,  Y: 895},{X: 125,  Y: 895}, {X: 150,  Y: 895}, {X: 175, Y: 895},  {X: 200,  Y: 895}, {X: 225,  Y: 895},
                     {X: 250,  Y: 895},{X: 275,  Y: 895}, {X: 300,  Y: 895}, {X: 325,  Y: 895},                                          // scene 0
-                    {X: 900,  Y: 500},{X: 1200, Y: 295}, {X: 1500, Y: 450}, {X: 2000, Y: 340}, {X: 2300, Y: 540}, {X: 1100, Y: 650},
-                    {X: 1900, Y: 650},{X: 1400, Y: 900}, {X: 1550, Y: 900}, {X: 1700, Y: 900}, {X: 2100, Y: 900},                      // scene 1
-                    {X: 2675, Y: 525},{X: 2800, Y: 390}, {X: 3400, Y: 520}, {X: 3600, Y: 330}, {X: 4050, Y: 540}, {X: 3800, Y: 650},
-                    {X: 3000, Y: 650},{X: 3350, Y: 900}, {X: 3400, Y: 900}, {X: 3450, Y: 900}, {X: 4100, Y: 900},                      // scene 2
-                    {X: 4360, Y: 60}, {X: 4772, Y: 215}, {X: 5305, Y: 50},  {X: 5810, Y: 70},  {X: 5255, Y: 650}, {X: 5440, Y: 650},
+                    {X: 900,  Y: 500},{X: 1200, Y: 295}, {X: 1500, Y: 450}, {X: 2000, Y: 340}, {X: 2300, Y: 540}, {X: 1150, Y: 600},
+                    {X: 1950, Y: 600},{X: 1400, Y: 900}, {X: 1550, Y: 900}, {X: 1700, Y: 900}, {X: 2100, Y: 900},                      // scene 1
+                    {X: 2675, Y: 525},{X: 2800, Y: 390}, {X: 3400, Y: 520}, {X: 3600, Y: 330}, {X: 4050, Y: 540}, {X: 3850, Y: 600},
+                    {X: 3050, Y: 600},{X: 3350, Y: 900}, {X: 3400, Y: 900}, {X: 3450, Y: 900}, {X: 4100, Y: 900},                      // scene 2
+                    {X: 4360, Y: 60}, {X: 4772, Y: 215}, {X: 5305, Y: 50},  {X: 5810, Y: 70},  {X: 5245, Y: 600}, {X: 5400, Y: 600},
                     {X: 4621, Y: 895},{X: 4938, Y: 895}, {X: 4719, Y: 37},  {X: 5059, Y: 138},                                         // scene 3
                     {X: 6550, Y: 475},{X: 6750, Y: 150}, {X: 7075, Y: 240}, {X: 7175, Y: 550}, {X: 7475, Y: 350}, {X: 7975, Y: 640},
                     {X: 6500, Y: 895},{X: 7000, Y: 895}, {X: 7100, Y: 895}, {X: 7200, Y: 895},                                         // scene 4
@@ -65,6 +66,7 @@
                 ],
 
     NOFACE_SCALE: 0.5,
+
     NOFACE_LOCATION: [{X: 3200, Y: 100},  // scene 2
                       {X: 7000, Y: 0}, ], // scene 4
 
@@ -163,6 +165,8 @@ class SceneManager {
 
             // initialization of the breath bar and counter
             this.coinCounter = new CoinCounter(this.game, CHIHIRO.COIN_COUNTER.X, CHIHIRO.COIN_COUNTER.Y);
+            this.bubbleCounter = new BubbleCounter(this.game, CHIHIRO.BUBBLE_COUNTER.X, CHIHIRO.BUBBLE_COUNTER.Y);
+
             this.breathbar = new BreathBar(this.game, CHIHIRO.BREATH_BAR.X, CHIHIRO.BREATH_BAR.Y, this.breathwidth,
                 CHIHIRO.BREATH_BAR.HEIGHT * PARAMS.SCALE, CHIHIRO.BREATH_BAR.MAX);
         }
@@ -241,6 +245,11 @@ class SceneManager {
                 this.game.addEntity(new Coins(this.game, coin.X, coin.Y));
             }
 
+            for (var i = 0; i < LEVEL.PORTAL_LOCATION.length; i++) {
+                let portal = LEVEL.PORTAL_LOCATION[i];
+                this.game.addEntity(new Portal(this.game, portal.X, portal.Y));
+            }
+
             for (var i = 0; i < LEVEL.CHICK_LOCATION.length; i++) {
                 let chick = LEVEL.CHICK_LOCATION[i];
                 this.game.addEntity(new Chick(this.game, chick.X, chick.Y, chick.MIN, chick.MAX, chick.DIR));
@@ -251,6 +260,7 @@ class SceneManager {
                 this.game.addEntity(new Radish(this.game, radish.X, radish.Y));
             }
 
+
             this.game.addEntity(this.chihiro);
 
             for (var i = 0; i < LEVEL.HAKU_LOCATION.length; i++) {
@@ -260,6 +270,7 @@ class SceneManager {
 
             this.game.addEntity(this.breathbar);
             this.game.addEntity(this.coinCounter);
+            this.game.addEntity(this.bubbleCounter);
             this.game.addEntity(new Fireworks(this.game));
             this.game.addEntity(new EndScreen(this.game, this.level, LEVEL.END_SCREEN.X, LEVEL.END_SCREEN.Y));
          
