@@ -31,8 +31,15 @@ ASSET_MANAGER.queueDownload("./GameEngine/sprites/youwin_text.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/title-buttons.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/volume.png");
 
-// music
+// music 
 ASSET_MANAGER.queueDownload("./GameEngine/audio/OneSummersDay.mp3");
+
+//  sound effects 
+ASSET_MANAGER.queueDownload("./GameEngine/audio/effort-jump.mp3");
+ASSET_MANAGER.queueDownload("./GameEngine/audio/jump.wav"); //not used
+ASSET_MANAGER.queueDownload("./GameEngine/audio/jump2.wav"); //not used
+ASSET_MANAGER.queueDownload("./GameEngine/audio/power-up.mp3");
+ASSET_MANAGER.queueDownload("./GameEngine/audio/coin-collection.wav");
 
 ASSET_MANAGER.downloadAll(() => {
 

@@ -14,7 +14,10 @@ var CHIHIRO = {
     CROUCH_WALK: {RIGHT: {X: 0,  Y: 700}, LEFT: {X: 0,  Y: 770}, FRAME: 4, SPEED: 0.33, PADDING: 0, REVERSE: false, LOOP: true},
     BREATH_BAR:  {X: 1700, Y: 10, HEIGHT: 10, MAX: 100},
     COIN_COUNTER:{X: 1600, Y: 7.25},
-    BUBBLE_COUNTER:{X: 1500, Y: 6.7}
+    BUBBLE_COUNTER:{X: 1500, Y: 6.7},
+    JUMP_SOUND: "./GameEngine/audio/jump2.wav",
+    COIN_SOUND: "./GameEngine/audio/coin-collection.wav",
+    PORTAL_SOUND: "./GameEngine/audio/power-up.mp3"
 };
 /* Chihiro, the main character of the game */
 class Player {
@@ -234,9 +237,10 @@ class Player {
                 this.jumping = true;
                 this.velocity.y = -250 * PARAMS.SCALE;
                 this.state = 2; 
+                ASSET_MANAGER.playAsset(CHIHIRO.JUMP_SOUND);
             } else {
                 // set the default idle if not anything else.
-                this.state = 0;
+                this.state = 0; 
                 this.velocity.y = 0;
             }
 
@@ -456,12 +460,16 @@ class Player {
                 if (entity instanceof Coins) {
                     entity.removeFromWorld = true;
                     that.game.camera.coinCounter.coinCount ++;
+                    ASSET_MANAGER.playAsset(CHIHIRO.COIN_SOUND);
+
                 }
 
                 if (entity instanceof Portal) {
                     that.powerup = true; 
                     entity.removeFromWorld = true;
                     that.game.camera.bubbleCounter.bubbleCount += 6;
+                    ASSET_MANAGER.playAsset(CHIHIRO.PORTAL_SOUND);
+
 
                 }
 

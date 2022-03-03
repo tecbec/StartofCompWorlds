@@ -271,7 +271,7 @@ class SceneManager {
             this.game.addEntity(this.breathbar);
             this.game.addEntity(this.coinCounter);
             this.game.addEntity(this.bubbleCounter);
-            this.game.addEntity(new Fireworks(this.game));
+           // this.game.addEntity(new Fireworks(this.game));
             this.game.addEntity(new EndScreen(this.game, this.level, LEVEL.END_SCREEN.X, LEVEL.END_SCREEN.Y));
          
             this.game.addEntity(this.buttons);
@@ -283,7 +283,7 @@ class SceneManager {
     };
 
     update() {
-        this.mute = true;
+       // this.mute = true;
         this.updateAudio();
         // canvas width = 400
         // blockwidth = 32 * 1 = 32
