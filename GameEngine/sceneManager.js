@@ -283,6 +283,7 @@ class SceneManager {
     };
 
     update() {
+
        // this.mute = true;
         this.updateAudio();
         // canvas width = 400
@@ -378,6 +379,7 @@ class SceneManager {
         // PARAMS.DEBUG = document.getElementById("debug").checked;
     };
 
+          
     draw(ctx) {
         ctx.font = PARAMS.BLOCKWIDTH / 2 + 'px "Press Start 2P"';
 

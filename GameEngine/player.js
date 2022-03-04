@@ -174,6 +174,8 @@ class Player {
 
     /* Draw the images onto the screen */
     draw(ctx) {
+        
+        
         this.animations[this.state][this.facing].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, this.chihiroScale);
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
