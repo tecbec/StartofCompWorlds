@@ -137,13 +137,10 @@ class SceneManager {
     // create all entities for the Title Screen
     titleScreen() {
 
-        this.chickPlace = {x: 2000, y: 775, xneg: 1500, xpos: 1500};
-        this.hakuPlace = {x: 1000, y: 825};
-        this.noFacePlace = {x: 2500, y: 700, scale: 0.75};
-        this.sootPlace = {x: 1300, y: 800};
-
-        this.text1 = new Animator(this.spritesheet, 0, 0, 130, 130, 1, 0.5, 11, false, true);
-        this.text2 = new Animator(this.spritesheet, 560, 0, 130, 130, 1, 0.5, 11, false, true);
+        this.chickPlace = {x: LEVEL.STONE_LAMP_LOCATION[1].X, y: 775, xneg: LEVEL.STONE_LAMP_LOCATION[0].X, xpos: LEVEL.STONE_LAMP_LOCATION[1].X};
+        this.sootPlace = {x: LEVEL.STONE_LAMP_LOCATION[1].X - 500, y: 800};
+        this.hakuPlace = {x: LEVEL.LAMP_LOCATION[1].X-300, y: 825};
+        this.noFacePlace = {x: LEVEL.LAMP_LOCATION[1].X+200, y: 700, scale: 0.75};
 
         // Title Chihiro
         this.titlePlaque = new TitlePlaque(this.game);
@@ -158,6 +155,9 @@ class SceneManager {
         this.chick = new Chick(this.game, this.chickPlace.x, this.chickPlace.y, this.chickPlace.xneg, this.chickPlace.xpos);
         this.haku = new Haku(this.game, this.hakuPlace.x, this.hakuPlace.y);
         this.noFace = new NoFace(this.game, this.noFacePlace.x, this.noFacePlace.y, this.noFacePlace.scale);
+
+        this.soot= new Soot(gameEngine, this.sootPlace.x, this.sootPlace.y, 1, 170, 30 ,2);
+
 
         this.buttons = new TitleButtons(this.game);
 
@@ -203,24 +203,16 @@ class SceneManager {
     loadGame() {
         if (this.title) {
             this.game.addEntity(this.background);
-
             for (var i = 0; i < 5; i++) {
                 let tree = LEVEL.TREE[i];
                 this.game.addEntity(new Tree(this.game, tree.X, tree.Y, tree.TYPE));
             }
-            
-            this.game.addEntity(this.railing);
-
-            for(var i=1; i < 2; i++){
-                let start_dir = getRandomInteger(0,1);
-                let sootArea= new Soot(gameEngine, LEVEL.SOOT_LOCATION[i].X, LEVEL.SOOT_LOCATION[i].Y, start_dir, LEVEL.SOOT_AREA[i].W, LEVEL.SOOT_AREA[i].H, LEVEL.SOOT_NUM[i]);
-                this.game.addEntity(sootArea);
-            }
-
-            this.game.addEntity(this.noFace );
-
 
             this.game.addEntity(this.ground);
+            this.game.addEntity(this.railing);
+            this.game.addEntity(this.soot);
+            this.game.addEntity(this.noFace);
+
             this.game.addEntity(this.titlePlaque);
             this.game.addEntity(this.buttons);
             this.game.addEntity(new Fireworks(this.game));
@@ -228,9 +220,17 @@ class SceneManager {
             this.game.addEntity(this.chihiro);
             this.game.addEntity(this.chick);
             this.game.addEntity(this.haku);
-            this.bathhouse = new Bathhouse(this.game, LEVEL.BATHHOUSE.X,  LEVEL.BATHHOUSE.Y);
+            for(var i=0; i < 2; i++){
+                let lamp = LEVEL.LAMP_LOCATION[i];
+                this.game.addEntity(new Lamp(this.game, lamp.X, lamp.Y, BACKGROUND.LAMP.SIZE * BACKGROUND.LAMP.SCALE.W) );
+            }
 
+            for(var i=0; i < 2; i++){
+                let stone_lamp = LEVEL.STONE_LAMP_LOCATION[i];
+                this.game.addEntity(new StoneLamp(this.game, stone_lamp.X, stone_lamp.Y, BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE) );
+            }
 
+            this.bathhouse = new Bathhouse(this.game, 4000,  LEVEL.BATHHOUSE.Y);
 
         } else {
             this.bathhouse = new Bathhouse(this.game, LEVEL.BATHHOUSE.X,  LEVEL.BATHHOUSE.Y);
@@ -415,12 +415,12 @@ class SceneManager {
     draw(ctx) {
         ctx.font = PARAMS.BLOCKWIDTH / 2 + 'px "Press Start 2P"';
 
-        if (this.title) {
-            this.text1.drawFrame(this.game.clockTick, ctx, this.chickPlace.x+50-this.game.camera.x, this.chickPlace.y - 100, 1);  
-            this.text1.drawFrame(this.game.clockTick, ctx, this.sootPlace.x+50-this.game.camera.x, this.sootPlace.y - 50, 1);  
-            this.text2.drawFrame(this.game.clockTick, ctx, this.hakuPlace.x+50-this.game.camera.x, this.hakuPlace.y - 100, 1);  
-            this.text2.drawFrame(this.game.clockTick, ctx, this.noFacePlace.x+50-this.game.camera.x, this.noFacePlace.y - 100, 1);  
-        }
+        // if (this.title) {
+        //     this.text1.drawFrame(this.game.clockTick, ctx, this.chickPlace.x+50-this.game.camera.x, this.chickPlace.y - 100, 1);  
+        //     this.text1.drawFrame(this.game.clockTick, ctx, this.sootPlace.x+50-this.game.camera.x, this.sootPlace.y - 50, 1);  
+        //     this.text2.drawFrame(this.game.clockTick, ctx, this.hakuPlace.x+50-this.game.camera.x, this.hakuPlace.y - 100, 1);  
+        //     this.text2.drawFrame(this.game.clockTick, ctx, this.noFacePlace.x+50-this.game.camera.x, this.noFacePlace.y - 100, 1);  
+        // }
 
         if (PARAMS.DEBUG && !this.title && !this.chihiro.winGame) {
             ctx.strokeStyle = "White";
