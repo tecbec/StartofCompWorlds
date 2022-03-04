@@ -154,6 +154,7 @@ class CoinCounter {
     update(){
 
     };
+    
 
     draw(ctx){
         if (!this.game.camera.chihiro.winGame) {

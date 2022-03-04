@@ -3,8 +3,6 @@ class BreathBar {
     // use this to avoid inheriting a health bar
     constructor(game, x, y, width, height) {
         Object.assign(this, {game, x, y, width, height});
-       //  this.spritesheet = new Animator( ASSET_MANAGER.getAsset("./GameEngine/sprites/radish.png"), 0, 0, this.width, 
-      //  this.height, this.frameCount, this.frameDuration, 0, false, true);
         /* this.x and this.y set the top left corner of the breathbar */
         /* this.width and this.height are for the dimensions of the blue bar */
 
@@ -41,3 +39,27 @@ class BreathBar {
     };
 };
 
+class BreathBarOutline {
+    // the agent is the player it is a has a relationship chihiro has a breath bar
+    // use this to avoid inheriting a health bar
+    constructor(game, x, y) {
+        Object.assign(this, {game, x, y});
+        this.width = 93;
+        this.height =  14;
+        this.frameCount = 1;  
+      this.animation = new Animator( ASSET_MANAGER.getAsset("./GameEngine/sprites/healthbar.png"), 0, 0, this.width, 
+        this.height , this.frameCount, 1, 0, false, true);
+    };
+
+    update(){
+
+    };
+
+    draw(ctx){
+        this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y, PARAMS.SCALE * 1.5);
+        ctx.imageSmoothingEnabled = false;
+
+
+    };
+
+}

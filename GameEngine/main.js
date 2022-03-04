@@ -30,6 +30,7 @@ ASSET_MANAGER.queueDownload("./GameEngine/sprites/haku_text.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/youwin_text.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/title-buttons.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/volume.png");
+ASSET_MANAGER.queueDownload("./GameEngine/sprites/healthbar.png");
 
 // music 
 ASSET_MANAGER.queueDownload("./GameEngine/audio/OneSummersDay.mp3");

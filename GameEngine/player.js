@@ -12,9 +12,9 @@ var CHIHIRO = {
     RUN:    {RIGHT: {X: 0,  Y: 140},  LEFT: {X: 0,  Y: 210},  FRAME: 4, SPEED: 0.1, PADDING: 0, REVERSE: false, LOOP: true},
     DEAD:   {RIGHT: {X: 0,  Y: 420},  LEFT: {X: 0,  Y: 490},  FRAME: 3, SPEED: 0.12, PADDING: 0, REVERSE: false, LOOP: false},
     CROUCH_WALK: {RIGHT: {X: 0,  Y: 700}, LEFT: {X: 0,  Y: 770}, FRAME: 4, SPEED: 0.33, PADDING: 0, REVERSE: false, LOOP: true},
-    BREATH_BAR:  {X: 1700, Y: 10, HEIGHT: 10, MAX: 100},
-    COIN_COUNTER:{X: 1600, Y: 7.25},
-    BUBBLE_COUNTER:{X: 1500, Y: 6.7},
+    BREATH_BAR:  {X: 1612, Y: 18, HEIGHT: 17, MAX: 100},
+    COIN_COUNTER:{X: 1400, Y: 15},
+    BUBBLE_COUNTER:{X: 1500, Y: 15},
     JUMP_SOUND: "./GameEngine/audio/jump2.wav",
     COIN_SOUND: "./GameEngine/audio/coin-collection.wav",
     PORTAL_SOUND: "./GameEngine/audio/power-up.mp3"

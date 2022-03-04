@@ -84,7 +84,9 @@
     YUBABA_INC: [4304, 6206, 8108, 10010], // x vals that trigger: entrance, crow drop, heat seeking crows, yubaba exit
 
     /*    frame:            1             3              */
-    HAKU_LOCATION: [{X:500, Y:850, TEXT: 1},{X:5305, Y:575, TEXT: 2}, {X: 10056, Y:820, TEXT: 3}]
+    HAKU_LOCATION: [{X:500, Y:850, TEXT: 1},{X:5305, Y:575, TEXT: 2}, {X: 10056, Y:820, TEXT: 3}],
+
+    BREATH_BAR_OUTLINE: {X: 1600,Y: 10 }
 }
 
 class SceneManager {
@@ -169,6 +171,7 @@ class SceneManager {
 
             this.breathbar = new BreathBar(this.game, CHIHIRO.BREATH_BAR.X, CHIHIRO.BREATH_BAR.Y, this.breathwidth,
                 CHIHIRO.BREATH_BAR.HEIGHT * PARAMS.SCALE, CHIHIRO.BREATH_BAR.MAX);
+            this.breathbarOutline  = new BreathBarOutline (this.game, LEVEL.BREATH_BAR_OUTLINE.X, LEVEL.BREATH_BAR_OUTLINE.Y );
         }
 
         this.loadGame();
@@ -267,8 +270,9 @@ class SceneManager {
                 let haku = LEVEL.HAKU_LOCATION[i];
                 this.game.addEntity(new Haku(this.game, haku.X, haku.Y, haku.TEXT));
             }
-
             this.game.addEntity(this.breathbar);
+            this.game.addEntity(this.breathbarOutline);
+
             this.game.addEntity(this.coinCounter);
             this.game.addEntity(this.bubbleCounter);
            // this.game.addEntity(new Fireworks(this.game));
