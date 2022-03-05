@@ -101,7 +101,8 @@ class SceneManager {
         this.level = 1;
         this.gameOverCounter  = 0;
 
-
+        this.instructionsOpened = false;
+        this.onInstructions = false;
         this.loadLevelCount = -1;
         // sound
         this.mute = true;
@@ -184,6 +185,12 @@ class SceneManager {
         }
     };
 
+    loadInstructions() {
+        if (!this.instructionsOpened) {
+            this.game.addEntity(new Instruction(this.game, 0, 0));
+        }
+        
+    }
     loadGame() {
         if (this.title) {
             this.game.addEntity(this.background);
@@ -194,7 +201,7 @@ class SceneManager {
             this.game.addEntity(new Fireworks(this.game));
             this.game.addEntity(this.lamp);
             this.game.addEntity(this.chihiro);
-            //this.game.addEntity(new Instruction(this.game, 0, 0));
+            //
             //this.game.addEntity(this.chick);
             // this.game.addEntity(this.haku);
         } else {
@@ -298,8 +305,8 @@ class SceneManager {
     };
 
     update() {
-        // PARAMS.DEBUG = true;
-        // this.mute = true;
+        PARAMS.DEBUG = true;
+        this.mute = true;
         this.updateAudio();
         // canvas width = 400
         // blockwidth = 32 * 1 = 32
@@ -312,14 +319,24 @@ class SceneManager {
             }
         }
 
-        if (this.title && this.game.click) {  // start button
-            if (this.game.click && this.game.click.y > 700 && this.game.click.y < 750 && this.game.click.x > 815  && this.game.click.x < 1003) {
+        if (this.title && this.game.click && !this.onInstructions) {  // start button
+            if (this.game.click && this.game.click.y > 608 && this.game.click.y < 658 && this.game.click.x > 815  && this.game.click.x < 1003) {
                 this.title = false;
                 this.loadLevel(1, this.title);
                 this.loadLevelCount = this.loadLevelCount + 1;
                 this.game.click = false;
+             
             }
         }
+
+        if (this.title && !this.instructionsOpened && this.game.click && !this.onInstructions) {  // start button
+            if (this.title && !this.instructionsOpened && this.game.click && this.game.mouse.y > 700 && this.game.mouse.y < 750 && this.game.click.x > 723  && this.game.click.x < 1126) {
+                this.loadInstructions();
+                this.onInstructions = true;
+                this.instructionsOpened = false;
+                this.game.click = false;
+            } 
+        } 
 
         if (this.game.click) {
             // Debug

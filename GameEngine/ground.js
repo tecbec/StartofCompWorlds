@@ -25,9 +25,10 @@ var BACKGROUND = {
                      {X: 20200, Y: 500,      SPRITEX: 0, SPRITEY: 192,   NUM_FRAMES: 21,     DUR: 0.15,      SCALE: 2},     // index = 8 
                      {X: 20500, Y: 350,      SPRITEX: 0, SPRITEY: 384,   NUM_FRAMES: 21,     DUR: 0.1,       SCALE: 2}],    // index = 9
 
-    BUTTONS:       [{X: -10,   Y: 700,      SPRITEX: 0, SPRITEY: 0,     SWIDTH: 48,         SHEIGHT: 16,    SCALE: 4},
+    BUTTONS:       [{X: -10,   Y: 600,      SPRITEX: 0, SPRITEY: 0,     SWIDTH: 48,         SHEIGHT: 16,    SCALE: 4},
                     {X: 125,   Y: 1045,     SPRITEX: 0, SPRITEY: 16,    SWIDTH: 48,         SHEIGHT: 16,    SCALE: 1.5},
-                    {X: 250,   Y: 1045,     SPRITEX: 0, SPRITEY: 32,    SWIDTH: 48,         SHEIGHT: 16,    SCALE: 1.5}],
+                    {X: 250,   Y: 1045,     SPRITEX: 0, SPRITEY: 32,    SWIDTH: 48,         SHEIGHT: 16,    SCALE: 1.5},
+                    {X: -80,   Y: 700,      SPRITEX: 0, SPRITEY: 48,    SWIDTH: 96,         SHEIGHT: 16,    SCALE: 4}],
 
     VOLUMEUP:      {X: 475,   Y: 1000,      SPRITEX: 0, SPRITEY: 16,     SWIDTH: 16,         SHEIGHT: 16,    SCALE: 2},
     VOLUMEDOWN:    {X: 475,   Y: 1040,      SPRITEX: 0, SPRITEY: 0,      SWIDTH: 16,         SHEIGHT: 16,    SCALE: 2},
@@ -95,7 +96,21 @@ class TitleButtons {
 
     draw(ctx) {
         if(this.game.camera.title) {
-            if (this.game.mouse && this.game.mouse.y > 700 && this.game.mouse.y < 750 && this.game.mouse.x > 815  && this.game.mouse.x < 1003) {   // Start
+            if (this.game.mouse && this.game.mouse.y > 700 && this.game.mouse.y < 750 && this.game.mouse.x > 728  && this.game.mouse.x < 1113) {   // Start
+                ctx.drawImage(  this.spritesheet,
+                    BACKGROUND.BUTTONS[3].SPRITEX+BACKGROUND.BUTTONS[3].SWIDTH,     BACKGROUND.BUTTONS[3].SPRITEY,             // x and y of the spritesheet
+                    BACKGROUND.BUTTONS[3].SWIDTH,                                   BACKGROUND.BUTTONS[3].SHEIGHT,             // width and height of the spritesheet
+                    BACKGROUND.BUTTONS[3].X-this.game.camera.x,                     BACKGROUND.BUTTONS[3].Y,                   // x and y of the canvas
+                    BACKGROUND.BUTTONS[3].SWIDTH * BACKGROUND.BUTTONS[3].SCALE,      BACKGROUND.BUTTONS[3].SHEIGHT * BACKGROUND.BUTTONS[3].SCALE);                      // width and height of the canvas
+            } else {
+                ctx.drawImage(  this.spritesheet,
+                    BACKGROUND.BUTTONS[3].SPRITEX,                                  BACKGROUND.BUTTONS[3].SPRITEY,             // x and y of the spritesheet
+                    BACKGROUND.BUTTONS[3].SWIDTH,                                   BACKGROUND.BUTTONS[3].SHEIGHT,             // width and height of the spritesheet
+                    BACKGROUND.BUTTONS[3].X-this.game.camera.x,                     BACKGROUND.BUTTONS[3].Y,                   // x and y of the canvas
+                    BACKGROUND.BUTTONS[3].SWIDTH * BACKGROUND.BUTTONS[3].SCALE,     BACKGROUND.BUTTONS[3].SHEIGHT * BACKGROUND.BUTTONS[0].SCALE);                      // width and height of the canvas
+            }
+
+            if (this.game.mouse && this.game.mouse.y > 608 && this.game.mouse.y < 658 && this.game.mouse.x > 815  && this.game.mouse.x < 1003) {   // Start
                 ctx.drawImage(  this.spritesheet,
                     BACKGROUND.BUTTONS[0].SPRITEX+BACKGROUND.BUTTONS[0].SWIDTH,     BACKGROUND.BUTTONS[0].SPRITEY,             // x and y of the spritesheet
                     BACKGROUND.BUTTONS[0].SWIDTH,                                   BACKGROUND.BUTTONS[0].SHEIGHT,             // width and height of the spritesheet

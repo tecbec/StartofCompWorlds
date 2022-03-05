@@ -12,7 +12,7 @@ var CHIHIRO = {
     RUN:    {RIGHT: {X: 0,  Y: 140},  LEFT: {X: 0,  Y: 210},  FRAME: 4, SPEED: 0.1, PADDING: 0, REVERSE: false, LOOP: true},
     DEAD:   {RIGHT: {X: 0,  Y: 420},  LEFT: {X: 0,  Y: 490},  FRAME: 3, SPEED: 0.12, PADDING: 0, REVERSE: false, LOOP: false},
     CROUCH_WALK: {RIGHT: {X: 0,  Y: 700}, LEFT: {X: 0,  Y: 770}, FRAME: 4, SPEED: 0.33, PADDING: 0, REVERSE: false, LOOP: true},
-    VICTORY_DANCE:  {RIGHT: {X: 0,  Y: 840}, FRAME: 5, SPEED: 0.2, PADDING: 0, REVERSE: false, LOOP: true},
+    VICTORY_DANCE:  {RIGHT: {X: 0,  Y: 840}, LEFT: {X: 350, Y: 840}, FRAME: 5, SPEED: 0.2, PADDING: 0, REVERSE: false, LOOP: true},
     BREATH_BAR:  {X: 1700, Y: 10, HEIGHT: 10, MAX: 100},
     COIN_COUNTER:{X: 1620, Y: 7.25}
 };
@@ -147,13 +147,15 @@ class Player {
             CHIHIRO.CROUCH_WALK.FRAME, CHIHIRO.CROUCH_WALK.SPEED,
             CHIHIRO.CROUCH_WALK.PADDING, CHIHIRO.CROUCH_WALK.REVERSE, CHIHIRO.CROUCH_WALK.LOOP);
 
-
         // victory dance -> right
         this.animations[7][0] = new Animator (this.spritesheet, CHIHIRO.VICTORY_DANCE.RIGHT.X, CHIHIRO.VICTORY_DANCE.RIGHT.Y,
             CHIHIRO.SIZE, CHIHIRO.SIZE,
             CHIHIRO.VICTORY_DANCE.FRAME, CHIHIRO.VICTORY_DANCE.SPEED,
             CHIHIRO.VICTORY_DANCE.PADDING, CHIHIRO.VICTORY_DANCE.REVERSE, CHIHIRO.VICTORY_DANCE.LOOP);
-
+        this.animations[7][1] = new Animator (this.spritesheet, CHIHIRO.VICTORY_DANCE.LEFT.X, CHIHIRO.VICTORY_DANCE.LEFT.Y,
+            CHIHIRO.SIZE, CHIHIRO.SIZE,
+            CHIHIRO.VICTORY_DANCE.FRAME, CHIHIRO.VICTORY_DANCE.SPEED,
+            CHIHIRO.VICTORY_DANCE.PADDING, CHIHIRO.VICTORY_DANCE.REVERSE, CHIHIRO.VICTORY_DANCE.LOOP);
     };
 
     /* Update the bounding box of the player for collision detection */
@@ -339,9 +341,9 @@ class Player {
 
                 //Chihiro moves with clouds that are moving vertically 
                 if(entity instanceof CloudPlatform && (that.lastBB.bottom  <= entity.BB.top)){
-                    console.log("Collision with Player");
+                    //console.log("Collision with Player");
                     if(entity.moving){  
-                        console.log("Moving collision with Player");
+                        // console.log("Moving collision with Player");
                         if(!entity.vertical){
                             that.x += entity.speed * that.game.clockTick;
                         }
