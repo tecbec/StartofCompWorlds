@@ -475,7 +475,6 @@ class Player {
                         that.game.camera.breathwidth -= CHIHIRO.BREATH_BAR.MAX/4;
                         that.game.camera.changeBreath();
                         if (that.BB.collide(entity.leftBB)) { // left collision
-                            // maybe replace with a push animation?
                             that.setX(that.getX() - 50);
                             that.velocity.x = -100;
                          } else if (that.BB.collide(entity.rightBB)) { // right
@@ -586,8 +585,6 @@ class Player {
 
          //   if (this.deadCounter > 0.5) this.state = 0;
          //   if (this.deadCounter > 0.55) {
-           console.log( this.getY() + this.getHeight());
-           console.log( PARAMS.CANVAS_HEIGHT);
              if(this.getY() + this.getHeight() < 0){
                 this.game.camera.title = true;
                 this.game.camera.breathwidth = 100;

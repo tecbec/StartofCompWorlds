@@ -37,73 +37,47 @@ class Yubaba {
     }
 
     update(){
-        if(this.deathAnimation){
+        //Update animation
+        this.animator = this.animations[this.dir];
+
+        //Yuababa off screen - remove
+        if(this.y < (-this.height*this.scale - this.target.getHeight()) *2){
+            this.removeFromWorld = true;
+        }
+
+        if(this.deathAnimation){ //Chihiro died, end of game
             this.entrance();
             this.chihiroDeath();
         } else{
-
-            this.move();
-                    /* 
-            this.inc[0]: enter
+            /* 
+            this.inc[0]: Yubaba enter
             this.inc[1]: drop crows
             this.inc[2]: heat seeking crows
+            this.inc[3]: Yubaba exit           //swap these? / get rid of them?
+            this.inc[4]: Yubaba battle scene
             */
 
-            if(this.show){ // show Yubaba
-            this.entrance();
-
-            // update movement 
-            var inFrame = true;
-            if(this.x + this.width *this.scale >= PARAMS.CANVAS_WIDTH){  // too far right
-                    if(this.x > PARAMS.CANVAS_WIDTH + 5){ //outside of frame
-                        this.x = PARAMS.CANVAS_WIDTH;
-                    }
-
-                    this.speed = -Math.abs(this.speed); // *3 because need to speed up to catch up if out of frame
-                    this.animator = this.animations[1];
-                    this.dir = 1;
-                    inFrame = false;
-            }else if(this.x <= 0){ //too far left
-                    if(this.x < -this.width * this.scale - 5){ //outside of frame
-                        this.x = - this.width *this.scale;
-                    }
-
-                    this.speed = Math.abs(this.speed);  
-                    this.animator = this.animations[0];  
-                    this.dir = 0;   
-                    inFrame = false; 
+            // Yubaba enters
+            if(this.target.x > this.inc[0]){
+                this.show = true;
+                this.entrance();
             }
 
-            this.x += this.speed * this.game.clockTick;
-            this.x += (this.target.velocity.x * this.game.clockTick)*-2;
+            // Yubaba exit
+            if(this.target.x > this.inc[3]){
+                this.y -= Math.abs(this.speed * this.game.clockTick);
+            }
 
-                /* add start boolean for fluid enterance scene */
+            if(this.show){ 
+                this.move();
+                this.throwCrows();
+
+                // if(this.target.x > inc[4]){ //battlescene
+                //     if(this.hitpoints <= 0 ) {this.removeFromWorld = true;}
+                // }
 
                 this.updateBB();
-
-                // throw crows
-                if(this.target.x > this.inc[1]){ 
-                    if(this.target.x < this.inc[2]){ // drop regular crows
-                        this.elapsedTime += this.game.clockTick;
-                        if (this.elapsedTime > this.fireRate) { 
-                            this.elapsedTime = 0;
-                            this.game.addEntity(new Crow(this.game, this.BB.x, this.BB.y, this.target, false));
-                        }
-
-                    }else{ //drop heat seeking crows
-                        this.elapsedTime += this.game.clockTick;
-                        if (this.elapsedTime > this.fireRate) { 
-                            this.elapsedTime = 0;
-                            this.game.addEntity(new Crow(this.game, this.BB.x, this.BB.y, this.target, true));
-                        }
-
-                    }
-
-                }
-            }
-    
-          if(this.hitpoints <= 0 ) {this.removeFromWorld = true;}
-
+           }
         }
 
     };
@@ -139,52 +113,78 @@ class Yubaba {
         }
     };
 
+    throwCrows(){
+         // throw crows
+         if(this.target.x > this.inc[1]){ 
+            if(this.target.x < this.inc[2]){ // drop regular crows
+                this.elapsedTime += this.game.clockTick;
+                if (this.elapsedTime > this.fireRate) { 
+                    this.elapsedTime = 0;
+                    this.game.addEntity(new Crow(this.game, this.BB.x, this.BB.y, this.target, false));
+                }
+
+            }else{ //drop heat seeking crows
+                this.elapsedTime += this.game.clockTick;
+                if (this.elapsedTime > this.fireRate) { 
+                    this.elapsedTime = 0;
+                    this.game.addEntity(new Crow(this.game, this.BB.x, this.BB.y, this.target, true));
+                }
+
+            }
+
+        }
+    };
+
     chihiroDeath(){
-        // console.log("Chihiro x:" + this.target.getX() + this.target.getWidth()/2 + " y:" + this.target.getY());
-        // console.log("Yubaba x:" + this.BB.x + this.width *this.scale / 2 + " y:" + this.BB.y);
+        //speed up
+        this.speed = 250;
+        this.frameDuration = 0.5; 
 
-        this.speed = 200;
-        this.frameDuration = 0.7; 
-
+        // move y to match Chihiro
         if(this.target.getY() + 50 > this.BB.y + this.height * this.scale  && !this.hasChihiro){
             this.y += this.speed * this.game.clockTick;
-        }else if (this.hasChihiro){
+        }else if (this.hasChihiro){ // if has Chihiro, fly away
             this.y -= this.speed * this.game.clockTick;
 
-           // this.target.setX(this.BB.x + this.BB.width  /2 - this.target.getWidth/2);
-           // this.target.setY(this.BB.y + this.BB.height  - 10);
            var newY = this.target.getY() - this.speed * this.game.clockTick;
            this.target.setY(newY)
         }
 
-        if(this.target.getX() + this.target.getWidth()/2 > this.BB.x + this.width * this.scale / 2 + 100){
+        //move x to match Chihiro 
+        if(this.target.getX() + this.target.getWidth()/2 > this.BB.x + this.width * this.scale / 2 + 100){ // +- some margin of error
             this.x += this.speed * this.game.clockTick;
         }else if(this.target.getX() + this.target.getWidth()/2  < this.BB.x + this.width * this.scale / 2 - 100){
             this.x -= this.speed * this.game.clockTick;
         }else{
-            this.x = this.target.getX() + this.target.getWidth()/2 - this.game.camera.x - 75;
+            this.x = this.target.getX() + this.target.getWidth()/2 - this.game.camera.x - 75; //center on Chihiro
+            // if centered on Chihiro for x & y
             if(this.target.getY() + 50 <= this.BB.y + this.height * this.scale ){
                 this.hasChihiro = true;
              }
-
         }
 
         this.updateBB();
     };
 
     move(){
-        if(this.target.x > this.inc[0]){
-            this.show = true;
-        }
+           if(this.x + this.width *this.scale >= PARAMS.CANVAS_WIDTH){  // too far right
+            if(this.x > PARAMS.CANVAS_WIDTH + 5){ // if outside of frame, place on the edge of frame
+                this.x = PARAMS.CANVAS_WIDTH;
+            }
 
-        // what was this for?
-        // if(this.target.x > this.inc[3]){
-        //     this.y -= Math.abs(this.speed * this.game.clockTick);
-        // }
+            this.speed = -Math.abs(this.speed); 
+            this.dir = 1;
+           }else if(this.x <= 0){ //too far left
+                if(this.x < -this.width * this.scale - 5){ //outside of frame
+                    this.x = - this.width *this.scale;
+                }
 
-        if(this.y < -this.height*this.scale - this.target.getHeight()){
-            this.removeFromWorld = true;
-        }
+                this.speed = Math.abs(this.speed);  
+                this.dir = 0;   
+           }
+
+           this.x += this.speed * this.game.clockTick;
+           this.x += (this.target.velocity.x * this.game.clockTick)*-2;
     };
 
     entrance(){
@@ -192,7 +192,6 @@ class Yubaba {
             this.new = false;
             this.x = PARAMS.CANVAS_WIDTH;
             this.dir = 1;
-           // console.log("face left");
         }
     };
 
