@@ -5,7 +5,7 @@ var BACKGROUND = {
     SIZE: {W: 1000, H: 500},
     SCALE: 2,
     GROUND:         {X: 32, Y: 0, SIZE: 32, SCALE: 4},
-    FLAG:           {X: 0,  Y: 0, W: 264, H: 268, SCALE: 1},
+    FLAG:           {X: 0,  Y: 0, W: 264, H: 268, COUNT:5, SCALE: 1},
     STONE_LAMP:     {X: 0, Y: 0,  SIZE: {W:45, H:142 },  SCALE:{ X:4, Y: 5},   BB_SIZE: {W: 10, H: 10}},
     LAMP:           {X: 0, Y: 0,  SIZE: {W: 107, H:188}, SCALE:  {W: 2, H: 2}, BB_SIZE: {W: 5,  H: 10}, PADDING: {W: 40, H: 10}},
     RAILING:        {X: 0, Y: 10, SIZE: 64, SCALE: 2.5, BB_SIZE: {W: 5, H: 10}, PADDING: 20},
@@ -328,7 +328,7 @@ class Bathhouse {
         this.spritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/Bathhouse.png");
         this.treespritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/tree-sheet.png");
         this.flagspritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/flag.png");
-        this.flagAnim = new Animator (this.flagspritesheet,BACKGROUND.FLAG.X, BACKGROUND.FLAG.Y,  BACKGROUND.FLAG.W,  BACKGROUND.FLAG.H, 3, 0.5, 0, false, true );
+        this.flagAnim = new Animator (this.flagspritesheet,BACKGROUND.FLAG.X, BACKGROUND.FLAG.Y,  BACKGROUND.FLAG.W,  BACKGROUND.FLAG.H, BACKGROUND.FLAG.COUNT, 0.1, 0, false, true );
     }
 
     update() {

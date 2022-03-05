@@ -67,7 +67,7 @@ class Instruction {
         this.bubblespritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/bubble.png");
         this.portalspritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/portal.png");
         this.flagspritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/flag.png");
-        this.flagAnim = new Animator (this.flagspritesheet,BACKGROUND.FLAG.X, BACKGROUND.FLAG.Y,  BACKGROUND.FLAG.W,  BACKGROUND.FLAG.H, 3, 0.5, 0, false, true );
+        this.flagAnim = new Animator (this.flagspritesheet,BACKGROUND.FLAG.X, BACKGROUND.FLAG.Y,  BACKGROUND.FLAG.W,  BACKGROUND.FLAG.H, BACKGROUND.FLAG.COUNT, 0.1, 0, false, true );
         this.blurValues = 50;
         this.blurVelocity = 0;
         this.introbar = new BreathBar(this.game, 370, 651, 50, 10);
@@ -572,12 +572,12 @@ class Instruction {
                 if (this.ycrowvel < -MAX_JUMP) {
                     this.ycrowvel = -MAX_JUMP;
                 }
-            } else if (this.ycrow <= 500) { 
+            } else { 
                 this.ycrowvel += MAX_FALL * TICK;
                 if (this.ycrowvel > MAX_FALL) {
                     this.ycrowvel = MAX_FALL;
                 }
-            }
+            } 
         
             if (this.xcrow <= 400) { // stops here
                 this.xcrowvel -= MAX_RIGHT * TICK;
@@ -590,6 +590,8 @@ class Instruction {
                     this.xcrowvel = MAX_LEFT;
                  
                 }
+            } else {
+                //this.xcrow = 300;
             }
             if (this.xcrowvel > 0) {
                 this.crowstate = 1;

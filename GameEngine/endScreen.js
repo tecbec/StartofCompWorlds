@@ -46,11 +46,11 @@ class EndScreen {
         }
     };
 
-    draw(ctx) {  
-        if (!this.game.camera.title && !this.game.camera.chihiro.winGame) { // start timer 
-            ctx.font = "32px Minecraft";
-            ctx.strokeStyle = '#f2f0ed';
-            ctx.fillStyle = ctx.strokeStyle;
+    draw(ctx) { 
+        ctx.font = "32px Minecraft";
+        ctx.strokeStyle = '#f2f0ed';
+        ctx.fillStyle = ctx.strokeStyle; 
+        if (!this.game.camera.title && !this.game.camera.chihiro.winGame && this.game.camera.chihiro.x > 440) { // start timer 
             this.startTimer();
             if (Math.round(this.elapsedTime) < 10 && Math.round(this.minute) < 10) {
                 ctx.fillText("0" + Math.round(this.minute) + ":" + "0" + Math.round(this.elapsedTime), PARAMS.CANVAS_WIDTH / 2 - 32, 32); //timer 
@@ -61,7 +61,10 @@ class EndScreen {
             } else if (Math.round(this.elapsedTime) >= 10 && Math.round(this.minute) >= 10) {
                 ctx.fillText(Math.round(this.minute) + ":" + Math.round(this.elapsedTime), PARAMS.CANVAS_WIDTH / 2 - 32, 32); //timer 
             }
-            
+        } else {
+            if (Math.round(this.elapsedTime) < 10 && Math.round(this.minute) < 10) {
+                ctx.fillText("0" + Math.round(this.minute) + ":" + "0" + Math.round(this.elapsedTime), PARAMS.CANVAS_WIDTH / 2 - 32, 32); //timer 
+            }
         }
 
         // display timer as stats
