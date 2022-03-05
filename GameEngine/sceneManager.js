@@ -10,7 +10,7 @@
     START_CANVAS:       {X: -851, Y: 0},
     END_CANVAS:         {X: 22000},         // change this later when we figure out the exact ending canvas measurement
     END_TITLE_CANVAS:   {X: 500},           // This will end the title canvas so it won't keep going.
-    FRAME_COUNT: 13,                        // This is the factor that determine how wide the actual game is
+    FRAME_COUNT: 8,                         // change this for railing/canvas length
     // Type 0: has left,middle,right piece can be adjusted to be longer
     // Type 1: is short (just middle piece)
     TREE:[{X: 567, Y: 276, TYPE:3}, {X: 2538, Y: 0, TYPE:1}, {X: 3231, Y: 276, TYPE:2}, {X: 5543, Y: 0, TYPE:1}, {X: 6527, Y: 276, TYPE:2}, {X: 7816, Y: 276, TYPE:0}, {X: 8274, Y: 276, TYPE:3}],
@@ -34,16 +34,12 @@
                           {X: 6706, Y: 600}, {X: 7506, Y: 600}, // Scene 4 - 800 px between each stone lamp, 500 px between first lamp and stone lamp
                           {X: 9059, Y: 600}],                   // Scene 5
 
-    LAMP_LOCATION: [{X:500, Y: 650},        // Start Scene 1
-                    {X:2402,  Y: 650},      // Start Scene 2
-                    {X:4304, Y: 650},       // Start Scene 3
-                    {X:6206, Y: 650},       // Start Scene 4
-                    {X:8108, Y: 650},       // Start Scene 5
-                    {X:10010, Y: 650},],    // Start Scene 6
-                    // {X:11912, Y: 650}
     //                      1                       2                 3                4
     PORTAL_LOCATION: [{X: 820,  Y: 390}, {X: 2850, Y: 120}, {X: 3902, Y: 800}, {X: 7000, Y:120}],
                     //{X:13814, Y: 650}, {X:15716, Y: 650},],
+    /* Start of Frame:     1                   2                 3                 4                 5                   6                   7                8                 9                  10                11*/
+    LAMP_LOCATION: [{X:500, Y: 650},   {X:2402,  Y: 650}, {X:4304, Y: 650}, {X:6206, Y: 650}, {X:8108, Y: 650}, {X:10010, Y: 650},],// {X:11912, Y: 650}, {X:13814, Y: 650}, {X:15716, Y: 650}, {X:17618, Y:650}, {X:19520, Y:650}], 
+                    //, ,],
 
     RAILING_LOCATION: {X: 500, Y: 820},
 
@@ -88,13 +84,12 @@
 
     RADISH_LOCATION: [{X: 840,  Y: 690}], //scene
 
-    CHICK_LOCATION: [{X: 2402, Y: 785, MIN: 500,  MAX: 2402, SPEED: 2,  DIR:0},               // scene 1
-                     {X: 2900, Y: 785, MIN: 2402, MAX: 4304,  SPEED: 0, DIR:0}, {X: 3800, Y: 785, MIN: 2402, MAX: 4304, SPEED: 0, DIR:0},               // scene 2
-                     {X: 4780, Y: 785, MIN: 4304, MAX: 5255,  SPEED: 0, DIR:1}, {X: 5730, Y: 785, MIN: 5305, MAX: 6206, SPEED: 0, DIR:0},               // scene 3
-                     {X: 6750, Y: 785, MIN: 6750, MAX: 7900,  SPEED: 0, DIR:0}, {X: 7500, Y: 785, MIN: 6750, MAX: 7900,  SPEED: 0, DIR:1},               // Scene 4
-                     {X: 6250, Y: 785, MIN: 6250, MAX: 8100,  SPEED: 2, DIR:0}, {X: 8000, Y: 785, MIN: 6250, MAX: 8100,  SPEED: 2, DIR:1},
-                     {X: 8900, Y: 785, DIR:1}, {X: 9912, Y: 785, MIN: 8400, MAX: 10000, SPEED: 0, DIR:1},               // Scene 5
-                     {X: 9400, Y: 785, MIN: 9100, MAX: 10000, SPEED: 0, DIR:0}],
+    CHICK_LOCATION: [{X: 2402, Y: 785, MIN: 500,  MAX: 2402, SPEED: 2, DIR:0},               // scene 1
+                     {X: 2900, Y: 785, MIN: 2402, MAX: 4304, SPEED: 0, DIR:0}, {X: 3800, Y: 785, MIN: 2402, MAX: 4304, SPEED: 0, DIR:0},               // scene 2
+                     {X: 4780, Y: 785, MIN: 4304, MAX: 5255, SPEED: 0, DIR:1}, {X: 5730, Y: 785, MIN: 5305, MAX: 6206, SPEED: 0, DIR:0},               // scene 3
+                     {X: 6750, Y: 785, MIN: 6750, MAX: 7900, SPEED: 0, DIR:0}, {X: 7500, Y: 785, MIN: 6750, MAX: 7900,  SPEED: 0, DIR:1},               // Scene 4
+                     {X: 6250, Y: 785, MIN: 6250, MAX: 8100, SPEED: 2, DIR:0}, {X: 8000, Y: 785, MIN: 6250, MAX: 8100,  SPEED: 2, DIR:1},
+                     {X: 8900, Y: 785, MIN: 8500, MAX: 8900, SPEED: 2, DIR:1}], // Scene 5
 
     /*    enter: frame 3,   crow drop: frame 4,       heat seeking crows:  frame 5*/
     YUBABA_INC: [4304, 6206, 8108, 10010], // x vals that trigger: entrance, crow drop, heat seeking crows, yubaba exit
@@ -102,7 +97,7 @@
     /*    frame:            1             3              */
     HAKU_LOCATION: [{X:500, Y:850, TEXT: 1},{X:5305, Y:575, TEXT: 2}, {X: 10056, Y:820, TEXT: 3}],
     // 0 = right, 1 = left
-    FROG_LOCATION: [{X:11000, Y:681, DIR: 0, MIN: 10500, MAX: 11000, HEIGHT: -250, TIME: 2}],
+    FROG_LOCATION: [{X:9770, Y:0, DIR: 1, MIN: 9710, MAX: 9760, HEIGHT: -50, TIME: 4}, {X:9912, Y:681, DIR: 1, MIN: 9300, MAX: 9800, HEIGHT: -250, TIME: 2}], // scene 5
 
 
     BREATH_BAR_OUTLINE: {X: 1600,Y: 10 }
@@ -215,6 +210,7 @@ class SceneManager {
             this.game.addEntity(new Fireworks(this.game));
             this.game.addEntity(this.lamp);
             this.game.addEntity(this.chihiro);
+            //this.game.addEntity(new Instruction(this.game, 0, 0));
             //this.game.addEntity(this.chick);
             // this.game.addEntity(this.haku);
         } else {
@@ -324,8 +320,6 @@ class SceneManager {
     };
 
     update() {
-
-       // this.mute = true;
         this.updateAudio();
         // canvas width = 400
         // blockwidth = 32 * 1 = 32
