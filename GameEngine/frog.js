@@ -105,8 +105,8 @@ class Frog {
             if (entity.BB && that.BB.collide(entity.BB) ) { 
                 if (that.velocity.y > 0) {   
                     if ((entity instanceof Ground || entity instanceof Platform || entity instanceof CloudPlatform ||
-                        entity instanceof StoneLamp ||
-                        entity instanceof Railing || entity instanceof Lamp) && (that.lastBB.bottom  <= entity.BB.top)) {
+                        entity instanceof StoneLamp || // entity instanceof Railing ||
+                        entity instanceof Lamp) && (that.lastBB.bottom  <= entity.BB.top)) {
                         that.isGrounded = true;
                         that.y = entity.BB.top - 190; 
                     }
