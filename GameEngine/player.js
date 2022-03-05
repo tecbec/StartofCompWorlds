@@ -10,9 +10,10 @@ var CHIHIRO = {
     JUMP:   {RIGHT: {X: 0,  Y: 280},  LEFT: {X: 0,  Y: 350},  FRAME: 4, SPEED: 0.2, PADDING: 0, REVERSE: false, LOOP: true},
     CROUCH: {RIGHT: {X: 0,  Y: 560},  LEFT: {X: 0,  Y: 630},  FRAME: 4, SPEED: 0.33, PADDING: 0, REVERSE: false, LOOP: true},
     RUN:    {RIGHT: {X: 0,  Y: 140},  LEFT: {X: 0,  Y: 210},  FRAME: 4, SPEED: 0.1, PADDING: 0, REVERSE: false, LOOP: true},
-    DEAD:   {RIGHT: {X: 0,  Y: 420},  LEFT: {X: 0,  Y: 490},  FRAME: 3, SPEED: 0.12, PADDING: 0, REVERSE: false, LOOP: false},
+   // DEAD:   {RIGHT: {X: 0,  Y: 420},  LEFT: {X: 0,  Y: 490},  FRAME: 3, SPEED: 0.12, PADDING: 0, REVERSE: false, LOOP: false},
     CROUCH_WALK: {RIGHT: {X: 0,  Y: 700}, LEFT: {X: 0,  Y: 770}, FRAME: 4, SPEED: 0.33, PADDING: 0, REVERSE: false, LOOP: true},
     VICTORY_DANCE:  {RIGHT: {X: 0,  Y: 840}, FRAME: 5, SPEED: 0.2, PADDING: 0, REVERSE: false, LOOP: true},
+    DEAD:  {RIGHT: {X: 0,  Y: 910},  LEFT: {X: 0,  Y: 980},  FRAME: 8, SPEED: 0.2, PADDING: 0, REVERSE: false, LOOP: true},
     BREATH_BAR:  {X: 1612, Y: 18, HEIGHT: 17, MAX: 100},
     COIN_COUNTER:{X: 1400, Y: 15},
     BUBBLE_COUNTER:{X: 1500, Y: 15},
@@ -41,6 +42,7 @@ class Player {
         this.chihiroScale = 2;
         this.endPosition = false;
         this.collideWithFrog = false;
+        this.yubaba = null;
 
         // testing
         // this.sootCount = 0;
@@ -157,6 +159,17 @@ class Player {
             CHIHIRO.SIZE, CHIHIRO.SIZE,
             CHIHIRO.VICTORY_DANCE.FRAME, CHIHIRO.VICTORY_DANCE.SPEED,
             CHIHIRO.VICTORY_DANCE.PADDING, CHIHIRO.VICTORY_DANCE.REVERSE, CHIHIRO.VICTORY_DANCE.LOOP);
+
+        //  // panic -> right
+        //  this.animations[8][0] = new Animator(this.spritesheet, CHIHIRO.PANIC.RIGHT.X, CHIHIRO.PANIC.RIGHT.Y,
+        //     CHIHIRO.SIZE, CHIHIRO.SIZE,
+        //     CHIHIRO.PANIC.FRAME, CHIHIRO.PANIC.SPEED,
+        //     CHIHIRO.PANIC.PADDING, CHIHIRO.PANIC.REVERSE, CHIHIRO.PANIC.LOOP);
+        // // panic -> left
+        // this.animations[8][1] = new Animator(this.spritesheet, CHIHIRO.PANIC.LEFT.X, CHIHIRO.PANIC.LEFT.Y,
+        //     CHIHIRO.SIZE, CHIHIRO.SIZE,
+        //     CHIHIRO.PANIC.FRAME, CHIHIRO.PANIC.SPEED,
+        //     CHIHIRO.PANIC.PADDING, CHIHIRO.PANIC.REVERSE, CHIHIRO.PANIC.LOOP);
 
     };
 
@@ -284,16 +297,17 @@ class Player {
             }
         }
 
-        //this makes chihiro always fall
-        this.velocity.y += FALL_ACC * TICK;
+        //this makes chihiro always fall unless dead
+        if(!this.dead){
+            this.velocity.y += FALL_ACC * TICK;
 
-        if (this.velocity.y >= MAX_FALL)  this.velocity.y =  MAX_FALL;
-        if (this.velocity.y <= -MAX_FALL) this.velocity.y = -MAX_FALL;
-        if (this.velocity.x >= MAX_RUN)   this.velocity.x =  MAX_RUN;
-        if (this.velocity.x <= -MAX_RUN)  this.velocity.x = -MAX_RUN;
-        if (this.game.crouch && this.velocity.x <= -MIN_WALK) this.velocity.x = -CROUCH_SPEED;
-        if (this.game.crouch && this.velocity.x >= MIN_WALK) this.velocity.x = CROUCH_SPEED;
-
+            if (this.velocity.y >= MAX_FALL)  this.velocity.y =  MAX_FALL;
+            if (this.velocity.y <= -MAX_FALL) this.velocity.y = -MAX_FALL;
+            if (this.velocity.x >= MAX_RUN)   this.velocity.x =  MAX_RUN;
+            if (this.velocity.x <= -MAX_RUN)  this.velocity.x = -MAX_RUN;
+            if (this.game.crouch && this.velocity.x <= -MIN_WALK) this.velocity.x = -CROUCH_SPEED;
+            if (this.game.crouch && this.velocity.x >= MIN_WALK) this.velocity.x = CROUCH_SPEED;
+        }
 
         // winning condition.
 
@@ -443,8 +457,15 @@ class Player {
                 //Collision with Yubaba
                  if (entity instanceof Yubaba && that.BB.collide(entity.BB) && !that.dead) {
                     if (!that.game.camera.title && !that.game.camera.chihiro.winGame) {
-                        that.game.camera.breathwidth -= CHIHIRO.BREATH_BAR.MAX;
-                        that.game.camera.changeBreath();
+                        console.log("Yubaba collision");
+                        if(entity.deathAnimation){
+                            console.log("stick to Yubaba"); //not sensing collision
+                            that.setX(entity.BB.x + entity.BB.width  /2 - that.getWidth/2);
+                            that.setY(entity.BB.y + entity.BB.height  - 10);
+                        }else{
+                            that.game.camera.breathwidth -= CHIHIRO.BREATH_BAR.MAX;
+                            that.game.camera.changeBreath();
+                        }
                     }        
                 }
 
@@ -553,11 +574,21 @@ class Player {
         if (this.dead || this.state === 5) {
 
             this.velocity.x = 0;
+            this.velocity.y = 0;
+            if(this.yubaba != null){
+                this.yubaba.deathAnimation = true;
+            }
+            this.state = 5;
+            //this.state = 8;
 
-            this.deadCounter += this.game.clockTick;
 
-            if (this.deadCounter > 0.5) this.state = 0;
-            if (this.deadCounter > 0.55) {
+         //   this.deadCounter += this.game.clockTick;
+
+         //   if (this.deadCounter > 0.5) this.state = 0;
+         //   if (this.deadCounter > 0.55) {
+           console.log( this.getY() + this.getHeight());
+           console.log( PARAMS.CANVAS_HEIGHT);
+             if(this.getY() + this.getHeight() < 0){
                 this.game.camera.title = true;
                 this.game.camera.breathwidth = 100;
                 this.deadCounter = 0;

@@ -19,7 +19,10 @@ class Yubaba {
         // speed stuff
         this.speed = 50;
         this.target = this.game.camera.chihiro;
+        this.target.yubaba = this; //give access to Yubaba to player
         this.hitpoints = 30;
+        this.deathAnimation = false;
+        this.hasChihiro = false;
     };
 
     loadAnimations(){
@@ -34,78 +37,74 @@ class Yubaba {
     }
 
     update(){
-        if(this.target.x > this.inc[0]){
-            this.show = true;
-        }
+        if(this.deathAnimation){
+            this.entrance();
+            this.chihiroDeath();
+        } else{
 
-        if(this.target.x > this.inc[3]){
-            this.y -= Math.abs(this.speed * this.game.clockTick);
-        }
+            this.move();
+                    /* 
+            this.inc[0]: enter
+            this.inc[1]: drop crows
+            this.inc[2]: heat seeking crows
+            */
 
-        if(this.y < -this.height*this.scale){
-            this.removeFromWorld = true;
-        }
-        /* 
-        this.inc[0]: enter
-        this.inc[1]: drop crows
-        this.inc[2]: heat seeking crows
-        */
-        if(this.show){ // show Yubaba
-            if(this.new){ //entrance
-                this.new = false;
-                this.x = PARAMS.CANVAS_WIDTH;
-            }
+            if(this.show){ // show Yubaba
+            this.entrance();
 
-        // update movement 
-        var inFrame = true;
-        if(this.x + this.width *this.scale >= PARAMS.CANVAS_WIDTH){  // too far right
-                if(this.x > PARAMS.CANVAS_WIDTH + 5){ //outside of frame
-                    this.x = PARAMS.CANVAS_WIDTH;
-                }
-
-                this.speed = -Math.abs(this.speed); // *3 because need to speed up to catch up if out of frame
-                this.animator = this.animations[1];
-                this.dir = 1;
-                inFrame = false;
-        }else if(this.x <= 0){ //too far left
-                if(this.x < -this.width * this.scale - 5){ //outside of frame
-                    this.x = - this.width *this.scale;
-                }
-
-                this.speed = Math.abs(this.speed);  
-                this.animator = this.animations[0];  
-                this.dir = 0;   
-                inFrame = false; 
-        }
-
-        this.x += this.speed * this.game.clockTick;
-        this.x += (this.target.velocity.x * this.game.clockTick)*-2;
-
-            /* add start boolean for fluid enterance scene */
-
-            this.updateBB();
-
-            // throw crows
-            if(this.target.x > this.inc[1]){ 
-                if(this.target.x < this.inc[2]){ // drop regular crows
-                    this.elapsedTime += this.game.clockTick;
-                    if (this.elapsedTime > this.fireRate) { 
-                        this.elapsedTime = 0;
-                        this.game.addEntity(new Crow(this.game, this.BB.x, this.BB.y, this.target, false));
+            // update movement 
+            var inFrame = true;
+            if(this.x + this.width *this.scale >= PARAMS.CANVAS_WIDTH){  // too far right
+                    if(this.x > PARAMS.CANVAS_WIDTH + 5){ //outside of frame
+                        this.x = PARAMS.CANVAS_WIDTH;
                     }
 
-                }else{ //drop heat seeking crows
-                    this.elapsedTime += this.game.clockTick;
-                    if (this.elapsedTime > this.fireRate) { 
-                        this.elapsedTime = 0;
-                        this.game.addEntity(new Crow(this.game, this.BB.x, this.BB.y, this.target, true));
+                    this.speed = -Math.abs(this.speed); // *3 because need to speed up to catch up if out of frame
+                    this.animator = this.animations[1];
+                    this.dir = 1;
+                    inFrame = false;
+            }else if(this.x <= 0){ //too far left
+                    if(this.x < -this.width * this.scale - 5){ //outside of frame
+                        this.x = - this.width *this.scale;
+                    }
+
+                    this.speed = Math.abs(this.speed);  
+                    this.animator = this.animations[0];  
+                    this.dir = 0;   
+                    inFrame = false; 
+            }
+
+            this.x += this.speed * this.game.clockTick;
+            this.x += (this.target.velocity.x * this.game.clockTick)*-2;
+
+                /* add start boolean for fluid enterance scene */
+
+                this.updateBB();
+
+                // throw crows
+                if(this.target.x > this.inc[1]){ 
+                    if(this.target.x < this.inc[2]){ // drop regular crows
+                        this.elapsedTime += this.game.clockTick;
+                        if (this.elapsedTime > this.fireRate) { 
+                            this.elapsedTime = 0;
+                            this.game.addEntity(new Crow(this.game, this.BB.x, this.BB.y, this.target, false));
+                        }
+
+                    }else{ //drop heat seeking crows
+                        this.elapsedTime += this.game.clockTick;
+                        if (this.elapsedTime > this.fireRate) { 
+                            this.elapsedTime = 0;
+                            this.game.addEntity(new Crow(this.game, this.BB.x, this.BB.y, this.target, true));
+                        }
+
                     }
 
                 }
-
             }
+    
+          if(this.hitpoints <= 0 ) {this.removeFromWorld = true;}
+
         }
-        if(this.hitpoints <= 0 ) {this.removeFromWorld = true;}
 
     };
 
@@ -122,7 +121,7 @@ class Yubaba {
     *  param: context that we want to draw to 
     */
     draw(ctx){
-        if(this.show){ // show Yubaba
+        if(this.show || this.deathAnimation){ // show Yubaba
             ctx.shadowColor = '#ff2121';
             ctx.shadowBlur = 10; // change this to make the aura more spread out
             this.animator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
@@ -137,6 +136,63 @@ class Yubaba {
             }else{
                 this.updateBB();
             }
+        }
+    };
+
+    chihiroDeath(){
+        // console.log("Chihiro x:" + this.target.getX() + this.target.getWidth()/2 + " y:" + this.target.getY());
+        // console.log("Yubaba x:" + this.BB.x + this.width *this.scale / 2 + " y:" + this.BB.y);
+
+        this.speed = 200;
+        this.frameDuration = 0.7; 
+
+        if(this.target.getY() + 50 > this.BB.y + this.height * this.scale  && !this.hasChihiro){
+            this.y += this.speed * this.game.clockTick;
+        }else if (this.hasChihiro){
+            this.y -= this.speed * this.game.clockTick;
+
+           // this.target.setX(this.BB.x + this.BB.width  /2 - this.target.getWidth/2);
+           // this.target.setY(this.BB.y + this.BB.height  - 10);
+           var newY = this.target.getY() - this.speed * this.game.clockTick;
+           this.target.setY(newY)
+        }
+
+        if(this.target.getX() + this.target.getWidth()/2 > this.BB.x + this.width * this.scale / 2 + 100){
+            this.x += this.speed * this.game.clockTick;
+        }else if(this.target.getX() + this.target.getWidth()/2  < this.BB.x + this.width * this.scale / 2 - 100){
+            this.x -= this.speed * this.game.clockTick;
+        }else{
+            this.x = this.target.getX() + this.target.getWidth()/2 - this.game.camera.x - 75;
+            if(this.target.getY() + 50 <= this.BB.y + this.height * this.scale ){
+                this.hasChihiro = true;
+             }
+
+        }
+
+        this.updateBB();
+    };
+
+    move(){
+        if(this.target.x > this.inc[0]){
+            this.show = true;
+        }
+
+        // what was this for?
+        // if(this.target.x > this.inc[3]){
+        //     this.y -= Math.abs(this.speed * this.game.clockTick);
+        // }
+
+        if(this.y < -this.height*this.scale - this.target.getHeight()){
+            this.removeFromWorld = true;
+        }
+    };
+
+    entrance(){
+        if(this.new){ //entrance
+            this.new = false;
+            this.x = PARAMS.CANVAS_WIDTH;
+            this.dir = 1;
+           // console.log("face left");
         }
     };
 
