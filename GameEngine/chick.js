@@ -160,8 +160,11 @@ class Radish {
         this.BB = new BoundingBox(this.x + this.widthBB, this.y + this.heightBB/2, this.widthBB*this.scale, this.heightBB*this.scale);
         this.leftBB = new BoundingBox(this.x + this.widthBB + this.widthBB*this.scale - this.BBThickness, this.y + this.heightBB/2, this.BBThickness, this.heightBB*this.scale);
         this.rightBB = new BoundingBox(this.x+ this.widthBB, this.y + this.heightBB/2, this.BBThickness, this.heightBB*this.scale);
-        this.topBB = new BoundingBox(this.x+ this.widthBB, this.y+ this.heightBB /2, this.widthBB*this.scale, this.BBThickness);
+        //this.topBB = new BoundingBox(this.x+ this.widthBB, this.y+ this.heightBB /2, this.widthBB*this.scale, this.BBThickness);
         
+       this.topRBB = new BoundingBox(this.x + this.widthBB+ this.widthBB*this.scale /2, this.y + this.heightBB /2, this.widthBB*this.scale / 2, this.BBThickness);
+       this.topLBB = new BoundingBox(this.x+ this.widthBB, this.y+ this.heightBB /2, this.widthBB*this.scale  / 2, this.BBThickness);
+
         // tried to increase the height of the radish on frame 6
         // if (this.spritesheet.currentFrame() == 6){
         //     this.BB = new BoundingBox(this.x + this.widthBB, this.y , this.widthBB*this.scale, this.height*this.scale);
@@ -188,7 +191,11 @@ class Radish {
             ctx.strokeStyle = 'Yellow';
             ctx.strokeRect(this.leftBB.x - this.game.camera.x, this.leftBB.y, this.leftBB.width, this.leftBB.height);
             ctx.strokeRect(this.rightBB.x - this.game.camera.x, this.rightBB.y, this.rightBB.width, this.rightBB.height);
-            ctx.strokeRect(this.topBB.x - this.game.camera.x, this.topBB.y, this.topBB.width, this.topBB.height);
+            //ctx.strokeRect(this.topBB.x - this.game.camera.x, this.topBB.y, this.topBB.width, this.topBB.height);
+
+            ctx.strokeRect(this.topRBB.x - this.game.camera.x, this.topRBB.y, this.topRBB.width, this.topRBB.height);
+            ctx.strokeStyle = 'Blue';
+            ctx.strokeRect(this.topLBB.x - this.game.camera.x, this.topLBB.y, this.topLBB.width, this.topLBB.height);
         }
     };
 }

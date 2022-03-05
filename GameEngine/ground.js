@@ -706,21 +706,22 @@ class Lamp {
     };
 
     draw(ctx) {
-    // uncomment below to make the lamp turn on ;)
-    // Hana's laptop can't handle
-    //     var iterations = 16, radius = 50,
-    //     step = radius / iterations;
-    //     for(var i = 1; i < iterations; i++) {
-    //         ctx.filter = "blur(" + (step * i) + "px)";
-    //         ctx.drawImage(this.spritesheet2, BACKGROUND.LAMP.X, BACKGROUND.LAMP.Y,
-    //             BACKGROUND.LAMP.SIZE.W, BACKGROUND.LAMP.SIZE.H,
-    //             this.x - this.game.camera.x, this.y,
-    //             BACKGROUND.LAMP.SIZE.W * BACKGROUND.LAMP.SCALE.W, BACKGROUND.LAMP.SIZE.H * BACKGROUND.LAMP.SCALE.H);
-    //     }
-    //    //ctx.shadowColor = "transparent"; // remove shadow !
-    //    ctx.filter = "none";
-    //    ctx.fillStyle = "Yellow";
-       ctx.drawImage(this.spritesheet2, BACKGROUND.LAMP.X, BACKGROUND.LAMP.Y,
+        var grad = ctx.createRadialGradient(this.x - this.game.camera.x +190 , this.y + 100, 100, this.x - this.game.camera.x +190, this.y +100 ,0);
+        grad.addColorStop(0,"transparent");
+        grad.addColorStop(1,"yellow");
+        ctx.fillStyle = grad;
+                ctx.filter = "blur(10px)";
+        ctx.fillRect(this.x - this.game.camera.x , this.y, 400 , 400);
+
+        var grad = ctx.createRadialGradient(this.x - this.game.camera.x +190 , this.y + 100, 50, this.x - this.game.camera.x +190, this.y +100 ,0);
+        grad.addColorStop(0,"transparent");
+        grad.addColorStop(1,"orange");
+        ctx.fillStyle = grad;
+        ctx.filter = "blur(5px)";
+        ctx.fillRect(this.x - this.game.camera.x , this.y, 400 , 400);
+        
+        ctx.filter = "none";
+        ctx.drawImage(this.spritesheet2, BACKGROUND.LAMP.X, BACKGROUND.LAMP.Y,
             BACKGROUND.LAMP.SIZE.W, BACKGROUND.LAMP.SIZE.H,
             this.x - this.game.camera.x, this.y,
             BACKGROUND.LAMP.SIZE.W * BACKGROUND.LAMP.SCALE.W, BACKGROUND.LAMP.SIZE.H * BACKGROUND.LAMP.SCALE.H);

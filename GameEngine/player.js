@@ -13,8 +13,12 @@ var CHIHIRO = {
     DEAD:   {RIGHT: {X: 0,  Y: 420},  LEFT: {X: 0,  Y: 490},  FRAME: 3, SPEED: 0.12, PADDING: 0, REVERSE: false, LOOP: false},
     CROUCH_WALK: {RIGHT: {X: 0,  Y: 700}, LEFT: {X: 0,  Y: 770}, FRAME: 4, SPEED: 0.33, PADDING: 0, REVERSE: false, LOOP: true},
     VICTORY_DANCE:  {RIGHT: {X: 0,  Y: 840}, FRAME: 5, SPEED: 0.2, PADDING: 0, REVERSE: false, LOOP: true},
-    BREATH_BAR:  {X: 1700, Y: 10, HEIGHT: 10, MAX: 100},
-    COIN_COUNTER:{X: 1620, Y: 7.25}
+    BREATH_BAR:  {X: 1612, Y: 18, HEIGHT: 17, MAX: 100},
+    COIN_COUNTER:{X: 1400, Y: 15},
+    BUBBLE_COUNTER:{X: 1500, Y: 15},
+    JUMP_SOUND: "./GameEngine/audio/jump2.wav",
+    COIN_SOUND: "./GameEngine/audio/coin-collection.wav",
+    PORTAL_SOUND: "./GameEngine/audio/power-up.mp3"
 };
 /* Chihiro, the main character of the game */
 class Player {
@@ -181,6 +185,8 @@ class Player {
 
     /* Draw the images onto the screen */
     draw(ctx) {
+        
+        
         this.animations[this.state][this.facing].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, this.chihiroScale);
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
@@ -243,9 +249,10 @@ class Player {
                 this.jumping = true;
                 this.velocity.y = -250 * PARAMS.SCALE;
                 this.state = 2; 
+                ASSET_MANAGER.playAsset(CHIHIRO.JUMP_SOUND);
             } else {
                 // set the default idle if not anything else.
-                this.state = 0;
+                this.state = 0; 
                 this.velocity.y = 0;
             }
 
@@ -491,12 +498,17 @@ class Player {
                 if (entity instanceof Coins) {
                     entity.removeFromWorld = true;
                     that.game.camera.coinCounter.coinCount ++;
+                    ASSET_MANAGER.playAsset(CHIHIRO.COIN_SOUND);
+
                 }
 
                 if (entity instanceof Portal) {
-                    // console.log("instanceof");
-                    that.powerup = true;
+                    that.powerup = true; 
                     entity.removeFromWorld = true;
+                    that.game.camera.bubbleCounter.bubbleCount += 6;
+                    ASSET_MANAGER.playAsset(CHIHIRO.PORTAL_SOUND);
+
+
                 }
                 
                 if (entity instanceof Frog) {
@@ -560,15 +572,17 @@ class Player {
         if (this.velocity.x > 0) this.facing = 0;
 
         if (this.powerup == true) {
-            this.elapsedTime += TICK;
-            this.bubbleTime += TICK;
+            this.elapsedTime += TICK; 
+            //this.bubbleTime += TICK; 
             if (this.game.shoot && this.elapsedTime > 1 ){
                 this.game.addEntity(new BubblesController(this.game, this.getX()+ this.getWidth(), this.getY(),  this.facing));
                         this.elapsedTime = 0;
                         this.counter++; //once you shoot 7 bubbles then no more bubbles for you
+                        that.game.camera.bubbleCounter.bubbleCount --;
+
                 }
-            if (this.bubbleTime > 5) {
-                this.powerup = false;
+            if ( that.game.camera.bubbleCounter.bubbleCount == 0) {
+                this.powerup = false;  
             }
         }
 

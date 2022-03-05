@@ -26,8 +26,7 @@ class BubblesController{
 
          var that = this; 
          this.game.entities.forEach(function (entity) { 
-            if (( entity instanceof Chick  || entity instanceof Yubaba || entity instanceof Crow) && entity.BB && that.BB.collide(entity.BB) ) {
-
+            if (( entity instanceof Chick  || entity instanceof Yubaba || entity instanceof Crow || entity instanceof Radish) && entity.BB && that.BB.collide(entity.BB) ) {
                         entity.hitpoints -= 30; 
                         that.removeFromWorld = true;
              }
@@ -60,7 +59,7 @@ class Portal {
         Object.assign(this, { game, x, y});
         this.height = 30; 
         this.width = 29; 
-        this.animation = new Animator (ASSET_MANAGER.getAsset("./GameEngine/sprites/portal.png"), 0, 0, this.width, this.height, 4, .1, 1, false, true);
+        this.animation = new Animator (ASSET_MANAGER.getAsset("./GameEngine/sprites/portal.png"), 0, 0, this.width, this.height, 4, .3, 1, false, true);
         this.BB = new BoundingBox(this.x + this.width , this.y + this.height, this.height *2, this.width*2 );
 
     }
@@ -80,6 +79,35 @@ class Portal {
     }
 
 }
+class BubbleCounter {
+    constructor( game, x, y) {
+        Object.assign(this, { game, x, y});
+        this.scaleBubble = 1.5;
+    
+        this.heightofBubble = 20;
+        this.widthofBubble = 20;
+        this.frameCount = 5;
+         const framDuration = .5 ;
+         this.animation = new Animator (ASSET_MANAGER.getAsset("./GameEngine/sprites/bubble.png"), 0, 0, this.widthofBubble, this.heightofBubble
+            , this.frameCount, framDuration, 0, false, true );
+
+        this.bubbleCount = 0;
+    }
+
+    update(){
+
+    };
+
+    draw(ctx){
+        if (!this.game.camera.chihiro.winGame) {
+            this.animation.drawFrame(this.game.clockTick, ctx,
+                this.x, this.y, PARAMS.SCALE * .75);
+            ctx.fillStyle = "Pink";
+            ctx.fillText(": "+ this.bubbleCount,  this.x + 19 * PARAMS.SCALE, this.y + 13 * PARAMS.SCALE);
+        }
+    };
+};
+
 class Coins {
     constructor( game, x, y) {
         Object.assign(this, { game, x, y});
@@ -126,13 +154,14 @@ class CoinCounter {
     update(){
 
     };
+    
 
     draw(ctx){
         if (!this.game.camera.chihiro.winGame) {
             this.animation.drawFrame(this.game.clockTick, ctx,
                 this.x, this.y, PARAMS.SCALE * 1);
             ctx.fillStyle = "Pink";
-            ctx.fillText(this.coinCount,  this.x + 22 * PARAMS.SCALE, this.y + 13 * PARAMS.SCALE);
+            ctx.fillText(": " +this.coinCount,  this.x + 19 * PARAMS.SCALE, this.y + 13 * PARAMS.SCALE);
         }
     };
 };
