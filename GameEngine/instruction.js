@@ -100,6 +100,7 @@ class Instruction {
         if (!this.removeFromWorld && this.closePressed) {
             this.game.camera.onInstructions = false;
             this.removeFromWorld = true;
+            ASSET_MANAGER.pauseBackgroundMusic();
             this.game.introbar.removeFromWorld = true;
         }
         if (this.count >= 2) {

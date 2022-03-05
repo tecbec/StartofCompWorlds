@@ -3,7 +3,7 @@
  * THIS IS WHERE WE PUT THE ENTITIES IN THE CANVAS
  */
  var LEVEL = {
-    music: "./GameEngine/audio/OneSummersDay.mp3",
+    music: ["./GameEngine/audio/OneSummersDay.mp3", "./GameEngine/audio/TheNameOfLife.mp3"], 
     START_MUTE:         false,               // you can must the music in each level
     START_CANVAS:       {X: -851, Y: 0},
     END_CANVAS:         {X: 22000},         // change this later when we figure out the exact ending canvas measurement
@@ -179,18 +179,23 @@ class SceneManager {
         this.loadGame();
 
         // don't play music unless it's not the title page
-        if (LEVEL.music && !this.title) {
+        if (LEVEL.music[0] && !this.title) {
              ASSET_MANAGER.pauseBackgroundMusic();
-             ASSET_MANAGER.playAsset(LEVEL.music);
+             ASSET_MANAGER.playAsset(LEVEL.music[0]);
         }
+        
     };
 
     loadInstructions() {
-        if (!this.instructionsOpened) {
-            this.game.addEntity(new Instruction(this.game, 0, 0));
-        }
-        
+        if (this.instructionsOpened) {
+            this.buttons.mute = LEVEL.START_MUTE;
+            this.mute = LEVEL.START_MUTE;
+            this.game.addEntity(new Instruction(this.game, 0, 0)); 
+            ASSET_MANAGER.playAsset(LEVEL.music[1]);
+            this.instructionsOpened = false;
+        } 
     }
+
     loadGame() {
         if (this.title) {
             this.game.addEntity(this.background);
@@ -288,16 +293,14 @@ class SceneManager {
                 let haku = LEVEL.HAKU_LOCATION[i];
                 this.game.addEntity(new Haku(this.game, haku.X, haku.Y, haku.TEXT));
             }
-
-
-
             this.game.addEntity(this.breathbar);
             this.game.addEntity(this.coinCounter);
             this.game.addEntity(new Fireworks(this.game));
             this.game.addEntity(new EndScreen(this.game, this.level, LEVEL.END_SCREEN.X, LEVEL.END_SCREEN.Y));
-            this.game.addEntity(this.buttons);
-        
+          
         }
+        this.game.addEntity(this.buttons);
+        
     };
 
     changeBreath() {
@@ -328,16 +331,16 @@ class SceneManager {
              
             }
         }
-
+       
         if (this.title && !this.instructionsOpened && this.game.click && !this.onInstructions) {  // start button
             if (this.title && !this.instructionsOpened && this.game.click && this.game.mouse.y > 700 && this.game.mouse.y < 750 && this.game.click.x > 723  && this.game.click.x < 1126) {
+                this.instructionsOpened = true;
                 this.loadInstructions();
                 this.onInstructions = true;
-                this.instructionsOpened = false;
                 this.game.click = false;
             } 
         } 
-
+      
         if (this.game.click) {
             // Debug
             if(this.game.click.y > 1040         && this.game.click.y < 1070     && this.game.mouse.x < 200 && this.game.mouse.x > 100 && PARAMS.DEBUG) {
