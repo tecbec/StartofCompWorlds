@@ -84,7 +84,7 @@ class Instruction {
             this.blurVelocity += BLUR_SPEED;
             if (this.blurVelocity > BLUR_MAX)
                 this.blurVelocity = BLUR_MAX;
-        } else if (this.blurValues <= 0) {    
+        } else if (this.blurValues <= 10) {    
             this.blurVelocity -=  BLUR_SPEED;
             if (this.blurVelocity < -BLUR_MAX)   
                 this.blurVelocity = -BLUR_MAX;
@@ -163,6 +163,22 @@ class Instruction {
 
     };
 
+    drawLamps(ctx) {
+        this.stonelampspritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/stonelamp.png");
+        this.lampspritesheet = this.spritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/lamp.png");
+        this.firespritesheet =  ASSET_MANAGER.getAsset("./GameEngine/sprites/flame.png");
+       
+      
+        ctx.shadowColor = '#f57c00';
+        ctx.shadowBlur = 8;
+        ctx.drawImage(this.firespritesheet,0,0, 107,188, 0, 910, 107, 188);
+        ctx.drawImage(this.firespritesheet,0,0, 107,188, 455, 910, 107, 188);
+        ctx.shadowColor = "transparent"; // remove shadow !
+        ctx.drawImage(this.stonelampspritesheet, 0, 0, 45, 142, 773, 910, 45*2, 142*2);
+        ctx.drawImage(this.lampspritesheet,0,0, 107,188, 0, 910, 107, 188);
+        ctx.drawImage(this.lampspritesheet,0,188, 107,188, 530, 910, 107, 188);
+  
+    }
     drawButton(ctx) {
         if (this.closeHover) {
             ctx.drawImage(this.buttonspritesheet,
@@ -220,6 +236,7 @@ class Instruction {
         this.drawHouse(ctx);
         this.drawRailing(ctx);
         this.drawButton(ctx);
+        this.drawLamps(ctx);
        
         ctx.font = "24px Minecraft";
         ctx.strokeStyle = '#bdb4a4';
