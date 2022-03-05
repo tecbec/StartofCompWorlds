@@ -32,6 +32,7 @@ ASSET_MANAGER.queueDownload("./GameEngine/sprites/title-buttons.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/volume.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/frog.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/buttonUI.png");
+ASSET_MANAGER.queueDownload("./GameEngine/sprites/flag.png");
 // music
 ASSET_MANAGER.queueDownload("./GameEngine/audio/OneSummersDay.mp3");
 ASSET_MANAGER.queueDownload("./GameEngine/audio/TheNameOfLife.mp3");

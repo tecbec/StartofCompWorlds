@@ -66,7 +66,9 @@ class Instruction {
         this.buttonspritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/buttonUI.png");
         this.bubblespritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/bubble.png");
         this.portalspritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/portal.png");
-        this.blurValues = 100;
+        this.flagspritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/flag.png");
+        this.flagAnim = new Animator (this.flagspritesheet,BACKGROUND.FLAG.X, BACKGROUND.FLAG.Y,  BACKGROUND.FLAG.W,  BACKGROUND.FLAG.H, 3, 0.5, 0, false, true );
+        this.blurValues = 50;
         this.blurVelocity = 0;
         this.introbar = new BreathBar(this.game, 370, 651, 50, 10);
         this.breathbardrawn = false;
@@ -74,13 +76,13 @@ class Instruction {
         this.loadButton();
         // 0 is story line
         this.count = 1;
-        this.maxCount = 6;
+        this.maxCount = 7;
     }
 
     update() {
         var BLUR_SPEED = 100;
-        var BLUR_MAX = 100;
-        if (this.blurValues >= 99) {
+        var BLUR_MAX = 50;
+        if (this.blurValues >= 49) {
             this.blurVelocity += BLUR_SPEED;
             if (this.blurVelocity > BLUR_MAX)
                 this.blurVelocity = BLUR_MAX;
@@ -233,6 +235,8 @@ class Instruction {
     draw(ctx) {
         this.drawBackground(ctx);
         this.drawGround(ctx);
+        this.flagAnim.drawFrame(this.game.clockTick, ctx, 800, 0, 2);
+       
         this.drawHouse(ctx);
         this.drawRailing(ctx);
         this.drawButton(ctx);
@@ -490,7 +494,7 @@ class Instruction {
             ctx.fillText("Features", 50, 350); 
             ctx.font = "32px Minecraft";
 
-            ctx.fillText("Walk through the portal to receive a power up", 80, 750);
+            ctx.fillText("Walk through portals to receive a power up", 100, 750);
             ctx.fillText("(space bar to utilize)", 280, 800);  
             var MAX_LEFT = 80;
             var MAX_RIGHT = 100;
@@ -498,7 +502,6 @@ class Instruction {
                 this.portalAnim.drawFrame(this.game.clockTick, ctx, 392, 520, 3);
             }
             if (this.xwalk1 <= 450) {
-              
                 this.walkAnim[0][this.walkstate1].drawFrame(this.game.clockTick, ctx, this.xwalk1, 500, 2);
             } else {
                 this.elapsedChickTime += this.game.clockTick;
@@ -596,7 +599,19 @@ class Instruction {
             this.ycrow += this.ycrowvel * this.game.clockTick * 2;
             this.xcrow -= this.xcrowvel * this.game.clockTick * 2;
         }
+        if (this.count == 7) {
+            ctx.font = "64px Minecraft";
+            ctx.strokeStyle = '#b30000';
+            ctx.fillStyle = ctx.strokeStyle;
+            ctx.fillText("Features", 50, 355); 
+            ctx.strokeStyle = '#f2f0ed';
+            ctx.fillStyle = ctx.strokeStyle;
+            ctx.fillText("Features", 50, 350); 
+            ctx.font = "32px Minecraft";
+            ctx.fillText("Seek guidance and help from Haku", 240, 750);
 
+            this.hakuAnim.drawFrame(this.game.clockTick, ctx, 400, 500, 2);
+        }
       
     };
 
@@ -618,7 +633,7 @@ class Instruction {
         this.chihirospritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/Chihiro_spritesheet.png");
         this.chickspritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/chick.png")
         this.crowspritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/yubaba.png");
-
+        this.hakuspritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/haku_spritesheet.png");
         for (var i = 0; i < 1; i++) {
             this.jumpAnim.push([]);
             for (var j = 0; j < 2; j++) {
@@ -639,7 +654,10 @@ class Instruction {
             }
         }
 
-
+        this.hakuAnim = new Animator(this.hakuspritesheet, HAKU.IDLE.RIGHT.X, HAKU.IDLE.RIGHT.Y,
+            HAKU.SIZE, HAKU.SIZE,
+            HAKU.IDLE.FRAME, HAKU.IDLE.SPEED,
+            HAKU.IDLE.PADDING, HAKU.IDLE.REVERSE, HAKU.IDLE.LOOP);
         this.crowAnim[0][0] = new Animator (this.crowspritesheet, 0, 0, 278, 230, 14, 0.15, 0, false, true);
         this.crowAnim[0][1] = new Animator (this.crowspritesheet, 0, 230, 278, 230, 14, 0.15, 0, false, true);
         this.chickAnim = new Animator(this.chickspritesheet, 

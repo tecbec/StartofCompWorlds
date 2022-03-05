@@ -332,8 +332,8 @@ class SceneManager {
             }
         }
        
-        if (this.title && !this.instructionsOpened && this.game.click && !this.onInstructions) {  // start button
-            if (this.title && !this.instructionsOpened && this.game.click && this.game.mouse.y > 700 && this.game.mouse.y < 750 && this.game.click.x > 723  && this.game.click.x < 1126) {
+        if (this.title && !this.instructionsOpened && !this.onInstructions  &&  this.game.click) {  // start button
+            if (this.title && !this.instructionsOpened && !this.onInstructions && this.game.click && this.game.click.y > 700 && this.game.click.y < 750 && this.game.click.x > 723  && this.game.click.x < 1126) {
                 this.instructionsOpened = true;
                 this.loadInstructions();
                 this.onInstructions = true;
