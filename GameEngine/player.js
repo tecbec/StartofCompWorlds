@@ -13,6 +13,7 @@ var CHIHIRO = {
     DEAD:   {RIGHT: {X: 0,  Y: 420},  LEFT: {X: 0,  Y: 490},  FRAME: 3, SPEED: 0.12, PADDING: 0, REVERSE: false, LOOP: false},
     CROUCH_WALK: {RIGHT: {X: 0,  Y: 700}, LEFT: {X: 0,  Y: 770}, FRAME: 4, SPEED: 0.33, PADDING: 0, REVERSE: false, LOOP: true},
     VICTORY_DANCE:  {RIGHT: {X: 0,  Y: 840}, LEFT: {X: 350, Y: 840}, FRAME: 5, SPEED: 0.2, PADDING: 0, REVERSE: false, LOOP: true},
+    HEALING: {LAYER1:{X: 0, Y: 210}, LAYER2: {X: 0, Y: 140}, LAYER3: {X:0, Y:70}, LAYER4: {X:0, Y:0}, FRAME: 4, SPEED: 0.2, PADDING: 0, REVERSE: false, LOOP: true, W:70, H:70, },
     BREATH_BAR:  {X: 1700, Y: 10, HEIGHT: 10, MAX: 100},
     COIN_COUNTER:{X: 1620, Y: 7.25}
 };
@@ -26,6 +27,7 @@ class Player {
         this.game.chihiro = this;  // chihiro adds a reference to herself into the game engine
         this.game.x = this;
         this.spritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/Chihiro_spritesheet.png");
+        this.auraspritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/healing.png");
 
         // default values
         this.velocity = { x: 0, y: 0};
@@ -37,7 +39,8 @@ class Player {
         this.chihiroScale = 2;
         this.endPosition = false;
         this.collideWithFrog = false;
-
+        this.healthIncreases = false;
+        this.healingTimer = 0;
         // testing
         // this.sootCount = 0;
         this.nofaceCount = 0;
@@ -156,6 +159,27 @@ class Player {
             CHIHIRO.SIZE, CHIHIRO.SIZE,
             CHIHIRO.VICTORY_DANCE.FRAME, CHIHIRO.VICTORY_DANCE.SPEED,
             CHIHIRO.VICTORY_DANCE.PADDING, CHIHIRO.VICTORY_DANCE.REVERSE, CHIHIRO.VICTORY_DANCE.LOOP);
+
+
+        this.healAnim1 = new Animator (this.auraspritesheet, CHIHIRO.HEALING.LAYER1.X, CHIHIRO.HEALING.LAYER1.Y,
+             CHIHIRO.HEALING.W, CHIHIRO.HEALING.H,
+             CHIHIRO.HEALING.FRAME, CHIHIRO.HEALING.SPEED,
+             CHIHIRO.HEALING.PADDING, CHIHIRO.HEALING.REVERSE, CHIHIRO.HEALING.LOOP);
+
+        this.healAnim2 = new Animator (this.auraspritesheet, CHIHIRO.HEALING.LAYER2.X, CHIHIRO.HEALING.LAYER2.Y,
+        CHIHIRO.HEALING.W, CHIHIRO.HEALING.H,
+        CHIHIRO.HEALING.FRAME, CHIHIRO.HEALING.SPEED,
+        CHIHIRO.HEALING.PADDING, CHIHIRO.HEALING.REVERSE, CHIHIRO.HEALING.LOOP);
+
+        this.healAnim3 = new Animator (this.auraspritesheet, CHIHIRO.HEALING.LAYER3.X, CHIHIRO.HEALING.LAYER3.Y,
+            CHIHIRO.HEALING.W, CHIHIRO.HEALING.H,
+            CHIHIRO.HEALING.FRAME, CHIHIRO.HEALING.SPEED,
+            CHIHIRO.HEALING.PADDING, CHIHIRO.HEALING.REVERSE, CHIHIRO.HEALING.LOOP);
+
+        this.healAnim4 = new Animator (this.auraspritesheet, CHIHIRO.HEALING.LAYER4.X, CHIHIRO.HEALING.LAYER4.Y,
+            CHIHIRO.HEALING.W, CHIHIRO.HEALING.H,
+            CHIHIRO.HEALING.FRAME, CHIHIRO.HEALING.SPEED,
+            CHIHIRO.HEALING.PADDING, CHIHIRO.HEALING.REVERSE, CHIHIRO.HEALING.LOOP);
     };
 
     /* Update the bounding box of the player for collision detection */
@@ -183,11 +207,44 @@ class Player {
 
     /* Draw the images onto the screen */
     draw(ctx) {
-        this.animations[this.state][this.facing].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, this.chihiroScale);
+        // if this is healing -> do elapsed time
+        if (this.healthIncreases) {
+            this.healingTimer += this.game.clockTick;
+                if (this.healingTimer < 2) {
+                    var blurValues = 10;
+                    ctx.shadowColor = '#e8eeaa';
+                    ctx.shadowBlur = blurValues;
+                    this.healAnim1.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y + 10, this.chihiroScale);
+                 
+                    ctx.shadowBlur = blurValues;
+                    this.animations[this.state][this.facing].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, this.chihiroScale);
+                    ctx.shadowColor = "transparent"; // remove shadow !
+            
+                    ctx.shadowColor = '#e8eeaa';
+                    ctx.shadowBlur = blurValues;
+                    this.healAnim2.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, this.chihiroScale);
+                    this.healAnim3.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, this.chihiroScale);
+                    ctx.shadowColor = "transparent"; // remove shadow !
+                    ctx.shadowColor = '#c0d470';
+                    ctx.shadowBlur = 20;
+                    this.healAnim4.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, this.chihiroScale);
+                    ctx.shadowColor = "transparent";
+                } else {
+                    this.healingTimer = 0;
+                    this.healthIncreases = false;
+                }
+        } else {
+            this.animations[this.state][this.facing].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, this.chihiroScale);
+         
+        }
+        
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
             ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
         }
+      
+
+     
         ctx.imageSmoothingEnabled = false;
         // this.breathbar.draw(ctx);
         // this.coinCounter.draw(ctx);
@@ -473,6 +530,7 @@ class Player {
                 // collision with HAKU
                 if (entity instanceof Haku && that.BB.collide(entity.BB)) {
                     // instantly heal stamina bar
+                    that.healthIncreases = true;
                     that.game.camera.breathwidth = CHIHIRO.BREATH_BAR.MAX;
                     that.game.camera.changeBreath();
                     that.collideWithHaku = true;

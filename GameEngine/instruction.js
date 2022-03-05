@@ -29,6 +29,12 @@ class Instruction {
         this.ywalkvel2 = 0;
         this.walkDemoState = 0;
 
+        this.xwalk3 = 300;
+        this.ywalk3 = 500;
+        this.xwalkvel3 = 0;
+        this.ywalkvel3 = 0;
+        this.healingTimer = 0;
+
         this.xbubble = 610;
         this.ybubble = 420;
         this.xbubvel = 0;
@@ -611,8 +617,51 @@ class Instruction {
             ctx.fillText("Features", 50, 350); 
             ctx.font = "32px Minecraft";
             ctx.fillText("Seek guidance and help from Haku", 240, 750);
+            var MAX_LEFT = 80;
+            var MAX_RIGHT = 100;
+            if (this.xwalk3 <= 500) {
+                this.walkRightAnim.drawFrame(this.game.clockTick, ctx, this.xwalk3, 500, 2);  
+            } else {  
+                this.healingTimer += this.game.clockTick;
+                if (this.healingTimer < 2) {
+                    var blurValues = 10;
+                    ctx.shadowColor = '#e8eeaa';
+                    ctx.shadowBlur = blurValues;
+                    this.healAnim1.drawFrame(this.game.clockTick, ctx, 500 ,500 + 10, 2);
+                
+                    ctx.shadowBlur = blurValues;
+                    this.idleLeftAnim.drawFrame(this.game.clockTick, ctx, 500, 500, 2);
+                    ctx.shadowColor = "transparent"; // remove shadow !
+            
+                    ctx.shadowColor = '#e8eeaa';
+                    ctx.shadowBlur = blurValues;
+                    this.healAnim2.drawFrame(this.game.clockTick, ctx, 500, 500, 2);
+                    this.healAnim3.drawFrame(this.game.clockTick, ctx, 500, 500, 2);
+                    ctx.shadowColor = "transparent"; // remove shadow !
+                    ctx.shadowColor = '#c0d470';
+                    ctx.shadowBlur = 20;
+                    this.healAnim4.drawFrame(this.game.clockTick, ctx, 500, 500,2);
+                    ctx.shadowColor = "transparent";
+                }
+                this.idleLeftAnim.drawFrame(this.game.clockTick, ctx, 500, 500, 2);
+            }
+          
+            if (this.xwalk3 <= 500) { // stops here
+                this.xwalkvel3 -= MAX_LEFT * 2;
+                if (this.xwalkvel3 < -MAX_LEFT) {
+                    this.xwalkvel3 = -MAX_LEFT;
+                }
+            } else if (this.xwalk3 >= 500) {
+                this.xwalkvel3 = 0;
+            }
+            this.xwalk3 -= this.xwalkvel3 * this.game.clockTick * 2; 
+
 
             this.hakuAnim.drawFrame(this.game.clockTick, ctx, 400, 500, 2);
+        } else {
+            this.healingTimer = 0;
+            this.xwalk3 = 300;
+            this.xwalkvel3 = 0;
         }
       
     };
@@ -636,6 +685,7 @@ class Instruction {
         this.chickspritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/chick.png")
         this.crowspritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/yubaba.png");
         this.hakuspritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/haku_spritesheet.png");
+        this.auraspritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/healing.png");
         for (var i = 0; i < 1; i++) {
             this.jumpAnim.push([]);
             for (var j = 0; j < 2; j++) {
@@ -655,6 +705,25 @@ class Instruction {
                 this.crowAnim[i].push([]);
             }
         }
+        this.healAnim1 = new Animator (this.auraspritesheet, CHIHIRO.HEALING.LAYER1.X, CHIHIRO.HEALING.LAYER1.Y,
+            CHIHIRO.HEALING.W, CHIHIRO.HEALING.H,
+            CHIHIRO.HEALING.FRAME, CHIHIRO.HEALING.SPEED,
+            CHIHIRO.HEALING.PADDING, CHIHIRO.HEALING.REVERSE, CHIHIRO.HEALING.LOOP);
+
+        this.healAnim2 = new Animator (this.auraspritesheet, CHIHIRO.HEALING.LAYER2.X, CHIHIRO.HEALING.LAYER2.Y,
+            CHIHIRO.HEALING.W, CHIHIRO.HEALING.H,
+            CHIHIRO.HEALING.FRAME, CHIHIRO.HEALING.SPEED,
+            CHIHIRO.HEALING.PADDING, CHIHIRO.HEALING.REVERSE, CHIHIRO.HEALING.LOOP);
+
+         this.healAnim3 = new Animator (this.auraspritesheet, CHIHIRO.HEALING.LAYER3.X, CHIHIRO.HEALING.LAYER3.Y,
+            CHIHIRO.HEALING.W, CHIHIRO.HEALING.H,
+            CHIHIRO.HEALING.FRAME, CHIHIRO.HEALING.SPEED,
+            CHIHIRO.HEALING.PADDING, CHIHIRO.HEALING.REVERSE, CHIHIRO.HEALING.LOOP);
+
+        this.healAnim4 = new Animator (this.auraspritesheet, CHIHIRO.HEALING.LAYER4.X, CHIHIRO.HEALING.LAYER4.Y,
+            CHIHIRO.HEALING.W, CHIHIRO.HEALING.H,
+            CHIHIRO.HEALING.FRAME, CHIHIRO.HEALING.SPEED,
+            CHIHIRO.HEALING.PADDING, CHIHIRO.HEALING.REVERSE, CHIHIRO.HEALING.LOOP);
 
         this.hakuAnim = new Animator(this.hakuspritesheet, HAKU.IDLE.RIGHT.X, HAKU.IDLE.RIGHT.Y,
             HAKU.SIZE, HAKU.SIZE,
