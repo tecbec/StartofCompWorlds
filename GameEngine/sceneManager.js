@@ -4,7 +4,7 @@
  */
  const SOOT_AREA_HEIGHT = 30;
  var LEVEL = {
-    music: "./GameEngine/audio/OneSummersDay.mp3",
+    music: ["./GameEngine/audio/OneSummersDay.mp3", "./GameEngine/audio/TheNameOfLife.mp3"], 
     TITLE_START:        true,              // determine if you want the title to be on.
     START_MUTE:         false,               // you can must the music in each level
     START_CANVAS:       {X: -851, Y: 0},
@@ -156,6 +156,7 @@ class SceneManager {
 
         // Title Chihiro
         this.titlePlaque = new TitlePlaque(this.game);
+
         this.chihiro = new Player(this.game, CHIHIRO.TITLE_POSITION.X, CHIHIRO.TITLE_POSITION.Y);
         this.ground = new Ground(this.game, LEVEL.START_CANVAS.X, PARAMS.CANVAS_HEIGHT - BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE,
                                             PARAMS.CANVAS_WIDTH * LEVEL.FRAME_COUNT, BACKGROUND.GROUND.SCALE * BACKGROUND.GROUND.SIZE);
@@ -164,7 +165,7 @@ class SceneManager {
                                     BACKGROUND.RAILING.SCALE * BACKGROUND.RAILING.SIZE);
         this.lamp = new Lamp(this.game, -950, 620, BACKGROUND.LAMP.SIZE * BACKGROUND.LAMP.SCALE.W);
 
-        this.chick = new Chick(this.game, this.chickPlace.x, this.chickPlace.y, this.chickPlace.xneg, this.chickPlace.xpos);
+        this.chick = new Chick(this.game, this.chickPlace.x, this.chickPlace.y, 0, this.chickPlace.xneg, this.chickPlace.xpos);
         this.haku = new Haku(this.game, this.hakuPlace.x, this.hakuPlace.y);
         this.noFace = new NoFace(this.game, this.noFacePlace.x, this.noFacePlace.y, this.noFacePlace.scale);
 

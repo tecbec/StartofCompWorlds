@@ -109,21 +109,6 @@ class TitleButtons {
                 this.game.mouse.x > BACKGROUND.BUTTONS[0].X  &&
                 this.game.mouse.x < BACKGROUND.BUTTONS[0].X + BACKGROUND.START_BUTTON.W ) {
 
-            // if (this.game.mouse && this.game.mouse.y > 700 && this.game.mouse.y < 750 && this.game.mouse.x > 728  && this.game.mouse.x < 1113) {   // Start
-            //     ctx.drawImage(  this.spritesheet,
-            //         BACKGROUND.BUTTONS[3].SPRITEX+BACKGROUND.BUTTONS[3].SWIDTH,     BACKGROUND.BUTTONS[3].SPRITEY,             // x and y of the spritesheet
-            //         BACKGROUND.BUTTONS[3].SWIDTH,                                   BACKGROUND.BUTTONS[3].SHEIGHT,             // width and height of the spritesheet
-            //         BACKGROUND.BUTTONS[3].X-this.game.camera.x,                     BACKGROUND.BUTTONS[3].Y,                   // x and y of the canvas
-            //         BACKGROUND.BUTTONS[3].SWIDTH * BACKGROUND.BUTTONS[3].SCALE,      BACKGROUND.BUTTONS[3].SHEIGHT * BACKGROUND.BUTTONS[3].SCALE);                      // width and height of the canvas
-            // } else {
-            //     ctx.drawImage(  this.spritesheet,
-            //         BACKGROUND.BUTTONS[3].SPRITEX,                                  BACKGROUND.BUTTONS[3].SPRITEY,             // x and y of the spritesheet
-            //         BACKGROUND.BUTTONS[3].SWIDTH,                                   BACKGROUND.BUTTONS[3].SHEIGHT,             // width and height of the spritesheet
-            //         BACKGROUND.BUTTONS[3].X-this.game.camera.x,                     BACKGROUND.BUTTONS[3].Y,                   // x and y of the canvas
-            //         BACKGROUND.BUTTONS[3].SWIDTH * BACKGROUND.BUTTONS[3].SCALE,     BACKGROUND.BUTTONS[3].SHEIGHT * BACKGROUND.BUTTONS[0].SCALE);                      // width and height of the canvas
-            // }
-
-            if (this.game.mouse && this.game.mouse.y > 608 && this.game.mouse.y < 658 && this.game.mouse.x > 815  && this.game.mouse.x < 1003) {   // Start
                 ctx.drawImage(  this.spritesheet,
                     BACKGROUND.BUTTONS[0].SPRITEX+BACKGROUND.BUTTONS[0].SWIDTH,     BACKGROUND.BUTTONS[0].SPRITEY,             // x and y of the spritesheet
                     BACKGROUND.BUTTONS[0].SWIDTH,                                   BACKGROUND.BUTTONS[0].SHEIGHT,             // width and height of the spritesheet
