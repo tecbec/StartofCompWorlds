@@ -9,7 +9,7 @@
     START_MUTE:         false,               // you can must the music in each level
     START_CANVAS:       {X: -851, Y: 0},
     END_CANVAS:         {X: 13000},         // change this later when we figure out the exact ending canvas measurement
-    END_TITLE_CANVAS:   {X: 13000},  //500},           // This will end the title canvas so it won't keep going.
+    END_TITLE_CANVAS:   {X: 3000},  //500},           // This will end the title canvas so it won't keep going.
     END_GAME:           {X: 11515, Y: 813},
     FRAME_COUNT: 8,                         // This is the factor that determine how wide the actual game is
     // Type 0: has left,middle,right piece can be adjusted to be longer
@@ -49,7 +49,7 @@
                      {X: 5622, Y: 490}, {X: 5939, Y: 490}, {X: 4500, Y: 920}, {X: 5500, Y: 920}, // scene 3
                      {X: 6900, Y: 790}, {X: 6710, Y: 395},  // scene 4
                      {X: 8482, Y: 925}, {X: 9000, Y: 925}], // scene 5
-                    
+
     SOOT_AREA:      [{W: 170, H: SOOT_AREA_HEIGHT},   {W: 1000, H: SOOT_AREA_HEIGHT},  // scene 1
                      {W: 170, H: SOOT_AREA_HEIGHT},   {W: 200, H: SOOT_AREA_HEIGHT},  // scene 2
                      {W: 170, H: SOOT_AREA_HEIGHT},   {W: 170, H: SOOT_AREA_HEIGHT},  {W: 500, H: SOOT_AREA_HEIGHT},   {W: 500, H: SOOT_AREA_HEIGHT}, // scene 3
@@ -158,6 +158,8 @@ class SceneManager {
 
         this.soot= new Soot(gameEngine, this.sootPlace.x, this.sootPlace.y, 1, 170, 30 ,2);
 
+        this.text1 = new Animator(this.spritesheet, 0, 0, 143, 143, 3,1, 0, false, true);
+        this.text2 = new Animator(this.spritesheet, 580 , 0, 143, 143, 3, 1, 0, false, true);
 
         this.buttons = new TitleButtons(this.game);
 
@@ -326,8 +328,10 @@ class SceneManager {
             if (this.game.click && 
                 this.game.click.y  > BACKGROUND.BUTTONS[0].Y && 
                 this.game.click.y < BACKGROUND.BUTTONS[0].Y + BACKGROUND.START_BUTTON.H && 
-                this.game.click.x > BACKGROUND.BUTTONS[0].X  + BACKGROUND.START_PADDING && 
-                this.game.click.x < BACKGROUND.BUTTONS[0].X + BACKGROUND.START_BUTTON.W + BACKGROUND.START_PADDING) {
+                // this.game.click.x > BACKGROUND.BUTTONS[0].X  + BACKGROUND.START_PADDING && 
+                // this.game.click.x < BACKGROUND.BUTTONS[0].X + BACKGROUND.START_BUTTON.W + BACKGROUND.START_PADDING) {
+                this.game.click.x > BACKGROUND.BUTTONS[0].X  && 
+                this.game.click.x < BACKGROUND.BUTTONS[0].X + BACKGROUND.START_BUTTON.W ) {
 
                     this.title = false;
                     this.loadLevel(1, this.title);
@@ -408,19 +412,16 @@ class SceneManager {
         if (this.gameOver) {
             this.gameOver = false;
         }
-        
         // PARAMS.DEBUG = document.getElementById("debug").checked;
     };
 
     draw(ctx) {
         ctx.font = PARAMS.BLOCKWIDTH / 2 + 'px "Press Start 2P"';
 
-        // if (this.title) {
-        //     this.text1.drawFrame(this.game.clockTick, ctx, this.chickPlace.x+50-this.game.camera.x, this.chickPlace.y - 100, 1);  
-        //     this.text1.drawFrame(this.game.clockTick, ctx, this.sootPlace.x+50-this.game.camera.x, this.sootPlace.y - 50, 1);  
-        //     this.text2.drawFrame(this.game.clockTick, ctx, this.hakuPlace.x+50-this.game.camera.x, this.hakuPlace.y - 100, 1);  
-        //     this.text2.drawFrame(this.game.clockTick, ctx, this.noFacePlace.x+50-this.game.camera.x, this.noFacePlace.y - 100, 1);  
-        // }
+        if (this.title) {
+            this.text1.drawFrame(this.game.clockTick, ctx, this.sootPlace.x+50-this.game.camera.x, this.sootPlace.y - 150, 1);
+            this.text2.drawFrame(this.game.clockTick, ctx, this.hakuPlace.x+50-this.game.camera.x, this.hakuPlace.y - 150, 1);
+        }
 
         if (PARAMS.DEBUG && !this.title && !this.chihiro.winGame) {
             ctx.strokeStyle = "White";
