@@ -109,7 +109,6 @@ class TitleButtons {
     };
 
     draw(ctx) {
-        console.log(this.count);
         if(this.game.camera.title) {
             if (this.count == 0) {
                 this.startSelected = true;
@@ -138,6 +137,7 @@ class TitleButtons {
             }
             if ((this.game.mouse && this.game.mouse.y > 700 && this.game.mouse.y < 750 && this.game.mouse.x > 728  && this.game.mouse.x < 1113)) {   // Instructions
                 this.instructionsSelected = false;
+                this.startSelected = false;
                 ctx.drawImage(  this.spritesheet,
                     BACKGROUND.BUTTONS[3].SPRITEX+BACKGROUND.BUTTONS[3].SWIDTH,     BACKGROUND.BUTTONS[3].SPRITEY,             // x and y of the spritesheet
                     BACKGROUND.BUTTONS[3].SWIDTH,                                   BACKGROUND.BUTTONS[3].SHEIGHT,             // width and height of the spritesheet
@@ -158,6 +158,7 @@ class TitleButtons {
                 // this.game.mouse.x < BACKGROUND.BUTTONS[0].X + BACKGROUND.START_BUTTON.W + BACKGROUND.START_PADDING) {
                 this.game.mouse.x > BACKGROUND.BUTTONS[0].X  &&
                 this.game.mouse.x < BACKGROUND.BUTTONS[0].X + BACKGROUND.START_BUTTON.W)) {
+                this.instructionsSelected = false;
                 this.startSelected = false;
                 ctx.drawImage(  this.spritesheet,
                     BACKGROUND.BUTTONS[0].SPRITEX+BACKGROUND.BUTTONS[0].SWIDTH,     BACKGROUND.BUTTONS[0].SPRITEY,             // x and y of the spritesheet
