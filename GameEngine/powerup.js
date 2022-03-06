@@ -9,8 +9,8 @@ class BubblesController{
     this.heightofBubble = 20;
     this.widthofBubble = 20;
     this.frameCount = 5;
-     const framDuration = .5 ;
-     this.animation = new Animator (ASSET_MANAGER.getAsset("./GameEngine/sprites/bubble.png"), 0, 0, this.widthofBubble, this.heightofBubble
+    const framDuration = .5 ;
+    this.animation = new Animator (ASSET_MANAGER.getAsset("./GameEngine/sprites/bubble.png"), 0, 0, this.widthofBubble, this.heightofBubble
         , this.frameCount, framDuration, 0, false, true );
 
      this.BB = new BoundingBox(this.x, this.y, 

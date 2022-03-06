@@ -37,17 +37,23 @@ ASSET_MANAGER.queueDownload("./GameEngine/audio/OneSummersDay.mp3");
 
 //  sound effects 
 ASSET_MANAGER.queueDownload("./GameEngine/audio/effort-jump.mp3");
-ASSET_MANAGER.queueDownload("./GameEngine/audio/jump.wav"); //not used
-ASSET_MANAGER.queueDownload("./GameEngine/audio/jump2.wav"); //not used
+ASSET_MANAGER.queueDownload("./GameEngine/audio/jump.wav"); 
+ASSET_MANAGER.queueDownload("./GameEngine/audio/jump2.wav"); 
 ASSET_MANAGER.queueDownload("./GameEngine/audio/power-up.mp3");
 ASSET_MANAGER.queueDownload("./GameEngine/audio/coin-collection.wav");
 
+ASSET_MANAGER.queueDownload("./GameEngine/sprites/frog.png");
+ASSET_MANAGER.queueDownload("./GameEngine/sprites/buttonUI.png");
+ASSET_MANAGER.queueDownload("./GameEngine/sprites/flag.png");
+ASSET_MANAGER.queueDownload("./GameEngine/sprites/healing.png");
+// music
+ASSET_MANAGER.queueDownload("./GameEngine/audio/TheNameOfLife.mp3");
 ASSET_MANAGER.downloadAll(() => {
 
 	var canvas = document.getElementById("gameCanvas");
 	var ctx = canvas.getContext("2d");
 	ASSET_MANAGER.autoRepeat("./GameEngine/audio/OneSummersDay.mp3");
-
+	ASSET_MANAGER.autoRepeat("./GameEngine/audio/TheNameOfLife.mp3");
 	PARAMS.CANVAS_WIDTH = canvas.width;
 	PARAMS.CANVAS_HEIGHT = canvas.height;
 

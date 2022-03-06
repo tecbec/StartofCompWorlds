@@ -17,6 +17,7 @@
         "Ladd's",
         "nightsky",
         "nofacelocation",
+        "powerup",
         "randomx",
         "randomy",
         "sootlocation",
@@ -26,10 +27,14 @@
         "stonelamp",
         "subheight",
         "subwidth",
+        "vals",
         "velocityx",
         "velocityy",
         "Xand",
+        "xneg",
+        "xpos",
         "xstart",
+        "youwin",
         "ystart",
         "yubaba"
     ]
