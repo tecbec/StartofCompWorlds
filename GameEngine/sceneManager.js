@@ -73,7 +73,9 @@
                       {X: 7000, Y: 0}, ], // scene 4
 
     RADISH_LOCATION: [{X: 840,  Y: 690}], //scene
-
+    //                      1                       2                 3                4
+    PORTAL_LOCATION: [{X: 820,  Y: 390}, {X: 2850, Y: 120}, {X: 3902, Y: 800}, {X: 7000, Y:120}],
+    
     CHICK_LOCATION: [{X: 2402, Y: 785, MIN: 500,  MAX: 2402, SPEED: 2, DIR:0},               // scene 1
                      {X: 2900, Y: 785, MIN: 2402, MAX: 4304, SPEED: 0, DIR:0}, {X: 3800, Y: 785, MIN: 2402, MAX: 4304, SPEED: 0, DIR:0},               // scene 2
                      {X: 4780, Y: 785, MIN: 4304, MAX: 5255, SPEED: 0, DIR:1}, {X: 5730, Y: 785, MIN: 5305, MAX: 6206, SPEED: 0, DIR:0},               // scene 3

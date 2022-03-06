@@ -19,9 +19,7 @@ var CHIHIRO = {
     COIN_SOUND: "./GameEngine/audio/coin-collection.wav",
     PORTAL_SOUND: "./GameEngine/audio/power-up.mp3",
     VICTORY_DANCE:  {RIGHT: {X: 0,  Y: 840}, LEFT: {X: 350, Y: 840}, FRAME: 5, SPEED: 0.2, PADDING: 0, REVERSE: false, LOOP: true},
-    HEALING: {LAYER1:{X: 0, Y: 210}, LAYER2: {X: 0, Y: 140}, LAYER3: {X:0, Y:70}, LAYER4: {X:0, Y:0}, FRAME: 4, SPEED: 0.2, PADDING: 0, REVERSE: false, LOOP: true, W:70, H:70, },
-    BREATH_BAR:  {X: 1700, Y: 10, HEIGHT: 10, MAX: 100},
-    COIN_COUNTER:{X: 1620, Y: 7.25}
+    HEALING: {LAYER1:{X: 0, Y: 210}, LAYER2: {X: 0, Y: 140}, LAYER3: {X:0, Y:70}, LAYER4: {X:0, Y:0}, FRAME: 4, SPEED: 0.2, PADDING: 0, REVERSE: false, LOOP: true, W:70, H:70, }
 };
 /* Chihiro, the main character of the game */
 class Player {
