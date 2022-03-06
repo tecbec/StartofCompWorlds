@@ -5,6 +5,7 @@ var BACKGROUND = {
     SIZE: {W: 1000, H: 500},
     SCALE: 2,
     GROUND:         {X: 32, Y: 0, SIZE: 32, SCALE: 4},
+    FLAG:           {X: 0,  Y: 0, W: 264, H: 268, COUNT:5, SCALE: 1},
     STONE_LAMP:     {X: 0, Y: 0,  SIZE: {W:45, H:142 },  SCALE:{ X:4, Y: 5},   BB_SIZE: {W: 10, H: 10}},
     LAMP:           {X: 0, Y: 0,  SIZE: {W: 107, H:188}, SCALE:  {W: 2, H: 2}, BB_SIZE: {W: 5,  H: 10}, PADDING: {W: 40, H: 10}},
     RAILING:        {X: 0, Y: 10, SIZE: 64, SCALE: 2.5, BB_SIZE: {W: 5, H: 10}, PADDING: 20},
@@ -18,12 +19,12 @@ var BACKGROUND = {
                      {X: 100,   Y: 250,      SPRITEX: 0, SPRITEY: 64,    NUM_FRAMES: 21,     DUR: 0.15 ,     SCALE: 5},     // index = 1 
                      {X: 750,   Y: 100,      SPRITEX: 0, SPRITEY: 128,   NUM_FRAMES: 21,     DUR: 0.1,       SCALE: 4},     // index = 2 
                      {X: -300,  Y: 500,      SPRITEX: 0, SPRITEY: 192,   NUM_FRAMES: 21,     DUR: 0.15,      SCALE: 2},     // index = 3 
-                     {X: 500,   Y: 550,      SPRITEX: 0, SPRITEY: 384,   NUM_FRAMES: 21,     DUR: 0.1,       SCALE: 2},     // index = 4 
-                     {X: 10800, Y: 50,       SPRITEX: 0, SPRITEY: 0,     NUM_FRAMES: 21,     DUR: 0.1,       SCALE: 5},     // index = 5 
-                     {X: 11300, Y: 250,      SPRITEX: 0, SPRITEY: 64,    NUM_FRAMES: 21,     DUR: 0.15 ,     SCALE: 5},     // index = 6 
-                     {X: 11500, Y: 100,      SPRITEX: 0, SPRITEY: 128,   NUM_FRAMES: 21,     DUR: 0.1,       SCALE: 4},     // index = 7 
-                     {X: 10700, Y: 500,      SPRITEX: 0, SPRITEY: 192,   NUM_FRAMES: 21,     DUR: 0.15,      SCALE: 2},     // index = 8 
-                     {X: 10800, Y: 550,      SPRITEX: 0, SPRITEY: 384,   NUM_FRAMES: 21,     DUR: 0.1,       SCALE: 2}],    // index = 9
+                     {X: 100,   Y: 550,      SPRITEX: 0, SPRITEY: 384,   NUM_FRAMES: 21,     DUR: 0.1,       SCALE: 2},     // index = 4 
+                     {X: 200,   Y: 50,       SPRITEX: 0, SPRITEY: 0,     NUM_FRAMES: 21,     DUR: 0.1,       SCALE: 5},     // index = 5 
+                     {X: 500,   Y: 250,      SPRITEX: 0, SPRITEY: 64,    NUM_FRAMES: 21,     DUR: 0.15 ,     SCALE: 5},     // index = 6 
+                     {X: 800,   Y: 100,      SPRITEX: 0, SPRITEY: 128,   NUM_FRAMES: 21,     DUR: 0.1,       SCALE: 4},     // index = 7 
+                     {X: 200,   Y: 500,      SPRITEX: 0, SPRITEY: 192,   NUM_FRAMES: 21,     DUR: 0.15,      SCALE: 2},     // index = 8 
+                     {X: 100,   Y: 350,      SPRITEX: 0, SPRITEY: 384,   NUM_FRAMES: 21,     DUR: 0.1,       SCALE: 2}],    // index = 9
 
     BUTTONS:       [{X: 800,   Y: 600,      SPRITEX: 0, SPRITEY: 0,     SWIDTH: 48,         SHEIGHT: 16,    SCALE: 4},    // start
     // BUTTONS:       [{X: -25,   Y: 600,      SPRITEX: 0, SPRITEY: 0,     SWIDTH: 48,         SHEIGHT: 16,    SCALE: 4},    // start
@@ -108,6 +109,21 @@ class TitleButtons {
                 this.game.mouse.x > BACKGROUND.BUTTONS[0].X  &&
                 this.game.mouse.x < BACKGROUND.BUTTONS[0].X + BACKGROUND.START_BUTTON.W ) {
 
+            // if (this.game.mouse && this.game.mouse.y > 700 && this.game.mouse.y < 750 && this.game.mouse.x > 728  && this.game.mouse.x < 1113) {   // Start
+            //     ctx.drawImage(  this.spritesheet,
+            //         BACKGROUND.BUTTONS[3].SPRITEX+BACKGROUND.BUTTONS[3].SWIDTH,     BACKGROUND.BUTTONS[3].SPRITEY,             // x and y of the spritesheet
+            //         BACKGROUND.BUTTONS[3].SWIDTH,                                   BACKGROUND.BUTTONS[3].SHEIGHT,             // width and height of the spritesheet
+            //         BACKGROUND.BUTTONS[3].X-this.game.camera.x,                     BACKGROUND.BUTTONS[3].Y,                   // x and y of the canvas
+            //         BACKGROUND.BUTTONS[3].SWIDTH * BACKGROUND.BUTTONS[3].SCALE,      BACKGROUND.BUTTONS[3].SHEIGHT * BACKGROUND.BUTTONS[3].SCALE);                      // width and height of the canvas
+            // } else {
+            //     ctx.drawImage(  this.spritesheet,
+            //         BACKGROUND.BUTTONS[3].SPRITEX,                                  BACKGROUND.BUTTONS[3].SPRITEY,             // x and y of the spritesheet
+            //         BACKGROUND.BUTTONS[3].SWIDTH,                                   BACKGROUND.BUTTONS[3].SHEIGHT,             // width and height of the spritesheet
+            //         BACKGROUND.BUTTONS[3].X-this.game.camera.x,                     BACKGROUND.BUTTONS[3].Y,                   // x and y of the canvas
+            //         BACKGROUND.BUTTONS[3].SWIDTH * BACKGROUND.BUTTONS[3].SCALE,     BACKGROUND.BUTTONS[3].SHEIGHT * BACKGROUND.BUTTONS[0].SCALE);                      // width and height of the canvas
+            // }
+
+            if (this.game.mouse && this.game.mouse.y > 608 && this.game.mouse.y < 658 && this.game.mouse.x > 815  && this.game.mouse.x < 1003) {   // Start
                 ctx.drawImage(  this.spritesheet,
                     BACKGROUND.BUTTONS[0].SPRITEX+BACKGROUND.BUTTONS[0].SWIDTH,     BACKGROUND.BUTTONS[0].SPRITEY,             // x and y of the spritesheet
                     BACKGROUND.BUTTONS[0].SWIDTH,                                   BACKGROUND.BUTTONS[0].SHEIGHT,             // width and height of the spritesheet
@@ -234,7 +250,7 @@ class Fireworks {                   //Firework animation
         this.count++;
         this.fireCount = [85, 105, 125, 155, 190];
         this.fireDur = [110, 121, 160, 200, 245];
-        if (!this.game.camera.chihiro.winGame && !this.game.camera.chihiro.endPosition) {
+        if (!this.game.camera.chihiro.winGame && !this.game.camera.chihiro.endPosition && this.game.camera.title) {
             // first display of each
             if (this.count > this.fireCount[0] && this.count < this.fireDur[0]) {
                 this.animations[2].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[2].X-this.game.camera.x, BACKGROUND.FIREWORKS[2].Y, BACKGROUND.FIREWORKS[2].SCALE);
@@ -279,41 +295,41 @@ class Fireworks {                   //Firework animation
 
         else if (this.game.camera.chihiro.endPosition) {
             if (this.count > this.fireCount[0] && this.count < this.fireDur[0]) {
-                this.animations[2].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[7].X-this.game.camera.x, BACKGROUND.FIREWORKS[7].Y, BACKGROUND.FIREWORKS[7].SCALE);
+                this.animations[2].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[7].X, BACKGROUND.FIREWORKS[7].Y, BACKGROUND.FIREWORKS[7].SCALE);
     
             }
             if (this.count > this.fireCount[1]  && this.count < this.fireDur[1] ) {
-                this.animations[0].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[5].X-this.game.camera.x, BACKGROUND.FIREWORKS[5].Y, BACKGROUND.FIREWORKS[5].SCALE);
+                this.animations[0].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[5].X, BACKGROUND.FIREWORKS[5].Y, BACKGROUND.FIREWORKS[5].SCALE);
             }
             if (this.count > this.fireCount[2]  && this.count < this.fireDur[2] ) {
-                this.animations[1].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[6].X-this.game.camera.x, BACKGROUND.FIREWORKS[6].Y, BACKGROUND.FIREWORKS[6].SCALE);
+                this.animations[1].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[6].X, BACKGROUND.FIREWORKS[6].Y, BACKGROUND.FIREWORKS[6].SCALE);
             }
     
             if (this.count > this.fireCount[3] && this.count < this.fireDur[3]) {
-                this.animations[3].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[8].X-this.game.camera.x, 
+                this.animations[3].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[8].X, 
                                                 BACKGROUND.FIREWORKS[8].Y, BACKGROUND.FIREWORKS[8].SCALE);
             }
     
             if (this.count > this.fireCount[4] && this.count < this.fireDur[4]) {
-                this.animations[4].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[9].X-this.game.camera.x, 
+                this.animations[4].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[9].X, 
                                                 BACKGROUND.FIREWORKS[9].Y, BACKGROUND.FIREWORKS[9].SCALE);
             }
     
             // start the periodic presentation of the fireworks
             if (this.count > 130) {
-                    this.animations[0].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[5].X-this.game.camera.x, BACKGROUND.FIREWORKS[5].Y, BACKGROUND.FIREWORKS[5].SCALE);
+                    this.animations[0].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[5].X, BACKGROUND.FIREWORKS[5].Y, BACKGROUND.FIREWORKS[5].SCALE);
             }
             if (this.count > 150) {
-                this.animations[2].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[7].X-this.game.camera.x, BACKGROUND.FIREWORKS[7].Y, BACKGROUND.FIREWORKS[7].SCALE);
+                this.animations[2].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[7].X, BACKGROUND.FIREWORKS[7].Y, BACKGROUND.FIREWORKS[7].SCALE);
             }
             if (this.count > 180) {
-                this.animations[4].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[9].X-this.game.camera.x, BACKGROUND.FIREWORKS[9].Y, BACKGROUND.FIREWORKS[9].SCALE);
+                this.animations[4].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[9].X, BACKGROUND.FIREWORKS[9].Y, BACKGROUND.FIREWORKS[9].SCALE);
             }
             if (this.count > 210) {
-                this.animations[3].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[8].X-this.game.camera.x, BACKGROUND.FIREWORKS[8].Y, BACKGROUND.FIREWORKS[8].SCALE);
+                this.animations[3].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[8].X, BACKGROUND.FIREWORKS[8].Y, BACKGROUND.FIREWORKS[8].SCALE);
             }
             if (this.count > 250) {
-                this.animations[1].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[6].X-this.game.camera.x, BACKGROUND.FIREWORKS[6].Y, BACKGROUND.FIREWORKS[6].SCALE);
+                this.animations[1].drawFrame(this.game.clockTick, ctx, BACKGROUND.FIREWORKS[6].X, BACKGROUND.FIREWORKS[6].Y, BACKGROUND.FIREWORKS[6].SCALE);
             }
         }
 
@@ -327,6 +343,8 @@ class Bathhouse {
         Object.assign(this, { game, x, y});
         this.spritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/Bathhouse.png");
         this.treespritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/tree-sheet.png");
+        this.flagspritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/flag.png");
+        this.flagAnim = new Animator (this.flagspritesheet,BACKGROUND.FLAG.X, BACKGROUND.FLAG.Y,  BACKGROUND.FLAG.W,  BACKGROUND.FLAG.H, BACKGROUND.FLAG.COUNT, 0.1, 0, false, true );
     }
 
     update() {
@@ -346,6 +364,10 @@ class Bathhouse {
                 1024, 0,  272,  158,
                 this.x + 700 - this.game.camera.x, 670,
                 272 * 2, 158 * 2);
+
+ 
+            this.flagAnim.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x - 100, 0, 2);
+            
 
             ctx.drawImage(this.spritesheet,
                 BACKGROUND.BATHHOUSE.X, BACKGROUND.BATHHOUSE.Y,  BACKGROUND.BATHHOUSE.W,  BACKGROUND.BATHHOUSE.H,
@@ -561,17 +583,67 @@ class Platform {  // leaf platforms
  *  Allow player to jump through from the bottom but not from any other direction.
  */
 class CloudPlatform {
-    constructor(game, x, y, size) {
-        Object.assign(this, { game, x, y, size});
+    constructor(game, x, y, size, min = 0, max = 0, vertical = false) {
+        Object.assign(this, { game, x, y, size, min, max, vertical});
         this.spritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/cloud-Sheet.png");
 
         this.BB = new BoundingBox(this.x + 5 , this.y + 10,
             BACKGROUND.CLOUD_BB[this.size].W * BACKGROUND.CLOUD.SCALE - 10,
             BACKGROUND.CLOUD_BB[this.size].H * BACKGROUND.CLOUD.SCALE);
+
+        this.moving = (this.max - this.min > 0);
+
+        if(this.moving){
+            this.speed = 20;
+        }else{
+            this.speed = 0;
+        }
     }
 
     update() {
+        if(this.moving){
+            if(!this.vertical && this.x + this.BB.width >= this.max){ 
+                this.speed = -Math.abs(this.speed);
+           }else if(!this.vertical && this.x <= this.min){
+                this.speed = Math.abs(this.speed);     
+           }
+           
+           else if(this.vertical && this.y <= this.min){
+            this.speed = Math.abs(this.speed);  
+           }else if(this.vertical && this.y + this.BB.height >= this.max){ 
+            this.speed = -Math.abs(this.speed);
+           }
 
+           if(!this.vertical){
+               this.x += this.speed * this.game.clockTick;
+           }else{
+               this.y += this.speed * this.game.clockTick; 
+           }
+
+           this.BB = new BoundingBox(this.x + 5 , this.y + 10,
+            BACKGROUND.CLOUD_BB[this.size].W * BACKGROUND.CLOUD.SCALE - 10,
+            BACKGROUND.CLOUD_BB[this.size].H * BACKGROUND.CLOUD.SCALE);
+
+            /* doesnt work, not sensing player collisions*/
+            // var that = this; 
+            // this.game.entities.forEach(function (entity) {   
+            //     if(entity instanceof Player){
+            //         console.log("Player " + entity.BB.x + " " + entity.BB.y);
+            //         console.log("Cloud " + that.BB.x + " " + that.BB.y);  
+            //      }      
+            //     if (entity.BB && that.BB.collide(entity.BB)) {
+            //         if(entity instanceof Player && entity.lastBB.bottom <= that.BB.top){
+            //             console.log("Collision with Player");
+                       
+            //             if(!that.vertical){
+            //                 entity.x += that.speed * that.game.clockTick;
+            //             }else{
+            //                 entity.y += that.speed * that.game.clockTick; 
+            //             }
+            //         }
+            //     }
+            // });
+        }
     };
 
     draw(ctx) {
@@ -586,7 +658,7 @@ class CloudPlatform {
             ctx.strokeStyle = 'Red';
             ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
         }
-        ctx.imageSmoothingEnabled = false;
+        ctx.imageSmoothingEnabled = true;
     };
 
 }
@@ -660,7 +732,7 @@ class CloudPlatform {
 class Lamp {
     constructor(game, x, y, w) {
         Object.assign(this, { game, x, y, w});
-        this.spritesheet = this.spritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/lamp.png");
+        this.spritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/lamp.png");
         this.spritesheet2 =  ASSET_MANAGER.getAsset("./GameEngine/sprites/flame.png");
         this.BB = new BoundingBox(this.x+BACKGROUND.LAMP.PADDING.W +20 , this.y +5,
             BACKGROUND.LAMP.SIZE.W * BACKGROUND.LAMP.SCALE.W-BACKGROUND.LAMP.PADDING.W - 30, BACKGROUND.LAMP.SIZE.H * BACKGROUND.LAMP.SCALE.H);

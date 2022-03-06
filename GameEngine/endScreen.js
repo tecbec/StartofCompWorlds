@@ -13,7 +13,7 @@ class EndScreen {
         this.minute = 0;
         this.stopTimer = false;
 
-        this.font = new FontFace("Minecraft", 'url(./sprites/Minecraft.ttf) format("TrueType")');
+        this.font = new FontFace("Minecraft", 'url(./GameEngine/sprites/Minecraft.ttf) format("TrueType")');
         this.font.load().then(function(loadedFont) {
             document.fonts.add(loadedFont);
         }) 
@@ -46,12 +46,14 @@ class EndScreen {
         }
     };
 
-    draw(ctx) {  
-        if (!this.game.camera.title && !this.game.camera.chihiro.winGame) { // start timer 
-            ctx.font = "32px Minecraft";
-            ctx.strokeStyle = '#f2f0ed';
-            ctx.fillStyle = ctx.strokeStyle;
+    draw(ctx) { 
+        ctx.font = "32px Minecraft";
+        ctx.strokeStyle = '#f2f0ed';
+        ctx.fillStyle = ctx.strokeStyle; 
+        if (!this.game.camera.title && !this.game.camera.chihiro.winGame && this.game.camera.chihiro.x > 440) { 
             this.startTimer();
+        }
+        if (!this.game.camera.title && !this.game.camera.chihiro.winGame) { // start timer 
             if (Math.round(this.elapsedTime) < 10 && Math.round(this.minute) < 10) {
                 ctx.fillText("0" + Math.round(this.minute) + ":" + "0" + Math.round(this.elapsedTime), PARAMS.CANVAS_WIDTH / 2 - 32, 32); //timer 
             } else if (Math.round(this.elapsedTime) >= 10 && Math.round(this.minute) < 10) {
@@ -61,8 +63,8 @@ class EndScreen {
             } else if (Math.round(this.elapsedTime) >= 10 && Math.round(this.minute) >= 10) {
                 ctx.fillText(Math.round(this.minute) + ":" + Math.round(this.elapsedTime), PARAMS.CANVAS_WIDTH / 2 - 32, 32); //timer 
             }
-            
-        }
+        } 
+    
 
         // display timer as stats
 
@@ -108,9 +110,16 @@ class EndScreen {
                 }
                 if (this.elapsedStats > 2) {
                     ctx.font = "48px Minecraft";
-                    ctx.strokeStyle = '#470000';
-                    ctx.fillStyle = ctx.strokeStyle;
-                    ctx.fillText("Play again", 330, 805);
+                    if (this.game.mouse && this.game.mouse.y < 800 && this.game.mouse.y > 700 && this.game.mouse.x > 300 && this.game.mouse.x < 600) {
+                        // ctx.strokeStyle = '#bdb4a4';
+                        // ctx.fillStyle = ctx.strokeStyle;
+                        // ctx.fillText("Play again", 330, 805);
+                    } else {
+                        ctx.strokeStyle = '#470000';
+                        ctx.fillStyle = ctx.strokeStyle;
+                        ctx.fillText("Play again", 330, 805);
+                    }
+                 
                   
                     ctx.fillStyle = this.game.mouse && this.game.mouse.y < 800 && this.game.mouse.y > 700 && this.game.mouse.x > 300 && this.game.mouse.x < 600? "#ff7373" : "#bdb4a4";
                     ctx.fillText("Play again", 330, 800); 

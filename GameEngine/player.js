@@ -1,17 +1,19 @@
 /* Chihiro's Params */
 var CHIHIRO = {
     TITLE_POSITION:   {X: 0,  Y: 800},
-    INITIAL_POSITION: {X: 0,  Y: 0},  // change to 10200 to test winning condition. 
+    INITIAL_POSITION: {X: -200,  Y: 0},  // original: -200, change to 11500 to test winning condition. 
     SIZE: 70,
     SCALE: 2,
     PADDING:{X: 28, Y: 20}, // same padding for BB and imaginary x,y,w,h calculations
     IDLE:   {RIGHT: {X: 0,  Y: 0},    LEFT: {X: 0,  Y: 70},   FRAME: 4, SPEED: 0.4,  PADDING: 0, REVERSE: false, LOOP: true},
     WALK:   {RIGHT: {X: 0,  Y: 140},  LEFT: {X: 0,  Y: 210},  FRAME: 4, SPEED: 0.2,  PADDING: 0, REVERSE: false, LOOP: true},
-    JUMP:   {RIGHT: {X: 0,  Y: 280},  LEFT: {X: 0,  Y: 350},  FRAME: 4, SPEED: 0.1, PADDING: 0, REVERSE: false, LOOP: true},
+    JUMP:   {RIGHT: {X: 0,  Y: 280},  LEFT: {X: 0,  Y: 350},  FRAME: 4, SPEED: 0.2, PADDING: 0, REVERSE: false, LOOP: true},
     CROUCH: {RIGHT: {X: 0,  Y: 560},  LEFT: {X: 0,  Y: 630},  FRAME: 4, SPEED: 0.33, PADDING: 0, REVERSE: false, LOOP: true},
     RUN:    {RIGHT: {X: 0,  Y: 140},  LEFT: {X: 0,  Y: 210},  FRAME: 4, SPEED: 0.1, PADDING: 0, REVERSE: false, LOOP: true},
     DEAD:   {RIGHT: {X: 0,  Y: 420},  LEFT: {X: 0,  Y: 490},  FRAME: 3, SPEED: 0.12, PADDING: 0, REVERSE: false, LOOP: false},
     CROUCH_WALK: {RIGHT: {X: 0,  Y: 700}, LEFT: {X: 0,  Y: 770}, FRAME: 4, SPEED: 0.33, PADDING: 0, REVERSE: false, LOOP: true},
+    VICTORY_DANCE:  {RIGHT: {X: 0,  Y: 840}, LEFT: {X: 350, Y: 840}, FRAME: 5, SPEED: 0.2, PADDING: 0, REVERSE: false, LOOP: true},
+    HEALING: {LAYER1:{X: 0, Y: 210}, LAYER2: {X: 0, Y: 140}, LAYER3: {X:0, Y:70}, LAYER4: {X:0, Y:0}, FRAME: 4, SPEED: 0.2, PADDING: 0, REVERSE: false, LOOP: true, W:70, H:70, },
     BREATH_BAR:  {X: 1700, Y: 10, HEIGHT: 10, MAX: 100},
     COIN_COUNTER:{X: 1620, Y: 7.25}
 };
@@ -25,6 +27,7 @@ class Player {
         this.game.chihiro = this;  // chihiro adds a reference to herself into the game engine
         this.game.x = this;
         this.spritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/Chihiro_spritesheet.png");
+        this.auraspritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/healing.png");
 
         // default values
         this.velocity = { x: 0, y: 0};
@@ -35,6 +38,9 @@ class Player {
         this.collideWithHaku = false;
         this.chihiroScale = 2;
         this.endPosition = false;
+        this.collideWithFrog = false;
+        this.healthIncreases = false;
+        this.healingTimer = 0;
         // testing
         // this.sootCount = 0;
         this.nofaceCount = 0;
@@ -55,7 +61,7 @@ class Player {
     /* Load the following animations from the sprite sheet for Chihiro's current state and direction */
     loadAnimations() {
         // array with [state] [face] of the same animator
-        for (var i = 0; i < 7; i++) {
+        for (var i = 0; i < 8; i++) {
             this.animations.push([]);
             for (var j = 0; j < 2; j++) {
                 this.animations[i].push([]);
@@ -144,6 +150,36 @@ class Player {
             CHIHIRO.CROUCH_WALK.FRAME, CHIHIRO.CROUCH_WALK.SPEED,
             CHIHIRO.CROUCH_WALK.PADDING, CHIHIRO.CROUCH_WALK.REVERSE, CHIHIRO.CROUCH_WALK.LOOP);
 
+        // victory dance -> right
+        this.animations[7][0] = new Animator (this.spritesheet, CHIHIRO.VICTORY_DANCE.RIGHT.X, CHIHIRO.VICTORY_DANCE.RIGHT.Y,
+            CHIHIRO.SIZE, CHIHIRO.SIZE,
+            CHIHIRO.VICTORY_DANCE.FRAME, CHIHIRO.VICTORY_DANCE.SPEED,
+            CHIHIRO.VICTORY_DANCE.PADDING, CHIHIRO.VICTORY_DANCE.REVERSE, CHIHIRO.VICTORY_DANCE.LOOP);
+        this.animations[7][1] = new Animator (this.spritesheet, CHIHIRO.VICTORY_DANCE.LEFT.X, CHIHIRO.VICTORY_DANCE.LEFT.Y,
+            CHIHIRO.SIZE, CHIHIRO.SIZE,
+            CHIHIRO.VICTORY_DANCE.FRAME, CHIHIRO.VICTORY_DANCE.SPEED,
+            CHIHIRO.VICTORY_DANCE.PADDING, CHIHIRO.VICTORY_DANCE.REVERSE, CHIHIRO.VICTORY_DANCE.LOOP);
+
+
+        this.healAnim1 = new Animator (this.auraspritesheet, CHIHIRO.HEALING.LAYER1.X, CHIHIRO.HEALING.LAYER1.Y,
+             CHIHIRO.HEALING.W, CHIHIRO.HEALING.H,
+             CHIHIRO.HEALING.FRAME, CHIHIRO.HEALING.SPEED,
+             CHIHIRO.HEALING.PADDING, CHIHIRO.HEALING.REVERSE, CHIHIRO.HEALING.LOOP);
+
+        this.healAnim2 = new Animator (this.auraspritesheet, CHIHIRO.HEALING.LAYER2.X, CHIHIRO.HEALING.LAYER2.Y,
+        CHIHIRO.HEALING.W, CHIHIRO.HEALING.H,
+        CHIHIRO.HEALING.FRAME, CHIHIRO.HEALING.SPEED,
+        CHIHIRO.HEALING.PADDING, CHIHIRO.HEALING.REVERSE, CHIHIRO.HEALING.LOOP);
+
+        this.healAnim3 = new Animator (this.auraspritesheet, CHIHIRO.HEALING.LAYER3.X, CHIHIRO.HEALING.LAYER3.Y,
+            CHIHIRO.HEALING.W, CHIHIRO.HEALING.H,
+            CHIHIRO.HEALING.FRAME, CHIHIRO.HEALING.SPEED,
+            CHIHIRO.HEALING.PADDING, CHIHIRO.HEALING.REVERSE, CHIHIRO.HEALING.LOOP);
+
+        this.healAnim4 = new Animator (this.auraspritesheet, CHIHIRO.HEALING.LAYER4.X, CHIHIRO.HEALING.LAYER4.Y,
+            CHIHIRO.HEALING.W, CHIHIRO.HEALING.H,
+            CHIHIRO.HEALING.FRAME, CHIHIRO.HEALING.SPEED,
+            CHIHIRO.HEALING.PADDING, CHIHIRO.HEALING.REVERSE, CHIHIRO.HEALING.LOOP);
     };
 
     /* Update the bounding box of the player for collision detection */
@@ -171,11 +207,44 @@ class Player {
 
     /* Draw the images onto the screen */
     draw(ctx) {
-        this.animations[this.state][this.facing].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, this.chihiroScale);
+        // if this is healing -> do elapsed time
+        if (this.healthIncreases) {
+            this.healingTimer += this.game.clockTick;
+                if (this.healingTimer < 2) {
+                    var blurValues = 10;
+                    ctx.shadowColor = '#e8eeaa';
+                    ctx.shadowBlur = blurValues;
+                    this.healAnim1.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y + 10, this.chihiroScale);
+                 
+                    ctx.shadowBlur = blurValues;
+                    this.animations[this.state][this.facing].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, this.chihiroScale);
+                    ctx.shadowColor = "transparent"; // remove shadow !
+            
+                    ctx.shadowColor = '#e8eeaa';
+                    ctx.shadowBlur = blurValues;
+                    this.healAnim2.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, this.chihiroScale);
+                    this.healAnim3.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, this.chihiroScale);
+                    ctx.shadowColor = "transparent"; // remove shadow !
+                    ctx.shadowColor = '#c0d470';
+                    ctx.shadowBlur = 20;
+                    this.healAnim4.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, this.chihiroScale);
+                    ctx.shadowColor = "transparent";
+                } else {
+                    this.healingTimer = 0;
+                    this.healthIncreases = false;
+                }
+        } else {
+            this.animations[this.state][this.facing].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, this.chihiroScale);
+         
+        }
+        
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
             ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
         }
+      
+
+     
         ctx.imageSmoothingEnabled = false;
         // this.breathbar.draw(ctx);
         // this.coinCounter.draw(ctx);
@@ -241,9 +310,17 @@ class Player {
 
         } else {
             // fall straight down if did not jump
-            if (this.velocity.y > 0 && !this.jumping) {
-                this.velocity.x = 0;
+            // when fall users can change direction if fast enough
+            if (this.velocity.y > 0 && !this.jumping) { 
+                if (this.game.right && !this.game.left) {
+                    this.velocity.x = Math.abs(this.velocity.x);
+                } else if (this.game.left && !this.game.right) {
+                    this.velocity.x = -Math.abs(this.velocity.x);
+                } else if (!this.game.left && !this.game.right) {
+                    this.velocity.x = 0;
+                }
             }
+
             // can change direction they are falling
             if (this.game.left) {
                 this.velocity.x = -Math.abs(this.velocity.x);
@@ -270,17 +347,18 @@ class Player {
         if (this.game.crouch && this.velocity.x >= MIN_WALK) this.velocity.x = CROUCH_SPEED;
 
 
-        // winning condition. 
-        if (this.x > LEVEL.END_GAME.X) { // Freeze chihiro.
+        // winning condition.
+
+        if (this.x > this.game.camera.endGame) { // Freeze chihiro.
             this.winGame = true;
             this.velocity.x = 0; 
             this.chihiroScale = 1; 
             this.game.crouch = false;
-            if (this.x > LEVEL.END_GAME.X) { 
+            if (this.x > this.game.camera.endGame) { 
                 this.velocity.x = 40;  // walk   
-                if (this.x > LEVEL.END_GAME.X + 350) { // reach door stops
+                if (this.x > this.game.camera.endGame + 350) { // reach door stops
                     this.velocity.x = 0;   
-                    this.state = 0;
+                    this.state = 7;
                     this.endPosition = true;
                 }
                 this.x += this.velocity.x * TICK * TICK_SCALE;  
@@ -299,7 +377,7 @@ class Player {
         this.game.entities.forEach(function (entity) {         // this will look at all entities in relation to chihiro
             if (entity.BB && that.BB.collide(entity.BB) ) {    // is there an entity bb & check to see if they collide
                 if (that.velocity.y > 0) {                     // chihiro is falling
-                    if((entity instanceof Ground || entity instanceof Platform || entity instanceof CloudPlatform ||
+                    if((entity instanceof Ground || entity instanceof Platform || /*entity instanceof CloudPlatform ||*/
                         entity instanceof StoneLamp ||
                         entity instanceof Railing || entity instanceof Lamp) && (that.lastBB.bottom  <= entity.BB.top)) // minus one?? idk how this works
                   { // bottom of chihiro hits the top of the entity
@@ -307,10 +385,29 @@ class Player {
                         that.setY(entity.BB.top - that.getHeight());
                         that.velocity.y = 0;
                         //that.updateBB();
+                    }else if(entity instanceof CloudPlatform && (that.lastBB.bottom  <= entity.BB.top)){
+                        //prevents Chihiro from falling off clouds that are moving up
+                        that.isGrounded = true;
+                        that.setY(entity.BB.top - that.getHeight() - 1);
+                        that.velocity.y = 0;
                     }
                     else {
                         that.isGrounded = false;
                     }
+                }
+
+                //Chihiro moves with clouds that are moving vertically 
+                if(entity instanceof CloudPlatform && (that.lastBB.bottom  <= entity.BB.top)){
+                    //console.log("Collision with Player");
+                    if(entity.moving){  
+                        // console.log("Moving collision with Player");
+                        if(!entity.vertical){
+                            that.x += entity.speed * that.game.clockTick;
+                        }
+                        // else{ /* doesnt work */
+                        //     that.y += entity.speed * that.game.clockTick; 
+                        // }
+                    }   
                 }
 
                 if (that.velocity.y < 0) {     // chihiro is jumping up and hits the bottom of a platform
@@ -406,20 +503,25 @@ class Player {
                 }
 
                 // collision with Chicks
-                if (entity instanceof Chick && that.BB.collide(entity.BB) && !that.dead) {
-                    if (!that.game.camera.title && !that.game.camera.chihiro.winGame) {
+                if ((entity instanceof Chick || entity instanceof Radish || entity instanceof Frog)&& that.BB.collide(entity.BB) && !that.dead) {
+                    if (!that.game.camera.title && !that.game.camera.chihiro.winGame) { 
                         that.game.camera.breathwidth -= CHIHIRO.BREATH_BAR.MAX/4;
                         that.game.camera.changeBreath();
                         if (that.BB.collide(entity.leftBB)) { // left collision
                             // maybe replace with a push animation?
-                            that.setX(that.getX() + 20);
-                            that.velocity.x = 100;
+                            that.setX(that.getX() - 50);
+                            that.velocity.x = -100;
                          } else if (that.BB.collide(entity.rightBB)) { // right
-                             that.setX(that.getX() - 20);
-                             that.velocity.x = -100;
-                         }else if (that.BB.collide(entity.topBB)) { // right
-                             that.setY(that.getY() - 20);
+                             that.setX(that.getX() + 50);
+                             that.velocity.x = 100;
+                         } else if (that.BB.collide(entity.topRBB)) { 
+                             that.setY(that.getY() - 50);
                              that.velocity.y = -100;
+                             that.velocity.x = 100;
+                         } else if (that.BB.collide(entity.topLBB)){
+                            that.setY(that.getY() - 50);
+                             that.velocity.y = -100;
+                             that.velocity.x = -100;
                          }
                     }
                     //that.updateBB();
@@ -430,6 +532,7 @@ class Player {
 
                     if (!that.game.camera.title && !that.game.camera.chihiro.winGame) {
                         // instantly heal stamina bar
+                        that.healthIncreases = true;
                         that.game.camera.breathwidth = CHIHIRO.BREATH_BAR.MAX;
                         that.game.camera.changeBreath();
                         that.collideWithHaku = true;
@@ -457,6 +560,16 @@ class Player {
                     // console.log("instanceof");
                     that.powerup = true;
                     entity.removeFromWorld = true;
+                }
+                
+                if (entity instanceof Frog) {
+                    if (!that.game.camera.title && !that.game.camera.chihiro.winGame) {
+                        that.game.camera.breathwidth -= 5;
+                        that.game.camera.changeBreath();
+                    }
+                    if (that.BB.collide(entity.BB) && entity.BB.bottom - 10 <= that.BB.top) { // dont do bottom/top comparison if we want the frogs to jump off upon contact.
+                        that.collideWithFrog = true;
+                    }
                 }
             }
 

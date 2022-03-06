@@ -187,7 +187,7 @@ class Crow{
     update(){
         if(this.heatseeking){
             
-            if(this.y  >= this.target.y ){ // once at same y-level as Chihiro 
+            if(this.y  >= this.target.y + 5 ){ // once at same y-level as Chihiro 
                 this.speedY = 0;
             }else{
                 this.speedY = this.speed; //jumping wont 

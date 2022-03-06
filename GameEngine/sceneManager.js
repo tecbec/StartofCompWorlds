@@ -8,7 +8,7 @@
     TITLE_START:        true,              // determine if you want the title to be on.
     START_MUTE:         false,               // you can must the music in each level
     START_CANVAS:       {X: -851, Y: 0},
-    END_CANVAS:         {X: 13000},         // change this later when we figure out the exact ending canvas measurement
+    END_CANVAS:         {X: 22000},         // change this later when we figure out the exact ending canvas measurement
     END_TITLE_CANVAS:   {X: 3000},  //500},           // This will end the title canvas so it won't keep going.
     END_GAME:           {X: 11515, Y: 813},
     FRAME_COUNT: 8,                         // This is the factor that determine how wide the actual game is
@@ -16,17 +16,18 @@
     // Type 1: is short (just middle piece)
     TREE:[{X: 567, Y: 276, TYPE:3}, {X: 2538, Y: 0, TYPE:1}, {X: 3231, Y: 276, TYPE:2}, {X: 5543, Y: 0, TYPE:1}, {X: 6527, Y: 276, TYPE:2}, {X: 7816, Y: 276, TYPE:0}, {X: 8274, Y: 276, TYPE:3}],
     END_SCREEN: {X: 250, Y: 100},
-    BATHHOUSE: {X: 11608, Y: - 1200},
+    BATHHOUSE: {X: 1598, Y: -1200},
     PLATFORM_LOCATION:       [{X: 790,  Y: 550, TYPE: 0}, {X: 1100, Y: 375, TYPE: 0}, {X: 1400, Y: 500, TYPE: 0}, {X: 1900, Y: 390, TYPE: 0}, {X: 2200, Y: 590, TYPE: 0},    // scene 1
                               {X: 2600, Y: 590, TYPE: 0}, {X: 2750, Y: 450, TYPE: 0}, {X: 3300, Y: 575, TYPE: 0}, {X: 3500, Y: 400, TYPE: 0}, {X: 4000, Y: 600, TYPE: 0},    // scene 2
-                              {X: 5602, Y: 525, TYPE: 0}, {X: 5919, Y: 525, TYPE: 0},                                                                                        // scene 3
+                              {X: 5775 + 50, Y: 120, TYPE: 1}, {X: 5602, Y: 525, TYPE: 0}, {X: 5919, Y: 525, TYPE: 0},                                                                                        // scene 3
                               {X: 6500, Y: 525, TYPE: 0}, {X: 6700, Y: 425, TYPE: 0}, {X: 7000, Y: 300, TYPE: 0}, {X: 7100, Y: 600, TYPE: 0}, {X: 7400, Y: 400, TYPE: 0}, {X: 7900, Y: 700, TYPE: 0}, // scene 4
                               {X: 8340, Y: 525, TYPE: 1}, {X: 8480, Y: 390, TYPE: 1}, {X: 8620, Y: 525, TYPE: 1}, {X: 8760, Y: 390, TYPE: 1}, {X: 8900, Y: 525, TYPE: 1}, {X: 9040, Y: 390, TYPE: 1},  // Scene 5
                               {X: 9180, Y: 525, TYPE: 1}, {X: 9320, Y: 390, TYPE: 1}, {X: 9460, Y: 525, TYPE: 1}, {X: 9600, Y: 390, TYPE: 1}, {X: 9740, Y: 525, TYPE: 0},
                              ],
 
     CLOUD_PLATFORM_LOCATION: [{X: 2800, Y: 250, SIZE:3}, {X: 3200, Y: 300, SIZE:3}, {X: 3400, Y: 150, SIZE:3}, {X: 3750, Y: 250, SIZE:3}, {X: 4000, Y: 200, SIZE:3}, 
-                              {X: 4354, Y: 120, SIZE:1}, {X: 4780, Y: 270, SIZE:0}, {X: 5255, Y: 100 + 5, SIZE:3}, {X: 5315, Y: 300, SIZE:3}, {X: 5225, Y: 500 - 20, SIZE:4}, {X: 5632, Y: 280, SIZE:1}, {X: 5775, Y: 120, SIZE:2}, {X: 6166, Y: 270, SIZE:3},
+                              {X: 4354, Y: 120, SIZE:1}, {X: 4780, Y: 270, SIZE:0}, /*{X: 5255, Y: 100 + 5, SIZE:3}, {X: 5315, Y: 300, SIZE:3},*/ 
+                              {X: 5225 + 30, Y: 500 - 20, SIZE:4, MIN: 100 + 5 +100, MAX: 500 - 20 +100, V:true}, {X: 5632, Y: 280, SIZE:1}, /*{X: 5775, Y: 120, SIZE:2},*/ {X: 6166, Y: 270, SIZE:3, MIN:5983, MAX:6447, V: false},
                               {X: 6650, Y: 200, SIZE:3}, {X: 6950, Y: 100, SIZE:3}, {X: 7250, Y: 200, SIZE:3}, {X: 7750, Y: 250, SIZE:3} ],                                                                 // Scene 4                     
 
     STONE_LAMP_LOCATION: [{X: 1000, Y: 600}, {X: 1800, Y: 600}, {X: 2902, Y: 600}, {X: 3702, Y: 600}, {X: 5255, Y: 600},
@@ -40,7 +41,11 @@
                     {X:8108, Y: 650},       // Start Scene 5
                     {X:10010, Y: 650},],    // Start Scene 6
                     // {X:11912, Y: 650}
-                    //{X:13814, Y: 650}, {X:15716, Y: 650},],
+                    // {X:13814, Y: 650}, 
+                    // {X:15716, Y: 650},
+                    // {X:17618, Y:650}, 
+                    // {X:19520, Y:650}], 
+                    //, ,],
 
     RAILING_LOCATION: {X: 500, Y: 820},
 
@@ -82,19 +87,23 @@
     NOFACE_LOCATION: [{X: 3200, Y: 100},  // scene 2
                       {X: 7000, Y: 0}, ], // scene 4
 
-    CHICK_LOCATION: [{X: 840,  Y: 785, MIN: 0,    MAX: 0,     DIR:0}, {X: 2402, Y: 785, MIN: 500,  MAX: 2402,  DIR:0},               // scene 1
-                     {X: 2900, Y: 785, MIN: 2402, MAX: 4304,  DIR:0}, {X: 3800, Y: 785, MIN: 2402, MAX: 4304,  DIR:0},               // scene 2
-                     {X: 4780, Y: 785, MIN: 4304, MAX: 5255,  DIR:1}, {X: 5730, Y: 785, MIN: 5305, MAX: 6206,  DIR:0},               // scene 3
-                     {X: 6750, Y: 785, MIN: 6750, MAX: 7900,  DIR:1}, {X: 7500, Y: 785, MIN: 6750, MAX: 7900,  DIR:0},               // Scene 4
-                     {X: 6250, Y: 785, MIN: 6250, MAX: 8100,  DIR:1}, {X: 8000, Y: 785, MIN: 6250, MAX: 8100,  DIR:0},
-                     {X: 8900, Y: 785, MIN: 0,    MAX: 0,     DIR:1}, {X: 9912, Y: 785, MIN: 8400, MAX: 10000, DIR:1},               // Scene 5
-                     {X: 9400, Y: 785, MIN: 9100, MAX: 10000, DIR:0}],
+    RADISH_LOCATION: [{X: 840,  Y: 690}], //scene
+
+    CHICK_LOCATION: [{X: 2402, Y: 785, MIN: 500,  MAX: 2402, SPEED: 2, DIR:0},               // scene 1
+                     {X: 2900, Y: 785, MIN: 2402, MAX: 4304, SPEED: 0, DIR:0}, {X: 3800, Y: 785, MIN: 2402, MAX: 4304, SPEED: 0, DIR:0},               // scene 2
+                     {X: 4780, Y: 785, MIN: 4304, MAX: 5255, SPEED: 0, DIR:1}, {X: 5730, Y: 785, MIN: 5305, MAX: 6206, SPEED: 0, DIR:0},               // scene 3
+                     {X: 6750, Y: 785, MIN: 6750, MAX: 7900, SPEED: 0, DIR:0}, {X: 7500, Y: 785, MIN: 6750, MAX: 7900,  SPEED: 0, DIR:1},               // Scene 4
+                     {X: 6250, Y: 785, MIN: 6250, MAX: 8100, SPEED: 2, DIR:0}, {X: 8000, Y: 785, MIN: 6250, MAX: 8100,  SPEED: 2, DIR:1},
+                     {X: 8900, Y: 785, MIN: 8500, MAX: 8900, SPEED: 2, DIR:1}], // Scene 5
 
     /*    enter: frame 3,   crow drop: frame 4,       heat seeking crows:  frame 5*/
     YUBABA_INC: [4304, 6206, 8108, 10010], // x vals that trigger: entrance, crow drop, heat seeking crows, yubaba exit
 
     /*    frame:            1             3              */
-    HAKU_LOCATION: [{X:500, Y:850, TEXT: 1},{X:5305, Y:575, TEXT: 2}, {X: 10056, Y:820, TEXT: 3}]
+    HAKU_LOCATION: [{X:500, Y:850, TEXT: 1},{X:5305, Y:575, TEXT: 2}, {X: 10056, Y:820, TEXT: 3}],
+    // 0 = right, 1 = left
+    FROG_LOCATION: [{X:9770, Y:0, DIR: 1, MIN: 9710, MAX: 9760, HEIGHT: -50, TIME: 4}, {X:9912, Y:681, DIR: 1, MIN: 9300, MAX: 9800, HEIGHT: -250, TIME: 2}] // scene 5
+
 }
 
 class SceneManager {
@@ -108,7 +117,8 @@ class SceneManager {
         this.level = 1;
         this.gameOverCounter  = 0;
 
-
+        this.instructionsOpened = false;
+        this.onInstructions = false;
         this.loadLevelCount = -1;
         // sound
         this.mute = true;
@@ -117,6 +127,8 @@ class SceneManager {
         // instruction spritesheet
         this.spritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/tutorial_text.png");
 
+        // this set the bathhouse location relative to the last frame based on the lamp location
+        this.endGame = LEVEL.BATHHOUSE.X + LEVEL.LAMP_LOCATION[LEVEL.LAMP_LOCATION.length-1].X - 93;
         //Breath
         this.breathwidth = 100;
         this.loadLevel(this.level, this.title);
@@ -196,11 +208,22 @@ class SceneManager {
         this.loadGame();
 
         // don't play music unless it's not the title page
-        if (LEVEL.music && !this.title) {
+        if (LEVEL.music[0] && !this.title) {
              ASSET_MANAGER.pauseBackgroundMusic();
-             ASSET_MANAGER.playAsset(LEVEL.music);
+             ASSET_MANAGER.playAsset(LEVEL.music[0]);
         }
+        
     };
+
+    loadInstructions() {
+        if (this.instructionsOpened) {
+            this.buttons.mute = LEVEL.START_MUTE;
+            this.mute = LEVEL.START_MUTE;
+            this.game.addEntity(new Instruction(this.game, 0, 0)); 
+            ASSET_MANAGER.playAsset(LEVEL.music[1]);
+            this.instructionsOpened = false;
+        } 
+    }
 
     loadGame() {
         if (this.title) {
@@ -235,7 +258,7 @@ class SceneManager {
             this.bathhouse = new Bathhouse(this.game, 4000,  LEVEL.BATHHOUSE.Y);
 
         } else {
-            this.bathhouse = new Bathhouse(this.game, LEVEL.BATHHOUSE.X,  LEVEL.BATHHOUSE.Y);
+            this.bathhouse = new Bathhouse(this.game, LEVEL.BATHHOUSE.X + LEVEL.LAMP_LOCATION[LEVEL.LAMP_LOCATION.length-1].X,  LEVEL.BATHHOUSE.Y);
             this.game.addEntity(this.background);
 
             for (var i = 0; i < LEVEL.TREE.length; i++) {
@@ -252,8 +275,11 @@ class SceneManager {
             }
 
             for (var i = 0; i < LEVEL.CLOUD_PLATFORM_LOCATION.length; i++) {
-                let cloudPlatform = LEVEL.CLOUD_PLATFORM_LOCATION[i];
-                this.game.addEntity(new CloudPlatform(this.game, cloudPlatform.X, cloudPlatform.Y, cloudPlatform.SIZE));
+                let cloud = LEVEL.CLOUD_PLATFORM_LOCATION[i];
+                if(cloud.MIN != null && cloud.MAX != null && cloud.V != null){
+                    this.game.addEntity(new CloudPlatform(this.game, cloud.X, cloud.Y, cloud.SIZE, cloud.MIN, cloud.MAX, cloud.V));
+                }else
+                    this.game.addEntity(new CloudPlatform(this.game, cloud.X, cloud.Y, cloud.SIZE));
             }
 
             for(var i=0; i < LEVEL.LAMP_LOCATION.length; i++){
@@ -284,10 +310,30 @@ class SceneManager {
                 this.game.addEntity(new Coins(this.game, coin.X, coin.Y));
             }
 
+            
+            for (var i = 0; i < LEVEL.FROG_LOCATION.length; i++) {
+                let frog = LEVEL.FROG_LOCATION[i];
+                this.game.addEntity(new Frog(this.game, frog.X, frog.Y, frog.DIR, frog.MIN, frog.MAX, frog.HEIGHT, frog.TIME));
+            }
+            
             for (var i = 0; i < LEVEL.CHICK_LOCATION.length; i++) {
                 let chick = LEVEL.CHICK_LOCATION[i];
-                this.game.addEntity(new Chick(this.game, chick.X, chick.Y, chick.MIN, chick.MAX, chick.DIR));
+                if(chick.MIN == null || chick.MAX == null || chick.SPEED == null || chick.DIR == null){
+                    if(chick.DIR == null){
+                        this.game.addEntity(new Chick(this.game, chick.X, chick.Y));
+                    }else{
+                        this.game.addEntity(new Chick(this.game, chick.X, chick.Y, chick.DIR));
+                    }
+                }else{
+                    this.game.addEntity(new Chick(this.game, chick.X, chick.Y, chick.DIR, chick.MIN, chick.MAX, chick.SPEED));
+                }
             }
+
+            for (var i = 0; i < LEVEL.RADISH_LOCATION.length; i++) {
+                let radish = LEVEL.RADISH_LOCATION[i];
+                this.game.addEntity(new Radish(this.game, radish.X, radish.Y));
+            }
+
 
             this.game.addEntity(this.chihiro);
 
@@ -295,14 +341,14 @@ class SceneManager {
                 let haku = LEVEL.HAKU_LOCATION[i];
                 this.game.addEntity(new Haku(this.game, haku.X, haku.Y, haku.TEXT));
             }
-
             this.game.addEntity(this.breathbar);
             this.game.addEntity(this.coinCounter);
             this.game.addEntity(new Fireworks(this.game));
             this.game.addEntity(new EndScreen(this.game, this.level, LEVEL.END_SCREEN.X, LEVEL.END_SCREEN.Y));
-         
-            this.game.addEntity(this.buttons);
+          
         }
+        this.game.addEntity(this.buttons);
+        
     };
 
     changeBreath() {
@@ -310,6 +356,8 @@ class SceneManager {
     };
 
     update() {
+        // PARAMS.DEBUG = true;
+        // this.mute = true;
         this.updateAudio();
         // canvas width = 400
         // blockwidth = 32 * 1 = 32
@@ -339,7 +387,16 @@ class SceneManager {
                     this.game.click = false;
             }
         }
-
+       
+        if (this.title && !this.instructionsOpened && !this.onInstructions  &&  this.game.click) {  // start button
+            if (this.title && !this.instructionsOpened && !this.onInstructions && this.game.click && this.game.click.y > 700 && this.game.click.y < 750 && this.game.click.x > 723  && this.game.click.x < 1126) {
+                this.instructionsOpened = true;
+                this.loadInstructions();
+                this.onInstructions = true;
+                this.game.click = false;
+            } 
+        } 
+      
         if (this.game.click) {
             // Debug
             if(this.game.click.y > 1040         && this.game.click.y < 1070     && this.game.mouse.x < 200 && this.game.mouse.x > 100 && PARAMS.DEBUG) {
