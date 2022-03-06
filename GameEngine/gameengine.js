@@ -14,7 +14,8 @@ class GameEngine {
         this.entities = [];
         // Entities to be added at the end of each update
         this.entitiesToAdd = [];
-
+        this.crouch = false;
+        this.jump = false;
         this.left = false;
         this.right = false;
         this.up = false;
@@ -100,7 +101,9 @@ class GameEngine {
                 case "Escape":
                     that.close = true;
                     break;
-                
+                case "Enter":
+                    that.entered = true;
+                    break;
             }
         }, false);
         // Key released
@@ -127,6 +130,9 @@ class GameEngine {
                     break;
                 case "Escape":
                     that.close = false;
+                    break;
+                case "Enter":
+                    that.entered = false;
                     break;
             }
         }, false);

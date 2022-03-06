@@ -93,43 +93,81 @@ class TitleButtons {
         this.mute = true;
         this.up = false;
         this.down = false;
+        this.startSelected = true; // true by default
+        this.startbuttonAnim = new Animator (this.spritesheet,BACKGROUND.BUTTONS[0].SPRITEX, BACKGROUND.BUTTONS[0].SPRITEY,
+                                 BACKGROUND.BUTTONS[0].SWIDTH,
+                                 BACKGROUND.BUTTONS[0].SHEIGHT, 2, 0.8, 0, false, true);
+
+        this.instructbuttonAnim = new Animator (this.spritesheet,BACKGROUND.BUTTONS[3].SPRITEX, BACKGROUND.BUTTONS[3].SPRITEY,
+                                BACKGROUND.BUTTONS[3].SWIDTH,
+                                BACKGROUND.BUTTONS[3].SHEIGHT, 2, 0.8, 0, false, true);                         
+        this.instructionsSelected = false;
+        this.count = 0;
     }
 
     update() {
     };
 
     draw(ctx) {
+        console.log(this.count);
         if(this.game.camera.title) {
-            if (this.game.mouse && this.game.mouse.y > 700 && this.game.mouse.y < 750 && this.game.mouse.x > 728  && this.game.mouse.x < 1113) {   // Instructions
+            if (this.count == 0) {
+                this.startSelected = true;
+            } else if (this.count == 1) {
+                this.instructionsSelected = true;
+            } 
+           
+            if (this.instructionsSelected && this.game.crouch) {
+                this.startSelected = false
+                this.instructionsSelected = true;
+                this.count = 1;
+            } else if(this.startSelected && this.game.up) {
+                this.instructionsSelected = false;
+                this.startSelected = true;
+                this.count = 0;
+            } else if (this.startSelected && this.game.crouch) {
+                this.instructionsSelected = true;
+                this.startSelected = false
+                this.count = 1;
+            } else if (this.instructionsSelected && this.game.up) {
+                this.instructionsSelected = false
+                this.startSelected = true
+                this.count = 0;
+            } else {
+                
+            }
+            if ((this.game.mouse && this.game.mouse.y > 700 && this.game.mouse.y < 750 && this.game.mouse.x > 728  && this.game.mouse.x < 1113)) {   // Instructions
+                this.instructionsSelected = false;
                 ctx.drawImage(  this.spritesheet,
                     BACKGROUND.BUTTONS[3].SPRITEX+BACKGROUND.BUTTONS[3].SWIDTH,     BACKGROUND.BUTTONS[3].SPRITEY,             // x and y of the spritesheet
                     BACKGROUND.BUTTONS[3].SWIDTH,                                   BACKGROUND.BUTTONS[3].SHEIGHT,             // width and height of the spritesheet
                     BACKGROUND.BUTTONS[3].X,                                        BACKGROUND.BUTTONS[3].Y,                   // x and y of the canvas
                     BACKGROUND.BUTTONS[3].SWIDTH * BACKGROUND.BUTTONS[3].SCALE,      BACKGROUND.BUTTONS[3].SHEIGHT * BACKGROUND.BUTTONS[3].SCALE);                      // width and height of the canvas
             } else {
-                ctx.drawImage(  this.spritesheet,
+                ctx.drawImage(this.spritesheet,
                     BACKGROUND.BUTTONS[3].SPRITEX,                                  BACKGROUND.BUTTONS[3].SPRITEY,             // x and y of the spritesheet
                     BACKGROUND.BUTTONS[3].SWIDTH,                                   BACKGROUND.BUTTONS[3].SHEIGHT,             // width and height of the spritesheet
                     BACKGROUND.BUTTONS[3].X,                                        BACKGROUND.BUTTONS[3].Y,                   // x and y of the canvas
                     BACKGROUND.BUTTONS[3].SWIDTH * BACKGROUND.BUTTONS[3].SCALE,     BACKGROUND.BUTTONS[3].SHEIGHT * BACKGROUND.BUTTONS[0].SCALE);                      // width and height of the canvas
             }
       
-            if (this.game.mouse &&
+            if ((this.game.mouse &&
                 this.game.mouse.y > BACKGROUND.BUTTONS[0].Y &&                                                                                        // Start
                 this.game.mouse.y < BACKGROUND.BUTTONS[0].Y + BACKGROUND.START_BUTTON.H &&
                 // this.game.mouse.x > BACKGROUND.BUTTONS[0].X  + BACKGROUND.START_PADDING &&
                 // this.game.mouse.x < BACKGROUND.BUTTONS[0].X + BACKGROUND.START_BUTTON.W + BACKGROUND.START_PADDING) {
                 this.game.mouse.x > BACKGROUND.BUTTONS[0].X  &&
-                this.game.mouse.x < BACKGROUND.BUTTONS[0].X + BACKGROUND.START_BUTTON.W ) {
-
+                this.game.mouse.x < BACKGROUND.BUTTONS[0].X + BACKGROUND.START_BUTTON.W)) {
+                this.startSelected = false;
                 ctx.drawImage(  this.spritesheet,
                     BACKGROUND.BUTTONS[0].SPRITEX+BACKGROUND.BUTTONS[0].SWIDTH,     BACKGROUND.BUTTONS[0].SPRITEY,             // x and y of the spritesheet
                     BACKGROUND.BUTTONS[0].SWIDTH,                                   BACKGROUND.BUTTONS[0].SHEIGHT,             // width and height of the spritesheet
                     // BACKGROUND.BUTTONS[0].X-/this.game.camera.x,                     BACKGROUND.BUTTONS[0].Y,                   // x and y of the canvas
                     BACKGROUND.BUTTONS[0].X,                                        BACKGROUND.BUTTONS[0].Y,                   // x and y of the canvas
                     BACKGROUND.BUTTONS[0].SWIDTH * BACKGROUND.BUTTONS[0].SCALE,      BACKGROUND.BUTTONS[0].SHEIGHT * BACKGROUND.BUTTONS[0].SCALE);                      // width and height of the canvas
-
-            } else {
+            } else  {
+                // if not on instructions
+               
                 ctx.drawImage(  this.spritesheet,
                     BACKGROUND.BUTTONS[0].SPRITEX,                                  BACKGROUND.BUTTONS[0].SPRITEY,             // x and y of the spritesheet
                     BACKGROUND.BUTTONS[0].SWIDTH,                                   BACKGROUND.BUTTONS[0].SHEIGHT,             // width and height of the spritesheet
@@ -137,8 +175,16 @@ class TitleButtons {
                     BACKGROUND.BUTTONS[0].X,                                        BACKGROUND.BUTTONS[0].Y,                   // x and y of the canvas
                     BACKGROUND.BUTTONS[0].SWIDTH * BACKGROUND.BUTTONS[0].SCALE,     BACKGROUND.BUTTONS[0].SHEIGHT * BACKGROUND.BUTTONS[0].SCALE);                      // width and height of the canvas
             }
-        }
+           
+            if (this.startSelected && this.count == 0) {
+                this.startbuttonAnim.drawFrame(this.game.clockTick, ctx, BACKGROUND.BUTTONS[0].X, BACKGROUND.BUTTONS[0].Y, 4);
+            } 
 
+            if (this.instructionsSelected && this.count == 1) {
+                this.instructbuttonAnim.drawFrame(this.game.clockTick, ctx, BACKGROUND.BUTTONS[3].X, BACKGROUND.BUTTONS[3].Y, 4);
+            } 
+        }
+ 
         // if (this.game.mouse && this.game.mouse.y > 1040 && this.game.mouse.y < 1100 && this.game.mouse.x < 200 && this.game.mouse.x > 100 ) { // Debug
         if (PARAMS.DEBUG === true) { // Debug
             ctx.drawImage(  this.spritesheet,

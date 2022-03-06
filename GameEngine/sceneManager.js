@@ -233,9 +233,8 @@ class SceneManager {
                 let tree = LEVEL.TREE[i];
                 this.game.addEntity(new Tree(this.game, tree.X, tree.Y, tree.TYPE));
             }
-
-            this.game.addEntity(this.ground);
             this.game.addEntity(this.railing);
+            this.game.addEntity(this.ground);
             this.game.addEntity(this.soot);
             this.game.addEntity(this.noFace);
 
@@ -243,7 +242,6 @@ class SceneManager {
             this.game.addEntity(this.buttons);
             this.game.addEntity(new Fireworks(this.game));
             this.game.addEntity(this.lamp);
-            this.game.addEntity(this.chihiro);
             this.game.addEntity(this.chick);
             this.game.addEntity(this.haku);
             for(var i=0; i < 2; i++){
@@ -255,7 +253,7 @@ class SceneManager {
                 let stone_lamp = LEVEL.STONE_LAMP_LOCATION[i];
                 this.game.addEntity(new StoneLamp(this.game, stone_lamp.X, stone_lamp.Y, BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE) );
             }
-
+            this.game.addEntity(this.chihiro);
             this.bathhouse = new Bathhouse(this.game, 4000,  LEVEL.BATHHOUSE.Y);
 
         } else {
@@ -311,7 +309,8 @@ class SceneManager {
                 this.game.addEntity(new Coins(this.game, coin.X, coin.Y));
             }
 
-            
+            this.game.addEntity(this.chihiro);
+
             for (var i = 0; i < LEVEL.FROG_LOCATION.length; i++) {
                 let frog = LEVEL.FROG_LOCATION[i];
                 this.game.addEntity(new Frog(this.game, frog.X, frog.Y, frog.DIR, frog.MIN, frog.MAX, frog.HEIGHT, frog.TIME));
@@ -336,8 +335,7 @@ class SceneManager {
             }
 
 
-            this.game.addEntity(this.chihiro);
-
+          
             for (var i = 0; i < LEVEL.HAKU_LOCATION.length; i++) {
                 let haku = LEVEL.HAKU_LOCATION[i];
                 this.game.addEntity(new Haku(this.game, haku.X, haku.Y, haku.TEXT));
@@ -372,29 +370,34 @@ class SceneManager {
         }
 
         // START button
-        if (this.title && this.game.click) {  
+        if ((this.title && this.game.click && !this.onInstructions) || (this.title && !this.onInstructions && this.game.entered && this.buttons.startSelected)) {  
             // if (this.game.click && this.game.click.y > 700 && this.game.click.y < 750 && this.game.click.x > 815  && this.game.click.x < 1003) {
-            if (this.game.click && 
+            if ((this.game.click && 
                 this.game.click.y  > BACKGROUND.BUTTONS[0].Y && 
                 this.game.click.y < BACKGROUND.BUTTONS[0].Y + BACKGROUND.START_BUTTON.H && 
                 // this.game.click.x > BACKGROUND.BUTTONS[0].X  + BACKGROUND.START_PADDING && 
                 // this.game.click.x < BACKGROUND.BUTTONS[0].X + BACKGROUND.START_BUTTON.W + BACKGROUND.START_PADDING) {
                 this.game.click.x > BACKGROUND.BUTTONS[0].X  && 
-                this.game.click.x < BACKGROUND.BUTTONS[0].X + BACKGROUND.START_BUTTON.W ) {
-
+                this.game.click.x < BACKGROUND.BUTTONS[0].X + BACKGROUND.START_BUTTON.W) || (this.title && !this.onInstructions && this.game.entered && this.buttons.startSelected)) {
                     this.title = false;
                     this.loadLevel(1, this.title);
                     this.loadLevelCount = this.loadLevelCount + 1;
                     this.game.click = false;
+                    this.game.entered = false;
+                    this.buttons.startSelected = false;
             }
         }
        
-        if (this.title && !this.instructionsOpened && !this.onInstructions  &&  this.game.click) {  // start button
-            if (this.title && !this.instructionsOpened && !this.onInstructions && this.game.click && this.game.click.y > 700 && this.game.click.y < 750 && this.game.click.x > 723  && this.game.click.x < 1126) {
+        if ((this.title && !this.instructionsOpened && !this.onInstructions  &&  this.game.click) || (this.title && !this.instructionsOpened && !this.onInstructions && this.buttons.instructionsSelected && this.game.entered)) { 
+            if ((this.title && !this.instructionsOpened && !this.onInstructions 
+                && this.game.click && this.game.click.y > 700 && this.game.click.y < 750 && this.game.click.x > 723  && this.game.click.x < 1126)
+                || (this.game.entered && this.title && !this.instructionsOpened && !this.onInstructions && this.buttons.instructionsSelected && this.game.entered)) {
                 this.instructionsOpened = true;
                 this.loadInstructions();
                 this.onInstructions = true;
                 this.game.click = false;
+                this.game.entered = false;
+                this.buttons.instructionsSelected = false;
             } 
         } 
       
