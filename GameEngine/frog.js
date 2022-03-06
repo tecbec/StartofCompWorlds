@@ -139,7 +139,10 @@ class Frog {
     };
 
     draw(ctx) {
-    this.animations[this.state][this.facing].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, 2);
+        ctx.shadowColor = '#ff2121';
+        ctx.shadowBlur = 64;
+        this.animations[this.state][this.facing].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, 2);
+        ctx.shadowColor = "transparent"; // remove shadow !
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
             ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);

@@ -4,7 +4,7 @@
  */
  const SOOT_AREA_HEIGHT = 30;
  var LEVEL = {
-    music: ["./GameEngine/audio/OneSummersDay.mp3", "./GameEngine/audio/TheNameOfLife.mp3"], 
+    music: ["./GameEngine/audio/OneSummersDay.mp3", "./GameEngine/audio/TheNameOfLife.mp3", "./GameEngine/audio/AlwaysWithMe.mp3"], 
     TITLE_START:        true,              // determine if you want the title to be on.
     START_MUTE:         false,               // you can must the music in each level
     START_CANVAS:       {X: -851, Y: 0},
@@ -207,13 +207,11 @@ class SceneManager {
         }
 
         this.loadGame();
-
         // don't play music unless it's not the title page
         if (LEVEL.music[0] && !this.title) {
              ASSET_MANAGER.pauseBackgroundMusic();
              ASSET_MANAGER.playAsset(LEVEL.music[0]);
-        }
-        
+        } 
     };
 
     loadInstructions() {
@@ -221,6 +219,7 @@ class SceneManager {
             this.buttons.mute = LEVEL.START_MUTE;
             this.mute = LEVEL.START_MUTE;
             this.game.addEntity(new Instruction(this.game, 0, 0)); 
+            ASSET_MANAGER.pauseBackgroundMusic();
             ASSET_MANAGER.playAsset(LEVEL.music[1]);
             this.instructionsOpened = false;
         } 
@@ -368,7 +367,6 @@ class SceneManager {
                 }
             }
         }
-
         // START button
         if ((this.title && this.game.click && !this.onInstructions) || (this.title && !this.onInstructions && this.game.entered && this.buttons.startSelected)) {  
             // if (this.game.click && this.game.click.y > 700 && this.game.click.y < 750 && this.game.click.x > 815  && this.game.click.x < 1003) {
