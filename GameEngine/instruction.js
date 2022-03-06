@@ -63,6 +63,9 @@ class Instruction {
         this.xcrowvel = 0;
         this.ycrowvel = 0;
         this.crowstate = 0;
+
+        
+
         
         this.jumpAnim = [];
         this.walkAnim = []; 
