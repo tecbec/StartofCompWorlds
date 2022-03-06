@@ -19,6 +19,7 @@ class Yubaba {
         // speed stuff
         this.speed = 50;
         this.target = this.game.camera.chihiro;
+        
         this.hitpoints = 30;
     };
 
@@ -34,6 +35,7 @@ class Yubaba {
     }
 
     update(){
+
         if(this.target.x > this.inc[0]){
             this.show = true;
         }

@@ -1,7 +1,7 @@
 /* Chihiro's Params */
 var CHIHIRO = {
     TITLE_POSITION:   {X: 0,  Y: 800},
-    INITIAL_POSITION: {X: 0,  Y: 0},  // HAVE TO BE AT: 0, change to 11500 to test winning condition. 
+    INITIAL_POSITION: {X: 0,  Y: 0},  // original: -200, change to 11500 to test winning condition. 
     SIZE: 70,
     SCALE: 2,
     PADDING:{X: 28, Y: 20}, // same padding for BB and imaginary x,y,w,h calculations
@@ -529,11 +529,14 @@ class Player {
 
                 // collision with HAKU
                 if (entity instanceof Haku && that.BB.collide(entity.BB)) {
-                    // instantly heal stamina bar
-                    that.healthIncreases = true;
-                    that.game.camera.breathwidth = CHIHIRO.BREATH_BAR.MAX;
-                    that.game.camera.changeBreath();
-                    that.collideWithHaku = true;
+
+                    if (!that.game.camera.title && !that.game.camera.chihiro.winGame) {
+                        // instantly heal stamina bar
+                        that.healthIncreases = true;
+                        that.game.camera.breathwidth = CHIHIRO.BREATH_BAR.MAX;
+                        that.game.camera.changeBreath();
+                        that.collideWithHaku = true;
+                    }
                 } else {
 
                 }
