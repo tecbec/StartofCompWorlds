@@ -15,7 +15,7 @@
     // Type 1: is short (just middle piece)
     TREE:[{X: 567, Y: 276, TYPE:3}, {X: 2538, Y: 0, TYPE:1}, {X: 3231, Y: 276, TYPE:2}, {X: 5543, Y: 0, TYPE:1}, {X: 6527, Y: 276, TYPE:2}, {X: 7816, Y: 276, TYPE:0}, {X: 8274, Y: 276, TYPE:3}],
     END_SCREEN: {X: 250, Y: 100},
-    BATHHOUSE: {X: 11608, Y: - 1200},
+    BATHHOUSE: {X: 11608, Y: - 1200}, // 11608
 
     PLATFORM_LOCATION:       [{X: 790,  Y: 550, TYPE: 0}, {X: 1100, Y: 375, TYPE: 0}, {X: 1400, Y: 500, TYPE: 0}, {X: 1900, Y: 390, TYPE: 0}, {X: 2200, Y: 590, TYPE: 0},    // scene 1
                               {X: 2600, Y: 590, TYPE: 0}, {X: 2750, Y: 450, TYPE: 0}, {X: 3300, Y: 575, TYPE: 0}, {X: 3500, Y: 400, TYPE: 0}, {X: 4000, Y: 600, TYPE: 0},    // scene 2
@@ -37,9 +37,18 @@
     //                      1                       2                 3                4
     PORTAL_LOCATION: [{X: 820,  Y: 390}, {X: 2850, Y: 120}, {X: 3902, Y: 800}, {X: 7000, Y:120}],
                     //{X:13814, Y: 650}, {X:15716, Y: 650},],
-    /* Start of Frame:     1                   2                 3                 4                 5                   6                   7                8                 9                  10                11*/
-    LAMP_LOCATION: [{X:500, Y: 650},   {X:2402,  Y: 650}, {X:4304, Y: 650}, {X:6206, Y: 650}, {X:8108, Y: 650}, {X:10010, Y: 650},],// {X:11912, Y: 650}, {X:13814, Y: 650}, {X:15716, Y: 650}, {X:17618, Y:650}, {X:19520, Y:650}], 
-                    //, ,],
+    /* Start of Frame:    */           // 0 (entrance)
+    LAMP_LOCATION: [{X:500, Y: 650},   // 1
+                   {X:2402,  Y: 650},  // 2
+                   {X:4304, Y: 650},   // 3
+                   {X:6206, Y: 650},   // 4
+                   {X:8108, Y: 650},   // 5
+                   {X:10010, Y: 650},  // 6 *incomplete  
+                   {X:11912, Y: 650},  // 7 *incomplete  (temp battle scene for testing)
+                   {X:13814, Y: 650},  // 8 *incomplete
+                   {X:15716, Y: 650},  // 9  BATTLE SCENE
+                   {X:17618, Y:650},   // 10  (end)
+                   {X:19520, Y:650}],  //11  BATHHOUSE
 
     RAILING_LOCATION: {X: 500, Y: 820},
 
@@ -92,7 +101,7 @@
                      {X: 8900, Y: 785, MIN: 8500, MAX: 8900, SPEED: 2, DIR:1}], // Scene 5
 
     /*    enter: frame 3,   crow drop: frame 4,       heat seeking crows:  frame 5*/
-    YUBABA_INC: [4304, 6206, 8108, 10010], // x vals that trigger: entrance, crow drop, heat seeking crows, yubaba exit
+    YUBABA_INC: [4304, 6206, 8108, 11912], // x vals that trigger: entrance, crow drop, heat seeking crows, yubaba battle scene
 
     /*    frame:            1             3              */
     HAKU_LOCATION: [{X:500, Y:850, TEXT: 1},{X:5305, Y:575, TEXT: 2}, {X: 10056, Y:820, TEXT: 3}],

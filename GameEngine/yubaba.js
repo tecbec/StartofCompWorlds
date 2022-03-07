@@ -7,20 +7,33 @@ class Yubaba {
         this.height = 230;
         this.frameCount = 14;
         this.frameDuration = 0.15; 
-        this.elapsedTime = 0;
-        this.fireRate = 5;
         this.scale = 0.7; 
+
+        //
         this.new = true;
         this.show = false;
         this.removeFromWorld = false;
 
         this.loadAnimations();
 
-        // speed stuff
+        // speed 
         this.speed = 50;
+
+        // for crows
+        this.elapsedTime = 0;
+        this.fireRate = 5;
+
+        // connect Chihiro and Yubaba
         this.target = this.game.camera.chihiro;
         this.target.yubaba = this; //give access to Yubaba to player
-        this.hitpoints = 30;
+
+        //battle scene
+        this.battle = false;
+        this.reset = false;
+        this.hitpoints = 30; // make larger? talk to Hana about this
+        this.waitTime = 10;
+
+        // death animation
         this.deathAnimation = false;
         this.hasChihiro = false;
     };
@@ -40,41 +53,54 @@ class Yubaba {
         //Update animation
         this.animator = this.animations[this.dir];
 
-        //Yuababa off screen - remove
-        if(this.y < (-this.height*this.scale - this.target.getHeight()) *2){
-            this.removeFromWorld = true;
+         //Yuababa off screen
+        if(this.y < -this.height*this.scale){
+            console.log("off screen");
+            if(this.battle){ // successful reset
+                console.log("successful reset");
+                this.reset = true;
+                this.new = true;
+                this.elapsedTime = 0;
+            }else{
+                console.log("remove");
+                this.removeFromWorld = true;
+            }
         }
 
         if(this.deathAnimation){ //Chihiro died, end of game
-            this.entrance();
+            this.entrance(false);
             this.chihiroDeath();
         } else{
             /* 
             this.inc[0]: Yubaba enter
             this.inc[1]: drop crows
-            this.inc[2]: heat seeking crows
-            this.inc[3]: Yubaba exit           //swap these? / get rid of them?
-            this.inc[4]: Yubaba battle scene
+            this.inc[2]: heat seeking crows          
+            this.inc[3]: Yubaba battle scene
             */
 
             // Yubaba enters
             if(this.target.x > this.inc[0]){
                 this.show = true;
-                this.entrance();
+                this.entrance(false);
             }
 
-            // Yubaba exit
-            if(this.target.x > this.inc[3]){
-                this.y -= Math.abs(this.speed * this.game.clockTick);
-            }
+            // // Yubaba exit
+            /* REMOVED: this.inc[3]: Yubaba exit */
+            // if(this.target.x > this.inc[3]){
+            //     this.y -= Math.abs(this.speed * this.game.clockTick);
+            // }
 
             if(this.show){ 
-                this.move();
-                this.throwCrows();
-
-                // if(this.target.x > inc[4]){ //battlescene
-                //     if(this.hitpoints <= 0 ) {this.removeFromWorld = true;}
-                // }
+                if(this.target.x > this.inc[3]){ //battlescene
+                    this.battle = true;
+                    this.battleScene();
+                    if(this.hitpoints <= 0) { //Yubaba lost, battle over
+                        this.battle = false;
+                    }
+                }else{
+                    this.move();
+                    this.throwCrows();
+                }
 
                 this.updateBB();
            }
@@ -186,13 +212,46 @@ class Yubaba {
            this.x += this.speed * this.game.clockTick;
            this.x += (this.target.velocity.x * this.game.clockTick)*-2;
     };
-
-    entrance(){
+            /* parameter not working?*/
+    entrance(midScreen){
         if(this.new){ //entrance
             this.new = false;
             this.x = PARAMS.CANVAS_WIDTH;
+            if(this.battle /* midScreen */){
+                this.y = PARAMS.CANVAS_HEIGHT / 2 - this.height *this.scale;
+            }
             this.dir = 1;
         }
+    };
+
+    battleScene(){
+        if(this.reset && this.battle){
+            this.scale = 1.2; // enlarge
+            this.entrance(true);
+            //fly on screen and wait
+            this.elapsedTime += this.game.clockTick;
+            if (this.elapsedTime < this.waitTime) { 
+                if(this.x >= PARAMS.CANVAS_WIDTH - this.width *this.scale){  // too far right
+                    this.x -= Math.abs(this.speed * this.game.clockTick); 
+                    this.dir = 1;
+                 }
+                 console.log("wait");
+            }else{
+                this.attack();
+                console.log("attack");
+                this.reset = false;
+            }    
+        }else{  // reset: fly off screen 
+            console.log("reset");
+            if(this.y > -this.height*this.scale){
+                this.y -= Math.abs(this.speed * this.game.clockTick);
+            }
+        }
+    };
+
+    // does some attack between 1 - 3
+    attack(){
+
     };
 
     toString(){
