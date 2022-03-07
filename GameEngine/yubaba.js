@@ -1,3 +1,9 @@
+var YUBABA = {
+    SPEED: 50, 
+    WAIT_TIME: 10, 
+    ATTACK_TIME: 20
+};
+
 class Yubaba {
     constructor(game, x, y, inc){
         // sprite stuff
@@ -17,7 +23,7 @@ class Yubaba {
         this.loadAnimations();
 
         // speed 
-        this.speed = 50;
+        this.speed = YUBABA.SPEED;
 
         // for crows
         this.elapsedTime = 0;
@@ -31,7 +37,6 @@ class Yubaba {
         this.battle = false;
         this.reset = false;
         this.hitpoints = 30; // make larger? talk to Hana about this
-        this.waitTime = 10;
 
         // death animation
         this.deathAnimation = false;
@@ -56,6 +61,9 @@ class Yubaba {
          //Yuababa off screen
         if(this.y < -this.height*this.scale){
             console.log("off screen");
+            if(this.target.x > this.inc[3]){
+                this.battle = true;
+            }
             if(this.battle){ // successful reset
                 console.log("successful reset");
                 this.reset = true;
@@ -92,7 +100,6 @@ class Yubaba {
 
             if(this.show){ 
                 if(this.target.x > this.inc[3]){ //battlescene
-                    this.battle = true;
                     this.battleScene();
                     if(this.hitpoints <= 0) { //Yubaba lost, battle over
                         this.battle = false;
@@ -108,13 +115,31 @@ class Yubaba {
 
     };
 
-    updateBB(){
-        if(this.dir == 1){
-            // adjust bounding box for reverse direction?        /* need to account for camera so Yubaba's BB x value lines up with Chihiros*/
-            this.BB = new BoundingBox(this.x+this.width*3/8*this.scale +this.game.camera.x, this.y+this.height*1/8*this.scale, this.width*3/8*this.scale, this.height*3/4*this.scale);
+    updateBB() {
+        if(this.battle){ // seperate from Chihiro, x val relative to game camera now
+            this.BB_x = this.x+this.width*3/8*this.scale;
         }else{
-            this.BB = new BoundingBox(this.x+this.width*3/8 *this.scale +this.game.camera.x, this.y+this.height*1/8*this.scale, this.width*3/8*this.scale, this.height*3/4*this.scale);
-        } 
+            this.BB_x = this.x+this.width*3/8*this.scale +this.game.camera.x;
+        }
+        this.BB_y =  this.y+this.height*1/8*this.scale;
+        this.BB_w =  this.width*3/8*this.scale;
+        this.BB_h = this.height*3/4*this.scale;
+        this.BB = new BoundingBox(this.BB_x, this.BB_y, this.BB_w, this.BB_h);
+        this.leftBB = new BoundingBox(this.BB_x - this.BBThickness, this.BB_y, this.BBThickness, this.BB_h);
+        this.rightBB = new BoundingBox(this.BB_x + this.BB_w, this.BB_y, this.BBThickness, this.BB_h);
+        this.topRBB = new BoundingBox(this.BB_x + this.BB_w / 2, this.BB_y, this.BB_w / 2, this.BBThickness);
+        this.topLBB = new BoundingBox(this.BB_x, this.BB_y, this.BB_w / 2, this.BBThickness);
+
+        this.bottomRBB = new BoundingBox(this.BB_x + this.BB_w / 2, this.BB_y + this.BB_h, this.BB_w / 2, this.BBThickness);
+        this.bottomLBB = new BoundingBox(this.BB_x, this.BB_y + this.BB_h, this.BB_w / 2, this.BBThickness);
+
+
+        // if(this.dir == 1){
+        //     // adjust bounding box for reverse direction?        /* need to account for camera so Yubaba's BB x value lines up with Chihiros*/
+        //     this.BB = new BoundingBox(this.x+this.width*3/8*this.scale +this.game.camera.x, this.y+this.height*1/8*this.scale, this.width*3/8*this.scale, this.height*3/4*this.scale);
+        // }else{
+        //     this.BB = new BoundingBox(this.x+this.width*3/8 *this.scale +this.game.camera.x, this.y+this.height*1/8*this.scale, this.width*3/8*this.scale, this.height*3/4*this.scale);
+        // } 
     };
 
     /*
@@ -124,14 +149,24 @@ class Yubaba {
         if(this.show || this.deathAnimation){ // show Yubaba
             ctx.shadowColor = '#ff2121';
             ctx.shadowBlur = 10; // change this to make the aura more spread out
-            this.animator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
+            if(this.battle && !this.new){ //seperate from Chihiro
+                this.animator.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, this.scale);
+            }else
+                this.animator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
             ctx.shadowColor = "transparent"; // remove shadow !
 
             if(this.BB != null){
                 if (PARAMS.DEBUG) {
                     ctx.strokeStyle = 'Red';
-                     /* need to remove account for camera so drawn with Chihiro*/
-                    ctx.strokeRect(this.BB.x - this.game.camera.x,  this.BB.y, this.BB.width, this.BB.height);
+                    ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
+                    ctx.strokeStyle = 'Yellow';
+                    ctx.strokeRect(this.leftBB.x - this.game.camera.x, this.leftBB.y, this.leftBB.width, this.leftBB.height);
+                    ctx.strokeRect(this.rightBB.x - this.game.camera.x, this.rightBB.y, this.rightBB.width, this.rightBB.height);
+                    ctx.strokeRect(this.topRBB.x - this.game.camera.x, this.topRBB.y, this.topRBB.width, this.topRBB.height);
+                    ctx.strokeRect(this.bottomRBB.x - this.game.camera.x, this.bottomRBB.y, this.bottomRBB.width, this.bottomRBB.height);
+                    ctx.strokeStyle = 'Blue';
+                    ctx.strokeRect(this.topLBB.x - this.game.camera.x, this.topLBB.y, this.topLBB.width, this.topLBB.height);
+                    ctx.strokeRect(this.bottomLBB.x - this.game.camera.x, this.bottomLBB.y, this.bottomLBB.width, this.bottomLBB.height);
                 }
             }else{
                 this.updateBB();
@@ -216,9 +251,11 @@ class Yubaba {
     entrance(midScreen){
         if(this.new){ //entrance
             this.new = false;
-            this.x = PARAMS.CANVAS_WIDTH;
             if(this.battle /* midScreen */){
+                this.x = this.inc[3] + PARAMS.CANVAS_WIDTH;
                 this.y = PARAMS.CANVAS_HEIGHT / 2 - this.height *this.scale;
+            }else{
+                this.x = PARAMS.CANVAS_WIDTH;
             }
             this.dir = 1;
         }
@@ -230,27 +267,31 @@ class Yubaba {
             this.entrance(true);
             //fly on screen and wait
             this.elapsedTime += this.game.clockTick;
-            if (this.elapsedTime < this.waitTime) { 
-                if(this.x >= PARAMS.CANVAS_WIDTH - this.width *this.scale){  // too far right
+            if (this.elapsedTime < YUBABA.WAIT_TIME) { 
+                 // seperate from Chihiro, x val relative to game camera now
+                if(this.x >= this.inc[3] + PARAMS.CANVAS_WIDTH - this.width *this.scale){  // too far right
                     this.x -= Math.abs(this.speed * this.game.clockTick); 
                     this.dir = 1;
                  }
                  console.log("wait");
-            }else{
+            }else if(this.elapsedTime < YUBABA.WAIT_TIME + YUBABA.ATTACK_TIME){
                 this.attack();
                 console.log("attack");
+            }else{
                 this.reset = false;
-            }    
+            }  
         }else{  // reset: fly off screen 
             console.log("reset");
-            if(this.y > -this.height*this.scale){
-                this.y -= Math.abs(this.speed * this.game.clockTick);
+            this.y -= Math.abs(this.speed * this.game.clockTick);
+            if(!this.battle){
+                this.move();
             }
         }
     };
 
     // does some attack between 1 - 3
     attack(){
+
 
     };
 

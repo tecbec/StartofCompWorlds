@@ -11,6 +11,7 @@ var CHIHIRO = {
     CROUCH: {RIGHT: {X: 0,  Y: 560},  LEFT: {X: 0,  Y: 630},  FRAME: 4, SPEED: 0.33, PADDING: 0, REVERSE: false, LOOP: true},
     RUN:    {RIGHT: {X: 0,  Y: 140},  LEFT: {X: 0,  Y: 210},  FRAME: 4, SPEED: 0.1, PADDING: 0, REVERSE: false, LOOP: true},
    // DEAD:   {RIGHT: {X: 0,  Y: 420},  LEFT: {X: 0,  Y: 490},  FRAME: 3, SPEED: 0.12, PADDING: 0, REVERSE: false, LOOP: false},
+    DEAD:  {RIGHT: {X: 0,  Y: 910},  LEFT: {X: 0,  Y: 980},  FRAME: 8, SPEED: 0.2, PADDING: 0, REVERSE: false, LOOP: true},
     CROUCH_WALK: {RIGHT: {X: 0,  Y: 700}, LEFT: {X: 0,  Y: 770}, FRAME: 4, SPEED: 0.33, PADDING: 0, REVERSE: false, LOOP: true},
     BREATH_BAR:  {X: 1612, Y: 18, HEIGHT: 17, MAX: 100},
     COIN_COUNTER:{X: 1400, Y: 15},
@@ -519,6 +520,9 @@ class Player {
                             console.log("stick to Yubaba"); //not sensing collision
                             that.setX(entity.BB.x + entity.BB.width  /2 - that.getWidth/2);
                             that.setY(entity.BB.y + entity.BB.height  - 10);
+                        }else if(entity.battle){
+                            that.game.camera.breathwidth -= 10;
+                            that.game.camera.changeBreath();
                         }else{
                             that.game.camera.breathwidth -= CHIHIRO.BREATH_BAR.MAX;
                             that.game.camera.changeBreath();
@@ -527,7 +531,8 @@ class Player {
                 }
 
                 // collision with Chicks
-                if ((entity instanceof Chick || entity instanceof Radish || entity instanceof Frog)&& that.BB.collide(entity.BB) && !that.dead) {
+                if ((entity instanceof Chick || entity instanceof Radish || entity instanceof Frog 
+                     || (entity instanceof Yubaba && entity.battle))&& that.BB.collide(entity.BB) && !that.dead) {
                     if (!that.game.camera.title && !that.game.camera.chihiro.winGame) { 
                         that.game.camera.breathwidth -= CHIHIRO.BREATH_BAR.MAX/4;
                         that.game.camera.changeBreath();
