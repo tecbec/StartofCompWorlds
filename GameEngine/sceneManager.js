@@ -4,8 +4,9 @@
  */
  const SOOT_AREA_HEIGHT = 30;
  var LEVEL = {
-    music: "./GameEngine/audio/OneSummersDay.mp3",
+   // music: "./GameEngine/audio/OneSummersDay.mp3",
     TITLE_START:        true,              // determine if you want the title to be on.
+    music: ["./GameEngine/audio/OneSummersDay.mp3", "./GameEngine/audio/TheNameOfLife.mp3"], 
     START_MUTE:         false,               // you can must the music in each level
     START_CANVAS:       {X: -851, Y: 0},
     END_CANVAS:         {X: 22000},         // change this later when we figure out the exact ending canvas measurement
@@ -92,7 +93,9 @@
                       {X: 7000, Y: 0}, ], // scene 4
 
     RADISH_LOCATION: [{X: 840,  Y: 690}], //scene
-
+    //                      1                       2                 3                4
+    PORTAL_LOCATION: [{X: 820,  Y: 390}, {X: 2850, Y: 120}, {X: 3902, Y: 800}, {X: 7000, Y:120}],
+    
     CHICK_LOCATION: [{X: 2402, Y: 785, MIN: 500,  MAX: 2402, SPEED: 2, DIR:0},               // scene 1
                      {X: 2900, Y: 785, MIN: 2402, MAX: 4304, SPEED: 0, DIR:0}, {X: 3800, Y: 785, MIN: 2402, MAX: 4304, SPEED: 0, DIR:0},               // scene 2
                      {X: 4780, Y: 785, MIN: 4304, MAX: 5255, SPEED: 0, DIR:1}, {X: 5730, Y: 785, MIN: 5305, MAX: 6206, SPEED: 0, DIR:0},               // scene 3
@@ -105,11 +108,11 @@
 
     /*    frame:            1             3              */
     HAKU_LOCATION: [{X:500, Y:850, TEXT: 1},{X:5305, Y:575, TEXT: 2}, {X: 10056, Y:820, TEXT: 3}],
+
+    BREATH_BAR_OUTLINE: {X: 1600,Y: 10 },
     // 0 = right, 1 = left
     FROG_LOCATION: [{X:9770, Y:0, DIR: 1, MIN: 9710, MAX: 9760, HEIGHT: -50, TIME: 4}, {X:9912, Y:681, DIR: 1, MIN: 9300, MAX: 9800, HEIGHT: -250, TIME: 2}], // scene 5
 
-
-    BREATH_BAR_OUTLINE: {X: 1600,Y: 10 }
 }
 
 class SceneManager {
@@ -123,7 +126,8 @@ class SceneManager {
         this.level = 1;
         this.gameOverCounter  = 0;
 
-
+        this.instructionsOpened = false;
+        this.onInstructions = false;
         this.loadLevelCount = -1;
         // sound
         this.mute = true;
@@ -203,11 +207,22 @@ class SceneManager {
         this.loadGame();
 
         // don't play music unless it's not the title page
-        if (LEVEL.music && !this.title) {
+        if (LEVEL.music[0] && !this.title) {
              ASSET_MANAGER.pauseBackgroundMusic();
-             ASSET_MANAGER.playAsset(LEVEL.music);
+             ASSET_MANAGER.playAsset(LEVEL.music[0]);
         }
+        
     };
+
+    loadInstructions() {
+        if (this.instructionsOpened) {
+            this.buttons.mute = LEVEL.START_MUTE;
+            this.mute = LEVEL.START_MUTE;
+            this.game.addEntity(new Instruction(this.game, 0, 0)); 
+            ASSET_MANAGER.playAsset(LEVEL.music[1]);
+            this.instructionsOpened = false;
+        } 
+    }
 
     loadGame() {
         if (this.title) {
@@ -219,7 +234,7 @@ class SceneManager {
             this.game.addEntity(new Fireworks(this.game));
             this.game.addEntity(this.lamp);
             this.game.addEntity(this.chihiro);
-            //this.game.addEntity(new Instruction(this.game, 0, 0));
+            //
             //this.game.addEntity(this.chick);
             // this.game.addEntity(this.haku);
         } else {
@@ -275,17 +290,17 @@ class SceneManager {
                 this.game.addEntity(new Coins(this.game, coin.X, coin.Y));
             }
 
+            for (var i = 0; i < LEVEL.PORTAL_LOCATION.length; i++) {
+                let portal = LEVEL.PORTAL_LOCATION[i];
+                this.game.addEntity(new Portal(this.game, portal.X, portal.Y));
+            }
+
             
             for (var i = 0; i < LEVEL.FROG_LOCATION.length; i++) {
                 let frog = LEVEL.FROG_LOCATION[i];
                 this.game.addEntity(new Frog(this.game, frog.X, frog.Y, frog.DIR, frog.MIN, frog.MAX, frog.HEIGHT, frog.TIME));
             }
             
-            for (var i = 0; i < LEVEL.PORTAL_LOCATION.length; i++) {
-                let portal = LEVEL.PORTAL_LOCATION[i];
-                this.game.addEntity(new Portal(this.game, portal.X, portal.Y));
-            }
-
             for (var i = 0; i < LEVEL.CHICK_LOCATION.length; i++) {
                 let chick = LEVEL.CHICK_LOCATION[i];
                 if(chick.MIN == null || chick.MAX == null || chick.SPEED == null || chick.DIR == null){
@@ -319,9 +334,10 @@ class SceneManager {
             this.game.addEntity(this.bubbleCounter);
            // this.game.addEntity(new Fireworks(this.game));
             this.game.addEntity(new EndScreen(this.game, this.level, LEVEL.END_SCREEN.X, LEVEL.END_SCREEN.Y));
-            this.game.addEntity(this.buttons);
-        
+          
         }
+        this.game.addEntity(this.buttons);
+        
     };
 
     changeBreath() {
@@ -341,15 +357,25 @@ class SceneManager {
             }
         }
 
-        if (this.title && this.game.click) {  // start button
-            if (this.game.click && this.game.click.y > 700 && this.game.click.y < 750 && this.game.click.x > 815  && this.game.click.x < 1003) {
+        if (this.title && this.game.click && !this.onInstructions) {  // start button
+            if (this.game.click && this.game.click.y > 608 && this.game.click.y < 658 && this.game.click.x > 815  && this.game.click.x < 1003) {
                 this.title = false;
                 this.loadLevel(1, this.title);
                 this.loadLevelCount = this.loadLevelCount + 1;
                 this.game.click = false;
+             
             }
         }
-
+       
+        if (this.title && !this.instructionsOpened && !this.onInstructions  &&  this.game.click) {  // start button
+            if (this.title && !this.instructionsOpened && !this.onInstructions && this.game.click && this.game.click.y > 700 && this.game.click.y < 750 && this.game.click.x > 723  && this.game.click.x < 1126) {
+                this.instructionsOpened = true;
+                this.loadInstructions();
+                this.onInstructions = true;
+                this.game.click = false;
+            } 
+        } 
+      
         if (this.game.click) {
             // Debug
             if(this.game.click.y > 1040         && this.game.click.y < 1070     && this.game.mouse.x < 200 && this.game.mouse.x > 100 && PARAMS.DEBUG) {

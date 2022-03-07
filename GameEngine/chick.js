@@ -165,6 +165,12 @@ class Radish {
        this.topRBB = new BoundingBox(this.x + this.widthBB+ this.widthBB*this.scale /2, this.y + this.heightBB /2, this.widthBB*this.scale / 2, this.BBThickness);
        this.topLBB = new BoundingBox(this.x+ this.widthBB, this.y+ this.heightBB /2, this.widthBB*this.scale  / 2, this.BBThickness);
 
+        // this.leftBB = new BoundingBox(this.x + this.widthBB, this.y + this.heightBB/2, this.BBThickness, this.heightBB*this.scale);
+       
+        // this.topRBB = new BoundingBox(this.x +  this.widthBB + 5, this.y + this.heightBB/2,this.widthBB, this.BBThickness);
+        // this.topLBB = new BoundingBox(this.BB.right - this.widthBB - 5,  this.y + this.heightBB/2, this.widthBB, this.BBThickness);
+
+        
         // tried to increase the height of the radish on frame 6
         // if (this.spritesheet.currentFrame() == 6){
         //     this.BB = new BoundingBox(this.x + this.widthBB, this.y , this.widthBB*this.scale, this.height*this.scale);

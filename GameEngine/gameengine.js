@@ -97,6 +97,10 @@ class GameEngine {
                 case "Space": //shoot would be cool to have the player change the arrow direction with the mouse
                     that.shoot = true; 
                     break;
+                case "Escape":
+                    that.close = true;
+                    break;
+                
             }
         }, false);
         // Key released
@@ -105,26 +109,24 @@ class GameEngine {
             switch(e.code) {
                 case "ArrowLeft":
                     that.left = false;
-
                     break;
                 case "ArrowRight":
                     that.right = false;
-
                     break;
                 case "ArrowUp":
                     that.up = false;
-
                     break;
                 case "ShiftLeft":
                     that.run = false;
-
                     break;
                 case "ArrowDown":
                     that.crouch = false; 
-
                     break;
                 case "Space": //shoot 
                     that.shoot = false; 
+                    break;
+                case "Escape":
+                    that.close = false;
                     break;
             }
         }, false);
