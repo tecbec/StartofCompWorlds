@@ -1,7 +1,8 @@
 var YUBABA = {
     SPEED: 50, 
-    WAIT_TIME: 10, 
-    ATTACK_TIME: 20
+    WAIT_TIME: 5, 
+    ATTACK_TIME: 15,
+    FIRERATE: 5
 };
 
 class Yubaba {
@@ -26,8 +27,8 @@ class Yubaba {
         this.speed = YUBABA.SPEED;
 
         // for crows
-        this.elapsedTime = 0;
-        this.fireRate = 5;
+        this.crowTimer = 0;
+        this.fireRate = YUBABA.FIRERATE;
 
         // connect Chihiro and Yubaba
         this.target = this.game.camera.chihiro;
@@ -37,6 +38,8 @@ class Yubaba {
         this.battle = false;
         this.reset = false;
         this.hitpoints = 30; // make larger? talk to Hana about this
+        this.attackCount = 1;
+        this.battleTimer = 0;
 
         // death animation
         this.deathAnimation = false;
@@ -68,7 +71,8 @@ class Yubaba {
                 console.log("successful reset");
                 this.reset = true;
                 this.new = true;
-                this.elapsedTime = 0;
+                this.battleTimer = 0;
+                this.fireRate = 3;
             }else{
                 console.log("remove");
                 this.removeFromWorld = true;
@@ -178,16 +182,16 @@ class Yubaba {
          // throw crows
          if(this.target.x > this.inc[1]){ 
             if(this.target.x < this.inc[2]){ // drop regular crows
-                this.elapsedTime += this.game.clockTick;
-                if (this.elapsedTime > this.fireRate) { 
-                    this.elapsedTime = 0;
+                this.crowTimer += this.game.clockTick;
+                if (this.crowTimer > this.fireRate) { 
+                    this.crowTimer = 0;
                     this.game.addEntity(new Crow(this.game, this.BB.x, this.BB.y, this.target, false));
                 }
 
             }else{ //drop heat seeking crows
-                this.elapsedTime += this.game.clockTick;
-                if (this.elapsedTime > this.fireRate) { 
-                    this.elapsedTime = 0;
+                this.crowTimer += this.game.clockTick;
+                if (this.crowTimer > this.fireRate) { 
+                    this.crowTimer = 0;
                     this.game.addEntity(new Crow(this.game, this.BB.x, this.BB.y, this.target, true));
                 }
 
@@ -266,19 +270,22 @@ class Yubaba {
             this.scale = 1.2; // enlarge
             this.entrance(true);
             //fly on screen and wait
-            this.elapsedTime += this.game.clockTick;
-            if (this.elapsedTime < YUBABA.WAIT_TIME) { 
+            this.battleTimer += this.game.clockTick;
+            if (this.battleTimer < YUBABA.WAIT_TIME) { 
                  // seperate from Chihiro, x val relative to game camera now
                 if(this.x >= this.inc[3] + PARAMS.CANVAS_WIDTH - this.width *this.scale){  // too far right
                     this.x -= Math.abs(this.speed * this.game.clockTick); 
                     this.dir = 1;
                  }
                  console.log("wait");
-            }else if(this.elapsedTime < YUBABA.WAIT_TIME + YUBABA.ATTACK_TIME){
+            }else if(this.battleTimer < YUBABA.WAIT_TIME + YUBABA.ATTACK_TIME){
                 this.attack();
                 console.log("attack");
             }else{
                 this.reset = false;
+                this.speed = YUBABA.SPEED;
+                this.fireRate = 3;
+                this.attackCount = 1;
             }  
         }else{  // reset: fly off screen 
             console.log("reset");
@@ -291,8 +298,71 @@ class Yubaba {
 
     // does some attack between 1 - 3
     attack(){
+        this.speed = YUBABA.SPEED * 30;
+        //throw crows
+        this.crowTimer += this.game.clockTick;
+        if(this.crowTimer >= this.fireRate){
+            console.log("throw crow");
+            this.game.addEntity(new Crow(this.game, this.BB.x, this.BB.y, this.target, true));
+            if(this.fireRate > 1){
+                this.fireRate -= 0.3;
+            }
+            this.crowTimer = 0;
+        }
 
+        if(this.attackCount == 1){ // fly straight
+            this.x -= this.speed * this.game.clockTick;
 
+            if(this.x <= 0 + this.inc[3] - this.width*this.scale){ //set up
+                this.y = 50; 
+                this.dir = 0;
+                this.attackCount++;
+            }
+
+        }else if(this.attackCount == 2){ //fly back and forth across the screen
+            if(this.x >= this.inc[3] + PARAMS.CANVAS_WIDTH + 5 && this.dir == 0){  // too far right
+                this.y += PARAMS.CANVAS_HEIGHT/3;
+                this.dir = 1;
+            }else if(this.x + this.width *this.scale <= 0 + this.inc[3] - 5 && this.dir == 1){ // too far left
+                this.y += PARAMS.CANVAS_HEIGHT/3;  
+                this.dir = 0;   
+            }
+
+            if(this.dir == 0){
+                this.x += this.speed * this.game.clockTick;
+            }else{
+                this.x -= this.speed * this.game.clockTick;
+            }
+
+            if(this.y >= PARAMS.CANVAS_HEIGHT - 200){
+                console.log("attack 2 done");
+                this.y -= PARAMS.CANVAS_HEIGHT/3;  
+                this.attackCount++;
+            }
+
+        }else { // diagonal Yubaba attacks
+            if(this.attackCount == 3){
+                this.x -= this.speed * this.game.clockTick;
+                this.y -= this.speed / 2.5 * this.game.clockTick;
+
+                if(this.x + this.width *this.scale <= 0 + this.inc[3] - 5){ // too far left
+                    console.log("attack 3  done");
+                    this.x = this.inc[3] + PARAMS.CANVAS_WIDTH + 5;
+                    this.attackCount++;
+                }
+            }else if(this.attackCount == 4){
+                this.x -= this.speed * this.game.clockTick;
+                this.y += this.speed / 2 * this.game.clockTick;
+
+                if(this.y >= PARAMS.CANVAS_HEIGHT - 200){
+                    console.log("attack 4 done");
+                    this.attackCount = 2;
+                    this.x = this.inc[3] - this.width*this.scale
+                    this.y = 50;
+                    this.dir = 0;
+                }
+            }
+        }
     };
 
     toString(){
