@@ -69,11 +69,11 @@
 
     COIN_LOCATION: [{X: 100,  Y: 895},{X: 125,  Y: 895}, {X: 150,  Y: 895}, {X: 175, Y: 895},  {X: 200,  Y: 895}, {X: 225,  Y: 895},
                     {X: 250,  Y: 895},{X: 275,  Y: 895}, {X: 300,  Y: 895}, {X: 325,  Y: 895},                                          // scene 0
-                    {X: 900,  Y: 500},{X: 1200, Y: 295}, {X: 1500, Y: 450}, {X: 2000, Y: 340}, {X: 2300, Y: 540}, {X: 1100, Y: 650},
-                    {X: 1900, Y: 650},{X: 1400, Y: 900}, {X: 1550, Y: 900}, {X: 1700, Y: 900}, {X: 2100, Y: 900},                      // scene 1
-                    {X: 2675, Y: 525},{X: 2800, Y: 390}, {X: 3400, Y: 520}, {X: 3600, Y: 330}, {X: 4050, Y: 540}, {X: 3800, Y: 650},
-                    {X: 3000, Y: 650},{X: 3350, Y: 900}, {X: 3400, Y: 900}, {X: 3450, Y: 900}, {X: 4100, Y: 900},                      // scene 2
-                    {X: 4360, Y: 60}, {X: 4772, Y: 215}, {X: 5305, Y: 50},  {X: 5810, Y: 70},  {X: 5255, Y: 650}, {X: 5440, Y: 650},
+                    {X: 900,  Y: 500},{X: 1200, Y: 295}, {X: 1500, Y: 450}, {X: 2000, Y: 340}, {X: 2300, Y: 540}, {X: 1150, Y: 600},
+                    {X: 1950, Y: 600},{X: 1400, Y: 900}, {X: 1550, Y: 900}, {X: 1700, Y: 900}, {X: 2100, Y: 900},                      // scene 1
+                    {X: 2675, Y: 525},{X: 2800, Y: 390}, {X: 3400, Y: 520}, {X: 3600, Y: 330}, {X: 4050, Y: 540}, {X: 3850, Y: 600},
+                    {X: 3050, Y: 600},{X: 3350, Y: 900}, {X: 3400, Y: 900}, {X: 3450, Y: 900}, {X: 4100, Y: 900},                      // scene 2
+                    {X: 4360, Y: 60}, {X: 4772, Y: 215}, {X: 5305, Y: 50},  {X: 5810, Y: 70},  {X: 5245, Y: 600}, {X: 5400, Y: 600},
                     {X: 4621, Y: 895},{X: 4938, Y: 895}, {X: 4719, Y: 37},  {X: 5059, Y: 138},                                         // scene 3
                     {X: 6550, Y: 475},{X: 6750, Y: 150}, {X: 7075, Y: 240}, {X: 7175, Y: 550}, {X: 7475, Y: 350}, {X: 7975, Y: 640},
                     {X: 6500, Y: 895},{X: 7000, Y: 895}, {X: 7100, Y: 895}, {X: 7200, Y: 895},                                         // scene 4
@@ -84,11 +84,14 @@
                 ],
 
     NOFACE_SCALE: 0.5,
+
     NOFACE_LOCATION: [{X: 3200, Y: 100},  // scene 2
                       {X: 7000, Y: 0}, ], // scene 4
 
     RADISH_LOCATION: [{X: 840,  Y: 690}], //scene
-
+    //                      1                       2                 3                4
+    PORTAL_LOCATION: [{X: 820,  Y: 390}, {X: 2850, Y: 120}, {X: 3902, Y: 800}, {X: 7000, Y:120}],
+    
     CHICK_LOCATION: [{X: 2402, Y: 785, MIN: 500,  MAX: 2402, SPEED: 2, DIR:0},               // scene 1
                      {X: 2900, Y: 785, MIN: 2402, MAX: 4304, SPEED: 0, DIR:0}, {X: 3800, Y: 785, MIN: 2402, MAX: 4304, SPEED: 0, DIR:0},               // scene 2
                      {X: 4780, Y: 785, MIN: 4304, MAX: 5255, SPEED: 0, DIR:1}, {X: 5730, Y: 785, MIN: 5305, MAX: 6206, SPEED: 0, DIR:0},               // scene 3
@@ -101,6 +104,8 @@
 
     /*    frame:            1             3              */
     HAKU_LOCATION: [{X:500, Y:850, TEXT: 1},{X:5305, Y:575, TEXT: 2}, {X: 10056, Y:820, TEXT: 3}],
+
+    BREATH_BAR_OUTLINE: {X: 1600,Y: 10 },
     // 0 = right, 1 = left
     FROG_LOCATION: [{X:9770, Y:0, DIR: 1, MIN: 9710, MAX: 9760, HEIGHT: -50, TIME: 4}, {X:9912, Y:681, DIR: 1, MIN: 9300, MAX: 9800, HEIGHT: -250, TIME: 2}] // scene 5
 
@@ -202,8 +207,11 @@ class SceneManager {
 
             // initialization of the breath bar and counter
             this.coinCounter = new CoinCounter(this.game, CHIHIRO.COIN_COUNTER.X, CHIHIRO.COIN_COUNTER.Y);
+            this.bubbleCounter = new BubbleCounter(this.game, CHIHIRO.BUBBLE_COUNTER.X, CHIHIRO.BUBBLE_COUNTER.Y);
+
             this.breathbar = new BreathBar(this.game, CHIHIRO.BREATH_BAR.X, CHIHIRO.BREATH_BAR.Y, this.breathwidth,
                 CHIHIRO.BREATH_BAR.HEIGHT * PARAMS.SCALE, CHIHIRO.BREATH_BAR.MAX);
+            this.breathbarOutline  = new BreathBarOutline (this.game, LEVEL.BREATH_BAR_OUTLINE.X, LEVEL.BREATH_BAR_OUTLINE.Y );
         }
 
         this.loadGame();
@@ -310,11 +318,16 @@ class SceneManager {
 
             this.game.addEntity(this.chihiro);
 
+            for (var i = 0; i < LEVEL.PORTAL_LOCATION.length; i++) {
+                let portal = LEVEL.PORTAL_LOCATION[i];
+                this.game.addEntity(new Portal(this.game, portal.X, portal.Y));
+            }
+
             for (var i = 0; i < LEVEL.FROG_LOCATION.length; i++) {
                 let frog = LEVEL.FROG_LOCATION[i];
                 this.game.addEntity(new Frog(this.game, frog.X, frog.Y, frog.DIR, frog.MIN, frog.MAX, frog.HEIGHT, frog.TIME));
             }
-            
+
             for (var i = 0; i < LEVEL.CHICK_LOCATION.length; i++) {
                 let chick = LEVEL.CHICK_LOCATION[i];
                 if(chick.MIN == null || chick.MAX == null || chick.SPEED == null || chick.DIR == null){
@@ -340,8 +353,11 @@ class SceneManager {
                 this.game.addEntity(new Haku(this.game, haku.X, haku.Y, haku.TEXT));
             }
             this.game.addEntity(this.breathbar);
+            this.game.addEntity(this.breathbarOutline);
+
             this.game.addEntity(this.coinCounter);
-            this.game.addEntity(new Fireworks(this.game));
+            this.game.addEntity(this.bubbleCounter);
+           // this.game.addEntity(new Fireworks(this.game));
             this.game.addEntity(new EndScreen(this.game, this.level, LEVEL.END_SCREEN.X, LEVEL.END_SCREEN.Y));
           
         }
@@ -354,6 +370,8 @@ class SceneManager {
     };
 
     update() {
+
+       // this.mute = true;
         // PARAMS.DEBUG = true;
         // this.mute = true;
         this.updateAudio();
@@ -474,6 +492,7 @@ class SceneManager {
         // PARAMS.DEBUG = document.getElementById("debug").checked;
     };
 
+          
     draw(ctx) {
         ctx.font = PARAMS.BLOCKWIDTH / 2 + 'px "Press Start 2P"';
 
