@@ -13,7 +13,7 @@ var CHIHIRO = {
    // DEAD:   {RIGHT: {X: 0,  Y: 420},  LEFT: {X: 0,  Y: 490},  FRAME: 3, SPEED: 0.12, PADDING: 0, REVERSE: false, LOOP: false},
     CROUCH_WALK: {RIGHT: {X: 0,  Y: 700}, LEFT: {X: 0,  Y: 770}, FRAME: 4, SPEED: 0.33, PADDING: 0, REVERSE: false, LOOP: true},
     VICTORY_DANCE:  {RIGHT: {X: 0,  Y: 840}, FRAME: 5, SPEED: 0.2, PADDING: 0, REVERSE: false, LOOP: true},
-    DEAD:  {RIGHT: {X: 0,  Y: 910},  LEFT: {X: 0,  Y: 980},  FRAME: 8, SPEED: 0.2, PADDING: 0, REVERSE: false, LOOP: true},
+    DEAD:  {RIGHT: {X: 0,  Y: 910},  LEFT: {X: 0,  Y: 980},  FRAME: 4, SPEED: 0.2, PADDING: 0, REVERSE: false, LOOP: true},
     BREATH_BAR:  {X: 1612, Y: 18, HEIGHT: 17, MAX: 100},
     COIN_COUNTER:{X: 1400, Y: 15},
     BUBBLE_COUNTER:{X: 1500, Y: 15},
