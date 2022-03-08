@@ -97,7 +97,7 @@ class Instruction {
     update() {
         if (this.game.camera.onInstructions) { // lock chihiro movement in the background if on instructions.
             this.game.camera.chihiro.x = 0;
-            
+
         }
         var BLUR_SPEED = 100;
         var BLUR_MAX = 50;

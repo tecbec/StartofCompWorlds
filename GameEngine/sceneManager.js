@@ -34,7 +34,6 @@
                           {X: 6706, Y: 600}, {X: 7506, Y: 600}, // Scene 4 - 800 px between each stone lamp, 500 px between first lamp and stone lamp
                           {X: 9059, Y: 600}],                   // Scene 5
 
-                   1                       2                 3                4
     PORTAL_LOCATION: [{X: 820,  Y: 390}, {X: 2850, Y: 120}, {X: 3902, Y: 800}, {X: 7000, Y:120}],
                     //{X:13814, Y: 650}, {X:15716, Y: 650},],
 
@@ -49,7 +48,7 @@
                     // {X:15716, Y: 650},
                     // {X:17618, Y:650}, 
                     // {X:19520, Y:650}], 
-    //                       
+    //
     
     RAILING_LOCATION: {X: 500, Y: 820},
 
