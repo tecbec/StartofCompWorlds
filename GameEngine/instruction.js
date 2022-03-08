@@ -70,8 +70,6 @@ class Instruction {
         this.ycrowvel = 0;
         this.crowstate = 0;
 
-
-
         this.jumpAnim = [];
         this.walkAnim = []; 
         this.crowAnim = [];
@@ -250,7 +248,6 @@ class Instruction {
         
         
 }
-
 
     draw(ctx) {
         this.drawBackground(ctx);
