@@ -1,7 +1,7 @@
 /* Chihiro's Params */
 var CHIHIRO = {
     TITLE_POSITION:   {X: 0,  Y: 800},
-    INITIAL_POSITION: {X: 0,  Y: 0},  // original: 0, change to 11500 to test winning condition. 
+    INITIAL_POSITION: {X: 10000,  Y: 0},  // original: 0, change to 11500 to test winning condition. 
     SIZE: 70,
     SCALE: 2,
     PADDING:{X: 28, Y: 20}, // same padding for BB and imaginary x,y,w,h calculations

@@ -102,7 +102,12 @@
     /*    frame:            1             3              */
     HAKU_LOCATION: [{X:500, Y:850, TEXT: 1},{X:5305, Y:575, TEXT: 2}, {X: 10056, Y:820, TEXT: 3}],
     // 0 = right, 1 = left
-    FROG_LOCATION: [{X:9770, Y:0, DIR: 1, MIN: 9710, MAX: 9760, HEIGHT: -50, TIME: 4}, {X:9912, Y:681, DIR: 1, MIN: 9300, MAX: 9800, HEIGHT: -250, TIME: 2}] // scene 5
+    FROG_LOCATION: [{X:2000, Y:0, DIR: 1, MIN: 2200, MAX: 2700, HEIGHT: -200, TIME: 2, RAILING: false},  // scene 2
+                    {X:4023, Y:400, DIR: 1, MIN: 4000, MAX: 4010, HEIGHT: -50, TIME: 3, RAILING: false}, // scene 3
+                    {X:7050, Y:400, DIR: 0, MIN: 7080, MAX: 7100, HEIGHT: -50, TIME: 3, RAILING: false}, // scene 4
+                    {X:9770, Y:0, DIR: 1, MIN: 9710, MAX: 9730, HEIGHT: -50, TIME: 4, RAILING: false}, 
+                    {X:9210, Y:0, DIR: 0, MIN: 9200, MAX: 9500, HEIGHT: -100, TIME: 4, RAILING: true}, 
+                    {X:9912, Y:681, DIR: 1, MIN: 9300, MAX: 9800, HEIGHT: -250, TIME: 2, RAILING: false}] // scene 5
 
 }
 
@@ -312,7 +317,7 @@ class SceneManager {
 
             for (var i = 0; i < LEVEL.FROG_LOCATION.length; i++) {
                 let frog = LEVEL.FROG_LOCATION[i];
-                this.game.addEntity(new Frog(this.game, frog.X, frog.Y, frog.DIR, frog.MIN, frog.MAX, frog.HEIGHT, frog.TIME));
+                this.game.addEntity(new Frog(this.game, frog.X, frog.Y, frog.DIR, frog.MIN, frog.MAX, frog.HEIGHT, frog.TIME, frog.RAILING));
             }
             
             for (var i = 0; i < LEVEL.CHICK_LOCATION.length; i++) {
