@@ -339,6 +339,11 @@ class SceneManager {
                 let frog = LEVEL.FROG_LOCATION[i];
                 this.game.addEntity(new Frog(this.game, frog.X, frog.Y, frog.DIR, frog.MIN, frog.MAX, frog.HEIGHT, frog.TIME));
             }
+            
+            for (var i = 0; i < LEVEL.PORTAL_LOCATION.length; i++) {
+                let portal = LEVEL.PORTAL_LOCATION[i];
+                this.game.addEntity(new Portal(this.game, portal.X, portal.Y));
+            }
 
             for (var i = 0; i < LEVEL.CHICK_LOCATION.length; i++) {
                 let chick = LEVEL.CHICK_LOCATION[i];
@@ -382,10 +387,6 @@ class SceneManager {
     };
 
     update() {
-
-       // this.mute = true;
-        // PARAMS.DEBUG = true;
-        // this.mute = true;
         this.updateAudio();
         // canvas width = 400
         // blockwidth = 32 * 1 = 32
