@@ -185,7 +185,6 @@ class GameEngine {
         let updatedThisTic = this.clockTick;
 
         //Player radius updates only
-        
 
         for (let i = this.entities.length - 1; i >= 0; i--) {
             if (  !(this.entities[i] instanceof Player) && (getDistance(this.entities[i], this.player) < 700 ||
