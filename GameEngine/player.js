@@ -1,7 +1,7 @@
 /* Chihiro's Params */
 var CHIHIRO = {
     TITLE_POSITION:   {X: 0,  Y: 800},
-    INITIAL_POSITION: {X: -200,  Y: 0},  // original: -200, change to 11500 to test winning condition. 
+    INITIAL_POSITION: {X: 0,  Y: 0},  // original: -200, change to 11500 to test winning condition. 
     SIZE: 70,
     SCALE: 2,
     PADDING:{X: 28, Y: 20}, // same padding for BB and imaginary x,y,w,h calculations
@@ -281,16 +281,18 @@ class Player {
 
         // can only move while on the ground AND jump after has been grounded for x ticks
         if (this.isGrounded && !this.dead && !this.winGame) {
-            if(this.jumping) {         // just landed
-                this.jumpTimer = 1000; // set off short timer, to prevent accidental double jumping
-            }
-            //updating jump timer
-            this.jumpTimer -= .01;
-            this.jumping = false;
+            //console.log("----------------grounded");
+            // if(this.jumping) {         // just landed
+            //     this.jumpTimer = 1000; // set off short timer, to prevent accidental double jumping
+            // }
+            // //updating jump timer
+            // this.jumpTimer -= .01;
+            // this.jumping = false;
+
             // Consider removing deactivate -> should only use it for double jump fix
             if (Math.abs(this.velocity.x) < MIN_WALK) { // walking
                 this.velocity.x = 0;
-                if (this.game.left && !this.game.deactivate) {
+                 if (this.game.left && !this.game.deactivate) { //swtiching directions?
                     this.velocity.x -= MIN_WALK;
                 }
                 if (this.game.right && !this.game.deactivate) {
@@ -331,15 +333,15 @@ class Player {
         } else {
             // fall straight down if did not jump
             // when fall users can change direction if fast enough
-            if (this.velocity.y > 0 && !this.jumping) { 
-                if (this.game.right && !this.game.left) {
-                    this.velocity.x = Math.abs(this.velocity.x);
-                } else if (this.game.left && !this.game.right) {
-                    this.velocity.x = -Math.abs(this.velocity.x);
-                } else if (!this.game.left && !this.game.right) {
-                    this.velocity.x = 0;
-                }
-            }
+            // if (this.velocity.y > 0 && !this.jumping) { 
+            //     if (this.game.right && !this.game.left) {
+            //         this.velocity.x = Math.abs(this.velocity.x);
+            //     } else if (this.game.left && !this.game.right) {
+            //         this.velocity.x = -Math.abs(this.velocity.x);
+            //     } else if (!this.game.left && !this.game.right) {
+            //         this.velocity.x = 0;
+            //     }
+            // }
 
             // can change direction they are falling
             if (this.game.left) {
@@ -354,6 +356,16 @@ class Player {
             if (this.game.crouch && this.velocity.y < 0) { // if shes pressing crouch and jump, set the game crouch to false so she can only press it once.
                 this.game.crouch = false;
             }
+
+            // if jumped straight up, allow to move in x direction
+            if(this.jumping && this.velocity.x == 0){
+                if (this.game.left && !this.game.deactivate) { 
+                    this.velocity.x -= MIN_WALK;
+                }
+                if (this.game.right && !this.game.deactivate) {
+                    this.velocity.x += MIN_WALK;
+                }
+           }
         }
 
         //this makes chihiro always fall unless dead
@@ -516,9 +528,9 @@ class Player {
                 //Collision with Yubaba
                  if (entity instanceof Yubaba && that.BB.collide(entity.BB) && !that.dead) {
                     if (!that.game.camera.title && !that.game.camera.chihiro.winGame) {
-                        console.log("Yubaba collision");
+                        //console.log("Yubaba collision");
                         if(entity.deathAnimation){
-                            console.log("stick to Yubaba"); //not sensing collision
+                            //console.log("stick to Yubaba"); //not sensing collision
                             that.setX(entity.BB.x + entity.BB.width  /2 - that.getWidth/2);
                             that.setY(entity.BB.y + entity.BB.height  - 10);
                         }else{

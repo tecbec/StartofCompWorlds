@@ -137,7 +137,7 @@ class Yubaba {
 
     chihiroDeath(){
         //speed up
-        this.speed = 250;
+        this.speed = 400;
         this.frameDuration = 0.5; 
 
         // move y to match Chihiro
