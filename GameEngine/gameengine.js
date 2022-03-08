@@ -14,7 +14,8 @@ class GameEngine {
         this.entities = [];
         // Entities to be added at the end of each update
         this.entitiesToAdd = [];
-
+        this.crouch = false;
+        this.jump = false;
         this.left = false;
         this.right = false;
         this.up = false;
@@ -97,6 +98,12 @@ class GameEngine {
                 case "Space": //shoot would be cool to have the player change the arrow direction with the mouse
                     that.shoot = true; 
                     break;
+                case "Escape":
+                    that.close = true;
+                    break;
+                case "Enter":
+                    that.entered = true;
+                    break;
             }
         }, false);
         // Key released
@@ -105,26 +112,27 @@ class GameEngine {
             switch(e.code) {
                 case "ArrowLeft":
                     that.left = false;
-
                     break;
                 case "ArrowRight":
                     that.right = false;
-
                     break;
                 case "ArrowUp":
                     that.up = false;
-
                     break;
                 case "ShiftLeft":
                     that.run = false;
-
                     break;
                 case "ArrowDown":
                     that.crouch = false; 
-
                     break;
                 case "Space": //shoot 
                     that.shoot = false; 
+                    break;
+                case "Escape":
+                    that.close = false;
+                    break;
+                case "Enter":
+                    that.entered = false;
                     break;
             }
         }, false);
@@ -142,7 +150,7 @@ class GameEngine {
         for (var i = 0; i < this.entities.length; i++) {
             this.entities[i].draw(this.ctx);
         }
-        
+
         // draw chihiro here. 
         this.camera.draw(this.ctx);
 

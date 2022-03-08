@@ -10,8 +10,6 @@ ASSET_MANAGER.queueDownload("./GameEngine/sprites/Chihiro_spritesheet.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/cloud-Sheet.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/tree-sheet.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/stonelamp.png");
-ASSET_MANAGER.queueDownload("./GameEngine/sprites/stonelampTop.png");
-ASSET_MANAGER.queueDownload("./GameEngine/sprites/stonelampTop.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/lamp.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/flame.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/railing.png");
@@ -26,21 +24,46 @@ ASSET_MANAGER.queueDownload("./GameEngine/sprites/haku_spritesheet.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/yubaba.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/title.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/chick.png");
+ASSET_MANAGER.queueDownload("./GameEngine/sprites/radish.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/bubble.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/haku_text.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/youwin_text.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/title-buttons.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/volume.png");
+ASSET_MANAGER.queueDownload("./GameEngine/sprites/tutorial_text.png");
+ASSET_MANAGER.queueDownload("./GameEngine/sprites/healthbar.png");
+ASSET_MANAGER.queueDownload("./GameEngine/sprites/frog.png");
+ASSET_MANAGER.queueDownload("./GameEngine/sprites/healthbar.png");
+ASSET_MANAGER.queueDownload("./GameEngine/sprites/flower-pot.png");
+ASSET_MANAGER.queueDownload("./GameEngine/sprites/bench.png");
 
+// music 
+ASSET_MANAGER.queueDownload("./GameEngine/sprites/buttonUI.png");
 // music
 ASSET_MANAGER.queueDownload("./GameEngine/audio/OneSummersDay.mp3");
 
+//  sound effects 
+ASSET_MANAGER.queueDownload("./GameEngine/audio/effort-jump.mp3");
+ASSET_MANAGER.queueDownload("./GameEngine/audio/jump.wav"); 
+ASSET_MANAGER.queueDownload("./GameEngine/audio/jump2.wav"); 
+ASSET_MANAGER.queueDownload("./GameEngine/audio/power-up.mp3");
+ASSET_MANAGER.queueDownload("./GameEngine/audio/coin-collection.wav");
+
+ASSET_MANAGER.queueDownload("./GameEngine/sprites/frog.png");
+ASSET_MANAGER.queueDownload("./GameEngine/sprites/buttonUI.png");
+ASSET_MANAGER.queueDownload("./GameEngine/sprites/flag.png");
+ASSET_MANAGER.queueDownload("./GameEngine/sprites/healing.png");
+ASSET_MANAGER.queueDownload("./GameEngine/sprites/candy.png");
+// music
+ASSET_MANAGER.queueDownload("./GameEngine/audio/TheNameOfLife.mp3");
+ASSET_MANAGER.queueDownload("./GameEngine/audio/AlwaysWithMe.mp3");
 ASSET_MANAGER.downloadAll(() => {
 
 	var canvas = document.getElementById("gameCanvas");
 	var ctx = canvas.getContext("2d");
 	ASSET_MANAGER.autoRepeat("./GameEngine/audio/OneSummersDay.mp3");
-
+	ASSET_MANAGER.autoRepeat("./GameEngine/audio/TheNameOfLife.mp3");
+	ASSET_MANAGER.autoRepeat("./GameEngine/audio/AlwaysWithMe.mp3");
 	PARAMS.CANVAS_WIDTH = canvas.width;
 	PARAMS.CANVAS_HEIGHT = canvas.height;
 
