@@ -34,6 +34,10 @@
                           {X: 6706, Y: 600}, {X: 7506, Y: 600}, // Scene 4 - 800 px between each stone lamp, 500 px between first lamp and stone lamp
                           {X: 9059, Y: 600}],                   // Scene 5
 
+                   1                       2                 3                4
+    PORTAL_LOCATION: [{X: 820,  Y: 390}, {X: 2850, Y: 120}, {X: 3902, Y: 800}, {X: 7000, Y:120}],
+                    //{X:13814, Y: 650}, {X:15716, Y: 650},],
+
     LAMP_LOCATION: [{X:500, Y: 650},        // Start Scene 1
                     {X:2402,  Y: 650},      // Start Scene 2
                     {X:4304, Y: 650},       // Start Scene 3
@@ -45,8 +49,8 @@
                     // {X:15716, Y: 650},
                     // {X:17618, Y:650}, 
                     // {X:19520, Y:650}], 
-                    //, ,],
-
+    //                       
+    
     RAILING_LOCATION: {X: 500, Y: 820},
 
     SOOT_LOCATION:  [{X: 1100, Y: 345}, {X: 1000, Y: 920}, // scene 1
@@ -327,6 +331,11 @@ class SceneManager {
                 let frog = LEVEL.FROG_LOCATION[i];
                 this.game.addEntity(new Frog(this.game, frog.X, frog.Y, frog.DIR, frog.MIN, frog.MAX, frog.HEIGHT, frog.TIME));
             }
+            
+            for (var i = 0; i < LEVEL.PORTAL_LOCATION.length; i++) {
+                let portal = LEVEL.PORTAL_LOCATION[i];
+                this.game.addEntity(new Portal(this.game, portal.X, portal.Y));
+            }
 
             for (var i = 0; i < LEVEL.CHICK_LOCATION.length; i++) {
                 let chick = LEVEL.CHICK_LOCATION[i];
@@ -352,6 +361,7 @@ class SceneManager {
                 let haku = LEVEL.HAKU_LOCATION[i];
                 this.game.addEntity(new Haku(this.game, haku.X, haku.Y, haku.TEXT));
             }
+
             this.game.addEntity(this.breathbar);
             this.game.addEntity(this.breathbarOutline);
 
@@ -370,10 +380,6 @@ class SceneManager {
     };
 
     update() {
-
-       // this.mute = true;
-        // PARAMS.DEBUG = true;
-        // this.mute = true;
         this.updateAudio();
         // canvas width = 400
         // blockwidth = 32 * 1 = 32
