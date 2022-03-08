@@ -30,6 +30,7 @@ ASSET_MANAGER.queueDownload("./GameEngine/sprites/haku_text.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/youwin_text.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/title-buttons.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/volume.png");
+ASSET_MANAGER.queueDownload("./GameEngine/sprites/tutorial_text.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/healthbar.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/flower-pot.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/bench.png");
@@ -48,14 +49,17 @@ ASSET_MANAGER.queueDownload("./GameEngine/sprites/frog.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/buttonUI.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/flag.png");
 ASSET_MANAGER.queueDownload("./GameEngine/sprites/healing.png");
+ASSET_MANAGER.queueDownload("./GameEngine/sprites/candy.png");
 // music
 ASSET_MANAGER.queueDownload("./GameEngine/audio/TheNameOfLife.mp3");
+ASSET_MANAGER.queueDownload("./GameEngine/audio/AlwaysWithMe.mp3");
 ASSET_MANAGER.downloadAll(() => {
 
 	var canvas = document.getElementById("gameCanvas");
 	var ctx = canvas.getContext("2d");
 	ASSET_MANAGER.autoRepeat("./GameEngine/audio/OneSummersDay.mp3");
 	ASSET_MANAGER.autoRepeat("./GameEngine/audio/TheNameOfLife.mp3");
+	ASSET_MANAGER.autoRepeat("./GameEngine/audio/AlwaysWithMe.mp3");
 	PARAMS.CANVAS_WIDTH = canvas.width;
 	PARAMS.CANVAS_HEIGHT = canvas.height;
 

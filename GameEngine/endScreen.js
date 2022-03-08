@@ -7,12 +7,14 @@ class EndScreen {
         Object.assign(this, { game, level, x, y});
         this.elapsed = 0;
         this.fade = 1.5;
-
+        this.elapsedTimePlayAgain = 0;
         this.elapsedTime = 0;
         this.elapsedStats = 0;
         this.minute = 0;
         this.stopTimer = false;
-
+        this.color = "#ff7373";
+        this.color1 = "#bdb4a4";
+        this.playAgain = true;
         this.font = new FontFace("Minecraft", 'url(./GameEngine/sprites/Minecraft.ttf) format("TrueType")');
         this.font.load().then(function(loadedFont) {
             document.fonts.add(loadedFont);
@@ -39,7 +41,7 @@ class EndScreen {
 
 
     update() {
-        if (this.game.camera.chihiro.endPosition && this.game.click && this.game.click.y < 800 && this.game.click.y > 700 && this.game.mouse.x > 300 && this.game.mouse.x < 600) {
+        if ((this.game.camera.chihiro.endPosition && this.game.click && this.game.click.y < 800 && this.game.click.y > 700 && this.game.mouse.x > 300 && this.game.mouse.x < 600) || (this.game.camera.chihiro.endPosition && this.game.entered)) {
             this.game.camera.loadLevel(1, this.game.camera.title);
             this.game.camera.loadLevelCount = 0;
             this.game.click = false;
@@ -119,9 +121,14 @@ class EndScreen {
                         ctx.fillStyle = ctx.strokeStyle;
                         ctx.fillText("Play again", 330, 805);
                     }
-                 
-                  
-                    ctx.fillStyle = this.game.mouse && this.game.mouse.y < 800 && this.game.mouse.y > 700 && this.game.mouse.x > 300 && this.game.mouse.x < 600? "#ff7373" : "#bdb4a4";
+                    this.elapsedTimePlayAgain += this.game.clockTick;
+                    if (Math.round(this.elapsedTimePlayAgain) % 2 == 0) {
+                        this.playAgain = false;
+                    } else {
+                        this.playAgain = true;   
+                    }
+                    ctx.fillStyle = (this.game.mouse && this.game.mouse.y < 800 && this.game.mouse.y > 700 && this.game.mouse.x > 300 && this.game.mouse.x < 600 || (this.playAgain))? this.color : this.color1;
+
                     ctx.fillText("Play again", 330, 800); 
     
                  

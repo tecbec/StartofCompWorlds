@@ -22,6 +22,12 @@ class Instruction {
         this.yjump = 750;
         this.yvel = 0;
         this.xvel = 0;
+        this.sootsx = 0;
+        this.sootsx1 = 50;
+        this.sootsx2 = 100;
+        this.sootsx3 = 150;
+        this.sootsy = 350;
+        this.xsoots = 410;
 
         this.xwalk2 = 500;
         this.ywalk2 = 600;
@@ -63,12 +69,15 @@ class Instruction {
         this.xcrowvel = 0;
         this.ycrowvel = 0;
         this.crowstate = 0;
-        
+
+
+
         this.jumpAnim = [];
         this.walkAnim = []; 
         this.crowAnim = [];
         
         this.loadAnim();
+        this.sootsAnim();
         this.buttonspritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/buttonUI.png");
         this.bubblespritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/bubble.png");
         this.portalspritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/portal.png");
@@ -86,6 +95,10 @@ class Instruction {
     }
 
     update() {
+        if (this.game.camera.onInstructions) { // lock chihiro movement in the background if on instructions.
+            this.game.camera.chihiro.x = 0;
+            
+        }
         var BLUR_SPEED = 100;
         var BLUR_MAX = 50;
         if (this.blurValues >= 49) {
@@ -188,6 +201,7 @@ class Instruction {
   
     }
     drawButton(ctx) {
+       
         if (this.closeHover) {
             ctx.drawImage(this.buttonspritesheet,
                 96, 0, 32,  32,
@@ -246,8 +260,82 @@ class Instruction {
         this.drawHouse(ctx);
         this.drawRailing(ctx);
         this.drawButton(ctx);
+
+        var sootsy = 1010
+        var soot_max = 440
+  
+        if (this.sootsx < soot_max) {
+            this.sootAnimLeft.drawFrame(this.game.clockTick, ctx, this.sootsx, sootsy, 0.5);
+            ctx.shadowColor = '#6abe30';
+            ctx.shadowBlur = 10;
+            this.greenCandyAnim.drawFrame(this.game.clockTick, ctx, this.sootsx + 10, sootsy, 0.5);
+            ctx.shadowColor = 'transparent';
+        }  else {
+            this.sootsx = 0;
+        }
+        if (this.sootsx1 < soot_max) {
+            this.sootAnimLeft.drawFrame(this.game.clockTick, ctx, this.sootsx1, sootsy, 0.5);
+            ctx.shadowColor = '#ffb1cb';
+            ctx.shadowBlur = 10;
+            this.pinkCandyAnim.drawFrame(this.game.clockTick, ctx, this.sootsx1 + 10, sootsy, 0.5);
+            ctx.shadowColor = 'transparent';
+        } else {
+            this.sootsx1 = 0;
+        }
+        if (this.sootsx2 < soot_max) {
+            this.sootAnimLeft.drawFrame(this.game.clockTick, ctx, this.sootsx2, sootsy, 0.5); 
+            ctx.shadowColor = '#d2e086';
+            ctx.shadowBlur = 10;
+            this.lgreenCandyAnim.drawFrame(this.game.clockTick, ctx, this.sootsx2 + 10,  sootsy, 0.5);
+            ctx.shadowColor = 'transparent';
+        } else {
+            this.sootsx2 = 0;
+        }
+        if (this.sootsx3 < soot_max) {
+            this.sootAnimLeft.drawFrame(this.game.clockTick, ctx, this.sootsx3, sootsy, 0.5);
+            ctx.shadowColor = '#ffffff';
+            ctx.shadowBlur = 10;
+            this.whiteCandyAnim.drawFrame(this.game.clockTick, ctx, 10 + this.sootsx3, sootsy, 0.5);
+            ctx.shadowColor = 'transparent';
+        } else {
+            this.sootsx3 = 0;
+        }
+      
+        this.sootsx += 100 * this.game.clockTick ;
+        this.sootsx1 += 100 * this.game.clockTick ;
+        this.sootsx2 += 100 * this.game.clockTick ;
+        this.sootsx3 += 100 * this.game.clockTick ;
+
         this.drawLamps(ctx);
-       
+        ctx.shadowColor = '#ffffff';
+        ctx.shadowBlur = 2;
+        this.sootAnimLeft.drawFrame(this.game.clockTick, ctx, this.xsoots,  this.sootsy, 0.5);
+        this.sootAnimLeft.drawFrame(this.game.clockTick, ctx, this.xsoots + 50,  this.sootsy, 0.5);
+        this.sootAnimRight.drawFrame(this.game.clockTick, ctx, this.xsoots + 50 *2, this.sootsy, 0.5);
+        this.sootAnimRight.drawFrame(this.game.clockTick, ctx, this.xsoots + 50 *3, this.sootsy, 0.5);
+
+        ctx.shadowColor = 'transparent';
+        ctx.shadowColor = '#6abe30';
+        ctx.shadowBlur = 10;
+        this.greenCandyAnim.drawFrame(this.game.clockTick, ctx, this.xsoots + 10,  this.sootsy, 0.5);
+        ctx.shadowColor = 'transparent';
+
+        ctx.shadowColor = '#ffb1cb';
+        ctx.shadowBlur = 10;
+        this.pinkCandyAnim.drawFrame(this.game.clockTick, ctx,  this.xsoots + 50 + 10,  this.sootsy, 0.5);
+        ctx.shadowColor = 'transparent';
+
+        ctx.shadowColor = '#d2e086';
+        ctx.shadowBlur = 10;
+        this.lgreenCandyAnim.drawFrame(this.game.clockTick, ctx,  this.xsoots + 50 *2 + 10,  this.sootsy, 0.5);
+        ctx.shadowColor = 'transparent';
+
+
+        ctx.shadowColor = '#ffffff';
+        ctx.shadowBlur = 10;
+        this.whiteCandyAnim.drawFrame(this.game.clockTick, ctx,  this.xsoots + 50 *3 + 10,  this.sootsy, 0.5);
+        ctx.shadowColor = 'transparent';
+
         ctx.font = "24px Minecraft";
         ctx.strokeStyle = '#bdb4a4';
         ctx.fillStyle = ctx.strokeStyle;
@@ -267,6 +355,8 @@ class Instruction {
             ctx.fillText("written and directed by Hayao Miyazaki.", 50+10, 550);
             ctx.fillText("The user plays the role of Chihiro as she navigates through", 50, 600);
             ctx.fillText("the spiritual world.", 50+10, 650);
+            this.sootsy = 350;
+            this.xsoots = 410;
         }
 
         if (this.count == 2) {
@@ -287,6 +377,8 @@ class Instruction {
             ctx.fillText("lose breath.", 50 + 10, 650);
             ctx.fillText("Chihiro will be caught by Yubaba if she run out of breath", 50, 700);
             ctx.fillText("and lose the game.", 50+10, 750);
+            this.sootsy = 250;
+            this.xsoots = 380;
         }
 
         if (this.count == 3) {
@@ -303,6 +395,7 @@ class Instruction {
             this.idleLeftAnim.drawFrame(this.game.clockTick, ctx, 150, 350, 2);
             ctx.drawImage(this.buttonspritesheet, 68, 80, 17, 16, 100, 500, 17 * 2, 16 * 2);
             ctx.drawImage(this.buttonspritesheet, 68, 64, 17, 16, 200, 500, 17 * 2, 16 * 2);
+
 
             this.walkRightAnim.drawFrame(this.game.clockTick, ctx, 256, 350, 2);
             this.walkLeftAnim.drawFrame(this.game.clockTick, ctx, 362, 350, 2);
@@ -445,10 +538,12 @@ class Instruction {
             this.ybubble1 += this.ybubvel1 * this.game.clockTick * 2;
             this.xbubble1 -= this.xbubvel1 * this.game.clockTick * 2;
             this.idleLeftAnim.drawFrame(this.game.clockTick, ctx, 700, 350, 2);
+            this.xsoots = 320;
+            this.sootsy = 250;
         }
 
         if (this.count == 4) {
-         
+            this.sootsy = 300;
             ctx.font = "64px Minecraft";
             ctx.strokeStyle = '#b30000';
             ctx.fillStyle = ctx.strokeStyle;
@@ -488,6 +583,7 @@ class Instruction {
                 this.xwalk -= this.xwalkvel * TICK;
     
             }
+            this.xsoots = 340;
         }
 
         if (this.count == 5) {
@@ -642,8 +738,10 @@ class Instruction {
                     ctx.shadowBlur = 20;
                     this.healAnim4.drawFrame(this.game.clockTick, ctx, 500, 500,2);
                     ctx.shadowColor = "transparent";
+                } else {
+                    this.idleLeftAnim.drawFrame(this.game.clockTick, ctx, 500, 500, 2);
                 }
-                this.idleLeftAnim.drawFrame(this.game.clockTick, ctx, 500, 500, 2);
+               
             }
           
             if (this.xwalk3 <= 500) { // stops here
@@ -809,6 +907,23 @@ class Instruction {
             CHIHIRO.CROUCH_WALK.PADDING, CHIHIRO.CROUCH_WALK.REVERSE, CHIHIRO.CROUCH_WALK.LOOP);
 
     }
+    sootsAnim() {
+        this.sootsspritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/soot-jump-long_aura2_bidir.png");
+        this.candyspritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/candy.png");
+/**   let start = {x: 0, y: 0};   // location on the spritesheet to start
+        const height = 100;         // height of the sprite
+        const width = 100;          // width of the sprite
+        const frames = 6;           // number of frames
+        const framedur = 0.2;       // the duration of the frame to be up
+        const pad = 15;             // padding between the soot frames 
+ */
+        this.pinkCandyAnim = new Animator(this.candyspritesheet, 0, 0, 60, 50, 4, 0.2, 0, false, true);
+        this.greenCandyAnim= new Animator(this.candyspritesheet, 0, 50, 60, 50, 4, 0.2, 0, false, true);
+        this.whiteCandyAnim= new Animator(this.candyspritesheet, 0, 100, 60, 50, 4, 0.2, 0, false, true);
+        this.lgreenCandyAnim= new Animator(this.candyspritesheet, 0, 150, 60, 50, 4, 0.2, 0, false, true);
+        this.sootAnimLeft = new Animator (this.sootsspritesheet, 0, 0, 100, 100, 6, 0.6, 15, false, true);
+        this.sootAnimRight = new Animator (this.sootsspritesheet, 0, 125, 100, 100, 6, 0.2, 15, false, true);
+    }
     
     drawHouse(ctx) {
         this.housespritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/Bathhouse.png");
@@ -820,7 +935,7 @@ class Instruction {
             158 * 2, 268 * 2);
 
 
-        ctx.shadowColor = '#fee781';
+        ctx.shadowColor = '#fbf236';
         ctx.shadowBlur = this.blurValues 
            
         ctx.drawImage(this.housespritesheet,

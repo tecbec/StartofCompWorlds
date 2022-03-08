@@ -2,13 +2,16 @@
 /**
  * THIS IS WHERE WE PUT THE ENTITIES IN THE CANVAS
  */
+ const SOOT_AREA_HEIGHT = 30;
  var LEVEL = {
-    music: ["./GameEngine/audio/OneSummersDay.mp3", "./GameEngine/audio/TheNameOfLife.mp3"], 
+    music: ["./GameEngine/audio/OneSummersDay.mp3", "./GameEngine/audio/TheNameOfLife.mp3", "./GameEngine/audio/AlwaysWithMe.mp3"], 
+    TITLE_START:        true,              // determine if you want the title to be on.
     START_MUTE:         false,               // you can must the music in each level
     START_CANVAS:       {X: -851, Y: 0},
     END_CANVAS:         {X: 22000},         // change this later when we figure out the exact ending canvas measurement
-    END_TITLE_CANVAS:   {X: 500},           // This will end the title canvas so it won't keep going.
     FRAME_COUNT: 9,                         // change this for railing/canvas length
+    END_TITLE_CANVAS:   {X: 3000},  //500},           // This will end the title canvas so it won't keep going.
+    END_GAME:           {X: 11515, Y: 813},
     // Type 0: has left,middle,right piece can be adjusted to be longer
     // Type 1: is short (just middle piece)
     TREE:[{X: 567, Y: 276, TYPE:3}, {X: 2538, Y: 0, TYPE:1}, {X: 3231, Y: 276, TYPE:2}, {X: 5543, Y: 0, TYPE:1}, {X: 6527, Y: 276, TYPE:2}, {X: 7816, Y: 276, TYPE:0}, {X: 8274, Y: 276, TYPE:3}],
@@ -31,31 +34,38 @@
                           {X: 6706, Y: 600}, {X: 7506, Y: 600}, // Scene 4 - 800 px between each stone lamp, 500 px between first lamp and stone lamp
                           {X: 9059, Y: 600}],                   // Scene 5
 
-    /* Start of Frame:     1                   2                 3                 4                 5                   6                   7                8                 9                  10                11*/
-    LAMP_LOCATION: [{X:500, Y: 650},  
-         {X:2402,  Y: 650},
-          {X:4304, Y: 650}, 
-          {X:6206, Y: 650}, 
-          {X:8108, Y: 650},
-          {X:10010, Y: 650},
-          {X:11912, Y: 650}],// {X:13814, Y: 650}, {X:15716, Y: 650}, {X:17618, Y:650}, {X:19520, Y:650}], 
+    LAMP_LOCATION: [{X:500, Y: 650},        // Start Scene 1
+                    {X:2402,  Y: 650},      // Start Scene 2
+                    {X:4304, Y: 650},       // Start Scene 3
+                    {X:6206, Y: 650},       // Start Scene 4
+                    {X:8108, Y: 650},       // Start Scene 5
+                    {X:10010, Y: 650},],    // Start Scene 6
+                    // {X:11912, Y: 650}
+                    // {X:13814, Y: 650}, 
+                    // {X:15716, Y: 650},
+                    // {X:17618, Y:650}, 
+                    // {X:19520, Y:650}], 
                     //, ,],
 
     RAILING_LOCATION: {X: 500, Y: 820},
 
-    SOOT_LOCATION: [{X: 1100, Y: 335}, {X: 1500, Y: 920}, {X: 3350, Y: 540}, {X: 3350, Y: 920}, {X: 5622, Y: 500}, {X: 5939, Y: 500}, {X: 4500, Y: 920}, {X: 5500, Y: 920},
-                    {X: 7000, Y: 790}, {X: 6750, Y: 395},  // scene 4
-                    {X: 8482, Y: 925}, {X: 9500, Y: 925}], // scene 5
+    SOOT_LOCATION:  [{X: 1100, Y: 345}, {X: 1000, Y: 920}, // scene 1
+                     {X: 3320, Y: 540}, {X: 3350, Y: 920}, // scene 2
+                     {X: 5622, Y: 490}, {X: 5939, Y: 490}, {X: 4500, Y: 920}, {X: 5500, Y: 920}, // scene 3
+                     {X: 6900, Y: 790}, {X: 6710, Y: 395},  // scene 4
+                     {X: 8482, Y: 925}, {X: 9000, Y: 925}], // scene 5
 
-    SOOT_AREA: [{W: 100, H: 40},   {W: 200, H: 30},  // scene 1
-                {W: 100, H: 30},   {W: 200, H: 30}, {W: 110, H: 30}, {W: 110, H: 30}, {W: 500, H: 30}, {W: 500, H: 30},
-                {W: 500, H: 30},   {W: 100, H: 30},  // scene 4
-                {W: 500, H: 1305}, {W: 500, H: 30}], // Scene 5
+    SOOT_AREA:      [{W: 170, H: SOOT_AREA_HEIGHT},   {W: 1000, H: SOOT_AREA_HEIGHT},  // scene 1
+                     {W: 170, H: SOOT_AREA_HEIGHT},   {W: 200, H: SOOT_AREA_HEIGHT},  // scene 2
+                     {W: 170, H: SOOT_AREA_HEIGHT},   {W: 170, H: SOOT_AREA_HEIGHT},  {W: 500, H: SOOT_AREA_HEIGHT},   {W: 500, H: SOOT_AREA_HEIGHT}, // scene 3
+                     {W: 1000, H: SOOT_AREA_HEIGHT},   {W: 170, H: SOOT_AREA_HEIGHT},  // scene 4
+                     {W: 1000, H: SOOT_AREA_HEIGHT},   {W: 1000, H: SOOT_AREA_HEIGHT}], // Scene 5
 
-    SOOT_NUM:  [2, 3,   // scene 1
-                2, 3, 2, 2, 2, 2,
-                4, 2,   // scene 4
-                3, 4],  // Scene 5
+    SOOT_NUM:  [2, 10,              // scene 1
+                2, 3,               // scene 2
+                2, 2, 3, 3,         // scene 3
+                3, 2,               // scene 4
+                3, 5],              // Scene 5
 
     COIN_LOCATION: [{X: 100,  Y: 895},{X: 125,  Y: 895}, {X: 150,  Y: 895}, {X: 175, Y: 895},  {X: 200,  Y: 895}, {X: 225,  Y: 895},
                     {X: 250,  Y: 895},{X: 275,  Y: 895}, {X: 300,  Y: 895}, {X: 325,  Y: 895},                                          // scene 0
@@ -110,7 +120,7 @@ class SceneManager {
 
         // this.midPoint = 0;
         this.gameOver = false;
-        this.title = true;
+        this.title = LEVEL.TITLE_START;
         this.level = 1;
         this.gameOverCounter  = 0;
 
@@ -120,6 +130,9 @@ class SceneManager {
         // sound
         this.mute = true;
         this.volume = 0.1;
+
+        // instruction spritesheet
+        this.spritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/tutorial_text.png");
 
         // this set the bathhouse location relative to the last frame based on the lamp location
         this.endGame = LEVEL.BATHHOUSE.X + LEVEL.LAMP_LOCATION[LEVEL.LAMP_LOCATION.length-1].X - 93;
@@ -143,20 +156,31 @@ class SceneManager {
     // create all entities for the Title Screen
     titleScreen() {
 
-        let chickPlace = {x: 1200, y: 775, xneg: 500, xpos: 1200};
-        let hakuPlace = {x: -750, y: 825};
+        this.chickPlace = {x: LEVEL.STONE_LAMP_LOCATION[1].X, y: 775, xneg: LEVEL.STONE_LAMP_LOCATION[0].X, xpos: LEVEL.STONE_LAMP_LOCATION[1].X};
+        this.sootPlace = {x: LEVEL.STONE_LAMP_LOCATION[1].X - 500, y: 800};
+        this.hakuPlace = {x: LEVEL.LAMP_LOCATION[1].X-300, y: 825};
+        this.noFacePlace = {x: LEVEL.LAMP_LOCATION[1].X+200, y: 700, scale: 0.75};
 
         // Title Chihiro
         this.titlePlaque = new TitlePlaque(this.game);
+
         this.chihiro = new Player(this.game, CHIHIRO.TITLE_POSITION.X, CHIHIRO.TITLE_POSITION.Y);
         this.ground = new Ground(this.game, LEVEL.START_CANVAS.X, PARAMS.CANVAS_HEIGHT - BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE,
                                             PARAMS.CANVAS_WIDTH * LEVEL.FRAME_COUNT, BACKGROUND.GROUND.SCALE * BACKGROUND.GROUND.SIZE);
         this.background = new BackGround(this.game, LEVEL.START_CANVAS.X,  LEVEL.START_CANVAS.Y);
         this.railing = new Railing(this.game, LEVEL.RAILING_LOCATION.X, LEVEL.RAILING_LOCATION.Y, PARAMS.CANVAS_WIDTH * (LEVEL.FRAME_COUNT - 3),
                                     BACKGROUND.RAILING.SCALE * BACKGROUND.RAILING.SIZE);
-        this.chick = new Chick(this.game, chickPlace.x, chickPlace.y, chickPlace.xneg, chickPlace.xpos);
         this.lamp = new Lamp(this.game, -950, 620, BACKGROUND.LAMP.SIZE * BACKGROUND.LAMP.SCALE.W);
-        this.haku = new Haku(this.game, hakuPlace.x, hakuPlace.y);
+
+        this.chick = new Chick(this.game, this.chickPlace.x, this.chickPlace.y, 0, this.chickPlace.xneg, this.chickPlace.xpos);
+        this.haku = new Haku(this.game, this.hakuPlace.x, this.hakuPlace.y);
+        this.noFace = new NoFace(this.game, this.noFacePlace.x, this.noFacePlace.y, this.noFacePlace.scale);
+
+        this.soot= new Soot(gameEngine, this.sootPlace.x, this.sootPlace.y, 1, 170, 30 ,2);
+
+        this.text1 = new Animator(this.spritesheet, 0, 0, 143, 143, 3,1, 0, false, true);
+        this.text2 = new Animator(this.spritesheet, 580 , 0, 143, 143, 3, 1, 0, false, true);
+
         this.buttons = new TitleButtons(this.game);
 
         this.buttons.mute = true;
@@ -193,13 +217,11 @@ class SceneManager {
         }
 
         this.loadGame();
-
         // don't play music unless it's not the title page
         if (LEVEL.music[0] && !this.title) {
              ASSET_MANAGER.pauseBackgroundMusic();
              ASSET_MANAGER.playAsset(LEVEL.music[0]);
-        }
-        
+        } 
     };
 
     loadInstructions() {
@@ -207,6 +229,7 @@ class SceneManager {
             this.buttons.mute = LEVEL.START_MUTE;
             this.mute = LEVEL.START_MUTE;
             this.game.addEntity(new Instruction(this.game, 0, 0)); 
+            ASSET_MANAGER.pauseBackgroundMusic();
             ASSET_MANAGER.playAsset(LEVEL.music[1]);
             this.instructionsOpened = false;
         } 
@@ -215,16 +238,33 @@ class SceneManager {
     loadGame() {
         if (this.title) {
             this.game.addEntity(this.background);
+            for (var i = 0; i < 5; i++) {
+                let tree = LEVEL.TREE[i];
+                this.game.addEntity(new Tree(this.game, tree.X, tree.Y, tree.TYPE));
+            }
             this.game.addEntity(this.railing);
             this.game.addEntity(this.ground);
+            this.game.addEntity(this.soot);
+            this.game.addEntity(this.noFace);
+
             this.game.addEntity(this.titlePlaque);
             this.game.addEntity(this.buttons);
             this.game.addEntity(new Fireworks(this.game));
             this.game.addEntity(this.lamp);
+            this.game.addEntity(this.chick);
+            this.game.addEntity(this.haku);
+            for(var i=0; i < 2; i++){
+                let lamp = LEVEL.LAMP_LOCATION[i];
+                this.game.addEntity(new Lamp(this.game, lamp.X, lamp.Y, BACKGROUND.LAMP.SIZE * BACKGROUND.LAMP.SCALE.W) );
+            }
+
+            for(var i=0; i < 2; i++){
+                let stone_lamp = LEVEL.STONE_LAMP_LOCATION[i];
+                this.game.addEntity(new StoneLamp(this.game, stone_lamp.X, stone_lamp.Y, BACKGROUND.STONE_LAMP.SIZE * BACKGROUND.STONE_LAMP.SCALE) );
+            }
             this.game.addEntity(this.chihiro);
-            //
-            //this.game.addEntity(this.chick);
-            // this.game.addEntity(this.haku);
+            this.bathhouse = new Bathhouse(this.game, 4000,  LEVEL.BATHHOUSE.Y);
+
         } else {
             this.bathhouse = new Bathhouse(this.game, LEVEL.BATHHOUSE.X + LEVEL.LAMP_LOCATION[LEVEL.LAMP_LOCATION.length-1].X,  LEVEL.BATHHOUSE.Y);
             this.game.addEntity(this.background);
@@ -278,6 +318,8 @@ class SceneManager {
                 this.game.addEntity(new Coins(this.game, coin.X, coin.Y));
             }
 
+            this.game.addEntity(this.chihiro);
+
             for (var i = 0; i < LEVEL.PORTAL_LOCATION.length; i++) {
                 let portal = LEVEL.PORTAL_LOCATION[i];
                 this.game.addEntity(new Portal(this.game, portal.X, portal.Y));
@@ -297,7 +339,7 @@ class SceneManager {
                 let frog = LEVEL.FROG_LOCATION[i];
                 this.game.addEntity(new Frog(this.game, frog.X, frog.Y, frog.DIR, frog.MIN, frog.MAX, frog.HEIGHT, frog.TIME));
             }
-            
+
             for (var i = 0; i < LEVEL.CHICK_LOCATION.length; i++) {
                 let chick = LEVEL.CHICK_LOCATION[i];
                 if(chick.MIN == null || chick.MAX == null || chick.SPEED == null || chick.DIR == null){
@@ -317,8 +359,7 @@ class SceneManager {
             }
 
 
-            this.game.addEntity(this.chihiro);
-
+          
             for (var i = 0; i < LEVEL.HAKU_LOCATION.length; i++) {
                 let haku = LEVEL.HAKU_LOCATION[i];
                 this.game.addEntity(new Haku(this.game, haku.X, haku.Y, haku.TEXT));
@@ -356,23 +397,35 @@ class SceneManager {
                 }
             }
         }
-
-        if (this.title && this.game.click && !this.onInstructions) {  // start button
-            if (this.game.click && this.game.click.y > 608 && this.game.click.y < 658 && this.game.click.x > 815  && this.game.click.x < 1003) {
-                this.title = false;
-                this.loadLevel(1, this.title);
-                this.loadLevelCount = this.loadLevelCount + 1;
-                this.game.click = false;
-             
+        // START button
+        if ((this.title && this.game.click && !this.onInstructions) || (this.title && !this.onInstructions && this.game.entered && this.buttons.startSelected)) {  
+            // if (this.game.click && this.game.click.y > 700 && this.game.click.y < 750 && this.game.click.x > 815  && this.game.click.x < 1003) {
+            if ((this.game.click && 
+                this.game.click.y  > BACKGROUND.BUTTONS[0].Y && 
+                this.game.click.y < BACKGROUND.BUTTONS[0].Y + BACKGROUND.START_BUTTON.H && 
+                // this.game.click.x > BACKGROUND.BUTTONS[0].X  + BACKGROUND.START_PADDING && 
+                // this.game.click.x < BACKGROUND.BUTTONS[0].X + BACKGROUND.START_BUTTON.W + BACKGROUND.START_PADDING) {
+                this.game.click.x > BACKGROUND.BUTTONS[0].X  && 
+                this.game.click.x < BACKGROUND.BUTTONS[0].X + BACKGROUND.START_BUTTON.W) || (this.title && !this.onInstructions && this.game.entered && this.buttons.startSelected)) {
+                    this.title = false;
+                    this.loadLevel(1, this.title);
+                    this.loadLevelCount = this.loadLevelCount + 1;
+                    this.game.click = false;
+                    this.game.entered = false;
+                    this.buttons.startSelected = false;
             }
         }
        
-        if (this.title && !this.instructionsOpened && !this.onInstructions  &&  this.game.click) {  // start button
-            if (this.title && !this.instructionsOpened && !this.onInstructions && this.game.click && this.game.click.y > 700 && this.game.click.y < 750 && this.game.click.x > 723  && this.game.click.x < 1126) {
+        if ((this.title && !this.instructionsOpened && !this.onInstructions  &&  this.game.click) || (this.title && !this.instructionsOpened && !this.onInstructions && this.buttons.instructionsSelected && this.game.entered)) { 
+            if ((this.title && !this.instructionsOpened && !this.onInstructions 
+                && this.game.click && this.game.click.y > 700 && this.game.click.y < 750 && this.game.click.x > 723  && this.game.click.x < 1126)
+                || (this.game.entered && this.title && !this.instructionsOpened && !this.onInstructions && this.buttons.instructionsSelected && this.game.entered)) {
                 this.instructionsOpened = true;
                 this.loadInstructions();
                 this.onInstructions = true;
                 this.game.click = false;
+                this.game.entered = false;
+                this.buttons.instructionsSelected = false;
             } 
         } 
       
@@ -388,12 +441,12 @@ class SceneManager {
             // Mute
             if (this.game.click.y > 1040        && this.game.click.y < 1070     && this.game.mouse.x < 350 && this.game.mouse.x > 250 && this.buttons.mute) {
                 this.buttons.mute = false;
-                this.mute = true;
+                this.mute = false;
                 this.updateAudio();
                 this.game.click = false;
             } else if (this.game.click.y > 1040 && this.game.click.y < 1070     && this.game.mouse.x < 350 && this.game.mouse.x > 250 && !this.buttons.mute) {
                 this.buttons.mute = true;
-                this.mute=false;
+                this.mute=true;
                 this.updateAudio();
                 this.game.click = false;
             }
@@ -448,13 +501,17 @@ class SceneManager {
         if (this.gameOver) {
             this.gameOver = false;
         }
-        
         // PARAMS.DEBUG = document.getElementById("debug").checked;
     };
 
           
     draw(ctx) {
         ctx.font = PARAMS.BLOCKWIDTH / 2 + 'px "Press Start 2P"';
+
+        if (this.title) {
+            this.text1.drawFrame(this.game.clockTick, ctx, this.sootPlace.x+50-this.game.camera.x, this.sootPlace.y - 150, 1);
+            this.text2.drawFrame(this.game.clockTick, ctx, this.hakuPlace.x+50-this.game.camera.x, this.hakuPlace.y - 150, 1);
+        }
 
         if (PARAMS.DEBUG && !this.title && !this.chihiro.winGame) {
             ctx.strokeStyle = "White";
