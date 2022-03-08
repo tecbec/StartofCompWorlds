@@ -74,8 +74,10 @@ class BreathBarOutline {
     };
 
     draw(ctx){
-        this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y, PARAMS.SCALE * 1.5);
-        ctx.imageSmoothingEnabled = false;
+        if (!this.game.camera.chihiro.winGame) {
+            this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y, PARAMS.SCALE * 1.5);
+            ctx.imageSmoothingEnabled = false;
+        }
 
 
     };
