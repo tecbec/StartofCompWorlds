@@ -70,8 +70,6 @@ class Instruction {
         this.ycrowvel = 0;
         this.crowstate = 0;
 
-
-
         this.jumpAnim = [];
         this.walkAnim = []; 
         this.crowAnim = [];
@@ -97,7 +95,7 @@ class Instruction {
     update() {
         if (this.game.camera.onInstructions) { // lock chihiro movement in the background if on instructions.
             this.game.camera.chihiro.x = 0;
-            
+
         }
         var BLUR_SPEED = 100;
         var BLUR_MAX = 50;
@@ -250,7 +248,6 @@ class Instruction {
         
         
 }
-
 
     draw(ctx) {
         this.drawBackground(ctx);

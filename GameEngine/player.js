@@ -1,7 +1,7 @@
 /* Chihiro's Params */
 var CHIHIRO = {
     TITLE_POSITION:   {X: 0,  Y: 800},
-    INITIAL_POSITION: {X: 0,  Y: 0},  // original: -200, change to 11500 to test winning condition. 
+    INITIAL_POSITION: {X: 0,  Y: 0},  // original: 0, change to 11500 to test winning condition. 
     SIZE: 70,
     SCALE: 2,
     PADDING:{X: 28, Y: 20}, // same padding for BB and imaginary x,y,w,h calculations
@@ -11,9 +11,8 @@ var CHIHIRO = {
     CROUCH: {RIGHT: {X: 0,  Y: 560},  LEFT: {X: 0,  Y: 630},  FRAME: 4, SPEED: 0.33, PADDING: 0, REVERSE: false, LOOP: true},
     RUN:    {RIGHT: {X: 0,  Y: 140},  LEFT: {X: 0,  Y: 210},  FRAME: 4, SPEED: 0.1, PADDING: 0, REVERSE: false, LOOP: true},
     CROUCH_WALK: {RIGHT: {X: 0,  Y: 700}, LEFT: {X: 0,  Y: 770}, FRAME: 4, SPEED: 0.33, PADDING: 0, REVERSE: false, LOOP: true},
-   // DEAD:   {RIGHT: {X: 0,  Y: 420},  LEFT: {X: 0,  Y: 490},  FRAME: 3, SPEED: 0.12, PADDING: 0, REVERSE: false, LOOP: false},
     VICTORY_DANCE:  {RIGHT: {X: 0,  Y: 840}, FRAME: 5, SPEED: 0.2, PADDING: 0, REVERSE: false, LOOP: true},
-    DEAD:  {RIGHT: {X: 0,  Y: 910},  LEFT: {X: 0,  Y: 980},  FRAME: 8, SPEED: 0.2, PADDING: 0, REVERSE: false, LOOP: true},
+    DEAD:  {RIGHT: {X: 0,  Y: 910},  LEFT: {X: 0,  Y: 980},  FRAME: 4, SPEED: 0.2, PADDING: 0, REVERSE: false, LOOP: true},
     BREATH_BAR:  {X: 1612, Y: 18, HEIGHT: 17, MAX: 100},
     COIN_COUNTER:{X: 1400, Y: 15},
     BUBBLE_COUNTER:{X: 1500, Y: 15},
@@ -420,6 +419,8 @@ class Player {
                 //Chihiro moves with clouds that are moving horizontally 
                 if(entity instanceof CloudPlatform && (that.lastBB.bottom  <= entity.BB.top)){
                     if(entity.moving){  
+                    //console.log("Collision with Player");
+                        // console.log("Moving collision with Player");
                         if(!entity.vertical){
                             that.x += entity.speed * that.game.clockTick;
                         }
@@ -584,7 +585,7 @@ class Player {
                 }
 
                 if (entity instanceof Portal) {
-                    that.powerup = true; 
+                    that.powerup = true;
                     entity.removeFromWorld = true;
                     that.game.camera.bubbleCounter.bubbleCount += 6;
                     ASSET_MANAGER.playAsset(CHIHIRO.PORTAL_SOUND);

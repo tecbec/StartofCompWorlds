@@ -5,8 +5,8 @@ var FROG = {
 }
 
 class Frog {
-    constructor(game, x, y, direction, min, max, jumpHeight, jumpTime) {
-        Object.assign(this, {game, x, y, direction, min, max, jumpHeight, jumpTime});
+    constructor(game, x, y, direction, min, max, jumpHeight, jumpTime, railing) {
+        Object.assign(this, {game, x, y, direction, min, max, jumpHeight, jumpTime, railing});
         this.facing = this.direction ; // 0 = right 1 = left
         this.state = 0; // 0 = idle 1 = jump
         this.isGrounded = false;
@@ -110,6 +110,12 @@ class Frog {
                         that.isGrounded = true;
                         that.y = entity.BB.top - 190; 
                     }
+                    if (that.railing && (entity instanceof Ground || entity instanceof Platform || entity instanceof CloudPlatform ||
+                        entity instanceof StoneLamp || entity instanceof Railing ||
+                        entity instanceof Lamp) && (that.lastBB.bottom  <= entity.BB.top)) {
+                            that.isGrounded = true;
+                            that.y = entity.BB.top - 190; 
+                        }
                 } else {
                     that.isGrounded = false;
                 }
@@ -132,7 +138,18 @@ class Frog {
 
                     }
             }
+            
 
+            }
+            
+            if (entity instanceof StoneLamp && that.BB.collide(entity.BBmiddle)) {
+                if (that.BB.collide(entity.BBmiddleleft) && that.BB.right >= entity.BBmiddleleft.left ) { // left collision
+                    that.x = entity.BB.left - 140;
+                    if (that.velocity.x > 0) that.velocity.x = 0;
+                } else if (that.BB.collide(entity.BBmiddleright) && that.BB.left <= entity.BBmiddleright.right ) { // right collision
+                    that.x = entity.BB.right - 70;
+                    if (that.velocity.x < 0) that.velocity.x = 0;
+                }
             }
         });
         this.updateBB();

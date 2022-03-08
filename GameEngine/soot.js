@@ -7,10 +7,18 @@ class Soot {
     constructor( game, x, y, startDir, widthSootArea, heightSootArea, numSoots)  {
         Object.assign(this, { game, x, y, startDir, widthSootArea, heightSootArea, numSoots });
         this.spritesheet= ASSET_MANAGER.getAsset("./GameEngine/sprites/soot-jump-long_aura2_bidir.png");
+        this.candyspritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/candy.png");
 
         // set the soot direction
         this.sootDir = this.startDir;
         this.soots = [];
+
+
+        // Set the number of candies and candy for each soot randomly
+        this.candyNum = [];
+        for (let i = 0; i < this.numSoots; i++){
+            this.candyNum[i] = getRandomInteger(0,3);
+        }
 
         // sets the areas the soot will be located in
         this.minScreen = {x: this.x, y: this.y};
@@ -60,6 +68,15 @@ class Soot {
             start.y = 125;
             this.animations = new Animator(this.spritesheet, start.x, start.y, this.SootWidth, this.SootHeight, frames, framedur, pad, false, true);
         }
+
+        const candyFramDur = 0.2;
+
+        this.pinkCandyAnim  = new Animator(this.candyspritesheet, 0,   0, 60, 50, 4, candyFramDur, 0, false, true);
+        this.greenCandyAnim = new Animator(this.candyspritesheet, 0,  50, 60, 50, 4, candyFramDur, 0, false, true);
+        this.lgreenCandyAnim= new Animator(this.candyspritesheet, 0, 150, 60, 50, 4, candyFramDur, 0, false, true);
+        this.whiteCandyAnim = new Animator(this.candyspritesheet, 0, 100, 60, 50, 4, candyFramDur, 0, false, true);
+
+
     }
 
     updateBB() {
@@ -124,11 +141,48 @@ class Soot {
         ctx.shadowColor = '#fdd834';
         ctx.shadowBlur = blurValues;
 
+        const candyPad = {x: 5, y: 12};
+
         // draws multiple soots
         for (let i = 0; i < this.numSoots; i++){
-            this.animations.drawFrame((this.game.clockTick/this.numSoots), ctx, ((this.Sootx + (i * this.SootWidth * this.scale)) - this.game.camera.x), this.Sooty, this.scale);
-        }
 
+            this.animations.drawFrame((this.game.clockTick/this.numSoots), ctx, 
+                                        ((this.Sootx + (i * this.SootWidth * this.scale)) - this.game.camera.x), 
+                                        this.Sooty, this.scale);
+
+            switch(this.candyNum[i]) {
+                case 0:
+                    ctx.shadowColor = '#6abe30';
+                    ctx.shadowBlur = 10;
+                    this.greenCandyAnim.drawFrame(this.game.clockTick, ctx, 
+                                                    ((this.Sootx + (i * this.SootWidth * this.scale)) - this.game.camera.x) + candyPad.x, 
+                                                    this.Sooty - candyPad.y, 0.5);
+                    break;
+                case 1:
+                    ctx.shadowColor = '#ffb1cb';
+                    ctx.shadowBlur = 10;
+                    this.pinkCandyAnim.drawFrame(this.game.clockTick, ctx, 
+                                                ((this.Sootx + (i * this.SootWidth * this.scale)) - this.game.camera.x) + candyPad.x, 
+                                                this.Sooty - candyPad.y, 0.5);
+                    break;
+                case 2:
+                    ctx.shadowColor = '#d2e086';
+                    ctx.shadowBlur = 10;
+                    this.lgreenCandyAnim.drawFrame(this.game.clockTick, ctx, 
+                                                    ((this.Sootx + (i * this.SootWidth * this.scale)) - this.game.camera.x) + candyPad.x,  
+                                                    this.Sooty - candyPad.y, 0.5);
+                    break;
+                case 3:
+                    ctx.shadowColor = '#ffffff';
+                    ctx.shadowBlur = 10;
+                    this.whiteCandyAnim.drawFrame(this.game.clockTick, ctx, 
+                                                    ((this.Sootx + (i * this.SootWidth * this.scale)) - this.game.camera.x) + candyPad.x,
+                                                    this.Sooty - candyPad.y, 0.5);
+                    break;
+                default:
+                    break;
+            }
+        }
         ctx.shadowColor = "transparent"; // remove shadow !
 
         if (PARAMS.DEBUG) {

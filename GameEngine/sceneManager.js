@@ -34,6 +34,9 @@
                           {X: 6706, Y: 600}, {X: 7506, Y: 600}, // Scene 4 - 800 px between each stone lamp, 500 px between first lamp and stone lamp
                           {X: 9059, Y: 600}],                   // Scene 5
 
+    PORTAL_LOCATION: [{X: 820,  Y: 390}, {X: 2850, Y: 120}, {X: 3902, Y: 800}, {X: 7000, Y:120}],
+                    //{X:13814, Y: 650}, {X:15716, Y: 650},],
+
     LAMP_LOCATION: [{X:500, Y: 650},        // Start Scene 1
                     {X:2402,  Y: 650},      // Start Scene 2
                     {X:4304, Y: 650},       // Start Scene 3
@@ -41,7 +44,7 @@
                     {X:8108, Y: 650},       // Start Scene 5
                     {X:10010, Y: 650},],    // Start Scene 6
                     // {X:11912, Y: 650}
-                    // {X:13814, Y: 650}, 
+                    // {X:13814, Y: 650},
                     // {X:15716, Y: 650},
                     // {X:17618, Y:650}, 
                     // {X:19520, Y:650}], 
@@ -107,10 +110,16 @@
 
     BREATH_BAR_OUTLINE: {X: 1600,Y: 10 },
     // 0 = right, 1 = left
-    FROG_LOCATION: [{X:9770, Y:0, DIR: 1, MIN: 9710, MAX: 9760, HEIGHT: -50, TIME: 4}, {X:9912, Y:681, DIR: 1, MIN: 9300, MAX: 9800, HEIGHT: -250, TIME: 2}], // scene 5
 
     FLOWER_POT_LOCATION: [{X:400, Y:850}], 
-    BENCH_LOCATION: [{X: 200, Y: 850}]
+    BENCH_LOCATION: [{X: 200, Y: 850}],
+    FROG_LOCATION: [{X:2000, Y:0, DIR: 1, MIN: 2200, MAX: 2700, HEIGHT: -200, TIME: 2, RAILING: false},  // scene 2
+                    {X:4023, Y:400, DIR: 1, MIN: 4000, MAX: 4010, HEIGHT: -50, TIME: 3, RAILING: false}, // scene 3
+                    {X:7050, Y:400, DIR: 0, MIN: 7080, MAX: 7100, HEIGHT: -50, TIME: 3, RAILING: false}, // scene 4
+                    {X:9770, Y:0, DIR: 1, MIN: 9710, MAX: 9730, HEIGHT: -50, TIME: 4, RAILING: false}, 
+                    {X:9210, Y:0, DIR: 0, MIN: 9200, MAX: 9500, HEIGHT: -100, TIME: 4, RAILING: true}, 
+                    {X:9912, Y:681, DIR: 1, MIN: 9300, MAX: 9800, HEIGHT: -250, TIME: 2, RAILING: false}] // scene 5
+
 }
 
 class SceneManager {
@@ -192,8 +201,10 @@ class SceneManager {
         this.title = title;
         this.level = level;
 
-        this.clearEntities();
         this.titleScreen();
+
+        this.clearEntities();
+
 
         if(!this.title){
             this.buttons.mute = LEVEL.START_MUTE;
@@ -337,7 +348,7 @@ class SceneManager {
 
             for (var i = 0; i < LEVEL.FROG_LOCATION.length; i++) {
                 let frog = LEVEL.FROG_LOCATION[i];
-                this.game.addEntity(new Frog(this.game, frog.X, frog.Y, frog.DIR, frog.MIN, frog.MAX, frog.HEIGHT, frog.TIME));
+                this.game.addEntity(new Frog(this.game, frog.X, frog.Y, frog.DIR, frog.MIN, frog.MAX, frog.HEIGHT, frog.TIME, frog.RAILING));
             }
             
             for (var i = 0; i < LEVEL.PORTAL_LOCATION.length; i++) {
