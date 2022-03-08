@@ -9,22 +9,16 @@ class Soot {
         this.spritesheet= ASSET_MANAGER.getAsset("./GameEngine/sprites/soot-jump-long_aura2_bidir.png");
         this.candyspritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/candy.png");
 
-        
-        console.log("1. soot num: " , this.numSoots);
-
         // set the soot direction
         this.sootDir = this.startDir;
         this.soots = [];
 
 
         // Set the number of candies and candy for each soot randomly
-        this.candyNum = [];  
+        this.candyNum = [];
         for (let i = 0; i < this.numSoots; i++){
             this.candyNum[i] = getRandomInteger(0,3);
-            console.log("candy num: " , this.candyNum[i]);
         }
-
-        console.log(this.candyNum.length);
 
         // sets the areas the soot will be located in
         this.minScreen = {x: this.x, y: this.y};

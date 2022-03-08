@@ -312,7 +312,6 @@ class SceneManager {
                 let start_dir = getRandomInteger(0,1);
                 let sootArea= new Soot(gameEngine, LEVEL.SOOT_LOCATION[i].X, LEVEL.SOOT_LOCATION[i].Y, start_dir, LEVEL.SOOT_AREA[i].W, LEVEL.SOOT_AREA[i].H, LEVEL.SOOT_NUM[i]);
                 this.game.addEntity(sootArea);
-                console.log( "LEVEL.SOOT_NUM[i]",  LEVEL.SOOT_NUM[i])
             }
 
             this.game.addEntity(new Yubaba(this.game, 0, 0, LEVEL.YUBABA_INC));
