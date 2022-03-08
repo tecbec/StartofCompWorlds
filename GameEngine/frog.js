@@ -15,6 +15,7 @@ class Frog {
         this.animations = [];
         this.velocity = { x: 0, y: 0};
         this.loadAnimations(); 
+        this.hitpoints = 60; 
         this.updateBB();
     };
 
@@ -153,6 +154,8 @@ class Frog {
             }
         });
         this.updateBB();
+        if(this.hitpoints <= 0 ) {this.removeFromWorld = true;}
+
     };
 
     draw(ctx) {

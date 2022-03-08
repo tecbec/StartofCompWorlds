@@ -70,8 +70,8 @@
                 3, 2,               // scene 4
                 3, 5],              // Scene 5
 
-    COIN_LOCATION: [{X: 100,  Y: 895},{X: 125,  Y: 895}, {X: 150,  Y: 895}, {X: 175, Y: 895},  {X: 200,  Y: 895}, {X: 225,  Y: 895},
-                    {X: 250,  Y: 895},{X: 275,  Y: 895}, {X: 300,  Y: 895}, {X: 325,  Y: 895},                                          // scene 0
+    COIN_LOCATION: [{X: 100,  Y: 895}, {X: 150,  Y: 895}, {X: 200,  Y: 895}, 
+                    {X: 250,  Y: 895}, {X: 300,  Y: 895}, {X: 350,  Y: 895},                                          // scene 0
                     {X: 900,  Y: 500},{X: 1200, Y: 295}, {X: 1500, Y: 450}, {X: 2000, Y: 340}, {X: 2300, Y: 540}, {X: 1150, Y: 600},
                     {X: 1950, Y: 600},{X: 1400, Y: 900}, {X: 1550, Y: 900}, {X: 1700, Y: 900}, {X: 2100, Y: 900},                      // scene 1
                     {X: 2675, Y: 525},{X: 2800, Y: 390}, {X: 3400, Y: 520}, {X: 3600, Y: 330}, {X: 4050, Y: 540}, {X: 3850, Y: 600},
@@ -111,8 +111,8 @@
     BREATH_BAR_OUTLINE: {X: 1600,Y: 10 },
     // 0 = right, 1 = left
 
-    FLOWER_POT_LOCATION: [{X:400, Y:850}], 
-    BENCH_LOCATION: [{X: 200, Y: 850}],
+    //LOWER_POT_LOCATION: [{X:400, Y:850}], 
+  //  BENCH_LOCATION: [{X: 200, Y: 850}],
     FROG_LOCATION: [{X:2000, Y:0, DIR: 1, MIN: 2200, MAX: 2700, HEIGHT: -200, TIME: 2, RAILING: false},  // scene 2
                     {X:4023, Y:400, DIR: 1, MIN: 4000, MAX: 4010, HEIGHT: -50, TIME: 3, RAILING: false}, // scene 3
                     {X:7050, Y:400, DIR: 0, MIN: 7080, MAX: 7100, HEIGHT: -50, TIME: 3, RAILING: false}, // scene 4
@@ -336,15 +336,15 @@ class SceneManager {
                 this.game.addEntity(new Portal(this.game, portal.X, portal.Y));
             }
 
-            for (var i = 0; i < LEVEL.BENCH_LOCATION.length; i++) {
-                let bench = LEVEL.BENCH_LOCATION[i];
-                this.game.addEntity(new Bench(this.game, bench.X, bench.Y));
-            }
+            // for (var i = 0; i < LEVEL.BENCH_LOCATION.length; i++) {
+            //     let bench = LEVEL.BENCH_LOCATION[i];
+            //     this.game.addEntity(new Bench(this.game, bench.X, bench.Y));
+            // }
 
-            for (var i = 0; i < LEVEL.FLOWER_POT_LOCATION.length; i++) {
-                let flowerpot = LEVEL.FLOWER_POT_LOCATION[i];
-                this.game.addEntity(new FlowerPot(this.game, flowerpot.X, flowerpot.Y));
-            }
+            // for (var i = 0; i < LEVEL.FLOWER_POT_LOCATION.length; i++) {
+            //     let flowerpot = LEVEL.FLOWER_POT_LOCATION[i];
+            //     this.game.addEntity(new FlowerPot(this.game, flowerpot.X, flowerpot.Y));
+            // }
 
             for (var i = 0; i < LEVEL.FROG_LOCATION.length; i++) {
                 let frog = LEVEL.FROG_LOCATION[i];
