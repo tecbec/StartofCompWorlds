@@ -173,7 +173,8 @@ class SceneManager {
         // Title Chihiro
         this.titlePlaque = new TitlePlaque(this.game);
 
-        this.chihiro = new Player(this.game, CHIHIRO.TITLE_POSITION.X, CHIHIRO.TITLE_POSITION.Y);
+       this.chihiro = new Player(this.game, CHIHIRO.TITLE_POSITION.X, CHIHIRO.TITLE_POSITION.Y);
+        // this.chihiro = this.game.chihiro;
         this.ground = new Ground(this.game, LEVEL.START_CANVAS.X, PARAMS.CANVAS_HEIGHT - BACKGROUND.GROUND.SIZE * BACKGROUND.GROUND.SCALE,
                                             PARAMS.CANVAS_WIDTH * LEVEL.FRAME_COUNT, BACKGROUND.GROUND.SCALE * BACKGROUND.GROUND.SIZE);
         this.background = new BackGround(this.game, LEVEL.START_CANVAS.X,  LEVEL.START_CANVAS.Y);
@@ -374,8 +375,6 @@ class SceneManager {
                 this.game.addEntity(new Radish(this.game, radish.X, radish.Y));
             }
 
-
-          
             for (var i = 0; i < LEVEL.HAKU_LOCATION.length; i++) {
                 let haku = LEVEL.HAKU_LOCATION[i];
                 this.game.addEntity(new Haku(this.game, haku.X, haku.Y, haku.TEXT));
@@ -387,10 +386,10 @@ class SceneManager {
             this.game.addEntity(this.bubbleCounter);
            // this.game.addEntity(new Fireworks(this.game));
             this.game.addEntity(new EndScreen(this.game, this.level, LEVEL.END_SCREEN.X, LEVEL.END_SCREEN.Y));
-          
         }
+
         this.game.addEntity(this.buttons);
-        
+
     };
 
     changeBreath() {

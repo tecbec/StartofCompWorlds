@@ -33,7 +33,6 @@ class GameEngine {
             debugging: false,
         };
 
-        //this.chir
     };
 
     init(ctx) {
@@ -174,7 +173,16 @@ class GameEngine {
         // Add new things
         this.entities = this.entities.concat(this.entitiesToAdd);
         this.entitiesToAdd = [];
-               // let updatedThisTic = this.clockTick;
+
+        let chihiroX = 0;
+        //Player radius updates only
+        for (let i = this.entities.length - 1; i >= 0; i--) {
+            if (this.entities[i] instanceof Player){
+                chihiroX = this.entities[i].x;
+            }
+        }
+
+        // let updatedThisTic = this.clockTick;
 
         // //Player radius updates only
         
