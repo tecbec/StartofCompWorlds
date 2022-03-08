@@ -483,7 +483,7 @@ class Player {
                 }
 
                 if(entity instanceof Railing) {// if she's crouching she'll fall to ground
-                    if (that.BB.bottom <= entity.BB.top && that.game.crouch) {
+                    if (that.BB.bottom >= entity.BB.top && that.game.crouch) {
                         that.isGrounded = false;
                         that.setY(entity.BB.top - that.getHeight() + 1); // the 1 is just to get her past the bb of the railing
                         //that.velocity.y += FALL_ACC * TICK;
