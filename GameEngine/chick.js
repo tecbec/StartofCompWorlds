@@ -60,7 +60,7 @@ class Chick {
         }
         this.animator = this.animations[this.dir];
 
-       
+        this.hitpoints = 90;
          //bounding box
          this.updateBB(); 
 
@@ -146,6 +146,7 @@ class Radish {
         this.frameCount = 6; 
         this.frameDuration = 0.40; 
         this.scale = 2.5; 
+
         this.spritesheet = new Animator( ASSET_MANAGER.getAsset("./GameEngine/sprites/radish.png"), 0, 0, this.width, 
         this.height, this.frameCount, this.frameDuration, 0, false, true);
         this.BBThickness = 5; 
@@ -174,7 +175,14 @@ class Radish {
 
     update(){
         this.updateBB();
+        var that = this; 
+
         if(this.hitpoints <= 0 ) {this.removeFromWorld = true;}
+        this.game.entities.forEach(function (entity) { 
+            if (entity instanceof BubblesController ) {
+                        entity.hitpoints -= 30; 
+             }
+         });
 
     };
     draw(ctx){

@@ -13,8 +13,10 @@ var BACKGROUND = {
     CLOUD_PLATFORM: {LEFT: {X: 0, Y: 0},  MID: {X: 0, Y: 0},   RIGHT: {X: 0, Y: 0},   SIZE: 16, SCALE: 4, COUNT: 2, BB_SIZE: {W: 5, H: 16}},
     CLOUD:          {X: 0, Y: 0, WIDTH: 192, HEIGHT:64, SCALE: 1},
     CLOUD_BB:       [{W: 64, H: 54}, {W: 64, H: 54}, {W: 128, H: 54}, {W: 148, H: 54}, {W: 192, H: 54}],
-    BATHHOUSE:      {X:0, Y: 0, W: 987, H: 1104},
-    TREE:           {X:0, Y:0, W:512, H:248, SCALE:4},
+    BATHHOUSE:      {X: 0, Y: 0, W: 987, H: 1104},
+    TREE:           {X: 0, Y: 0, W:512, H:248, SCALE:4},
+    FLOWER_POT:     {X: 0, Y: 0, W: 37, H: 56, SCALE: 3},
+    BENCH:          {X: 0, Y: 0, W: 57, H: 34, SCALE: 3.5},
     FIREWORKS:      [{X: -600,  Y: 50,       SPRITEX: 0, SPRITEY: 0,     NUM_FRAMES: 21,     DUR: 0.1,       SCALE: 5},     // index = 0 
                      {X: 100,   Y: 250,      SPRITEX: 0, SPRITEY: 64,    NUM_FRAMES: 21,     DUR: 0.15 ,     SCALE: 5},     // index = 1 
                      {X: 750,   Y: 100,      SPRITEX: 0, SPRITEY: 128,   NUM_FRAMES: 21,     DUR: 0.1,       SCALE: 4},     // index = 2 
@@ -34,7 +36,7 @@ var BACKGROUND = {
     VOLUMEUP:      {X: 475,   Y: 1000,      SPRITEX: 0, SPRITEY: 16,     SWIDTH: 16,         SHEIGHT: 16,    SCALE: 2},
     VOLUMEDOWN:    {X: 475,   Y: 1040,      SPRITEX: 0, SPRITEY: 0,      SWIDTH: 16,         SHEIGHT: 16,    SCALE: 2},
     VOLUMESIGN:    {X: 375,   Y: 1045,      SPRITEX: 0, SPRITEY: 32,     SWIDTH: 64,         SHEIGHT: 16,    SCALE: 1.5},
-
+    
     // PLATFORM_SHORT: {LEFT: {X: 0, Y: 32}, MID: {X: 16, Y: 32}, RIGHT: {X: 32, Y: 32}, SIZE: 16, SCALE: 2, COUNT: 2, BB_SIZE: {W: 5, H: 16}}
     // PLATFORM_LONG: {LEFT: {X: 0, Y: 0}, MID: {X: 16, Y: 32}, RIGHT: {X: 32, Y: 32}, SIZE: 16, SCALE: 2, COUNT: 5, BB_SIZE: {W: 5, H: 16}}
 };
@@ -321,7 +323,6 @@ class Fireworks {                   //Firework animation
     };
 };
 
-
 class Bathhouse {
     constructor(game, x, y) {
         Object.assign(this, { game, x, y});
@@ -379,7 +380,6 @@ class Bathhouse {
         ctx.imageSmoothingEnabled = false;
     }
 };
-
 
 class Ground { //bridge
     constructor(game, x, y, w) {
@@ -647,7 +647,6 @@ class CloudPlatform {
 
 }
 
-
 /**
  * StoneLamp
  * Allows walking on top of it but not through.
@@ -720,7 +719,6 @@ class Lamp {
         this.spritesheet2 =  ASSET_MANAGER.getAsset("./GameEngine/sprites/flame.png");
         this.BB = new BoundingBox(this.x+BACKGROUND.LAMP.PADDING.W +20 , this.y +5,
             BACKGROUND.LAMP.SIZE.W * BACKGROUND.LAMP.SCALE.W-BACKGROUND.LAMP.PADDING.W - 30, BACKGROUND.LAMP.SIZE.H * BACKGROUND.LAMP.SCALE.H);
-
     }
 
     update() {
@@ -801,3 +799,63 @@ class Railing {
         ctx.imageSmoothingEnabled = false;
     }
 }
+
+class FlowerPot {
+    constructor(game, x, y) {
+        Object.assign(this, { game, x, y});
+        this.spritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/flower-pot.png");
+        
+    }
+    updateBB(){
+        this.BB = new BoundingBox(this.x , this.y ,
+            BACKGROUND.FLOWER_POT.W *  BACKGROUND.FLOWER_POT.SCALE, BACKGROUND.FLOWER_POT.H *  BACKGROUND.FLOWER_POT.SCALE);
+        this.BBleft = new BoundingBox(this.x , this.y ,
+            BACKGROUND.FLOWER_POT.W , BACKGROUND.FLOWER_POT.H *  BACKGROUND.FLOWER_POT.SCALE);
+        this.BBright = new BoundingBox(this.x + (BACKGROUND.FLOWER_POT.W   *2), this.y ,
+            BACKGROUND.FLOWER_POT.W , BACKGROUND.FLOWER_POT.H *  BACKGROUND.FLOWER_POT.SCALE);
+    }
+
+    update(){
+        this.updateBB();
+    };
+
+    draw(ctx){
+        ctx.drawImage(this.spritesheet, BACKGROUND.FLOWER_POT.X, BACKGROUND.FLOWER_POT.Y,BACKGROUND.FLOWER_POT.W, BACKGROUND.FLOWER_POT.H,
+            this.x - this.game.camera.x, this.y,
+            BACKGROUND.FLOWER_POT.W * BACKGROUND.FLOWER_POT.SCALE, BACKGROUND.FLOWER_POT.H * BACKGROUND.FLOWER_POT.SCALE); 
+
+        if (PARAMS.DEBUG) {
+            // ctx.lineWidth = 2;
+            ctx.strokeStyle = 'red';
+            ctx.strokeRect(this.BB.x -this.game.camera.x, this.BB.y,
+                this.BB.width,
+                this.BB.height);
+            ctx.strokeStyle = 'yellow';
+            ctx.strokeRect(this.BBleft.x -this.game.camera.x, this.BBleft.y,
+                this.BBleft.width,
+                this.BBleft.height);
+            ctx.strokeRect(this.BBright.x -this.game.camera.x, this.BBright.y,
+                this.BBright.width,
+                this.BBright.height);
+        }
+        ctx.imageSmoothingEnabled = false;
+
+    };
+
+};
+
+class Bench {
+    constructor(game, x, y) {
+        Object.assign(this, { game, x, y});
+        this.spritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/bench.png");
+
+    }
+    update(){};
+
+    draw(ctx){
+        ctx.drawImage(this.spritesheet, BACKGROUND.BENCH.X, BACKGROUND.BENCH.Y,BACKGROUND.BENCH.W, BACKGROUND.BENCH.H,
+            this.x - this.game.camera.x, this.y,
+            BACKGROUND.BENCH.W *BACKGROUND.FLOWER_POT.SCALE, BACKGROUND.BENCH.H * BACKGROUND.FLOWER_POT.SCALE);  //2 is scale
+    };
+
+};

@@ -8,7 +8,7 @@
     START_CANVAS:       {X: -851, Y: 0},
     END_CANVAS:         {X: 22000},         // change this later when we figure out the exact ending canvas measurement
     END_TITLE_CANVAS:   {X: 500},           // This will end the title canvas so it won't keep going.
-    FRAME_COUNT: 8,                         // change this for railing/canvas length
+    FRAME_COUNT: 9,                         // change this for railing/canvas length
     // Type 0: has left,middle,right piece can be adjusted to be longer
     // Type 1: is short (just middle piece)
     TREE:[{X: 567, Y: 276, TYPE:3}, {X: 2538, Y: 0, TYPE:1}, {X: 3231, Y: 276, TYPE:2}, {X: 5543, Y: 0, TYPE:1}, {X: 6527, Y: 276, TYPE:2}, {X: 7816, Y: 276, TYPE:0}, {X: 8274, Y: 276, TYPE:3}],
@@ -32,7 +32,13 @@
                           {X: 9059, Y: 600}],                   // Scene 5
 
     /* Start of Frame:     1                   2                 3                 4                 5                   6                   7                8                 9                  10                11*/
-    LAMP_LOCATION: [{X:500, Y: 650},   {X:2402,  Y: 650}, {X:4304, Y: 650}, {X:6206, Y: 650}, {X:8108, Y: 650}, {X:10010, Y: 650},],// {X:11912, Y: 650}, {X:13814, Y: 650}, {X:15716, Y: 650}, {X:17618, Y:650}, {X:19520, Y:650}], 
+    LAMP_LOCATION: [{X:500, Y: 650},  
+         {X:2402,  Y: 650},
+          {X:4304, Y: 650}, 
+          {X:6206, Y: 650}, 
+          {X:8108, Y: 650},
+          {X:10010, Y: 650},
+          {X:11912, Y: 650}],// {X:13814, Y: 650}, {X:15716, Y: 650}, {X:17618, Y:650}, {X:19520, Y:650}], 
                     //, ,],
 
     RAILING_LOCATION: {X: 500, Y: 820},
@@ -63,8 +69,8 @@
                     {X: 6500, Y: 895},{X: 7000, Y: 895}, {X: 7100, Y: 895}, {X: 7200, Y: 895},                                         // scene 4
                     {X: 8340, Y: 420},{X: 8480, Y: 285}, {X: 8620, Y: 420}, {X: 8760, Y: 285}, {X: 8900, Y: 420}, {X: 9040, Y: 285},   // Scene 5
                     {X: 9180, Y: 420},{X: 9320, Y: 285}, {X: 9460, Y: 420}, {X: 9600, Y: 285},
-                    {X: 10610,Y: 895},{X: 10710,Y: 895}, {X: 10810,Y: 895}, {X: 10910,Y: 895}, {X: 11010,Y: 895}, {X: 11110,Y: 895},   // scene 6
-                    {X: 11210,Y: 895},{X: 11310,Y: 895}, {X: 11410,Y: 895}, {X: 11510,Y: 895}
+                    {X: 12610,Y: 895},{X: 12710,Y: 895}, {X: 12810,Y: 895}, {X: 12910,Y: 895}, {X: 13010,Y: 895}, {X: 13110,Y: 895},   // scene 6
+                    {X: 13210,Y: 895},{X: 13310,Y: 895}, {X: 13410,Y: 895}, {X: 13510,Y: 895}
                 ],
 
     NOFACE_SCALE: 0.5,
@@ -91,8 +97,10 @@
 
     BREATH_BAR_OUTLINE: {X: 1600,Y: 10 },
     // 0 = right, 1 = left
-    FROG_LOCATION: [{X:9770, Y:0, DIR: 1, MIN: 9710, MAX: 9760, HEIGHT: -50, TIME: 4}, {X:9912, Y:681, DIR: 1, MIN: 9300, MAX: 9800, HEIGHT: -250, TIME: 2}] // scene 5
+    FROG_LOCATION: [{X:9770, Y:0, DIR: 1, MIN: 9710, MAX: 9760, HEIGHT: -50, TIME: 4}, {X:9912, Y:681, DIR: 1, MIN: 9300, MAX: 9800, HEIGHT: -250, TIME: 2}], // scene 5
 
+    FLOWER_POT_LOCATION: [{X:400, Y:850}], 
+    BENCH_LOCATION: [{X: 200, Y: 850}]
 }
 
 class SceneManager {
@@ -275,7 +283,16 @@ class SceneManager {
                 this.game.addEntity(new Portal(this.game, portal.X, portal.Y));
             }
 
-            
+            for (var i = 0; i < LEVEL.BENCH_LOCATION.length; i++) {
+                let bench = LEVEL.BENCH_LOCATION[i];
+                this.game.addEntity(new Bench(this.game, bench.X, bench.Y));
+            }
+
+            for (var i = 0; i < LEVEL.FLOWER_POT_LOCATION.length; i++) {
+                let flowerpot = LEVEL.FLOWER_POT_LOCATION[i];
+                this.game.addEntity(new FlowerPot(this.game, flowerpot.X, flowerpot.Y));
+            }
+
             for (var i = 0; i < LEVEL.FROG_LOCATION.length; i++) {
                 let frog = LEVEL.FROG_LOCATION[i];
                 this.game.addEntity(new Frog(this.game, frog.X, frog.Y, frog.DIR, frog.MIN, frog.MAX, frog.HEIGHT, frog.TIME));
