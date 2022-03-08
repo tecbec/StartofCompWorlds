@@ -182,59 +182,59 @@ class GameEngine {
             }
         }
 
-        // let updatedThisTic = this.clockTick;
+        let updatedThisTic = this.clockTick;
 
-        // //Player radius updates only
+        //Player radius updates only
         
 
-        // for (let i = this.entities.length - 1; i >= 0; i--) {
-        //     if (  !(this.entities[i] instanceof Player) && (getDistance(this.entities[i], this.player) < 700 ||
-        //                         // this.entities[i] instanceof Water || this.entities[i] instanceof Spike ||
-        //                          this.entities[i] instanceof SceneManager) ) {
+        for (let i = this.entities.length - 1; i >= 0; i--) {
+            if (  !(this.entities[i] instanceof Player) && (getDistance(this.entities[i], this.player) < 700 ||
+                                // this.entities[i] instanceof Water || this.entities[i] instanceof Spike ||
+                                 this.entities[i] instanceof SceneManager) ) {
     
-        //         //if the player exists update things close to the player
-        //         let entity = this.entities[i];
-        //          if ((entity instanceof Yubaba)){
-        //             break;
-        //         } else if (!entity.removeFromWorld ) {
-        //             entity.update();
-        //             updatedThisTic++;
-        //         }
-        //     } 
-        //      if ((!this.player) ) {
-        //         //if no player update everythign so we dont crash
-        //         let entity = this.entities[i];
-        //         if ((entity instanceof Yubaba)){
-        //             break;
-        //         } else if (!entity.removeFromWorld) {
-        //             entity.update();
-        //             updatedThisTic++;
-        //         }
-        //     } 
-        //     else if (this.entities[i] instanceof Ground) {
-        //         if (
-        //         //Ground is a large tile so we need to make sure it is fully out of frame
-        //             //before wse stop updating it
-        //             getDistance(this.entities[i], this.player) <
-        //             Math.max(
-        //             this.entities[i].horizontal * 64,
-        //             this.entities[i].vertical * 64
-        //             ) +
-        //             this.cullingOffset
-        //         ) {
-        //             let entity = this.entities[i];
-        //              if ((entity instanceof Yubaba)){
-        //                 entity.update();
-        //                 updatedThisTic++;
-        //             }
-        //             else if (!entity.removeFromWorld) {
-        //                 entity.update();
-        //                 updatedThisTic++;
-        //             }
-        //         }
-        //     }
+                //if the player exists update things close to the player
+                let entity = this.entities[i];
+                 if ((entity instanceof Yubaba)){
+                    break;
+                } else if (!entity.removeFromWorld ) {
+                    entity.update();
+                    updatedThisTic++;
+                }
+            } 
+             if ((!this.player) ) {
+                //if no player update everythign so we dont crash
+                let entity = this.entities[i];
+                if ((entity instanceof Yubaba)){
+                    break;
+                } else if (!entity.removeFromWorld) {
+                    entity.update();
+                    updatedThisTic++;
+                }
+            } 
+            else if (this.entities[i] instanceof Ground) {
+                if (
+                //Ground is a large tile so we need to make sure it is fully out of frame
+                    //before wse stop updating it
+                    getDistance(this.entities[i], this.player) <
+                    Math.max(
+                    this.entities[i].horizontal * 64,
+                    this.entities[i].vertical * 64
+                    ) +
+                    this.cullingOffset
+                ) {
+                    let entity = this.entities[i];
+                     if ((entity instanceof Yubaba)){
+                        entity.update();
+                        updatedThisTic++;
+                    }
+                    else if (!entity.removeFromWorld) {
+                        entity.update();
+                        updatedThisTic++;
+                    }
+                }
+            }
         
-        // }
+        }
     };
 
     loop() {
