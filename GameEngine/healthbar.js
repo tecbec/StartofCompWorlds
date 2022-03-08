@@ -65,7 +65,7 @@ class BreathBarOutline {
         this.width = 93;
         this.height =  14;
         this.frameCount = 1;  
-      this.animation = new Animator( ASSET_MANAGER.getAsset("./GameEngine/sprites/healthBar.png"), 0, 0, this.width, 
+        this.animation = new Animator( ASSET_MANAGER.getAsset("./GameEngine/sprites/healthBar.png"), 0, 0, this.width, 
         this.height , this.frameCount, 1, 0, false, true);
     };
 
