@@ -59,7 +59,7 @@ class Player {
 
         this.elapsedTime = 0; 
         this.fireRate = 1;
-        this.jumpTimer = 0.01;
+        this.jumpTimer = 0.15;
         this.updateBB();
         this.loadAnimations();
 
@@ -281,7 +281,7 @@ class Player {
         if (this.isGrounded && !this.dead && !this.winGame) {
             this.jumpTimer -= this.game.clockTick;
             if (this.jumpTimer <= 0) {
-                this.jumpTimer = 0.01;
+                this.jumpTimer = 0.15;
                 this.jumping = false;
             }
             // Consider removing deactivate -> should only use it for double jump fix
