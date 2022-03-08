@@ -59,7 +59,7 @@ class Player {
 
         this.elapsedTime = 0; 
         this.fireRate = 1;
-
+        this.jumpTimer = 0.15;
         this.updateBB();
         this.loadAnimations();
 
@@ -271,21 +271,19 @@ class Player {
     update() {
         const TICK = this.game.clockTick;
         const TICK_SCALE = 2;
-        const MAX_FALL = 240 * PARAMS.SCALE;
-        const MAX_RUN = 150 * PARAMS.SCALE;
-        const MIN_WALK = 100 * PARAMS.SCALE;
-        const CROUCH_SPEED = 25 * PARAMS.SCALE;
+        const MAX_FALL = 160 * PARAMS.SCALE;
+        const MAX_RUN = 80 * PARAMS.SCALE;
+        const MIN_WALK = 65 * PARAMS.SCALE;
+        const CROUCH_SPEED = 25 * PARAMS.SCALE / 2;
         const RUN_ACC = 400 * PARAMS.SCALE;
-        const FALL_ACC = 562.5 * PARAMS.SCALE;
-
+        const FALL_ACC = 250 * PARAMS.SCALE;
         // can only move while on the ground AND jump after has been grounded for x ticks
         if (this.isGrounded && !this.dead && !this.winGame) {
-            if(this.jumping) {         // just landed
-                this.jumpTimer = 1000; // set off short timer, to prevent accidental double jumping
+            this.jumpTimer -= this.game.clockTick;
+            if (this.jumpTimer <= 0) {
+                this.jumpTimer = 0.15;
+                this.jumping = false;
             }
-            //updating jump timer
-            this.jumpTimer -= .01;
-            this.jumping = false;
             // Consider removing deactivate -> should only use it for double jump fix
             if (Math.abs(this.velocity.x) < MIN_WALK) { // walking
                 this.velocity.x = 0;
@@ -316,7 +314,7 @@ class Player {
                 }
             } 
             
-            if (this.game.up) {  // jumping
+            if (this.game.up && !this.jumping) {  // jumping
                 this.jumping = true;
                 this.velocity.y = -250 * PARAMS.SCALE;
                 this.state = 2; 
