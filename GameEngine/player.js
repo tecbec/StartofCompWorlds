@@ -278,6 +278,7 @@ class Player {
         const CROUCH_SPEED = 25 * PARAMS.SCALE / 2;
         const RUN_ACC = 40 * PARAMS.SCALE;
         const FALL_ACC = 250 * PARAMS.SCALE;
+
         // can only move while on the ground AND jump after has been grounded for x ticks
         if (this.isGrounded && !this.dead && !this.winGame) {
             this.jumpTimer -= this.game.clockTick;
@@ -355,7 +356,7 @@ class Player {
         }
 
         //this makes chihiro always fall unless dead
-        if(!this.dead){
+        if(!this.dead || this.state != 5){
             this.velocity.y += FALL_ACC * TICK;
 
             if (this.velocity.y >= MAX_FALL)  this.velocity.y =  MAX_FALL;
@@ -644,13 +645,7 @@ class Player {
                 this.yubaba.deathAnimation = true;
             }
             this.state = 5;
-            //this.state = 8;
 
-
-         //   this.deadCounter += this.game.clockTick;
-
-         //   if (this.deadCounter > 0.5) this.state = 0;
-         //   if (this.deadCounter > 0.55) {
              if(this.getY() + this.getHeight() < 0){
                 this.game.camera.title = true;
                 this.game.camera.breathwidth = 100;
