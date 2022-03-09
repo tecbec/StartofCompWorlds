@@ -59,7 +59,7 @@ class Player {
 
         this.elapsedTime = 0; 
         this.fireRate = 1;
-        this.jumpTimer = 0.15;
+        this.jumpTimer = 0.05;
         this.updateBB();
         this.loadAnimations();
 
@@ -275,13 +275,13 @@ class Player {
         const MAX_RUN = 80 * PARAMS.SCALE;
         const MIN_WALK = 65 * PARAMS.SCALE;
         const CROUCH_SPEED = 25 * PARAMS.SCALE / 2;
-        const RUN_ACC = 400 * PARAMS.SCALE;
+        const RUN_ACC = 20 * PARAMS.SCALE;
         const FALL_ACC = 250 * PARAMS.SCALE;
         // can only move while on the ground AND jump after has been grounded for x ticks
         if (this.isGrounded && !this.dead && !this.winGame) {
             this.jumpTimer -= this.game.clockTick;
             if (this.jumpTimer <= 0) {
-                this.jumpTimer = 0.15;
+                this.jumpTimer = 0.05;
                 this.jumping = false;
             }
             // Consider removing deactivate -> should only use it for double jump fix
