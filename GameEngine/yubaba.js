@@ -154,7 +154,7 @@ class Yubaba {
         }else if (this.hasChihiro){ // if has Chihiro, fly away
             this.y -= this.speed * this.game.clockTick;
 
-           var newY = this.target.getY() - this.speed * this.game.clockTick;
+           var newY = this.target.getY() + this.speed * this.game.clockTick;
            this.target.setY(newY)
         }
 
