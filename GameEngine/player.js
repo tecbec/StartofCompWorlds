@@ -59,7 +59,8 @@ class Player {
 
         this.elapsedTime = 0; 
         this.fireRate = 1;
-        this.jumpTimer = 0.05;
+        this.jumpTimerNum = 0.1 // change how long chihiro have to wait until she can jump again
+        this.jumpTimer = this.jumpTimerNum;
         this.updateBB();
         this.loadAnimations();
 
@@ -275,13 +276,14 @@ class Player {
         const MAX_RUN = 80 * PARAMS.SCALE;
         const MIN_WALK = 65 * PARAMS.SCALE;
         const CROUCH_SPEED = 25 * PARAMS.SCALE / 2;
-        const RUN_ACC = 20 * PARAMS.SCALE;
+        const RUN_ACC = 40 * PARAMS.SCALE;
         const FALL_ACC = 250 * PARAMS.SCALE;
+        console.log(this.jumpTimer);
         // can only move while on the ground AND jump after has been grounded for x ticks
         if (this.isGrounded && !this.dead && !this.winGame) {
             this.jumpTimer -= this.game.clockTick;
             if (this.jumpTimer <= 0) {
-                this.jumpTimer = 0.05;
+                this.jumpTimer = this.jumpTimerNum; // reset the timer and set it to false
                 this.jumping = false;
             }
             // Consider removing deactivate -> should only use it for double jump fix

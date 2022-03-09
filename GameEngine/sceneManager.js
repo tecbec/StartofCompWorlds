@@ -9,7 +9,7 @@
     START_MUTE:         false,               // you can must the music in each level
     START_CANVAS:       {X: -851, Y: 0},
     END_CANVAS:         {X: 22000},         // change this later when we figure out the exact ending canvas measurement
-    FRAME_COUNT: 9,                         // change this for railing/canvas length
+    FRAME_COUNT: 8,                         // change this for railing/canvas length
     END_TITLE_CANVAS:   {X: 3000},  //500},           // This will end the title canvas so it won't keep going.
     END_GAME:           {X: 11515, Y: 813},
     // Type 0: has left,middle,right piece can be adjusted to be longer
