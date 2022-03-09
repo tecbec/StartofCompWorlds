@@ -40,20 +40,24 @@ class Yubaba {
 
         if(this.target.x > this.inc[0]){                                        // If Chihiro passes an x value, introduce Yubaba
             this.show = true;
+            this.entrance();
         }
+
 
         //Update animation
         this.animator = this.animations[this.dir];                              // adjust the direction the yubaba flies based on this.dir
 
         //Yuababa off screen - remove
-        if( this.y < ( -this.height * this.scale - this.target.getHeight() ) *2){   // Remove yubabs if her y value is less than her height plus chihiro's height?
+        if( this.y < ( -this.height * this.scale - this.target.getHeight() ) *2){   // Remove yubabas if her y value is less than her height plus chihiro's height?
             this.removeFromWorld = true;
         }
 
-        if(this.deathAnimation){ //Chihiro died, end of game
-            this.entrance();
-            this.chihiroDeath();
-        } else{
+        if(this.deathAnimation){                                                    //Chihiro died, end of game
+
+            this.entrance();                                                        // Yubaba enters
+            this.chihiroDeath();                                                    // Chihiro death animation is called
+
+        } else {                                                                    // If Chihiro not dead, then Yubaba moves like this.
             /*
             this.inc[0]: Yubaba enter
             this.inc[1]: drop crows
@@ -62,19 +66,19 @@ class Yubaba {
             this.inc[4]: Yubaba battle scene
             */
             // Yubaba enters
-            if(this.target.x > this.inc[0]){
-                this.show = true;
-                this.entrance();
-            }
+            // if(this.target.x > this.inc[0]){                                        // why is this being done twice?
+            //     this.show = true;
+            //     this.entrance();
+            // }
 
             // Yubaba exit
-            if(this.target.x > this.inc[3]){
+            if(this.target.x > this.inc[3]){                                            // If Chihiro hits a certain x-value, then Yubaba leaves.
                 this.y -= Math.abs(this.speed * this.game.clockTick);
             }
 
-            if(this.show){ 
-                this.move();
-                this.throwCrows();
+            if(this.show){                                                              // if show is marked as true,
+                this.move();                                                            // go to the move()
+                this.throwCrows();                                                      // go to throwCrows()
 
                 // if(this.target.x > inc[4]){ //battlescene
                 //     if(this.hitpoints <= 0 ) {this.removeFromWorld = true;}
@@ -146,7 +150,7 @@ class Yubaba {
         let belowYubabaY = 100;
 
         // move y to match Chihiro
-        if(this.target.getY() + 50 > this.BB.y + this.height * this.scale  && !this.hasChihiro){ // yubaba doesn't have chihiro and 
+        if(this.target.getY() + 50 > this.BB.y + this.height * this.scale  && !this.hasChihiro){ // yubaba doesn't have chihiro and
                                                                                                  // her bottom is at least 50 greater than Chihiro's y then...
 
             this.y += this.speed * this.game.clockTick;                                          // move yubaba to this y with every clock tick
@@ -154,7 +158,7 @@ class Yubaba {
         } else if (this.hasChihiro){                                                             // if yubaba has Chihiro, then ...
             this.y -= this.speed * this.game.clockTick;                                          // move yubaba to this y with every clock tick
 
-           var newY = this.y + belowYubabaY;                     // move chihiro to this y with every clock tick
+           var newY = this.y + belowYubabaY;                                                     // move chihiro to this y with every clock tick
            this.target.setY(newY)
         }
 
@@ -176,25 +180,30 @@ class Yubaba {
         this.updateBB();
     };
 
-    move(){
-           if(this.x + this.width *this.scale >= PARAMS.CANVAS_WIDTH){  // too far right
-            if(this.x > PARAMS.CANVAS_WIDTH + 5){ // if outside of frame, place on the edge of frame
+    move(){                                                                 // this determines Yubaba's movements
+
+        if( this.x + this.width * this.scale >= PARAMS.CANVAS_WIDTH ){      // If Yubaba off the current canvas on the right-hand side
+
+            if(this.x > PARAMS.CANVAS_WIDTH + 5){                           // if outside of frame, place on the edge of frame
                 this.x = PARAMS.CANVAS_WIDTH;
             }
 
-            this.speed = -Math.abs(this.speed);
-            this.dir = 1;
-           }else if(this.x <= 0){ //too far left
-                if(this.x < -this.width * this.scale - 5){ //outside of frame
-                    this.x = - this.width *this.scale;
-                }
+            this.speed = -Math.abs(this.speed);                             // set the speed so she's going to the left
+            this.dir = 1;                                                   // set the direction to left
 
-                this.speed = Math.abs(this.speed);
-                this.dir = 0;
-           }
+        } else if (this.x <= 0){                                              // If Yubaba off the current canvas on the left-hand side
+            if( this.x < -this.width * this.scale - 5){                     //outside of frame
+                this.x = - this.width *this.scale;
+            }
 
-           this.x += this.speed * this.game.clockTick;
-           this.x += (this.target.velocity.x * this.game.clockTick)*-2;
+            this.speed = Math.abs(this.speed);                              // set her speed so she's going to the right
+            this.dir = 0;                                                   // set direction to the right
+        }
+
+        this.x += this.speed * this.game.clockTick;
+        this.x += (this.target.velocity.x * this.game.clockTick) * -4;      // the constant (was -2) must change depending on the speed of the game
+            
+
     };
 
     entrance(){
