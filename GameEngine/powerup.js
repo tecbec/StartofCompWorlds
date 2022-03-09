@@ -104,7 +104,8 @@ class BubbleCounter {
         if (!this.game.camera.chihiro.winGame) {
             this.animation.drawFrame(this.game.clockTick, ctx,
                 this.x, this.y, PARAMS.SCALE * .75);
-            ctx.fillStyle = "Pink";
+            ctx.font = "32px Minecraft";
+            ctx.fillStyle = "#f2f0ed";
             ctx.fillText(": "+ this.bubbleCount,  this.x + 19 * PARAMS.SCALE, this.y + 13 * PARAMS.SCALE);
         }
     };
@@ -162,7 +163,8 @@ class CoinCounter {
         if (!this.game.camera.chihiro.winGame) {
             this.animation.drawFrame(this.game.clockTick, ctx,
                 this.x, this.y, PARAMS.SCALE * 1);
-            ctx.fillStyle = "Pink";
+            ctx.font = "32px Minecraft";
+            ctx.fillStyle = "#f2f0ed";
             ctx.fillText(": " +this.coinCount,  this.x + 19 * PARAMS.SCALE, this.y + 13 * PARAMS.SCALE);
         }
     };

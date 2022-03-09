@@ -19,7 +19,7 @@
     BATHHOUSE: {X: 1598, Y: -1200},
     PLATFORM_LOCATION:       [{X: 790,  Y: 550, TYPE: 0}, {X: 1100, Y: 375, TYPE: 0}, {X: 1400, Y: 500, TYPE: 0}, {X: 1900, Y: 390, TYPE: 0}, {X: 2200, Y: 590, TYPE: 0},    // scene 1
                               {X: 2600, Y: 590, TYPE: 0}, {X: 2750, Y: 450, TYPE: 0}, {X: 3300, Y: 575, TYPE: 0}, {X: 3500, Y: 400, TYPE: 0}, {X: 4000, Y: 600, TYPE: 0},    // scene 2
-                              {X: 5775 + 50, Y: 120, TYPE: 1}, {X: 5602, Y: 525, TYPE: 0}, {X: 5919, Y: 525, TYPE: 0},                                                                                        // scene 3
+                              {X: 5775 + 50, Y: 120, TYPE: 1}, {X: 5800, Y: 280, TYPE: 0}, {X: 5602, Y: 525, TYPE: 0}, {X: 5919, Y: 525, TYPE: 0},                                                                                        // scene 3
                               {X: 6500, Y: 525, TYPE: 0}, {X: 6700, Y: 425, TYPE: 0}, {X: 7000, Y: 300, TYPE: 0}, {X: 7100, Y: 600, TYPE: 0}, {X: 7400, Y: 400, TYPE: 0}, {X: 7900, Y: 700, TYPE: 0}, // scene 4
                               {X: 8340, Y: 525, TYPE: 1}, {X: 8480, Y: 390, TYPE: 1}, {X: 8620, Y: 525, TYPE: 1}, {X: 8760, Y: 390, TYPE: 1}, {X: 8900, Y: 525, TYPE: 1}, {X: 9040, Y: 390, TYPE: 1},  // Scene 5
                               {X: 9180, Y: 525, TYPE: 1}, {X: 9320, Y: 390, TYPE: 1}, {X: 9460, Y: 525, TYPE: 1}, {X: 9600, Y: 390, TYPE: 1}, {X: 9740, Y: 525, TYPE: 0},
@@ -142,7 +142,10 @@ class SceneManager {
 
         // instruction spritesheet
         this.spritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/tutorial_text.png");
-
+        this.font = new FontFace("Minecraft", 'url(./GameEngine/sprites/Minecraft.ttf) format("TrueType")');
+        this.font.load().then(function(loadedFont) {
+            document.fonts.add(loadedFont);
+        }) 
         // this set the bathhouse location relative to the last frame based on the lamp location
         this.endGame = LEVEL.BATHHOUSE.X + LEVEL.LAMP_LOCATION[LEVEL.LAMP_LOCATION.length-1].X - 93;
         //Breath
