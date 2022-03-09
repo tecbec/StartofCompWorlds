@@ -278,7 +278,6 @@ class Player {
         const CROUCH_SPEED = 25 * PARAMS.SCALE / 2;
         const RUN_ACC = 40 * PARAMS.SCALE;
         const FALL_ACC = 250 * PARAMS.SCALE;
-        console.log(this.jumpTimer);
         // can only move while on the ground AND jump after has been grounded for x ticks
         if (this.isGrounded && !this.dead && !this.winGame) {
             this.jumpTimer -= this.game.clockTick;
