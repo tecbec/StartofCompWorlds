@@ -133,11 +133,10 @@ class Yubaba {
 
             }else{ //drop heat seeking crows
                 this.elapsedTime += this.game.clockTick;
-                if (this.elapsedTime > this.fireRate) { 
+                if (this.elapsedTime > this.fireRate) {
                     this.elapsedTime = 0;
                     this.game.addEntity(new Crow(this.game, this.BB.x, this.BB.y, this.target, true));
                 }
-
             }
         }
     };
@@ -145,19 +144,19 @@ class Yubaba {
     chihiroDeath(){
         //speed up
         this.speed = 250;
-        this.frameDuration = 0.5; 
+        this.frameDuration = 0.5;
 
         // move y to match Chihiro
         if(this.target.getY() + 50 > this.BB.y + this.height * this.scale  && !this.hasChihiro){
             this.y += this.speed * this.game.clockTick;
-        }else if (this.hasChihiro){ // if has Chihiro, fly away
+        } else if (this.hasChihiro){ // if has Chihiro, fly away
             this.y -= this.speed * this.game.clockTick;
 
            var newY = this.target.getY() - this.speed * this.game.clockTick;
            this.target.setY(newY)
         }
 
-        //move x to match Chihiro 
+        //move x to match Chihiro
         if(this.target.getX() + this.target.getWidth()/2 > this.BB.x + this.width * this.scale / 2 + 100){ // +- some margin of error
             this.x += this.speed * this.game.clockTick;
         }else if(this.target.getX() + this.target.getWidth()/2  < this.BB.x + this.width * this.scale / 2 - 100){
