@@ -38,14 +38,15 @@ class Yubaba {
 
     update(){
 
-        if(this.target.x > this.inc[0]){
+        if(this.target.x > this.inc[0]){                                        // If Chihiro passes an x value, introduce Yubaba
             this.show = true;
         }
+
         //Update animation
-        this.animator = this.animations[this.dir];
+        this.animator = this.animations[this.dir];                              // adjust the direction the yubaba flies based on this.dir
 
         //Yuababa off screen - remove
-        if(this.y < (-this.height*this.scale - this.target.getHeight()) *2){
+        if( this.y < ( -this.height * this.scale - this.target.getHeight() ) *2){   // Remove yubabs if her y value is less than her height plus chihiro's height?
             this.removeFromWorld = true;
         }
 
@@ -142,6 +143,7 @@ class Yubaba {
         //speed up
         this.speed = 400;
         this.frameDuration = 0.5; 
+        let chihiroYplacement = 100;
 
         // move y to match Chihiro
         if(this.target.getY() + 50 > this.BB.y + this.height * this.scale  && !this.hasChihiro){
@@ -149,11 +151,11 @@ class Yubaba {
         }else if (this.hasChihiro){ // if has Chihiro, fly away
             this.y -= this.speed * this.game.clockTick;
 
-           var newY = this.target.getY() - this.speed * this.game.clockTick;
+           var newY = this.y + chihiroYplacement;
            this.target.setY(newY)
         }
 
-        //move x to match Chihiro 
+        //move x to match Chihiro
         if(this.target.getX() + this.target.getWidth()/2 > this.BB.x + this.width * this.scale / 2 + 100){ // +- some margin of error
             this.x += this.speed * this.game.clockTick;
         }else if(this.target.getX() + this.target.getWidth()/2  < this.BB.x + this.width * this.scale / 2 - 100){
