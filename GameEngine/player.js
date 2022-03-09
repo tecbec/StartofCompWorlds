@@ -586,12 +586,17 @@ class Player {
 
                 }
 
-                if (entity instanceof Portal) {
+                if (entity instanceof Portal && that.BB.collide(entity.BB)) { 
+                    if (!that.game.camera.title && !that.game.camera.chihiro.winGame) { 
+                        if (entity.hasPower) {
+                            entity.removeFromWorld = true; 
+                            that.game.camera.bubbleCounter.bubbleCount += 6;
+                            entity.hasPower = false;
+                        }
                     that.powerup = true;
-                    entity.removeFromWorld = true;
-                    that.game.camera.bubbleCounter.bubbleCount += 6;
+                    }
+            //        that.game.camera.bubbleCounter.bubbleCount += 6;
                     ASSET_MANAGER.playAsset(CHIHIRO.PORTAL_SOUND);
-
 
                 }
                 

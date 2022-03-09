@@ -63,10 +63,11 @@ class Portal {
         this.width = 29; 
         this.animation = new Animator (ASSET_MANAGER.getAsset("./GameEngine/sprites/portal.png"), 0, 0, this.width, this.height, 4, .3, 1, false, true);
         this.BB = new BoundingBox(this.x + this.width , this.y + this.height, this.height *2, this.width*2 );
-
+        this.hasPower = true; 
     }
 
     update(){
+        
 
     };
     
@@ -96,7 +97,7 @@ class BubbleCounter {
         this.bubbleCount = 0;
     }
 
-    update(){
+    update(){ 
 
     };
 

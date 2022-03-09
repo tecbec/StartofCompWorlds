@@ -20,7 +20,7 @@ class Yubaba {
         this.speed = 50;
         this.target = this.game.camera.chihiro;
         this.target.yubaba = this; //give access to Yubaba to player
-        this.hitpoints = 30;
+        this.hitpoints = 100;
         this.deathAnimation = false;
         this.hasChihiro = false;
     };
@@ -232,6 +232,9 @@ class Crow{
 
         this.removeFromWorld = false;
 
+        this.hitpoints = 30;
+
+
     };
 
     loadAnimations(){
@@ -283,6 +286,8 @@ class Crow{
         if(this.x < this.target.x - PARAMS.CANVAS_WIDTH|| this.x > this.target.x + PARAMS.CANVAS_WIDTH){ 
             this.removeFromWorld = true;
         }
+         if(this.hitpoints <= 0 ) {this.removeFromWorld = true;}
+
     };
 
     /*

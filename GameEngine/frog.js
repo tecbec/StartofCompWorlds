@@ -154,7 +154,10 @@ class Frog {
             }
         });
         this.updateBB();
-        if(this.hitpoints <= 0 ) {this.removeFromWorld = true;}
+        if(this.hitpoints  < 60)  {
+        console.log(this.hitpoints);
+        }
+        if(this.hitpoints == 0 ) {this.removeFromWorld = true;}
 
     };
 
