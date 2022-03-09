@@ -141,30 +141,35 @@ class Yubaba {
 
     chihiroDeath(){
         //speed up
-        this.speed = 400;
-        this.frameDuration = 0.5; 
-        let chihiroYplacement = 100;
+        this.speed = 250;
+        this.frameDuration = 0.5;
+        let belowYubabaY = 100;
 
         // move y to match Chihiro
-        if(this.target.getY() + 50 > this.BB.y + this.height * this.scale  && !this.hasChihiro){
-            this.y += this.speed * this.game.clockTick;
-        }else if (this.hasChihiro){ // if has Chihiro, fly away
-            this.y -= this.speed * this.game.clockTick;
+        if(this.target.getY() + 50 > this.BB.y + this.height * this.scale  && !this.hasChihiro){ // yubaba doesn't have chihiro and 
+                                                                                                 // her bottom is at least 50 greater than Chihiro's y then...
 
-           var newY = this.y + chihiroYplacement;
+            this.y += this.speed * this.game.clockTick;                                          // move yubaba to this y with every clock tick
+
+        } else if (this.hasChihiro){                                                             // if yubaba has Chihiro, then ...
+            this.y -= this.speed * this.game.clockTick;                                          // move yubaba to this y with every clock tick
+
+           var newY = this.y + belowYubabaY;                     // move chihiro to this y with every clock tick
            this.target.setY(newY)
         }
 
         //move x to match Chihiro
-        if(this.target.getX() + this.target.getWidth()/2 > this.BB.x + this.width * this.scale / 2 + 100){ // +- some margin of error
+        if(this.target.getX() + this.target.getWidth()/2 > this.BB.x + this.width * this.scale / 2 + 100){  // move yubaba right to find chihiro
+                                                                                                            // +- some margin of error
             this.x += this.speed * this.game.clockTick;
-        }else if(this.target.getX() + this.target.getWidth()/2  < this.BB.x + this.width * this.scale / 2 - 100){
+        }else if(this.target.getX() + this.target.getWidth()/2  < this.BB.x + this.width * this.scale / 2 - 100){ // move yubaba left to find chihiro
             this.x -= this.speed * this.game.clockTick;
-        }else{
-            this.x = this.target.getX() + this.target.getWidth()/2 - this.game.camera.x - 75; //center on Chihiro
+        } else {                                                                                                  // Yubaba is right above chihiro
+            this.x = this.target.getX() + this.target.getWidth()/2 - this.game.camera.x - 75;                     //center on Chihiro
+
             // if centered on Chihiro for x & y
-            if(this.target.getY() + 50 <= this.BB.y + this.height * this.scale ){
-                this.hasChihiro = true;
+            if(this.target.getY() + 50 <= this.BB.y + this.height * this.scale ){                                 // if Yubaba is within 50 of Chihiro's y
+                this.hasChihiro = true;                                                                           // set hasChihiro to true
              }
         }
 
