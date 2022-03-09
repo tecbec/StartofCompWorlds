@@ -53,7 +53,7 @@ class Yubaba {
             this.entrance();
             this.chihiroDeath();
         } else{
-            /* 
+            /*
             this.inc[0]: Yubaba enter
             this.inc[1]: drop crows
             this.inc[2]: heat seeking crows
