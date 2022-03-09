@@ -41,10 +41,6 @@ class Yubaba {
         if(this.target.x > this.inc[0]){
             this.show = true;
         }
-
-        if(this.target.x > this.inc[3]){
-            this.y -= Math.abs(this.speed * this.game.clockTick);
-        }
         //Update animation
         this.animator = this.animations[this.dir];
 
@@ -64,7 +60,6 @@ class Yubaba {
             this.inc[3]: Yubaba exit           //swap these? / get rid of them?
             this.inc[4]: Yubaba battle scene
             */
-
             // Yubaba enters
             if(this.target.x > this.inc[0]){
                 this.show = true;
@@ -123,55 +118,51 @@ class Yubaba {
 
     throwCrows(){
          // throw crows
-         if(this.target.x > this.inc[1]){
+         if(this.target.x > this.inc[1]){ 
             if(this.target.x < this.inc[2]){ // drop regular crows
                 this.elapsedTime += this.game.clockTick;
-                if (this.elapsedTime > this.fireRate) {
+                if (this.elapsedTime > this.fireRate) { 
                     this.elapsedTime = 0;
                     this.game.addEntity(new Crow(this.game, this.BB.x, this.BB.y, this.target, false));
                 }
 
             }else{ //drop heat seeking crows
                 this.elapsedTime += this.game.clockTick;
-                if (this.elapsedTime > this.fireRate) {
+                if (this.elapsedTime > this.fireRate) { 
                     this.elapsedTime = 0;
                     this.game.addEntity(new Crow(this.game, this.BB.x, this.BB.y, this.target, true));
                 }
+
             }
+
         }
     };
 
     chihiroDeath(){
         //speed up
-        this.speed = 250;
-        this.frameDuration = 0.5;
-        let belowYubabaY = 100;
+        this.speed = 400;
+        this.frameDuration = 0.5; 
 
         // move y to match Chihiro
-        if(this.target.getY() + 50 > this.BB.y + this.height * this.scale  && !this.hasChihiro){ // yubaba doesn't have chihiro and 
-                                                                                                 // her bottom is at least 50 greater than Chihiro's y then...
+        if(this.target.getY() + 50 > this.BB.y + this.height * this.scale  && !this.hasChihiro){
+            this.y += this.speed * this.game.clockTick;
+        }else if (this.hasChihiro){ // if has Chihiro, fly away
+            this.y -= this.speed * this.game.clockTick;
 
-            this.y += this.speed * this.game.clockTick;                                          // move yubaba to this y with every clock tick
-
-        } else if (this.hasChihiro){                                                             // if yubaba has Chihiro, then ...
-            this.y -= this.speed * this.game.clockTick;                                          // move yubaba to this y with every clock tick
-
-           var newY = this.y + belowYubabaY;                     // move chihiro to this y with every clock tick
+           var newY = this.target.getY() - this.speed * this.game.clockTick;
            this.target.setY(newY)
         }
 
-        //move x to match Chihiro
-        if(this.target.getX() + this.target.getWidth()/2 > this.BB.x + this.width * this.scale / 2 + 100){  // move yubaba right to find chihiro
-                                                                                                            // +- some margin of error
+        //move x to match Chihiro 
+        if(this.target.getX() + this.target.getWidth()/2 > this.BB.x + this.width * this.scale / 2 + 100){ // +- some margin of error
             this.x += this.speed * this.game.clockTick;
-        }else if(this.target.getX() + this.target.getWidth()/2  < this.BB.x + this.width * this.scale / 2 - 100){ // move yubaba left to find chihiro
+        }else if(this.target.getX() + this.target.getWidth()/2  < this.BB.x + this.width * this.scale / 2 - 100){
             this.x -= this.speed * this.game.clockTick;
-        } else {                                                                                                  // Yubaba is right above chihiro
-            this.x = this.target.getX() + this.target.getWidth()/2 - this.game.camera.x - 75;                     //center on Chihiro
-
+        }else{
+            this.x = this.target.getX() + this.target.getWidth()/2 - this.game.camera.x - 75; //center on Chihiro
             // if centered on Chihiro for x & y
-            if(this.target.getY() + 50 <= this.BB.y + this.height * this.scale ){                                 // if Yubaba is within 50 of Chihiro's y
-                this.hasChihiro = true;                                                                           // set hasChihiro to true
+            if(this.target.getY() + 50 <= this.BB.y + this.height * this.scale ){
+                this.hasChihiro = true;
              }
         }
 
@@ -184,15 +175,15 @@ class Yubaba {
                 this.x = PARAMS.CANVAS_WIDTH;
             }
 
-            this.speed = -Math.abs(this.speed); 
+            this.speed = -Math.abs(this.speed);
             this.dir = 1;
            }else if(this.x <= 0){ //too far left
                 if(this.x < -this.width * this.scale - 5){ //outside of frame
                     this.x = - this.width *this.scale;
                 }
 
-                this.speed = Math.abs(this.speed);  
-                this.dir = 0;   
+                this.speed = Math.abs(this.speed);
+                this.dir = 0;
            }
 
            this.x += this.speed * this.game.clockTick;
@@ -251,24 +242,24 @@ class Crow{
 
     update(){
         if(this.heatseeking){
-            
-            if(this.y  >= this.target.y + 5 ){ // once at same y-level as Chihiro 
+
+            if( this.y  >= this.target.y + 5  ) { // once at same y-level as Chihiro
                 this.speedY = 0;
             }else{
-                this.speedY = this.speed; //jumping wont 
-                this.speedX = 0; // how to make sure can still crouch? 
-                                          // how else to adjust motion? 
+                this.speedY = this.speed; //jumping wont
+                this.speedX = 0; // how to make sure can still crouch?
+                                          // how else to adjust motion?
             }
-    
-            if(this.speedY == 0 && this.speedX == 0){ 
+
+            if ( this.speedY == 0 && this.speedX == 0 ) {
                 // if this x is to the right of Chihiro
                 // go left
                 if(this.x > this.target.x && this.x < this.target.x + this.target.width*this.target.scale - this.width*this.scale){
                     this.speedY = this.speed;
-                }else if(this.x + this.width/2*this.scale > this.target.x){ // go left towards chihiro 
+                }else if(this.x + this.width/2*this.scale > this.target.x){  // go left towards chihiro
                     this.animator = this.animations[1];
                     this.speedX = -this.speed;
-    
+
                 }else{ //else go right
                     this.speedX = this.speed;
                     this.animator = this.animations[0];
@@ -279,20 +270,20 @@ class Crow{
         this.y += this.speedY * this.game.clockTick;
         this.x += this.speedX * this.game.clockTick;
         this.BB = new BoundingBox(this.x+this.width*3/8*this.scale, this.y+this.height*1/8*this.scale, this.width*3/8*this.scale, this.height*3/4*this.scale);
-        
-        //moved off screen? Delete entity 
+
+        //moved off screen? Delete entity
         if(this.y > PARAMS.CANVAS_HEIGHT * 1.5){
             this.removeFromWorld = true;
         }
-        if(this.x < this.target.x - PARAMS.CANVAS_WIDTH|| this.x > this.target.x + PARAMS.CANVAS_WIDTH){ 
+        if(this.x < this.target.x - PARAMS.CANVAS_WIDTH|| this.x > this.target.x + PARAMS.CANVAS_WIDTH){
             this.removeFromWorld = true;
         }
     };
 
     /*
-    *  param: context that we want to draw to 
+    *  param: context that we want to draw to
     */
-    draw(ctx){ 
+    draw(ctx){
         this.animator.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y, this.scale);
 
         ctx.shadowColor = '#fdd834';
@@ -302,7 +293,7 @@ class Crow{
 
         if (PARAMS.DEBUG) {
             ctx.strokeStyle = 'Red';
-            ctx.strokeRect(this.BB.x-this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);           
+            ctx.strokeRect(this.BB.x-this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
         }
     };
 
