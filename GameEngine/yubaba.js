@@ -6,10 +6,10 @@ class Yubaba {
         this.width = 278;
         this.height = 230;
         this.frameCount = 14;
-        this.frameDuration = 0.15; 
+        this.frameDuration = 0.15;
         this.elapsedTime = 0;
-        this.fireRate = 5;
-        this.scale = 0.7; 
+        this.fireRate = 3;          // smaller number will be faster every blank seconds she throws a crow
+        this.scale = 0.7;
         this.new = true;
         this.show = false;
         this.removeFromWorld = false;
