@@ -281,93 +281,93 @@ class Player {
 
         if (!this.dead && !this.winGame){
                     // can only move while on the ground AND jump after has been grounded for x ticks
-        if (this.isGrounded) {
-            this.jumpTimer -= this.game.clockTick;
-            if (this.jumpTimer <= 0) {
-                this.jumpTimer = this.jumpTimerNum; // reset the timer and set it to false
-                this.jumping = false;
-            }
-            // Consider removing deactivate -> should only use it for double jump fix
-            if (Math.abs(this.velocity.x) < MIN_WALK) { // walking
-                this.velocity.x = 0;
-                if (this.game.left && !this.game.deactivate) {
-                    this.velocity.x -= MIN_WALK;
+            if (this.isGrounded) {
+                this.jumpTimer -= this.game.clockTick;
+                if (this.jumpTimer <= 0) {
+                    this.jumpTimer = this.jumpTimerNum; // reset the timer and set it to false
+                    this.jumping = false;
                 }
-                if (this.game.right && !this.game.deactivate) {
-                    this.velocity.x += MIN_WALK;
-                }
-            } else if (Math.abs(this.velocity.x) >= MIN_WALK) { // running
-                if (this.facing === 0) {                        // if going left
-                    if (this.game.right && !this.game.left && !this.game.deactivate) {   // make sure that only one button is pressed at a time
-                        if (this.game.run) {                    // when player press shift + arrow
-                            this.velocity.x += RUN_ACC * TICK;
-                        }
-                    } else {
-                        this.velocity.x = 0;
-                    }
-                }
-                if (this.facing === 1) {                        // if going right
-                    if (this.game.left && !this.game.right && !this.game.deactivate) {
-                        if (this.game.run) {
-                            this.velocity.x -= RUN_ACC * TICK;
-                        }
-                    } else {
-                        this.velocity.x = 0;
-                    }
-                }
-            } 
-            
-            if (this.game.up && !this.jumping) {  // jumping
-                this.jumping = true;
-                this.velocity.y = -250 * PARAMS.SCALE;
-                this.state = 2; 
-                ASSET_MANAGER.playAsset(CHIHIRO.JUMP_SOUND);
-            } else {
-                // set the default idle if not anything else.
-                this.state = 0; 
-                this.velocity.y = 0;
-            }
-
-        } else {
-            // fall straight down if did not jump
-            // when fall users can change direction if fast enough
-            if (this.velocity.y > 0 && !this.jumping) { 
-                if (this.game.right && !this.game.left) {
-                    this.velocity.x = Math.abs(this.velocity.x);
-                } else if (this.game.left && !this.game.right) {
-                    this.velocity.x = -Math.abs(this.velocity.x);
-                } else if (!this.game.left && !this.game.right) {
+                // Consider removing deactivate -> should only use it for double jump fix
+                if (Math.abs(this.velocity.x) < MIN_WALK) { // walking
                     this.velocity.x = 0;
+                    if (this.game.left && !this.game.deactivate) {
+                        this.velocity.x -= MIN_WALK;
+                    }
+                    if (this.game.right && !this.game.deactivate) {
+                        this.velocity.x += MIN_WALK;
+                    }
+                } else if (Math.abs(this.velocity.x) >= MIN_WALK) { // running
+                    if (this.facing === 0) {                        // if going left
+                        if (this.game.right && !this.game.left && !this.game.deactivate) {   // make sure that only one button is pressed at a time
+                            if (this.game.run) {                    // when player press shift + arrow
+                                this.velocity.x += RUN_ACC * TICK;
+                            }
+                        } else {
+                            this.velocity.x = 0;
+                        }
+                    }
+                    if (this.facing === 1) {                        // if going right
+                        if (this.game.left && !this.game.right && !this.game.deactivate) {
+                            if (this.game.run) {
+                                this.velocity.x -= RUN_ACC * TICK;
+                            }
+                        } else {
+                            this.velocity.x = 0;
+                        }
+                    }
+                } 
+                
+                if (this.game.up && !this.jumping) {  // jumping
+                    this.jumping = true;
+                    this.velocity.y = -250 * PARAMS.SCALE;
+                    this.state = 2; 
+                    ASSET_MANAGER.playAsset(CHIHIRO.JUMP_SOUND);
+                } else {
+                    // set the default idle if not anything else.
+                    this.state = 0; 
+                    this.velocity.y = 0;
                 }
-            }
 
-            // can change direction they are falling
-            if (this.game.left) {
-                this.velocity.x = -Math.abs(this.velocity.x);
-            }
-            if (this.game.right) {
-                this.velocity.x = Math.abs(this.velocity.x);
-            }
-            if (this.game.crouch && this.velocity.y > 0) { // if shes pressing crouch and falls, set the game crouch to false so she can only press it once.
-                this.game.crouch = false;
-            }
-            if (this.game.crouch && this.velocity.y < 0) { // if shes pressing crouch and jump, set the game crouch to false so she can only press it once.
-                this.game.crouch = false;
-            }
-
-            // if jumped straight up, allow to move in x direction
-            if(this.jumping && this.velocity.x == 0){
-                if (this.game.left && !this.game.deactivate) {
-                    this.velocity.x -= MIN_WALK;
+            } else {
+                // fall straight down if did not jump
+                // when fall users can change direction if fast enough
+                if (this.velocity.y > 0 && !this.jumping) { 
+                    if (this.game.right && !this.game.left) {
+                        this.velocity.x = Math.abs(this.velocity.x);
+                    } else if (this.game.left && !this.game.right) {
+                        this.velocity.x = -Math.abs(this.velocity.x);
+                    } else if (!this.game.left && !this.game.right) {
+                        this.velocity.x = 0;
+                    }
                 }
-                if (this.game.right && !this.game.deactivate) {
-                    this.velocity.x += MIN_WALK;
+
+                // can change direction they are falling
+                if (this.game.left) {
+                    this.velocity.x = -Math.abs(this.velocity.x);
                 }
-           }
+                if (this.game.right) {
+                    this.velocity.x = Math.abs(this.velocity.x);
+                }
+                if (this.game.crouch && this.velocity.y > 0) { // if shes pressing crouch and falls, set the game crouch to false so she can only press it once.
+                    this.game.crouch = false;
+                }
+                if (this.game.crouch && this.velocity.y < 0) { // if shes pressing crouch and jump, set the game crouch to false so she can only press it once.
+                    this.game.crouch = false;
+                }
+
+                // if jumped straight up, allow to move in x direction
+                if(this.jumping && this.velocity.x == 0){
+                    if (this.game.left && !this.game.deactivate) {
+                        this.velocity.x -= MIN_WALK;
+                    }
+                    if (this.game.right && !this.game.deactivate) {
+                        this.velocity.x += MIN_WALK;
+                    }
+            }
 
 
+            }
         }
-    }
 
 
         //this makes chihiro always fall unless dead
