@@ -17,7 +17,7 @@ class BreathBar {
         this.elapsed += this.game.clockTick;
         if (!this.game.camera.chihiro.winGame && !this.game.camera.onInstructions) { 
             if (this.width > 0 && this.game.camera.chihiro.x > 440 && this.game.camera.chihiro.state != 0) {
-                this.width -= 0.03; // original
+                this.width -= 0.02; // original
                 // this.width -= 0.5; // changes for testing
                 this.width = (this.width / this.maxHealth) * this.maxHealth;
                 this.game.camera.breathwidth = this.width;
