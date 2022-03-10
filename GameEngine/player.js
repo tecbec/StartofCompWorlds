@@ -279,8 +279,9 @@ class Player {
         const RUN_ACC = 40 * PARAMS.SCALE;
         const FALL_ACC = 250 * PARAMS.SCALE;
 
-        // can only move while on the ground AND jump after has been grounded for x ticks
-        if (this.isGrounded && !this.dead && !this.winGame) {
+        if (!this.dead && !this.winGame){
+                    // can only move while on the ground AND jump after has been grounded for x ticks
+        if (this.isGrounded) {
             this.jumpTimer -= this.game.clockTick;
             if (this.jumpTimer <= 0) {
                 this.jumpTimer = this.jumpTimerNum; // reset the timer and set it to false
@@ -353,7 +354,21 @@ class Player {
             if (this.game.crouch && this.velocity.y < 0) { // if shes pressing crouch and jump, set the game crouch to false so she can only press it once.
                 this.game.crouch = false;
             }
+
+            // if jumped straight up, allow to move in x direction
+            if(this.jumping && this.velocity.x == 0){
+                if (this.game.left && !this.game.deactivate) {
+                    this.velocity.x -= MIN_WALK;
+                }
+                if (this.game.right && !this.game.deactivate) {
+                    this.velocity.x += MIN_WALK;
+                }
+           }
+
+
         }
+    }
+
 
         //this makes chihiro always fall unless dead
         if(!this.dead || this.state != 5){
@@ -588,12 +603,16 @@ class Player {
                 }
 
                 if (entity instanceof Portal) {
+                    // Set a maximum amount of coins upon interact
+                    if (!that.game.camera.title && !that.game.camera.chihiro.winGame) { 
+                        if (entity.hasBubbles) {
+                            that.game.camera.bubbleCounter.bubbleCount += 3;
+                            entity.hasBubbles = false;
+                        }
+                        entity.removeFromWorld = true;
+                    }
                     that.powerup = true;
-                    entity.removeFromWorld = true;
-                    that.game.camera.bubbleCounter.bubbleCount += 6;
                     ASSET_MANAGER.playAsset(CHIHIRO.PORTAL_SOUND);
-
-
                 }
                 
                 if (entity instanceof Frog) {

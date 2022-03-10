@@ -230,6 +230,8 @@ class Crow{
         this.frameDuration = 0.15; 
         this.scale = 0.2; 
 
+        this.hitpoints = 30;
+
         this.loadAnimations();
 
         //bounding box
@@ -257,6 +259,11 @@ class Crow{
    }
 
     update(){
+
+        if(this.hitpoints <= 0) {
+            this.removeFromWorld = true;
+        }
+
         if(this.heatseeking){
 
             if( this.y  >= this.target.y + 5  ) { // once at same y-level as Chihiro
