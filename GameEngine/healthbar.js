@@ -25,7 +25,7 @@ class BreathBar {
         }
         if (this.game.camera.onInstructions) {
             if (this.introWidth > 0) {
-                this.introWidth -= 0.1; // original
+                this.introWidth -= 0.07; // original
                 this.introWidth = (this.introWidth / this.maxHealth) * this.maxHealth;
             }
         }
