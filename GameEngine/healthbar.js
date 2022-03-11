@@ -15,17 +15,17 @@ class BreathBar {
 
     update() {
         this.elapsed += this.game.clockTick;
-        if (!this.game.camera.chihiro.winGame && !this.game.camera.onInstructions) { 
+        if (!this.game.camera.chihiro.winGame && !this.game.camera.onInstructions) {
             if (this.width > 0 && this.game.camera.chihiro.x > 440 && this.game.camera.chihiro.state != 0) {
                 this.width -= 0.02; // original
                 // this.width -= 0.5; // changes for testing
                 this.width = (this.width / this.maxHealth) * this.maxHealth;
                 this.game.camera.breathwidth = this.width;
             }
-        }   
+        }
         if (this.game.camera.onInstructions) {
             if (this.introWidth > 0) {
-                this.introWidth -= 0.3; // original
+                this.introWidth -= 0.07; // original
                 this.introWidth = (this.introWidth / this.maxHealth) * this.maxHealth;
             }
         }

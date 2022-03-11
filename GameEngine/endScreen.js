@@ -92,7 +92,7 @@ class EndScreen {
                 }
                 if (this.elapsedStats > 1) {
                     this.coin.drawFrame(this.game.clockTick, ctx, 395, 520, PARAMS.SCALE * 1);
-                    ctx.fillText(": " + this.game.camera.coinCounter.coinCount, 447, 545); //timer 
+                    ctx.fillText(": " + this.game.camera.coinCounter.coinCount + "/" + (LEVEL.COIN_LOCATION.length + (LEVEL.NOFACE_LOCATION.length * 15)), 447, 545); //timer 
                 }
              
                 if (this.elapsedStats > 1.5) {

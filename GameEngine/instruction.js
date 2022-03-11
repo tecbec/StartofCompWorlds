@@ -89,7 +89,7 @@ class Instruction {
         this.loadButton();
         // 0 is story line
         this.count = 1;
-        this.maxCount = 7;
+        this.maxCount = 8;
     }
 
     update() {
@@ -758,7 +758,37 @@ class Instruction {
             this.xwalk3 = 300;
             this.xwalkvel3 = 0;
         }
-      
+        if (this.count == 8) {
+            this.xsoots = 330;
+            this.sootsy = 300
+            ctx.font = "64px Minecraft";
+            ctx.strokeStyle = '#b30000';
+            ctx.fillStyle = ctx.strokeStyle;
+            ctx.fillText("Credits", 50, 355); 
+            ctx.strokeStyle = '#f2f0ed';
+            ctx.fillStyle = ctx.strokeStyle;
+            ctx.fillText("Credits", 50, 350);   
+            ctx.font = "32px Minecraft";
+            ctx.strokeStyle = '#7fb3c7'; 
+            ctx.fillStyle = ctx.strokeStyle;
+            ctx.fillText("Developed by:", 320, 440);
+            ctx.fillText("All art are created by us <3", 230, 690);
+            ctx.strokeStyle = '#7fb3c7'; 
+            ctx.fillStyle = ctx.strokeStyle;
+            ctx.fillText("♥ Chau Vu ♥", 330, 490);
+            ctx.fillText("♥ Hana Bechara ♥", 280, 540);
+            ctx.fillText("♥ Kumiko Dunn ♥", 294, 590);
+            ctx.fillText("♥ Katelynn Oleson ♥", 276, 640);
+            ctx.strokeStyle = '#f2f0ed';
+            ctx.fillStyle = ctx.strokeStyle;
+            ctx.fillText("♥ Chau Vu ♥", 330, 488);
+            ctx.fillText("♥ Hana Bechara ♥", 280, 538);
+            ctx.fillText("♥ Kumiko Dunn ♥", 294, 588);
+            ctx.fillText("♥ Katelynn Oleson ♥", 276, 638);  
+            ctx.fillText("Special thanks to Professor Chris Mariott", 140, 740);
+            ctx.fillText("TCSS 491: Computational Worlds", 200, 790);
+
+        }
     };
 
     loadPortalFeatureAnim() {
