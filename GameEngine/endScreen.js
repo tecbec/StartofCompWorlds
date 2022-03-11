@@ -15,10 +15,6 @@ class EndScreen {
         this.color = "#ff7373";
         this.color1 = "#bdb4a4";
         this.playAgain = true;
-        this.font = new FontFace("Minecraft", 'url(./GameEngine/sprites/Minecraft.ttf) format("TrueType")');
-        this.font.load().then(function(loadedFont) {
-            document.fonts.add(loadedFont);
-        }) 
 
         this.spritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/youwin_text.png");
 

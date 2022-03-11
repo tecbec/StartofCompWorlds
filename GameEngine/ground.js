@@ -631,13 +631,10 @@ class CloudPlatform {
     constructor(game, x, y, size, min = 0, max = 0, vertical = false) {
         Object.assign(this, { game, x, y, size, min, max, vertical});
         this.spritesheet = ASSET_MANAGER.getAsset("./GameEngine/sprites/cloud-Sheet.png");
-
-        this.BB = new BoundingBox(this.x + 5 , this.y + 10,
-            BACKGROUND.CLOUD_BB[this.size].W * BACKGROUND.CLOUD.SCALE - 10,
-            BACKGROUND.CLOUD_BB[this.size].H * BACKGROUND.CLOUD.SCALE);
-
+        this.updateBB();
+  
         this.moving = (this.max - this.min > 0);
-
+   
         if(this.moving){
             this.speed = 20;
         }else{
@@ -645,7 +642,20 @@ class CloudPlatform {
         }
     }
 
+    updateBB() {
+        this.lastBB = this.BB;
+        if (this.moving){
+            this.BB = new BoundingBox(this.x + 5 , this.y + 10,
+                BACKGROUND.CLOUD_BB[this.size].W * BACKGROUND.CLOUD.SCALE - 10,
+                BACKGROUND.CLOUD_BB[this.size].H * BACKGROUND.CLOUD.SCALE);
+        } else {
+            this.BB = new BoundingBox(this.x + 5 , this.y + 10,
+                BACKGROUND.CLOUD_BB[this.size].W * BACKGROUND.CLOUD.SCALE - 10,
+                BACKGROUND.CLOUD_BB[this.size].H * BACKGROUND.CLOUD.SCALE);
+        }
+    }
     update() {
+        this.updateBB();
         if(this.moving){
             if(!this.vertical && this.x + this.BB.width >= this.max){ 
                 this.speed = -Math.abs(this.speed);
@@ -653,7 +663,7 @@ class CloudPlatform {
                 this.speed = Math.abs(this.speed);     
            }
            
-           else if(this.vertical && this.y <= this.min){
+           else if(this.vertical && this.y <= this.min){ 
             this.speed = Math.abs(this.speed);  
            }else if(this.vertical && this.y + this.BB.height >= this.max){ 
             this.speed = -Math.abs(this.speed);
@@ -664,11 +674,6 @@ class CloudPlatform {
            }else{
                this.y += this.speed * this.game.clockTick; 
            }
-
-           this.BB = new BoundingBox(this.x + 5 , this.y + 10,
-            BACKGROUND.CLOUD_BB[this.size].W * BACKGROUND.CLOUD.SCALE - 10,
-            BACKGROUND.CLOUD_BB[this.size].H * BACKGROUND.CLOUD.SCALE);
-
             /* doesnt work, not sensing player collisions*/
             // var that = this; 
             // this.game.entities.forEach(function (entity) {   
@@ -689,6 +694,7 @@ class CloudPlatform {
             //     }
             // });
         }
+        
     };
 
     draw(ctx) {

@@ -17,7 +17,7 @@ class BreathBar {
         this.elapsed += this.game.clockTick;
         if (!this.game.camera.chihiro.winGame && !this.game.camera.onInstructions) { 
             if (this.width > 0 && this.game.camera.chihiro.x > 440 && this.game.camera.chihiro.state != 0) {
-                this.width -= 0.03; // original
+                this.width -= 0.02; // original
                 // this.width -= 0.5; // changes for testing
                 this.width = (this.width / this.maxHealth) * this.maxHealth;
                 this.game.camera.breathwidth = this.width;
@@ -65,7 +65,7 @@ class BreathBarOutline {
         this.width = 93;
         this.height =  14;
         this.frameCount = 1;  
-      this.animation = new Animator( ASSET_MANAGER.getAsset("./GameEngine/sprites/healthbar.png"), 0, 0, this.width, 
+        this.animation = new Animator( ASSET_MANAGER.getAsset("./GameEngine/sprites/healthBar.png"), 0, 0, this.width, 
         this.height , this.frameCount, 1, 0, false, true);
     };
 
@@ -74,8 +74,10 @@ class BreathBarOutline {
     };
 
     draw(ctx){
-        this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y, PARAMS.SCALE * 1.5);
-        ctx.imageSmoothingEnabled = false;
+        if (!this.game.camera.chihiro.winGame) {
+            this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y, PARAMS.SCALE * 1.5);
+            ctx.imageSmoothingEnabled = false;
+        }
 
 
     };

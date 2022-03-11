@@ -64,6 +64,8 @@ class Portal {
         this.animation = new Animator (ASSET_MANAGER.getAsset("./GameEngine/sprites/portal.png"), 0, 0, this.width, this.height, 4, .3, 1, false, true);
         this.BB = new BoundingBox(this.x + this.width , this.y + this.height, this.height *2, this.width*2 );
 
+        this.hasBubbles = true;
+
     }
 
     update(){
@@ -104,7 +106,8 @@ class BubbleCounter {
         if (!this.game.camera.chihiro.winGame) {
             this.animation.drawFrame(this.game.clockTick, ctx,
                 this.x, this.y, PARAMS.SCALE * .75);
-            ctx.fillStyle = "Pink";
+            ctx.font = "32px Minecraft";
+            ctx.fillStyle = "#f2f0ed";
             ctx.fillText(": "+ this.bubbleCount,  this.x + 19 * PARAMS.SCALE, this.y + 13 * PARAMS.SCALE);
         }
     };
@@ -162,7 +165,8 @@ class CoinCounter {
         if (!this.game.camera.chihiro.winGame) {
             this.animation.drawFrame(this.game.clockTick, ctx,
                 this.x, this.y, PARAMS.SCALE * 1);
-            ctx.fillStyle = "Pink";
+            ctx.font = "32px Minecraft";
+            ctx.fillStyle = "#f2f0ed";
             ctx.fillText(": " +this.coinCount,  this.x + 19 * PARAMS.SCALE, this.y + 13 * PARAMS.SCALE);
         }
     };
