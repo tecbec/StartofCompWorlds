@@ -785,7 +785,7 @@ class Instruction {
             ctx.fillText("♥ Hana Bechara ♥", 280, 538);
             ctx.fillText("♥ Kumiko Dunn ♥", 294, 588);
             ctx.fillText("♥ Katelynn Oleson ♥", 276, 638);  
-            ctx.fillText("Special thanks to Professor Chris Mariott", 140, 740);
+            ctx.fillText("Special thanks to Professor Chris Marriott", 140, 740);
             ctx.fillText("TCSS 491: Computational Worlds", 200, 790);
 
         }
